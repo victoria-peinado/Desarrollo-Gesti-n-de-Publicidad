@@ -2,9 +2,9 @@
 
 ## Grupo
 ### Integrantes
-47814, Peinado Victoria
-49856, Del Solar Marcos
-49491, Brancatti Lautaro
+* 47814, Peinado Victoria
+* 49856, Del Solar Marcos
+* 49491, Brancatti Lautaro
 
 ### Repositorios
 * [fullstack app](https://github.com/victoria-peinado/Desarrollo-Gesti-n-de-Publicidad)
