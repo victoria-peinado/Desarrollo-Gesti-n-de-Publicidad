@@ -25,9 +25,9 @@ La organización objeto de nuestro trabajo es una emisora de radio FM. Su equipo
 Regularidad:
 |Req|Detalle|
 |:-|:-|
-|CRUD simple|1. CRUD Registo_Comercio<br>2. CRUD Registro_Contratación<br>3. CRUD Emision_Orden_Publicitaria<br> 4. Bloques -ask-<br>5. Dia -ask-|
-|CRUD dependiente|1. CRUD Registro_Pagos {depende de} CRUD Emision_Orden_Publicitaria<br>2. CRUD Actualizacion_Precio_Bloques {depende de} CRUD Bloques<br>3.Emision_Orden_Publicitaria {depende de} CRUD Emision_Orden_Publicitaria|
-|Listado<br>+<br>detalle| 1. Listado de publicidades filtrado por fecha desde a fecha hasta, muestra nroBloque(Bloque), nombreCampaña(Orden Publicitaria), horaInicio(Bloque) y fecha(Dia) <br> 2. Listar para una contratacion todas las ordenes publicitarias|
+|CRUD simple|1.Contacto CRUD <br>2. CRUD Titular Facturacción<br>3. CRUD Contratación<br> 4. Spot Publicitario <br>5.Bloque|
+|CRUD dependiente|1. CRUD Comercio {depende de} CRUD Contacto y CRUD Titular Facturación<br>2. CRUD Orden publicitaria {depende de} CRUD Contratación|
+|Listado<br>+<br>detalle| 1. Listado de publicidades filtrado por fecha desde a fecha hasta, muestra nroBloque(Bloque), nombreCampaña(Orden Publicitaria), horaInicio(Bloque) y fecha(Relacion) <br> 2. Listar para una contratacion todas las ordenes publicitarias|
 |CUU/Epic|1. Realizar una contratación<br>2. Realizar Orden_Publicitaria|
 
 
