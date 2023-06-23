@@ -31,4 +31,7 @@ Regularidad:
 |CUU/Epic|1. Realizar una contratación<br>2. Realizar Orden_Publicitaria|
 
 
+//Cuando se diagrame nuevamente se eliminara la clase Dia
+
+
 
