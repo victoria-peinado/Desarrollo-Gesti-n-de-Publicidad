@@ -1,1 +1,0 @@
-{"version":3,"file":"block.entity.js","sourceRoot":"","sources":["../../src/block/block.entity.ts"],"names":[],"mappings":"AAAA,OAAO,MAAM,MAAM,aAAa,CAAA;AAEhC,MAAM,OAAO,KAAK;IAChB,YACS,SAAiB,EACjB,MAAc,EACd,KAAK,MAAM,CAAC,UAAU,EAAE;QAFxB,cAAS,GAAT,SAAS,CAAQ;QACjB,WAAM,GAAN,MAAM,CAAQ;QACd,OAAE,GAAF,EAAE,CAAsB;IAC9B,CAAC;CACL"}
