@@ -1,0 +1,40 @@
+### obtener todos los contacs
+GET http://localhost:3000/api/contacs
+
+
+### obtener un contac
+GET http://localhost:3000/api/contacs/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+
+### crear un nuevo contac
+POST http://localhost:3000/api/contacs
+Content-Type: application/json
+
+{
+  "name": "Juann",
+  "lastName": "Pablo Segundo",
+  "dni": 109888,
+  "contacts": ["484903","arrow@gmail.com"]
+  
+}
+
+### modificar un contac (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/contacs/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "name": "Put",
+  "lastName": "Pablo Segundo",
+  "dni": 109888,
+  "contacts": ["484903","arrow@gmail.com"]  
+}
+
+### modificar un contac (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/contacs/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "name": "Patch"  
+}
+
+### borrar un contac
+DELETE http://localhost:3000/api/contacs/a02b91bc-3769-4221-beb1-d7a3aeba7dad

@@ -1,0 +1,35 @@
+### obtener todos los advertisingSpots
+GET http://localhost:3000/api/advertisingSpots
+
+
+### obtener un advertisingSpot
+GET http://localhost:3000/api/advertisingSpots/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+
+### crear un nuevo advertisingSpot
+POST http://localhost:3000/api/advertisingSpots
+Content-Type: application/json
+
+{
+  "name": "Atila",
+  "duration": 15
+}
+
+### modificar un advertisingSpot (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/advertisingSpots/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "name": "Anakin Skywalker",
+  "duration": 110
+}
+
+### modificar un advertisingSpot (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/advertisingSpots/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "name": "Path"
+}
+
+### borrar un advertisingSpot
+DELETE http://localhost:3000/api/advertisingSpots/a02b91bc-3769-4221-beb1-d7a3aeba7dad
