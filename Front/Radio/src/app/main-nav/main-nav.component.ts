@@ -17,8 +17,10 @@ export class MainNavComponent {
       map(result => result.matches),
       shareReplay()
     );
-    isDisplay= true;
-    toggleDisplay(){
-      this.isDisplay = !this.isDisplay;
-    }
+
+  isDisplay= true;
+  toggleDisplay(){
+    this.isDisplay = !this.isDisplay;
+  }
+  isLoggedIn= false;
 }

@@ -1,4 +1,4 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container ">
   <mat-sidenav #drawer class="sidenav"  fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
@@ -17,8 +17,8 @@
       <a mat-list-item href="#">Link 3</a>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
+  <mat-sidenav-content >
+    <mat-toolbar color="primary" class=" mat-elevation-z4">
       <button
         type="button"
         aria-label="Toggle sidenav"
@@ -30,6 +30,9 @@
       <div class="flex items-center">
         <img src="../../assets/logo.png" class="h-10 w-30 mr-2" alt="Logo">
       </div>
+      <span class="flex-1"></span>
+      <mat-icon *ngIf="isLoggedIn === true">account_circle</mat-icon>
+      <a mat-button *ngIf="isLoggedIn === false" routerLink="/login">Login</a>
       
     </mat-toolbar>
     <!-- Add Content Here -->
