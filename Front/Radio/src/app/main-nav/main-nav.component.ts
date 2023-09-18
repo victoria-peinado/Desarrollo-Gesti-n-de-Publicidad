@@ -18,9 +18,29 @@ export class MainNavComponent {
       shareReplay()
     );
 
-  isDisplay= true;
-  toggleDisplay(){
-    this.isDisplay = !this.isDisplay;
+  isDisplayComercios= true;
+  isDisplayPublicistas= true;
+  isDisplayContrataciones= true;
+  isDisplayPagos= true;
+  isDisplayPublicidades= true;
+  isDisplayBloques= true;
+  toggleDisplayComercios(){
+    this.isDisplayComercios = !this.isDisplayComercios;
+  }
+  toggleDisplayPublicistas(){ 
+    this.isDisplayPublicistas = !this.isDisplayPublicistas;
+  }
+  toggleDisplayContrataciones(){
+    this.isDisplayContrataciones = !this.isDisplayContrataciones;
+  }
+  toggleDisplayPagos(){
+    this.isDisplayPagos = !this.isDisplayPagos;
+  }
+  toggleDisplayPublicidades(){
+    this.isDisplayPublicidades = !this.isDisplayPublicidades;
+  }
+  toggleDisplayBloques(){
+    this.isDisplayBloques = !this.isDisplayBloques;
   }
   isLoggedIn= false;
 }

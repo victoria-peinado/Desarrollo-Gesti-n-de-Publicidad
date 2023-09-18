@@ -7,14 +7,38 @@
     <mat-toolbar  >Menu</mat-toolbar>
     <mat-nav-list >
       
-      <a mat-list-item (click)="toggleDisplay()" href="#">Link 2</a>
-        
-          <div *ngIf="!isDisplay" class="flex flex-col  w-full justify-between pl-0 ml-0">
-            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Link 2</a>
-            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Link 2</a>
+      <a mat-list-item (click)="toggleDisplayComercios()" routerLink="comercios">Comercios</a>
+          <div *ngIf="!isDisplayComercios" class="flex flex-col  w-full justify-between pl-0 ml-0">
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Alta Comercio </a>
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización Comercio</a>
           </div>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
+      <a mat-list-item (click)="toggleDisplayPublicistas()">Publicistas</a>
+          <div *ngIf="!isDisplayPublicistas" class="flex flex-col  w-full justify-between pl-0 ml-0">
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Alta Publicista</a>
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Liquidación a Publicistas</a>
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Listado Liquidaciones </a>
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Registro de Pago</a>
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización Publicista</a>
+          </div>
+      <a mat-list-item (click)="toggleDisplayContrataciones()">Contrataciones</a>
+          <div *ngIf="!isDisplayContrataciones" class="flex flex-col  w-full justify-between pl-0 ml-0">
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Alta Contratación</a>
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización Contratación</a>
+          </div>
+      <a mat-list-item (click)="toggleDisplayPagos()">Pagos</a>
+          <div *ngIf="!isDisplayPagos" class="flex flex-col  w-full justify-between pl-0 ml-0">
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Registro de Pago</a>
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Informe Falta de Pago</a>
+          </div>
+      <a mat-list-item (click)="toggleDisplayPublicidades()">Publicidades</a>
+          <div *ngIf="!isDisplayPublicidades" class="flex flex-col  w-full justify-between pl-0 ml-0">
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Emisión Ordenes</a>
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Listado Publicitario</a>
+          </div>
+      <a mat-list-item (click)="toggleDisplayBloques()">Bloques</a>
+          <div *ngIf="!isDisplayBloques" class="flex flex-col  w-full justify-between pl-0 ml-0">
+            <a href="#" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización Spot</a>
+          </div>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content >
@@ -31,8 +55,8 @@
         <img src="../../assets/logo.png" class="h-10 w-30 mr-2" alt="Logo">
       </div>
       <span class="flex-1"></span>
-      <mat-icon *ngIf="isLoggedIn === true">account_circle</mat-icon>
-      <a mat-button *ngIf="isLoggedIn === false" routerLink="/login">Login</a>
+      <mat-icon routerLink="logOut" *ngIf="isLoggedIn === true">account_circle</mat-icon>
+      <a mat-button routerLink="login" *ngIf="isLoggedIn === false" routerLink="/login">Login</a>
       
     </mat-toolbar>
     <!-- Add Content Here -->
