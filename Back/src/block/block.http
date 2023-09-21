@@ -11,7 +11,8 @@ Content-Type: application/json
 
 {
   "startTime": "12:30:00",
-  "number": 30
+   "number": 30
+  
 }
 
 ### modificar un block(PUT - recurso completo e idempotente)

@@ -6,7 +6,7 @@ const repository = new BlockRepository()
 
 function sanitizeBlockInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
-    name: req.body.name,
+    number: req.body.number,
     startTime: req.body.startTime
   }
   //more checks here

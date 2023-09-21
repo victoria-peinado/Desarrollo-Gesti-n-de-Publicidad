@@ -3,7 +3,7 @@ import { Block } from './block.entity.js';
 const repository = new BlockRepository();
 function sanitizeBlockInput(req, res, next) {
     req.body.sanitizedInput = {
-        name: req.body.name,
+        number: req.body.number,
         startTime: req.body.startTime
     };
     //more checks here
