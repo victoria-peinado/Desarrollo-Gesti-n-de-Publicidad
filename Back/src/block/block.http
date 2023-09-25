@@ -29,7 +29,7 @@ PATCH http://localhost:3000/api/blocks/a02b91bc-3769-4221-beb1-d7a3aeba7dad
 Content-Type: application/json
 
 {
-  "startTime": "23:30:00", 
+  "startTime": "23:30:00"
 }
 
 ### borrar un block
