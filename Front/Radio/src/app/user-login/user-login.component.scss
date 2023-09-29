@@ -1,0 +1,37 @@
+#title {
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10px;
+  font-weight: bold;
+  font-size: 200%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.mat-dialog-actions button {
+  margin: 0 7px;
+}
+
+div p {
+    text-decoration: underline;
+    display: flex;
+    justify-content: center;
+  }
+  
