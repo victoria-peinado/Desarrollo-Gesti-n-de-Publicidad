@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { DummyComponent } from './dummy/dummy.component';
 import { BlockComponent } from './block/block.component';
 import { RouterModule, Routes } from '@angular/router';
+import { UserLoginComponent } from './user-login/user-login.component';
 
 const routes: Routes = [
-  { path:'', component: DummyComponent },
+  { path:'', component: UserLoginComponent },
   { path:'login', component: DummyComponent },
   { path:'altaComercio', component: DummyComponent },
   { path:'actualizacionComercio', component: DummyComponent },

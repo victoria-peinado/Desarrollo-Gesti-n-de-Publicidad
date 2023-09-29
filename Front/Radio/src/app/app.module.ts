@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DummyComponent } from './dummy/dummy.component';
 import { FormsModule } from '@angular/forms';
+import { UserLoginComponent } from './user-login/user-login.component';
 
 
 
@@ -23,7 +24,8 @@ import { FormsModule } from '@angular/forms';
     TopMenuComponent,
     MainNavComponent,
     DummyComponent,
-    BlockComponent
+    BlockComponent,
+    UserLoginComponent
   ],
   imports: [
     BrowserModule,
