@@ -1,3 +1,13 @@
+/*.wrapper {
+  width: 400px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 30px 40px;
+  border: 2px solid #000;
+  justify-content: center;
+  align-items: center;
+}*/
+
 #title {
   margin: 20px;
   display: flex;
@@ -33,5 +43,31 @@ div p {
     text-decoration: underline;
     display: flex;
     justify-content: center;
-  }
-  
+}
+
+.forgot {
+  margin-top: -5px;
+  margin-bottom: 15px;
+}
+
+.forgot a {
+  text-decoration: none;
+}
+
+.forgot a:hover{
+  text-decoration: underline;
+}
+
+.register-link {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.register-link p a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link p a:hover {
+  text-decoration: underline;
+}
