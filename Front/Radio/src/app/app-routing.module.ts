@@ -21,6 +21,7 @@ const routes: Routes = [
   { path:'emisionOrdenes', component: DummyComponent },
   { path:'listadoPublicitario', component: DummyComponent },
   { path:'actualizacionSpot', component: BlockComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full'} // cuando el usuario pone una ruta inexistente redirige a http://localhost:4200
 
 ];
 
