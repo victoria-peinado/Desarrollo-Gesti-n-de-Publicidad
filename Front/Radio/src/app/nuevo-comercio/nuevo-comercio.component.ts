@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./nuevo-comercio.component.scss']
 })
 export class NuevoComercioComponent {
-
+  cuit: string = '444';
 }
