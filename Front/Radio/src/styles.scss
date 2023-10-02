@@ -9,3 +9,7 @@ body{
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mdc-notched-outline__notch /*p solucionar bug de appearance="outline" del form-field*/
+{
+  border-right: none;
+}

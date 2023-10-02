@@ -3,11 +3,14 @@ import { DummyComponent } from './dummy/dummy.component';
 import { BlockComponent } from './block/block.component';
 import { RouterModule, Routes } from '@angular/router';
 import { UserLoginComponent } from './user-login/user-login.component';
+import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
+import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
 
 const routes: Routes = [
   { path:'', component: UserLoginComponent },
   { path:'login', component: DummyComponent },
-  { path:'altaComercio', component: DummyComponent },
+  { path:'altaComercio', component: AltaComercioComponent },
+  { path:'altaComercio/nuevoComercio', component: NuevoComercioComponent },
   { path:'actualizacionComercio', component: DummyComponent },
   { path:'altaPublicista', component: DummyComponent },
   { path:'liquidacionPublicistas', component: DummyComponent },

@@ -1,0 +1,15 @@
+<h1 class="title">Alta de un nuevo comercio</h1>
+<div class="flex flex-col items-center justify-center">
+    <div>
+        <mat-form-field [color]="coloring" class="mt-5" appearance="outline">
+            <mat-label>Cuit</mat-label>
+            <input matInput [(ngModel)]="cuit" maxlength="11" #cuitInput>
+            <mat-icon matSuffix color="warn" [style]="icon">warning</mat-icon>
+        </mat-form-field>
+    </div>
+    <div *ngIf="cuitInvalid" class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">*Cuit incorrecto. Por favor, ingrese un Cuit válido.</div>
+    <div>
+        <button mat-raised-button color="none" class="mr-2" (click)="redirectToHome()">Cancelar</button>
+        <button mat-raised-button color="primary" class="ml-2" (click)="verifyCuit()">Siguiente</button>
+    </div>
+</div>

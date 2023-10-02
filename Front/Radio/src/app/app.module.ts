@@ -11,6 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DummyComponent } from './dummy/dummy.component';
 import { FormsModule } from '@angular/forms';
 import { UserLoginComponent } from './user-login/user-login.component';
+import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
+import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
 
 
 
@@ -25,7 +27,9 @@ import { UserLoginComponent } from './user-login/user-login.component';
     MainNavComponent,
     DummyComponent,
     BlockComponent,
-    UserLoginComponent
+    UserLoginComponent,
+    AltaComercioComponent,
+    NuevoComercioComponent
   ],
   imports: [
     BrowserModule,
