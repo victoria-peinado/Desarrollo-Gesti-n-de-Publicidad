@@ -1,31 +1,43 @@
-<div class="wrapper">
-    <h1 id="title">Login</h1>
-    <div mat-dialog-content class="flex flex-col items-center justify-center">
-        <div class="row">
-            <mat-icon class="icon">person</mat-icon>
-            <mat-form-field appearance="outline">
-                <input matInput type="text" placeholder="Username" required>
-            </mat-form-field>
+<body>
+    <div class="wrapper">
+        <div mat-dialog-content class="flex flex-col items-center justify-center">
+            <div>
+                <h2 id="title">Login</h2>
+            </div>
+            
+            <div class="row -mb-2">
+                <mat-icon class="icon">person</mat-icon>
+                <mat-form-field appearance="outline">
+                    <input matInput type="text" placeholder="Usuario" required>
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" disabled>
+                        <mat-icon>nothing</mat-icon>
+                      </button>
+                </mat-form-field>
+            </div>
+    
+            <div class="row">
+                <mat-icon class="icon">lock</mat-icon>
+                <mat-form-field appearance="outline">
+                    <input matInput [type]="hide ? 'password' : 'text'" placeholder="Contraseña" required>
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                  </mat-form-field>
+            </div>
+    
+            <div class="forgot">
+                <a href="#" class="coloring">¿Olvidaste tu contraseña?</a>
+            </div>
+    
+            <div mat-dialog-actions>
+                <button mat-raised-button class="coloring-deg">Iniciar sesión</button>
+            </div>
+    
+            <div class="register-link"> <!--no se pq al usar <p> dentro de un <div>, el texto se subraya-->
+                <p>¿No tienes una cuenta?<a class="ml-2"
+                    href="#">Regístrate</a></p>
+            </div>
+            
         </div>
-
-        <div class="row">
-            <mat-icon class="icon">lock</mat-icon>
-            <mat-form-field appearance="outline">
-                <input matInput type="password" placeholder="Password" required>
-            </mat-form-field>
-        </div>
-
-        <div class="forgot">
-            <a href="#">Forgot password?</a>
-        </div>
-        
     </div>
-    <div mat-dialog-actions class="mat-dialog-actions">
-        <button mat-raised-button>Cancel</button>
-        <button mat-raised-button color="primary">Login</button>
-    </div>
-    <div class="register-link"> <!--no se pq al usar <p> dentro de un <div>, el texto se subraya-->
-        <p>Don't have an account? <a
-            href="#">Register</a></p>
-    </div>
-</div>
+</body>

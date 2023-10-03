@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./user-login.component.scss']
 })
 export class UserLoginComponent {
+  hide = true;
 
 }
