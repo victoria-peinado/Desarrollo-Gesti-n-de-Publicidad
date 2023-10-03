@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./nuevo-comercio.component.scss']
 })
 export class NuevoComercioComponent {
-  cuit: string = '444';
+  cuit: string = '11-11111111-1';
+  razonSocial: string = "Juan Perez";
+  condicionFinal: string = "Responsable inscripto"
 }

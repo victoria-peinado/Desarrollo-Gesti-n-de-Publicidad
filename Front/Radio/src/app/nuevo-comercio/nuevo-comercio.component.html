@@ -1,9 +1,43 @@
-<b class="text-lg">TITULAR</b>
-<div class="">
-    <div class="">
-        <p class="text-3xs">CUIT</p>
-        <mat-form-field>
-            <input matInput [value]="cuit" readonly>
-        </mat-form-field>
+<section id="titular">
+    <div class="m-5">
+        <b class="text-lg">TITULAR</b>
     </div>
-</div>
+    <div class="m-4 flex flex-row items-center justify-center">
+    
+        <div class="inline-block ml-4 mr-4">
+            <p class="text-3xs ml-10 text-left">CUIT</p>
+            <mat-form-field class="-mt-2 " appearance="outline">
+                <input matInput [value]="cuit" readonly>
+            </mat-form-field>
+        </div>
+    
+        <div class="inline-block ml-4 mr-4">
+            <p class="text-3xs ml-10 text-left">RAZON SOCIAL</p>
+            <mat-form-field class="-mt-2" appearance="outline">
+                <input matInput [value]="razonSocial" readonly>
+            </mat-form-field>
+        </div>
+    
+        <div class="inline-block ml-4 mr-4">
+            <p class="text-3xs ml-10 text-left">CONDICION FINAL</p>
+            <mat-form-field class="-mt-2" appearance="outline">
+                <mat-select>
+                  <mat-option value="one">Responsable Inscripto</mat-option>
+                  <mat-option value="two">Otro</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+</section>
+
+<section id="comerciosTitular">
+    <div class="m-5">
+        <b class="text-lg">COMERCIOS DEL TITULAR</b>
+    </div>
+    <div class="m-4 flex flex-row items-center justify-center">
+    
+        <div class="inline-block ml-4 mr-4">
+            <p class="tabla">TABLA</p>
+        </div>
+    </div>
+</section>

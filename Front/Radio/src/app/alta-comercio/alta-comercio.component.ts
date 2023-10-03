@@ -11,7 +11,7 @@ export class AltaComercioComponent {
   @ViewChild('cuitInput', { static: false }) cuitInputRef!: ElementRef;
   cuit: string = '';
   cuitInvalid: boolean = false;
-  cuitsPermitidos: string[] = ['11111111111', '77777777777']; // simulación BD
+  cuitsPermitidos: string[] = ['11111111111']; // simulación BD
   coloring: ThemePalette = "primary";
   icon: string = 'display: none';
 
