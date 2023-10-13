@@ -39,7 +39,8 @@ export class BlockComponent implements OnInit{
     } );
     
   }
-   getHistory() {  this.myDataService.getHistory().pipe(take(1)).subscribe((response: any) => {
+   getHistory() {  
+  this.myDataService.getHistory().pipe(take(1)).subscribe((response: any) => {
     // Verifica si la propiedad 'data' es un arreglo
     if (Array.isArray(response.data)) {
       // El resto del código para procesar la respuesta
@@ -52,8 +53,9 @@ export class BlockComponent implements OnInit{
         // Convierte la fecha del historial a un objeto de fecha
         const historyDate = new Date(history.startTime);
 
-        if (historyDate < today) {
-          // Si la fecha del historial es anterior a hoy, verifica si es la más reciente
+        if (historyDate < today && history.idBlock === this.selectedValue.id) {
+          // Si la fecha del historial es anterior a hoy y el idBlock coincide con selectedValue.id
+          // verifica si es la más reciente
           if (!lastHistory || historyDate > new Date(lastHistory.startTime)) {
             lastHistory = history;
           }
@@ -61,7 +63,7 @@ export class BlockComponent implements OnInit{
       }
 
       // Ahora, lastHistory contiene el último historial válido
-    
+
       this.last = lastHistory;
     } else {
       console.error('La propiedad "data" no es un arreglo en la respuesta.');
