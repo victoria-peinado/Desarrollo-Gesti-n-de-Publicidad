@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
 import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
+import { BtnDegradeComponent } from './btn-degrade/btn-degrade.component';
 
 
 
@@ -29,7 +30,8 @@ import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.componen
     BlockComponent,
     UserLoginComponent,
     AltaComercioComponent,
-    NuevoComercioComponent
+    NuevoComercioComponent,
+    BtnDegradeComponent
   ],
   imports: [
     BrowserModule,

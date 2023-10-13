@@ -1,0 +1,39 @@
+### obtener todos los characters
+GET http://localhost:3000/api/historys
+
+
+### obtener un character
+GET http://localhost:3000/api/historys/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+
+### crear un nuevo character
+POST http://localhost:3000/api/historys
+Content-Type: application/json
+
+{
+  "startTime": "2023-10-08",
+  "precio": 10,
+  "idBlock": "a02b91bc-3769-4221-beb1-d7a3aeba7dad"
+}
+
+### modificar un character (PUT - recurso completo e idempotente)
+
+PUT http://localhost:3000/api/historys/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "startTime": "2020-10-08",
+  "precio": 15,
+  "idBlock": "a02b91bc-3769-4221-beb1-d7a3aeba7dad" 
+}
+
+### modificar un character (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/historys/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "startTime": "2020-10-08",
+  "precio": 3
+}
+
+### borrar un character
+DELETE http://localhost:3000/api/historys/a02b91bc-3769-4221-beb1-d7a3aeba7dad

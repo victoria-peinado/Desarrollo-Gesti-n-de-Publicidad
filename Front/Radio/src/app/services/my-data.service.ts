@@ -10,5 +10,13 @@ export class MyDataService {
   getBlocks() {
     return this.http.get('http://localhost:3000/api/blocks');
   }
-
+  createBlock(block:any) {
+    return this.http.post('http://localhost:3000/api/blocks', block);
+  }
+  getHistory() {
+    return this.http.get('http://localhost:3000/api/historys');
+  }
+  createHistory(history:any) {
+    return this.http.post('http://localhost:3000/api/historys', history);
+  }
 }
