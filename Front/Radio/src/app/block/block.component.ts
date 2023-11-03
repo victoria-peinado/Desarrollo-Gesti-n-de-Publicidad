@@ -1,20 +1,26 @@
-import { Component } from '@angular/core';
+import { Component ,ViewChild, ElementRef } from '@angular/core';
 import { MyDataService } from '../services/my-data.service';
 import { OnInit } from '@angular/core';
 import { take ,tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { ThemePalette } from '@angular/material/core/index.js';
 @Component({
   selector: 'app-block',
   templateUrl: './block.component.html',
   styleUrls: ['./block.component.scss']
 })
 export class BlockComponent implements OnInit{
+   @ViewChild('inputBloque') inputBloque: any;
+  @ViewChild('inputPrecio', { static: false }) precioInputRef!: ElementRef;
   blocks: any
   blocks$: any
   selectedValue: any
   last: any
-  nuevoPrecio: any
+  nuevoPrecio: number | null=null 
+  inValido: boolean= false
   isBlocksEmpty: boolean = true; // Inicialmente, asumimos que blocks está vacío
+  coloring: ThemePalette = "primary";
+  icon: string = 'display: none';
   constructor(private myDataService: MyDataService,private router: Router) { }
   toadd=[{
   "startTime": "12:30:00",
@@ -86,7 +92,30 @@ export class BlockComponent implements OnInit{
       );
     });
   }
-  
+  verify() {
+    console.log(this.selectedValue);
+    console.log(this.nuevoPrecio);
+    if (!this.isCreateHistoyDisabled() ) {
+      this.inValido = false;
+      this.createHistory();
+     
+    } else {
+      this.inValido = true;
+    this.coloring = "warn";
+    this.icon = "";
+    if(!this.selectedValue){
+     this.inputBloque.focus(); 
+      
+    }else{
+      const precioInputElement = this.precioInputRef.nativeElement;
+      precioInputElement.focus();
+    }
+    
+    }
+  }  
+isCreateHistoyDisabled() {
+  return !this.selectedValue || !this.nuevoPrecio|| this.nuevoPrecio < 0|| isNaN(this.nuevoPrecio);
+}  
 createHistory() {
     // Obtén la fecha de hoy en el formato "yyyy-MM-dd"
     const today = new Date(); // Esto ya incluirá la hora actual, minutos y segundos

@@ -6,5 +6,6 @@ import { Component, Input } from '@angular/core';
 })
 export class BtnDegradeComponent {
    @Input() text: string = 'Aceptar';
+   @Input() disabled: boolean = false;
 
 }

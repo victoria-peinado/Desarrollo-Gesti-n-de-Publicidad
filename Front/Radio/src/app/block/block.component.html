@@ -4,26 +4,27 @@
 </form>
 
 <form *ngIf="!isBlocksEmpty" class="flex flex-col items-center justify-center">
-  <mat-form-field hideRequiredMarke floatLabel="auto" class="w-1/2">
-    <mat-select hideRequiredMarke required [(ngModel)]="selectedValue" name="selectedValue"  (ngModelChange)="getHistory()">
+  <mat-form-field hideRequiredMarke floatLabel="auto" class="w-1/2" [color]="coloring">
+    <mat-select hideRequiredMarke required [(ngModel)]="selectedValue" name="selectedValue"  (ngModelChange)="getHistory()" #inputBloque>
       <mat-option hideRequiredMarke *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
     </mat-select>
     <mat-label><strong> Spot</strong></mat-label>
   </mat-form-field>
+ 
   <p *ngIf="selectedValue !== null && selectedValue !== undefined"> Hora Inicio:{{selectedValue.startTime}}</p>
   <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Fecha ultima actualizacion:{{last.startTime}}</p>
   <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual:{{last.precio}}</p>
-  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2">
+  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring" >
     <mat-label>Nuevo Precio</mat-label>
     <!--  PEDIR AYUDAAAAAAA appearance="outline"-->
-    <mat-hint align="end">Solo números</mat-hint>
-    <input matInput placeholder="Nuevo precio" required name="nuevoPrecio" [(ngModel)]="nuevoPrecio">
     
+    <input matInput placeholder="Nuevo precio" required name="nuevoPrecio" [(ngModel)]="nuevoPrecio" #inputPrecio>
   </mat-form-field>
+  <div  class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="inValido">*Por favor, ingrese un bloque y precio válido.</div>
   <div>
-    <button mat-raised-button (click)="redirectToHome()">Cancelar</button>
+    <button mat-raised-button   (click)="redirectToHome()">Cancelar</button>
     <span style="margin-left: 10px;"></span>
-    <app-btn-degrade (click)="createHistory()" > </app-btn-degrade>
+    <app-btn-degrade [disabled]="isCreateHistoyDisabled()" (click)="verify()" > </app-btn-degrade>
   </div>
 
 </form>
