@@ -5,6 +5,7 @@ import { Trade } from 'src/app/models/trade';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SharedDataService } from '../services/shared-data.service';
 
 @Component({
   selector: 'app-nuevo-comercio',
@@ -17,10 +18,15 @@ export class NuevoComercioComponent implements AfterViewInit {
   titulo = "Crear Comercio";
   id: string | null;
 
+  cuit: string;
+  razonSocial: string;
+  condicionFinal: string;
+
   constructor(private fb: FormBuilder,
               private router: Router,
               private _tradeService: MyDataService,
-              private aRouter: ActivatedRoute) {
+              private aRouter: ActivatedRoute,
+              private sharedDataService: SharedDataService) {
 
     this.tradeForm = this.fb.group({
       fantasyName: ['', Validators.required],
@@ -32,6 +38,10 @@ export class NuevoComercioComponent implements AfterViewInit {
     })
 
     this.id = this.aRouter.snapshot.paramMap.get('id');
+
+    this.cuit = this.sharedDataService.getCuit();
+    this.razonSocial = this.sharedDataService.getRazonSocial();
+    this.condicionFinal = this.sharedDataService.getCondicionFinal();
 
   }
 
@@ -64,9 +74,6 @@ export class NuevoComercioComponent implements AfterViewInit {
   mostrarNuevoComercio = false;
   continuarNuevoComercio = false;
 
-  cuit: string = '11-11111111-1';
-  razonSocial: string = "Juan Perez";
-  condicionFinal: string = "Responsable inscripto";
   
   displayedColumns: string[] = ['name', 'address', 'billingType', 'email', 'wayToPay', 'type'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
