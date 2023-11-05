@@ -19,7 +19,7 @@
         </div>
     
         <div class="inline-block ml-4 mr-4">
-            <p class="text-3xs ml-10 text-left">CONDICION FINAL</p>
+            <p class="text-3xs ml-10 text-left">CONDICION FISCAL</p>
             <mat-form-field class="-mt-2" appearance="outline">
                 <mat-select>
                   <mat-option value="one">Responsable Inscripto</mat-option>
@@ -82,7 +82,140 @@
             </mat-paginator>
           </div>
           <div class="m-5">
-            <button mat-raised-button color="primary">Nuevo Comercio</button>
+            <button mat-raised-button color="primary" (click)="showNewTrade()">Nuevo Comercio</button>
           </div>
     </div>
+</section>
+
+<section id="nuevoComercio" *ngIf="mostrarNuevoComercio">
+  <div class="m-5">
+      <b class="text-lg">NUEVO COMERCIO</b>
+  </div>
+  <div class="m-4 flex flex-row items-center justify-left">
+  
+      <div class="inline-block ml-4 mr-4">
+          <mat-form-field>
+            <mat-label>Nombre fantasia</mat-label>
+            <input matInput>
+          </mat-form-field>
+      </div>
+
+      <div class="m-5">
+        <button mat-raised-button color="primary" (click)="continueWithNewTrade()">Sigue</button>
+      </div>
+
+  </div>
+</section>
+
+<form class="mt-3" [formGroup]="tradeForm" (ngSubmit)="addTrade()">
+  <section id="comercio" *ngIf="continuarNuevoComercio">
+    <div class="m-5">
+        <b class="text-lg">COMERCIO</b>
+    </div>
+    <div class="m-4 flex flex-row items-center justify-left">
+    
+        <div class="inline-block ml-4 mr-4">
+            <p class="text-3xs ml-10 text-left">NOMBRE FANTASIA</p>
+            <mat-form-field class="-mt-2 " appearance="outline">
+                <input matInput formControlName="fantasyName">
+                <div class="text-danger"
+                *ngIf="tradeForm.get('fantasyName')?.hasError('required') && tradeForm.get('fantasyName')?.touched"> <!--se agrega el ? porque si no salta un error de que hasError puede devolver null-->
+                <span>El nombre del producto <strong>es obligatorio</strong></span>
+              </div>
+            </mat-form-field>
+        </div>
+    
+        <div class="inline-block ml-4 mr-4">
+            <p class="text-3xs ml-10 text-left">DIRECCION</p>
+            <mat-form-field class="-mt-2" appearance="outline">
+                <input matInput formControlName="address">
+            </mat-form-field>
+        </div>
+    
+        <div class="inline-block ml-4 mr-4">
+          <p class="text-3xs ml-10 text-left">TIPO FACTURACION</p>
+          <mat-form-field class="-mt-2" appearance="outline">
+              <input matInput formControlName="billingType">
+          </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="m-4 flex flex-row items-center justify-left">
+    
+      <div class="inline-block ml-4 mr-4">
+          <p class="text-3xs ml-10 text-left">MAIL</p>
+          <mat-form-field class="-mt-2 " appearance="outline">
+              <input matInput formControlName="mail">
+          </mat-form-field>
+      </div>
+
+      <div class="inline-block ml-4 mr-4">
+          <p class="text-3xs ml-10 text-left">FORMA DE PAGO HABITUAL</p>
+          <mat-form-field class="-mt-2" appearance="outline">
+              <input matInput formControlName="usualPaymentForm">
+          </mat-form-field>
+      </div>
+
+      <div class="inline-block ml-4 mr-4">
+        <p class="text-3xs ml-10 text-left">TIPO COMERCIO</p>
+        <mat-form-field class="-mt-2" appearance="outline">
+            <input matInput formControlName="type">
+        </mat-form-field>
+    </div>
+
+      <div class="m-5">
+        <button type="submit" class="btn btn-success btn-lg float-end" [disabled]="tradeForm.invalid">ACEPTAR</button>
+      </div>
+
+  </div>
+  </section>
+</form>
+
+<section id="comercio" *ngIf="continuarNuevoComercio">
+  <div class="m-5">
+      <b class="text-lg">CONTACTO</b>
+  </div>
+  <div class="m-4 flex flex-row items-center justify-left">
+  
+      <div class="inline-block ml-4 mr-4">
+          <p class="text-3xs ml-10 text-left">NOMBRE</p>
+          <mat-form-field class="-mt-2 " appearance="outline">
+              <input matInput>
+          </mat-form-field>
+      </div>
+  
+      <div class="inline-block ml-4 mr-4">
+          <p class="text-3xs ml-10 text-left">APELLIDO</p>
+          <mat-form-field class="-mt-2" appearance="outline">
+              <input matInput>
+          </mat-form-field>
+      </div>
+  
+      <div class="inline-block ml-4 mr-4">
+        <p class="text-3xs ml-10 text-left">DNI</p>
+        <mat-form-field class="-mt-2" appearance="outline">
+            <input matInput>
+        </mat-form-field>
+    </div>
+  </div>
+  <div class="m-4 flex flex-row items-center justify-left">
+  
+    <div class="inline-block ml-4 mr-4">
+        <p class="text-3xs ml-10 text-left">TELEFONO</p>
+        <mat-form-field class="-mt-2 " appearance="outline">
+            <input matInput>
+        </mat-form-field>
+    </div>
+
+    <div class="inline-block ml-4 mr-4">
+        <p class="text-3xs ml-10 text-left">MAIL</p>
+        <mat-form-field class="-mt-2" appearance="outline">
+            <input matInput>
+        </mat-form-field>
+    </div>
+
+    
+
+</div>
 </section>

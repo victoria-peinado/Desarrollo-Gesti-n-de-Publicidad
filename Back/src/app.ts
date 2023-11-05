@@ -5,13 +5,17 @@ import { characterRouter } from './character/character.routes.js'
 import { advertisingSpotRouter } from './advertising spot/advertisingSpot.routes.js'
 import { blockRouter } from './block/block.routes.js'
 import { historyRouter } from './history/history.routes.js'
+import { tradeRouter } from './trade/trade.routes.js'
+import { connectDB } from './config/db.js'
 
 const app = express()
 
-// Configurar CORS
+connectDB();
+
 app.use(cors());
 app.use(express.json())
 
+app.use('/api/trades', tradeRouter)
 app.use('/api/contacs', contactRouter)
 app.use('/api/advertisingSpots', advertisingSpotRouter)
 app.use('/api/characters', characterRouter)
