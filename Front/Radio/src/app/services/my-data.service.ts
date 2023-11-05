@@ -8,7 +8,8 @@ import { Trade } from '../models/trade';
 })
 export class MyDataService {
 
-  url = 'http://localhost:3000/api/trades/';
+  urlTrade = 'http://localhost:3000/api/trades/';
+  urlBillingHolder = 'http://localhost:3000/api/billingHolders/cuit/';
 
   constructor(private http: HttpClient) { }
 
@@ -28,15 +29,20 @@ export class MyDataService {
 
   // trade
   getTrades(): Observable<any> {
-    return this.http.get(this.url);
+    return this.http.get(this.urlTrade);
   }
 
-  saveTrade(trade: Trade): Observable<any> {
-    return this.http.post(this.url, trade);
+  createTrade(trade: Trade): Observable<any> {
+    return this.http.post(this.urlTrade, trade);
   }
 
   getTrade(id: string): Observable<any> {
-    return this.http.get(this.url + id);
+    return this.http.get(this.urlTrade + id);
+  }
+
+  //billing holder
+  getBillingHolderByCUIT(cuit: string): Observable<any> {
+    return this.http.get(this.urlBillingHolder + cuit);
   }
 
 }

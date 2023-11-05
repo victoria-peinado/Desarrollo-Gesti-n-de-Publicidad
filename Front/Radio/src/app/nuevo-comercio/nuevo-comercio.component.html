@@ -118,10 +118,6 @@
             <p class="text-3xs ml-10 text-left">NOMBRE FANTASIA</p>
             <mat-form-field class="-mt-2 " appearance="outline">
                 <input matInput formControlName="fantasyName">
-                <div class="text-danger"
-                *ngIf="tradeForm.get('fantasyName')?.hasError('required') && tradeForm.get('fantasyName')?.touched"> <!--se agrega el ? porque si no salta un error de que hasError puede devolver null-->
-                <span>El nombre del producto <strong>es obligatorio</strong></span>
-              </div>
             </mat-form-field>
         </div>
     
@@ -165,7 +161,7 @@
     </div>
 
       <div class="m-5">
-        <button type="submit" class="btn btn-success btn-lg float-end" [disabled]="tradeForm.invalid">ACEPTAR</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="tradeForm.invalid">ACEPTAR</button>
       </div>
 
   </div>

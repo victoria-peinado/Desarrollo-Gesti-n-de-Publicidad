@@ -1,0 +1,27 @@
+### create billing holder
+POST http://localhost:3000/api/billingHolders HTTP/1.1
+Content-Type: application/json
+
+{
+  "CUIT": 11111111111,
+  "businessName": "Juan Perez",
+  "fiscalCondition": "Responsable Inscripto"
+}
+
+### create billing holder
+POST http://localhost:3000/api/billingHolders HTTP/1.1
+Content-Type: application/json
+
+{
+  "CUIT": 33333333333,
+  "businessName": "Joaquin Lares",
+  "fiscalCondition": "Otro"
+}
+
+### getAll billing holder
+GET http://localhost:3000/api/billingHolders HTTP/1.1
+Content-Type: application/json
+
+### getbyCUIT
+GET http://localhost:3000/api/billingHolders/cuit/11111111111 HTTP/1.1
+Content-Type: application/json

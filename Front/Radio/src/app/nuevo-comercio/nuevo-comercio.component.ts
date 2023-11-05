@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./nuevo-comercio.component.scss']
 })
 export class NuevoComercioComponent implements AfterViewInit {
-  // prueba
+
   tradeForm: FormGroup;
   titulo = "Crear Comercio";
   id: string | null;
@@ -48,7 +48,7 @@ export class NuevoComercioComponent implements AfterViewInit {
     };
 
     if(this.id == null) {
-      this._tradeService.saveTrade(TRADE).subscribe(data => {
+      this._tradeService.createTrade(TRADE).subscribe(data => {
       this.router.navigate(['/']);
       }, error => {
         console.log(error);
@@ -60,7 +60,7 @@ export class NuevoComercioComponent implements AfterViewInit {
 
   }
 
-  // prueba
+
   mostrarNuevoComercio = false;
   continuarNuevoComercio = false;
 

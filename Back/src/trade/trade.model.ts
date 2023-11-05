@@ -28,7 +28,12 @@ const TradeSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-  }
+  },
+  billingHolderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "BillingHolder",
+    required: true,
+  },
 });
 
 export default mongoose.model('Trade', TradeSchema);
