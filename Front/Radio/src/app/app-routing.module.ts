@@ -5,10 +5,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
 import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
+import { NuevoContratoComponent } from './nuevo-contrato/nuevo-contrato.component';
 
 const routes: Routes = [
   { path:'', component: UserLoginComponent },
-  { path:'login', component: DummyComponent },
+  { path:'login', component: UserLoginComponent  },
   { path:'altaComercio', component: AltaComercioComponent },
   { path:'altaComercio/nuevoComercio', component: NuevoComercioComponent },
   { path:'actualizacionComercio', component: DummyComponent },
@@ -17,7 +18,7 @@ const routes: Routes = [
   { path:'listadoLiquidaciones', component: DummyComponent },
   { path:'registroPagoPub', component: DummyComponent },
   { path:'actualizacionPublicista', component: DummyComponent },
-  { path:'altaContratacion', component: DummyComponent },
+  { path:'altaContratacion', component: NuevoContratoComponent },
   { path:'actualizacionContratacion', component: DummyComponent },
   { path:'registroPago', component: DummyComponent },
   { path:'informeFaltaPago', component: DummyComponent },

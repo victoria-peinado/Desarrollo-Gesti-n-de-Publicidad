@@ -26,7 +26,6 @@ export class MyDataService {
     return this.http.post('http://localhost:3000/api/historys', history);
   }
 
-
   // trade
   getTrades(): Observable<any> {
     return this.http.get(this.urlTrade);
@@ -40,9 +39,17 @@ export class MyDataService {
     return this.http.get(this.urlTrade + id);
   }
 
-  //billing holder
+  
   getBillingHolderByCUIT(cuit: string): Observable<any> {
     return this.http.get(this.urlBillingHolder + cuit);
+  }
+
+
+  getTitulares() {
+    return this.http.get('http://localhost:3000/api/titulares');
+  }
+  getComers(){
+    return this.http.get('http://localhost:3000/api/comers')
   }
 
 }

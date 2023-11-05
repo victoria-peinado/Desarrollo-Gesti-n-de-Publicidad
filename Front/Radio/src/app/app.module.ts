@@ -14,6 +14,8 @@ import { UserLoginComponent } from './user-login/user-login.component';
 import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
 import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
 import { BtnDegradeComponent } from './btn-degrade/btn-degrade.component';
+import { NuevoContratoComponent } from './nuevo-contrato/nuevo-contrato.component';
+
 
 
 
@@ -31,7 +33,8 @@ import { BtnDegradeComponent } from './btn-degrade/btn-degrade.component';
     UserLoginComponent,
     AltaComercioComponent,
     NuevoComercioComponent,
-    BtnDegradeComponent
+    BtnDegradeComponent,
+    NuevoContratoComponent
   ],
   imports: [
     BrowserModule,
