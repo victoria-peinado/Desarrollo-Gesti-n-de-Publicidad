@@ -1,1 +1,0 @@
-{"version":3,"file":"history.entity.js","sourceRoot":"","sources":["../../src/history/history.entity.ts"],"names":[],"mappings":"AAAA,OAAO,MAAM,MAAM,aAAa,CAAC;AAEjC,MAAM,OAAO,OAAO;IAClB,YACS,SAAiB,EACjB,MAAc,EACd,OAAe,EAAE,gDAAgD;IACjE,KAAK,MAAM,CAAC,UAAU,EAAE;QAHxB,cAAS,GAAT,SAAS,CAAQ;QACjB,WAAM,GAAN,MAAM,CAAQ;QACd,YAAO,GAAP,OAAO,CAAQ;QACf,OAAE,GAAF,EAAE,CAAsB;IAC9B,CAAC;CACL"}
