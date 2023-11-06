@@ -1,6 +1,7 @@
 import { Block } from './block.entity.js';
 const blocks = [
     new Block('08:30:00', 11, 'a02b91bc-3769-4221-beb1-d7a3aeba7dad'),
+    new Block('08:30:00', 11, 'a02b91bc-3768-4221-beb1-d7a3aeba7dad'),
 ];
 export class BlockRepository {
     findAll() {

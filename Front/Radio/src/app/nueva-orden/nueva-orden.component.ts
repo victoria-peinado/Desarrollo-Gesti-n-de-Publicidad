@@ -4,68 +4,48 @@ import { OnInit } from '@angular/core';
 import { take ,tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
+
 @Component({
-  selector: 'app-nuevo-contrato',
-  templateUrl: './nuevo-contrato.component.html',
-  styleUrls: ['./nuevo-contrato.component.scss']
+  selector: 'app-nueva-orden',
+  templateUrl: './nueva-orden.component.html',
+  styleUrls: ['./nueva-orden.component.scss']
 })
-export class NuevoContratoComponent {
-  @ViewChild('inputBloque') inputBloque: any;
-  @ViewChild('inputPrecio', { static: false }) precioInputRef!: ElementRef;
-  nombre: string | any =null
-  cuit:any =null
+export class NuevaOrdenComponent implements OnInit{;
+  numero:any =null
   inValido: boolean= false
   coloring: ThemePalette = "primary";
-  tutular:any =null
-  comercio:any =null
-  fechaIn:Date|null=null
-  fechaFin:Date|null=null
+  dataSource : any|null
+  clickedRows : any
+ picker:any
+ fecha:any|null
+ matDatepicker:any
+
+  displayedColumns: string[] = ['Bloque', 'Lunes', 'Martes', 'Miercoles','Jueves','Viernes','Sabado','Domingo'];
   constructor(private myDataService: MyDataService,private router: Router) { }
 
   redirectToHome() {
     this.router.navigate(['/']);
   }
-  getFechaR(){
-    //implementar
+  ngOnInit() {
+    this.getBLoques();
   }
-  getTitular(){
-    this.myDataService.getTitulares().pipe(take(1)).subscribe((response: any) => {
-    // Verifica si la propiedad 'data' es un arreglo
-      if (Array.isArray(response.data)) {
-        // El resto del código para procesar la respuesta
-
-        for (const tit of response.data) {
-        
-          if (tit.cuit=== this.cuit) {
-            this.tutular= tit
-          }
-        }
-      } else {
-        console.error('La propiedad "data" no es un arreglo en la respuesta.');
-      }
-    });
+  getBLoques() {
+    this.myDataService.getBlocks().pipe(take(1)).subscribe(data => {
+      let blocks :any
+      blocks = data;
+      blocks = blocks.data;
+      this.dataSource = blocks;
+    } );
+    console.log(this.dataSource);
   }
-  getComer(){
-    this.myDataService.getComers().pipe(take(1)).subscribe((response: any) => {
-    // Verifica si la propiedad 'data' es un arreglo
-      if (Array.isArray(response.data)) {
-        // El resto del código para procesar la respuesta
-        const today = new Date();
-
-        for (const tit of response.data) {
-        
-          if (tit.nombre=== this.nombre) {
-            this.comercio= tit
-          }
-        }
-      } else {
-        console.error('La propiedad "data" no es un arreglo en la respuesta.');
-      }
-    });
+  onCheckboxChange(index: number, day: string) {
+  // Aquí puedes registrar las celdas tildadas en un array o realizar otras acciones.
+  if (this.dataSource[index][day]) {
+    // La celda está tildada, realiza la lógica necesaria.
+  } else {
+    // La celda está destildada, realiza la lógica necesaria.
   }
-
-   
- 
+}
   // verify() {
   //   console.log(this.selectedValue);
   //   console.log(this.nuevoPrecio);
@@ -87,7 +67,7 @@ export class NuevoContratoComponent {
   //   }
   // }  
 isCreateContracDisabled() {
-  return !this.tutular || !this.comercio;
+  return !this.numero || isNaN(this.numero);
 }  
 // createContrac() {
 //     // Obtén la fecha de hoy en el formato "yyyy-MM-dd"
