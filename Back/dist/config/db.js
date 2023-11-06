@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 export const connectDB = async () => {
     try {
-        await mongoose.connect('mongodb+srv://m4rc0sd3ls0l4r:marcosdelsolar@cluster0.03tncxo.mongodb.net/radio');
+        await mongoose.connect('mongodb+srv://victoriapeinado:piolin87@cluster0.2m1ohob.mongodb.net/');
         console.log('Database connected successfully');
     }
     catch (error) {

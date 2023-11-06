@@ -6,6 +6,7 @@ import { UserLoginComponent } from './user-login/user-login.component';
 import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
 import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
 import { NuevoContratoComponent } from './nuevo-contrato/nuevo-contrato.component';
+import { NuevaOrdenComponent } from './nueva-orden/nueva-orden.component';
 
 const routes: Routes = [
   { path:'', component: UserLoginComponent },
@@ -22,7 +23,7 @@ const routes: Routes = [
   { path:'actualizacionContratacion', component: DummyComponent },
   { path:'registroPago', component: DummyComponent },
   { path:'informeFaltaPago', component: DummyComponent },
-  { path:'emisionOrdenes', component: DummyComponent },
+  { path:'emisionOrdenes', component: NuevaOrdenComponent },
   { path:'listadoPublicitario', component: DummyComponent },
   { path:'actualizacionSpot', component: BlockComponent },
   { path: '**', redirectTo: '', pathMatch: 'full'} // cuando el usuario pone una ruta inexistente redirige a http://localhost:4200

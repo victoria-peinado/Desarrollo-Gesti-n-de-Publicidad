@@ -1,0 +1,81 @@
+<h1 class="text-center ">Nueva Orden</h1>
+
+<form class="flex flex-col items-center justify-center">
+
+  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
+    <mat-label>Numero Contratación</mat-label>
+    <!--  PEDIR AYUDAAAAAAA appearance="outline"-->
+    <input matInput placeholder="Numero de Contratación" required name="numero" [(ngModel)]="numero" #inputNumero>
+  </mat-form-field>
+  <mat-checkbox  [checked]="true">
+    Igual para todos los meses
+  </mat-checkbox>
+
+ 
+<div class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead>
+      <tr>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+          Bloque</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+          Lunes</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+          Martes</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+          Miércoles</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+          Jueves</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+          Viernes</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+          Sábado</th>
+        <th class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+          Domingo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bloque of dataSource; let i = index">
+        <td class="px-6 py-4 whitespace-no-wrap">{{bloque.startTime}}</td>
+        <td class="px-6 py-4 whitespace-no-wrap">
+          <mat-checkbox (change)="onCheckboxChange(i, 'Lunes')"></mat-checkbox>
+        </td>
+        <td class="px-6 py-4 whitespace-no-wrap">
+          <mat-checkbox (change)="onCheckboxChange(i, 'Martes')"></mat-checkbox>
+        </td>
+        <td class="px-6 py-4 whitespace-no-wrap">
+          <mat-checkbox (change)="onCheckboxChange(i, 'Miércoles')"></mat-checkbox>
+        </td>
+        <td class="px-6 py-4 whitespace-no-wrap">
+          <mat-checkbox (change)="onCheckboxChange(i, 'Jueves')"></mat-checkbox>
+        </td>
+        <td class="px-6 py-4 whitespace-no-wrap">
+          <mat-checkbox (change)="onCheckboxChange(i, 'Viernes')"></mat-checkbox>
+        </td>
+        <td class="px-6 py-4 whitespace-no-wrap">
+          <mat-checkbox (change)="onCheckboxChange(i, 'Sábado')"></mat-checkbox>
+        </td>
+        <td class="px-6 py-4 whitespace-no-wrap">
+          <mat-checkbox (change)="onCheckboxChange(i, 'Domingo')"></mat-checkbox>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+  <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="inValido">
+    *Por favor,ingrese un numero de comercio valido y al menos un bloque.
+  </div>
+  <div >
+    <button mat-raised-button (click)="redirectToHome()">Añadir Fecha</button>
+    <div>
+      <button mat-raised-button (click)="redirectToHome()">Añadir Bloque</button>
+    </div>
+  </div>
+  <div>
+    <button mat-raised-button (click)="redirectToHome()">Cancelar</button>
+    <span style="margin-left: 10px;"></span>
+    <app-btn-degrade [disabled]="isCreateContracDisabled()"> </app-btn-degrade>
+  </div>
+</form>
