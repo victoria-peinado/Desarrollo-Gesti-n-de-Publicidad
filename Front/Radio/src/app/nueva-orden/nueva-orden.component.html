@@ -7,12 +7,9 @@
     <!--  PEDIR AYUDAAAAAAA appearance="outline"-->
     <input matInput placeholder="Numero de Contratación" required name="numero" [(ngModel)]="numero" #inputNumero>
   </mat-form-field>
-  <mat-checkbox  [checked]="true">
-    Igual para todos los meses
-  </mat-checkbox>
-
- 
-<div class="overflow-x-auto">
+<mat-checkbox name="a" [(ngModel)]="igual">Igual para todos los meses</mat-checkbox>
+   
+<div class="overflow-x-auto" *ngIf="igual">
   <table class="min-w-full divide-y divide-gray-200">
     <thead>
       <tr>
@@ -67,15 +64,14 @@
   <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="inValido">
     *Por favor,ingrese un numero de comercio valido y al menos un bloque.
   </div>
+  <ng-container #container></ng-container>
   <div >
-    <button mat-raised-button (click)="redirectToHome()">Añadir Fecha</button>
-    <div>
-      <button mat-raised-button (click)="redirectToHome()">Añadir Bloque</button>
-    </div>
+    <button mat-raised-button (click)="crearFecha()"*ngIf="!igual">Añadir Fecha</button>
+   
   </div>
-  <div>
+  <div class="mt-4">
     <button mat-raised-button (click)="redirectToHome()">Cancelar</button>
-    <span style="margin-left: 10px;"></span>
+    <span class="ml-4"></span>
     <app-btn-degrade [disabled]="isCreateContracDisabled()"> </app-btn-degrade>
   </div>
 </form>

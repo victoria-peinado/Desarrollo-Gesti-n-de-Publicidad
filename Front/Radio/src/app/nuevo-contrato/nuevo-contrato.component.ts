@@ -9,7 +9,7 @@ import { ThemePalette } from '@angular/material/core/index.js';
   templateUrl: './nuevo-contrato.component.html',
   styleUrls: ['./nuevo-contrato.component.scss']
 })
-export class NuevoContratoComponent {
+export class NuevoContratoComponent implements OnInit{
   @ViewChild('inputBloque') inputBloque: any;
   @ViewChild('inputPrecio', { static: false }) precioInputRef!: ElementRef;
   nombre: string | any =null
@@ -20,30 +20,33 @@ export class NuevoContratoComponent {
   comercio:any =null
   fechaIn:Date|null=null
   fechaFin:Date|null=null
+  fecehaR:Date|null=null
+  obs:string|null=null    
   constructor(private myDataService: MyDataService,private router: Router) { }
+  ngOnInit(){
+    // const today = new Date(); 
+    // const year = today.getFullYear();
+    // const month = String(today.getMonth() + 1).padStart(2, '0');
+    // const day = String(today.getDate()).padStart(2, '0');
+    // const formattedDate = `${year}-${month}-${day}`;
+    this.fecehaR= new Date()
 
+  }
   redirectToHome() {
     this.router.navigate(['/']);
   }
-  getFechaR(){
-    //implementar
-  }
-  getTitular(){
-    this.myDataService.getTitulares().pipe(take(1)).subscribe((response: any) => {
-    // Verifica si la propiedad 'data' es un arreglo
-      if (Array.isArray(response.data)) {
-        // El resto del código para procesar la respuesta
 
-        for (const tit of response.data) {
-        
-          if (tit.cuit=== this.cuit) {
-            this.tutular= tit
-          }
-        }
-      } else {
-        console.error('La propiedad "data" no es un arreglo en la respuesta.');
+  getTitular(){
+    this.myDataService.getBillingHolderByCUIT(this.cuit).subscribe(
+      (result: any) => {
+        if (result) {
+          this.tutular = result
+        } 
+      },
+      (error: any) => {
+        console.error(error);
       }
-    });
+    );
   }
   getComer(){
     this.myDataService.getComers().pipe(take(1)).subscribe((response: any) => {
@@ -63,6 +66,10 @@ export class NuevoContratoComponent {
       }
     });
   }
+  titularValido(){
+    return !this.tutular
+  }
+
 
    
  

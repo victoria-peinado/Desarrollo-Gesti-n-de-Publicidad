@@ -1,24 +1,25 @@
-import { Component ,ViewChild, ElementRef } from '@angular/core';
+import { Component ,ViewChild, ElementRef, ViewContainerRef } from '@angular/core';
 import { MyDataService } from '../services/my-data.service';
 import { OnInit } from '@angular/core';
 import { take ,tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
+import { OrdenFechaComponent } from '../orden-fecha/orden-fecha.component';
 
 @Component({
   selector: 'app-nueva-orden',
   templateUrl: './nueva-orden.component.html',
   styleUrls: ['./nueva-orden.component.scss']
 })
-export class NuevaOrdenComponent implements OnInit{;
+export class NuevaOrdenComponent implements OnInit{
+  @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef;
   numero:any =null
   inValido: boolean= false
-  coloring: ThemePalette = "primary";
-  dataSource : any|null
-  clickedRows : any
- picker:any
- fecha:any|null
- matDatepicker:any
+  coloring: ThemePalette = "primary"
+  dataSource : any|null = null
+  fecha:any|null
+  igual:any= true
+  
 
   displayedColumns: string[] = ['Bloque', 'Lunes', 'Martes', 'Miercoles','Jueves','Viernes','Sabado','Domingo'];
   constructor(private myDataService: MyDataService,private router: Router) { }
@@ -45,6 +46,9 @@ export class NuevaOrdenComponent implements OnInit{;
   } else {
     // La celda está destildada, realiza la lógica necesaria.
   }
+}
+crearFecha(){
+  this.container.createComponent(OrdenFechaComponent)
 }
   // verify() {
   //   console.log(this.selectedValue);

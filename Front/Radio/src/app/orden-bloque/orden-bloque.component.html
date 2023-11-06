@@ -1,0 +1,8 @@
+<form class="m-5 flex flex-col items-center justify-center">
+  <mat-form-field hideRequiredMarke floatLabel="auto" class="w-1/2">
+    <mat-select hideRequiredMarke required [(ngModel)]="selectedValue" name="selectedValue" #inputBloque>
+      <mat-option hideRequiredMarke *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
+    </mat-select>
+    <mat-label><strong> Spot</strong></mat-label>
+  </mat-form-field>
+</form>
