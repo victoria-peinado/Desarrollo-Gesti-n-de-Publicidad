@@ -46,29 +46,39 @@ export class NuevoComercioComponent implements AfterViewInit {
   }
 
   addTrade() {
-    
-    const TRADE: Trade = { 
-      fantasyName: this.tradeForm.get('fantasyName')?.value,
-      address: this.tradeForm.get('address')?.value,
-      billingType: this.tradeForm.get('billingType')?.value,
-      mail: this.tradeForm.get('mail')?.value,
-      usualPaymentForm: this.tradeForm.get('usualPaymentForm')?.value,
-      type: this.tradeForm.get('type')?.value
-
-    };
-
-    if(this.id == null) {
-      this._tradeService.createTrade(TRADE).subscribe(data => {
-      this.router.navigate(['/']);
-      }, error => {
-        console.log(error);
-        this.tradeForm.reset();
-      });
-    }
-
-    
-
+  if (this.cuit) {
+    this._tradeService.getBillingHolderByCUIT(this.cuit).subscribe(
+      (billingHolderId: any) => {
+        const TRADE: Trade = { 
+          fantasyName: this.tradeForm.get('fantasyName')?.value,
+          address: this.tradeForm.get('address')?.value,
+          billingType: this.tradeForm.get('billingType')?.value,
+          mail: this.tradeForm.get('mail')?.value,
+          usualPaymentForm: this.tradeForm.get('usualPaymentForm')?.value,
+          type: this.tradeForm.get('type')?.value,
+          billingHolderId: billingHolderId
+        };
+        
+        this.createTrade(TRADE);
+      },
+      error => {
+        console.error(error);
+      }
+    );
+  } else {
+    console.error('El CUIT no está definido.');
   }
+}
+
+createTrade(TRADE: Trade) {
+  this._tradeService.createTrade(TRADE).subscribe(data => {
+    this.router.navigate(['/']);
+  }, error => {
+    console.log(error);
+    this.tradeForm.reset();
+  });
+}
+
 
 
   mostrarNuevoComercio = false;

@@ -38,3 +38,14 @@ export const getTrade = async (req: any, res: any) => {
     res.status(500).send('there was an error');
   }
 };
+
+export const getTradesByBillingHolderId = async (req: any, res: any) => {
+  const billingHolderId = req.params.billingHolderId;
+  try {
+    const trades = await Trade.find({ billingHolderId: billingHolderId });
+    res.json(trades);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Hubo un error');
+  }
+};

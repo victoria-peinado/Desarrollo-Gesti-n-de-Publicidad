@@ -34,4 +34,15 @@ export const getTrade = async (req, res) => {
         res.status(500).send('there was an error');
     }
 };
+export const getTradesByBillingHolderId = async (req, res) => {
+    const billingHolderId = req.params.billingHolderId;
+    try {
+        const trades = await Trade.find({ billingHolderId: billingHolderId });
+        res.json(trades);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send('Hubo un error');
+    }
+};
 //# sourceMappingURL=trade.controler.js.map
