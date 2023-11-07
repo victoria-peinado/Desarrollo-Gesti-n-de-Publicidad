@@ -7,13 +7,14 @@ import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
 import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
 import { NuevoContratoComponent } from './nuevo-contrato/nuevo-contrato.component';
 import { NuevaOrdenComponent } from './nueva-orden/nueva-orden.component';
+import { ActualizacionComercioComponent } from './actualizacion-comercio/actualizacion-comercio.component';
 
 const routes: Routes = [
   { path:'', component: UserLoginComponent },
   { path:'login', component: UserLoginComponent  },
   { path:'altaComercio', component: AltaComercioComponent },
   { path:'altaComercio/nuevoComercio', component: NuevoComercioComponent },
-  { path:'actualizacionComercio', component: DummyComponent },
+  { path:'actualizacionComercio', component: ActualizacionComercioComponent },
   { path:'altaPublicista', component: DummyComponent },
   { path:'liquidacionPublicistas', component: DummyComponent },
   { path:'listadoLiquidaciones', component: DummyComponent },

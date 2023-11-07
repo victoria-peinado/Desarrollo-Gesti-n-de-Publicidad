@@ -18,6 +18,7 @@ import { NuevoContratoComponent } from './nuevo-contrato/nuevo-contrato.componen
 import { NuevaOrdenComponent } from './nueva-orden/nueva-orden.component';
 import { OrdenFechaComponent } from './orden-fecha/orden-fecha.component';
 import { OrdenBLoqueComponent } from './orden-bloque/orden-bloque.component';
+import { ActualizacionComercioComponent } from './actualizacion-comercio/actualizacion-comercio.component';
 
 
 
@@ -35,7 +36,8 @@ import { OrdenBLoqueComponent } from './orden-bloque/orden-bloque.component';
     NuevoContratoComponent,
     NuevaOrdenComponent,
     OrdenFechaComponent,
-    OrdenBLoqueComponent
+    OrdenBLoqueComponent,
+    ActualizacionComercioComponent
   ],
   imports: [
     BrowserModule,
