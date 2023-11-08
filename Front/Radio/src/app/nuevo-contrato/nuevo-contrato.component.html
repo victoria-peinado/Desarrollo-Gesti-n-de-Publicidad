@@ -1,20 +1,23 @@
 <h1 class="text-center ">Nuevo contrato</h1>
 
-<form class="flex flex-col items-center justify-center">
+<div class="flex flex-col items-center justify-center">
 
   <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
     <mat-label>Cuit Titular</mat-label>
     <input matInput  maxlength="11" placeholder="Cuit" (focusout)="getTitular()"required name="cuit" [(ngModel)]="cuit" #inputCuit>
   </mat-form-field>
   <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="!titularValido()">
-    *Mostrar los dato.
+    <p> Nombre:{{tutular.businessName}}</p>
   </div>
   
   <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
     <mat-label>Nombre del Comercio</mat-label>
-    <input matInput  placeholder="Nombre" required name="nombre" [(ngModel)]="nombre" #inputNombre>
+    <input matInput  placeholder="Nombre" required name="nombre"(focusout)="getComers()" [(ngModel)]="nombre" #inputNombre>
   </mat-form-field>
-
+  <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="this.comercio">
+    <p> Direccion:{{comercio.address}}</p>
+    <p> Email:{{comercio.mail}}</p>
+  </div>
   <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
     <mat-label>Fecha de  Inicico</mat-label>
     <input type="date" matInput placeholder="Fecha Inicico" required name="fechaI" [(ngModel)]="fechaIn" #inputFI>
@@ -40,4 +43,4 @@
     <app-btn-degrade [disabled]="isCreateContracDisabled()" > </app-btn-degrade>
   </div>
 
-</form>
+</div>

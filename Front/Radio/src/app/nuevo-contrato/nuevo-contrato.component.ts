@@ -18,6 +18,7 @@ export class NuevoContratoComponent implements OnInit{
   coloring: ThemePalette = "primary";
   tutular:any =null
   comercio:any =null
+  comercios:any =new Set()
   fechaIn:Date|null=null
   fechaFin:Date|null=null
   fecehaR:Date|null=null
@@ -41,6 +42,7 @@ export class NuevoContratoComponent implements OnInit{
       (result: any) => {
         if (result) {
           this.tutular = result
+          console.log(this.tutular)
         } 
       },
       (error: any) => {
@@ -48,24 +50,31 @@ export class NuevoContratoComponent implements OnInit{
       }
     );
   }
-  getComer(){
-    this.myDataService.getComers().pipe(take(1)).subscribe((response: any) => {
-    // Verifica si la propiedad 'data' es un arreglo
-      if (Array.isArray(response.data)) {
-        // El resto del código para procesar la respuesta
-        const today = new Date();
+  getComers() {
+  this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
 
-        for (const tit of response.data) {
-        
-          if (tit.nombre=== this.nombre) {
-            this.comercio= tit
-          }
+
+    if (Array.isArray(response)) {
+      // El objeto de respuesta ya es un arreglo, no necesitas acceder a la propiedad 'data'.
+      for (const tit of response) {
+        if (tit.fantasyName === this.nombre && tit.billingHolderId===this.tutular._id) {
+          this.comercio= tit
         }
-      } else {
-        console.error('La propiedad "data" no es un arreglo en la respuesta.');
       }
-    });
-  }
+       console.log(this.comercio)
+    } else {
+      console.error('La respuesta no es un arreglo.');
+    }
+  });
+}
+  // getComer(){
+  //   //Rocorre comercios y poner en comercio el que tiene el mismo nombre que this.nnombre
+  //   for (const c of this.comercios){
+  //     if(c.fantasyName==this.nombre)
+  //         this.comercio=c
+  //       console.log(this.comercio)
+  //   }
+  // }
   titularValido(){
     return !this.tutular
   }
