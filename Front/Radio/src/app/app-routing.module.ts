@@ -11,7 +11,7 @@ import { ActualizacionComercioComponent } from './actualizacion-comercio/actuali
 import { InicioComponent } from './inicio/inicio.component';
 
 const routes: Routes = [
-  { path:'', component: UserLoginComponent },
+  { path:'', component: InicioComponent },
   { path:'inicio', component: InicioComponent  },
   { path:'login', component: UserLoginComponent  },
   { path:'altaComercio', component: AltaComercioComponent },
