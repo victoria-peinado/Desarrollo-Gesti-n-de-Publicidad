@@ -8,9 +8,11 @@ import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.componen
 import { NuevoContratoComponent } from './nuevo-contrato/nuevo-contrato.component';
 import { NuevaOrdenComponent } from './nueva-orden/nueva-orden.component';
 import { ActualizacionComercioComponent } from './actualizacion-comercio/actualizacion-comercio.component';
+import { InicioComponent } from './inicio/inicio.component';
 
 const routes: Routes = [
   { path:'', component: UserLoginComponent },
+  { path:'inicio', component: InicioComponent  },
   { path:'login', component: UserLoginComponent  },
   { path:'altaComercio', component: AltaComercioComponent },
   { path:'altaComercio/nuevoComercio', component: NuevoComercioComponent },

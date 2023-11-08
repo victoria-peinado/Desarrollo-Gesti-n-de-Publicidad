@@ -19,6 +19,7 @@ import { NuevaOrdenComponent } from './nueva-orden/nueva-orden.component';
 import { OrdenFechaComponent } from './orden-fecha/orden-fecha.component';
 import { OrdenBLoqueComponent } from './orden-bloque/orden-bloque.component';
 import { ActualizacionComercioComponent } from './actualizacion-comercio/actualizacion-comercio.component';
+import { InicioComponent } from './inicio/inicio.component';
 
 
 
@@ -37,7 +38,8 @@ import { ActualizacionComercioComponent } from './actualizacion-comercio/actuali
     NuevaOrdenComponent,
     OrdenFechaComponent,
     OrdenBLoqueComponent,
-    ActualizacionComercioComponent
+    ActualizacionComercioComponent,
+    InicioComponent
   ],
   imports: [
     BrowserModule,
