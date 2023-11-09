@@ -30,14 +30,14 @@
       <mat-label>Fecha de Inicico</mat-label>
       <input type="date" matInput placeholder="Fecha Inicico" required name="fechaI" [(ngModel)]="fechaIn" #inputFI="ngModel">
     <mat-error >* Requerido</mat-error>
-    <mat-hint *ngIf="fechaIValida()&&inputFI.touched" [ngStyle]="{'color': 'red'}">* Ingrese uno válido</mat-hint>
+    <mat-hint *ngIf="!fechaIValida()" [ngStyle]="{'color': 'red'}">* Ingrese uno válido</mat-hint>
     </mat-form-field>
 
     <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
       <mat-label>Fecha de Fenalización(Opcional)</mat-label>
       <input type="date" matInput placeholder="Fecha Fin" name="fechaF" [(ngModel)]="fechaFin" #inputFF="ngModel">
       <mat-error>* Requerido</mat-error>
-      <mat-hint *ngIf="fechaOValida()&&inputFF.touched" [ngStyle]="{'color': 'red'}">* Ingrese uno válido</mat-hint>
+      <mat-hint *ngIf="!fechaOValida()&&inputFF.touched" [ngStyle]="{'color': 'red'}">* Ingrese uno válido</mat-hint>
     </mat-form-field>
 
     <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">

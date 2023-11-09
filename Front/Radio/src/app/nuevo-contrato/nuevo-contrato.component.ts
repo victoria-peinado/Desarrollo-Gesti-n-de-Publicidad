@@ -101,11 +101,24 @@ titularValido() {
 //   }
  console.log('5')
 }
-fechaIValida(){
-  return this.fechaIn !== null && this.fechaIn >= new Date();
+fechaIValida() {
+  if (this.fechaIn === null) {
+    return false; // La fecha es nula, por lo que no es válida.
+  } else {
+    const fechaActual = new Date();
+    const anio = fechaActual.getFullYear();
+    const mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0'); // Asegura que tenga 2 dígitos
+    const dia = fechaActual.getDate().toString().padStart(2, '0'); // Asegura que tenga 2 dígitos
+    const fechaActualFormateada = `${anio}-${mes}-${dia}`;
+    const fechaActual2 = new Date(fechaActualFormateada)
+    const fechaInp= new Date(this.fechaIn)
+    console.log(fechaInp)
+    console.log(fechaActual2)
+    return fechaInp >= fechaActual2; // aaaaDevuelve true si la fecha es mayor o igual a la fecha actual.
+  }
 }
 fechaOValida(){
-  return !(this.fechaFin === null || this.fechaIn !== null && this.fechaFin > this.fechaIn) 
+  return this.fechaFin === null  || this.fechaIn !== null && this.fechaFin > this.fechaIn 
 }
 
   // verify() {
