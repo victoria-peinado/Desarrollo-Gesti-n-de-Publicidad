@@ -1,46 +1,59 @@
-<h1 class="text-center ">Nuevo contrato</h1>
 
-<div class="flex flex-col items-center justify-center">
+  <h1 class="text-center ">Nuevo contrato</h1>
 
-  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
-    <mat-label>Cuit Titular</mat-label>
-    <input matInput  maxlength="11" placeholder="Cuit" (focusout)="getTitular()"required name="cuit" [(ngModel)]="cuit" #inputCuit>
-  </mat-form-field>
-  <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="!titularValido()">
-    <p> Nombre:{{tutular.businessName}}</p>
+  <div class="flex flex-col items-center justify-center">
+
+    <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
+
+      <mat-label>Cuit Titular</mat-label>
+      <input matInput maxlength="11" placeholder="Cuit" (focusout)="getTitular()" required name="cuit" [(ngModel)]="cuit"
+        #inputCuit="ngModel">
+      <mat-error *ngIf="!comercio&&inputNombre.touched">* Requerido</mat-error>
+      <mat-hint *ngIf="!tutular&&inputCuit.touched" [ngStyle]="{'color': 'red'}">* Ingrese uno válido</mat-hint>
+    </mat-form-field>
+    <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="tutular">
+      <p> Nombre:{{tutular.businessName}}</p>
+    </div>
+
+    <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
+      <mat-label>Nombre del Comercio</mat-label>
+      <input matInput placeholder="Nombre" required name="nombre" (focusout)="getComers()" [(ngModel)]="nombre"
+        #inputNombre="ngModel">
+        <mat-error *ngIf="!comercio&&inputNombre.touched">* Requerido</mat-error>
+      <mat-hint *ngIf="!comercio&&inputNombre.touched"  [ngStyle]="{'color': 'red'}">* Ingrese uno válido</mat-hint>
+    </mat-form-field>
+    <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="this.comercio">
+      <p> Direccion:{{comercio.address}}</p>
+      <p> Email:{{comercio.mail}}</p>
+    </div>
+    <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
+      <mat-label>Fecha de Inicico</mat-label>
+      <input type="date" matInput placeholder="Fecha Inicico" required name="fechaI" [(ngModel)]="fechaIn" #inputFI="ngModel">
+    <mat-error >* Requerido</mat-error>
+    <mat-hint *ngIf="fechaIValida()&&inputFI.touched" [ngStyle]="{'color': 'red'}">* Ingrese uno válido</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
+      <mat-label>Fecha de Fenalización(Opcional)</mat-label>
+      <input type="date" matInput placeholder="Fecha Fin" name="fechaF" [(ngModel)]="fechaFin" #inputFF="ngModel">
+      <mat-error>* Requerido</mat-error>
+      <mat-hint *ngIf="fechaOValida()&&inputFF.touched" [ngStyle]="{'color': 'red'}">* Ingrese uno válido</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
+      <mat-label>Observaciones(Opcional)</mat-label>
+      <input matInput placeholder="Obs."  name="obs" [(ngModel)]="obs" #inputObs>
+    </mat-form-field>
+
+    <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="inValido">
+      *Por favor,ingrese u cuit de un titular, un nombre de comercio y fechas validas.
+    </div>
+
+    <div>
+      <button mat-raised-button (click)="redirectToHome()">Cancelar</button>
+      <span style="margin-left: 10px;"></span>
+      <app-btn-degrade [disabled]="isCreateContracDisabled()"> </app-btn-degrade>
+    </div>
+
   </div>
-  
-  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
-    <mat-label>Nombre del Comercio</mat-label>
-    <input matInput  placeholder="Nombre" required name="nombre"(focusout)="getComers()" [(ngModel)]="nombre" #inputNombre>
-  </mat-form-field>
-  <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="this.comercio">
-    <p> Direccion:{{comercio.address}}</p>
-    <p> Email:{{comercio.mail}}</p>
-  </div>
-  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
-    <mat-label>Fecha de  Inicico</mat-label>
-    <input type="date" matInput placeholder="Fecha Inicico" required name="fechaI" [(ngModel)]="fechaIn" #inputFI>
-  </mat-form-field>
 
-  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
-    <mat-label>Fecha de Fenalización(Opcional)</mat-label>
-    <input type="date" matInput placeholder="Fecha Fin"  name="fechaF" [(ngModel)]="fechaFin" #inputFF>
-  </mat-form-field>
-
-  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring">
-    <mat-label>Observaciones(Opcional)</mat-label>
-    <input matInput placeholder="Obs." required name="obs" [(ngModel)]="obs" #inputObs>
-  </mat-form-field>
-
-  <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="inValido">
-    *Por favor,ingrese u cuit de un titular, un nombre de comercio y fechas validas.
-  </div>
-
-  <div>
-    <button mat-raised-button (click)="redirectToHome()">Cancelar</button>
-    <span style="margin-left: 10px;"></span>
-    <app-btn-degrade [disabled]="isCreateContracDisabled()" > </app-btn-degrade>
-  </div>
-
-</div>
