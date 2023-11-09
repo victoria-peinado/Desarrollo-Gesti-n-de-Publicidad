@@ -9,7 +9,6 @@ import { Trade } from '../models/trade';
 export class MyDataService {
 
   urlTrade = 'http://localhost:3000/api/trades/';
-  urlBillingHolder = 'http://localhost:3000/api/billingHolders/cuit/';
 
   constructor(private http: HttpClient) { }
 
@@ -41,7 +40,7 @@ export class MyDataService {
 
   
   getBillingHolderByCUIT(cuit: string): Observable<any> {
-    return this.http.get(this.urlBillingHolder + cuit);
+    return this.http.get('http://localhost:3000/api/billingHolders/cuit/' + cuit);
   }
 
 

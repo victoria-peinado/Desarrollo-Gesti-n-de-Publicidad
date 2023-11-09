@@ -7,31 +7,30 @@ import { SharedDataService } from '../services/shared-data.service';
 @Component({
   selector: 'app-alta-comercio',
   templateUrl: './alta-comercio.component.html',
-  styleUrls: ['./alta-comercio.component.scss']
+  styleUrls: ['./alta-comercio.component.scss'],
 })
 export class AltaComercioComponent {
   @ViewChild('cuitInput', { static: false }) cuitInputRef!: ElementRef;
   cuit: string = '';
   cuitInvalid: boolean = false;
-  cuitsPermitidos: string[] = ['11111111111']; // simulación BD
-  coloring: ThemePalette = "primary";
-  icon: string = 'display: none';
+  coloring: ThemePalette = 'primary';
 
-  constructor(private router: Router, private _BillingHolderService: MyDataService, private sharedDataService: SharedDataService) { }
+  constructor(
+    private router: Router,
+    private _BillingHolderService: MyDataService,
+    private sharedDataService: SharedDataService
+  ) {}
 
   redirectToHome() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 
   redirectToNuevoComercio() {
     this.router.navigate(['/altaComercio/nuevoComercio']);
   }
 
-  isCuitValid(): boolean {
-    return this.cuitsPermitidos.includes(this.cuit);
-  }
-
   verifyCuit() {
+    console.log(typeof this._BillingHolderService.getBillingHolderByCUIT(this.cuit))
     this._BillingHolderService.getBillingHolderByCUIT(this.cuit).subscribe(
       (result: any) => {
         if (result) {
@@ -42,9 +41,8 @@ export class AltaComercioComponent {
           this.redirectToNuevoComercio();
         } else {
           this.cuitInvalid = true;
-          this.coloring = "warn";
-          this.icon = "";
-  
+          this.coloring = 'warn';
+
           const cuitInputElement = this.cuitInputRef.nativeElement;
           cuitInputElement.click();
           cuitInputElement.focus();
@@ -53,17 +51,12 @@ export class AltaComercioComponent {
       (error: any) => {
         console.error(error);
         this.cuitInvalid = true;
-        this.coloring = "warn";
-        this.icon = "";
-  
+        this.coloring = 'warn';
+
         const cuitInputElement = this.cuitInputRef.nativeElement;
         cuitInputElement.click();
         cuitInputElement.focus();
       }
     );
   }
-  
-  
-  
-
 }
