@@ -11,9 +11,12 @@ import { SharedDataService } from '../services/shared-data.service';
 })
 export class AltaComercioComponent {
   @ViewChild('cuitInput', { static: false }) cuitInputRef!: ElementRef;
-  cuit: string = '';
-  cuitInvalid: boolean = false;
+  
   coloring: ThemePalette = 'primary';
+  cuitInvalid: boolean = false;
+  isButtonDisabled: boolean = true;
+  cuit: string = '';
+  message: string = '';
 
   constructor(
     private router: Router,
@@ -29,33 +32,40 @@ export class AltaComercioComponent {
     this.router.navigate(['/altaComercio/nuevoComercio']);
   }
 
-  verifyCuit() {
-    console.log(typeof this._BillingHolderService.getBillingHolderByCUIT(this.cuit))
-    this._BillingHolderService.getBillingHolderByCUIT(this.cuit).subscribe(
-      (result: any) => {
-        if (result) {
-          this.cuitInvalid = false;
-          this.sharedDataService.setCuit(result.CUIT);
-          this.sharedDataService.setRazonSocial(result.businessName);
-          this.sharedDataService.setCondicionFinal(result.fiscalCondition);
-          this.redirectToNuevoComercio();
-        } else {
-          this.cuitInvalid = true;
-          this.coloring = 'warn';
+  onInput() {
+    this.isButtonDisabled = !this.cuit;
 
-          const cuitInputElement = this.cuitInputRef.nativeElement;
-          cuitInputElement.click();
-          cuitInputElement.focus();
-        }
+    if (this.isButtonDisabled) {
+      this.alertUserAboutError('*Este campo es obligatorio.');
+    } else {
+      this.cuitInvalid = false;
+      this.coloring = 'primary';
+    }
+  }
+
+  alertUserAboutError(mess: string) {
+    this.cuitInvalid = true;
+    this.coloring = 'warn';
+    this.message = mess;
+
+    const cuitInputElement = this.cuitInputRef.nativeElement;
+    cuitInputElement.click();
+    cuitInputElement.focus();
+  }
+
+  verifyCuit() {
+    this._BillingHolderService.getBillingHolderByCUIT(this.cuit).subscribe(
+      (billingHolder: any) => {
+        this.sharedDataService.setCuit(billingHolder.CUIT);
+        this.sharedDataService.setRazonSocial(billingHolder.businessName);
+        this.sharedDataService.setCondicionFinal(billingHolder.fiscalCondition);
+        this.redirectToNuevoComercio();
       },
       (error: any) => {
-        console.error(error);
-        this.cuitInvalid = true;
-        this.coloring = 'warn';
-
-        const cuitInputElement = this.cuitInputRef.nativeElement;
-        cuitInputElement.click();
-        cuitInputElement.focus();
+        console.error('Error: ', error);
+        this.alertUserAboutError(
+          'Cuit incorrecto. Por favor, ingrese un Cuit válido.'
+        );
       }
     );
   }
