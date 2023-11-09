@@ -10,3 +10,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
+.disabled-background {
+  background: #ccc;
+  /* Color de fondo gris cuando está deshabilitado */
+  color: #666;
+  /* Color de texto gris cuando está deshabilitado */
+  cursor: not-allowed;
+  /* Cursor de "no permitido" cuando está deshabilitado */
+}
