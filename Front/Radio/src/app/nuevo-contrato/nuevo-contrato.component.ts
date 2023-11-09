@@ -4,6 +4,7 @@ import { OnInit } from '@angular/core';
 import { take ,tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
+import { Validator } from '@angular/forms';
 @Component({
   selector: 'app-nuevo-contrato',
   templateUrl: './nuevo-contrato.component.html',
@@ -12,6 +13,7 @@ import { ThemePalette } from '@angular/material/core/index.js';
 export class NuevoContratoComponent implements OnInit{
   @ViewChild('inputBloque') inputBloque: any;
   @ViewChild('inputPrecio', { static: false }) precioInputRef!: ElementRef;
+  @ViewChild('inputCuit', { static: false }) cuitInputRef!: ElementRef;
   nombre: string | any =null
   cuit:any =null
   inValido: boolean= false
@@ -23,6 +25,7 @@ export class NuevoContratoComponent implements OnInit{
   fechaFin:Date|null=null
   fecehaR:Date|null=null
   obs:string|null=null    
+
   constructor(private myDataService: MyDataService,private router: Router) { }
   ngOnInit(){
     // const today = new Date(); 
@@ -38,34 +41,46 @@ export class NuevoContratoComponent implements OnInit{
   }
 
   getTitular(){
-    this.myDataService.getBillingHolderByCUIT(this.cuit).subscribe(
-      (result: any) => {
-        if (result) {
-          this.tutular = result
-          console.log(this.tutular)
-        } 
-      },
-      (error: any) => {
-        console.error(error);
-      }
-    );
+    if(this.cuit!=null){
+  
+      this.myDataService.getBillingHolderByCUIT(this.cuit).subscribe(
+        (result: any) => {
+          if (result) {
+            this.tutular = result
+            console.log(this.tutular)
+          } 
+          
+        },
+        (error: any) => {
+          console.log('7')
+          this.titularValido()
+           console.log('6')
+        }
+
+      );
+    }
+    
   }
   getComers() {
-  this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
+  if(this.nombre!=null){
+    this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
 
 
-    if (Array.isArray(response)) {
-      // El objeto de respuesta ya es un arreglo, no necesitas acceder a la propiedad 'data'.
-      for (const tit of response) {
-        if (tit.fantasyName === this.nombre && tit.billingHolderId===this.tutular._id) {
-          this.comercio= tit
+      if (Array.isArray(response)&& this.tutular!=null) {
+        // El objeto de respuesta ya es un arreglo, no necesitas acceder a la propiedad 'data'.
+        for (const tit of response) {
+
+          if (tit.fantasyName === this.nombre && tit.billingHolderId===this.tutular._id) {
+            this.comercio= tit
+          }
         }
+        console.log(this.comercio)
+      } else {
+        console.error('La respuesta no es un arreglo.');
       }
-       console.log(this.comercio)
-    } else {
-      console.error('La respuesta no es un arreglo.');
-    }
-  });
+    });
+  }
+
 }
   // getComer(){
   //   //Rocorre comercios y poner en comercio el que tiene el mismo nombre que this.nnombre
@@ -75,13 +90,24 @@ export class NuevoContratoComponent implements OnInit{
   //       console.log(this.comercio)
   //   }
   // }
-  titularValido(){
-    return !this.tutular
-  }
+titularValido() {
+// console.log('5',this.tutular)
+//   if (!this.tutular ) {
+//     // const cinput = this.cuitInputRef.nativeElement;
+//     // cinput.focus();
+    
+//      this.coloring = "warn";
+//     console.log('coloring')
+//   }
+ console.log('5')
+}
+fechaIValida(){
+  return this.fechaIn !== null && this.fechaIn >= new Date();
+}
+fechaOValida(){
+  return !(this.fechaFin === null || this.fechaIn !== null && this.fechaFin > this.fechaIn) 
+}
 
-
-   
- 
   // verify() {
   //   console.log(this.selectedValue);
   //   console.log(this.nuevoPrecio);
@@ -103,7 +129,7 @@ export class NuevoContratoComponent implements OnInit{
   //   }
   // }  
 isCreateContracDisabled() {
-  return !this.tutular || !this.comercio;
+  return !this.tutular || !this.comercio||!this.fechaOValida()||!this.fechaIValida();
 }  
 // createContrac() {
 //     // Obtén la fecha de hoy en el formato "yyyy-MM-dd"
