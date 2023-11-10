@@ -1,14 +1,13 @@
-<main-nav>
 
-<!-- <h1 class="text-3xl font-bold underline bg-red-300">
-  Hello world!
-  <button class="bg-pry hover:bg-pry text-white font-bold py-2 px-4 rounded">
-    Button </button>
+<div *ngIf="isInicioRoute"class="h-full">
+  <main-nav [lateral]="false">
   
-</h1>
-
-<app-top-menu></app-top-menu> -->
-
-
-<router-outlet></router-outlet>
-</main-nav>
+    <router-outlet></router-outlet>
+  </main-nav>
+</div>
+<div *ngIf="!isInicioRoute" class="h-full">
+  <main-nav [lateral]="true">
+  
+    <router-outlet></router-outlet>
+  </main-nav>
+</div>

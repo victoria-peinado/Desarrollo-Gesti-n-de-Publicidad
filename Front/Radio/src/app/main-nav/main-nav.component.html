@@ -1,53 +1,53 @@
+
+<div *ngIf="lateral" class="h-full">
 <mat-sidenav-container class="sidenav-container ">
-  <mat-sidenav #drawer class="sidenav"  fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false"
-      color="primary">
-    <mat-toolbar  >Menu</mat-toolbar>
-    <mat-nav-list >
-      
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false" color="primary">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+
       <a mat-list-item (click)="toggleDisplayComercios()">Comercios</a>
-          <div *ngIf="!isDisplayComercios" class="flex flex-col  w-full justify-between pl-0 ml-0">
-            <a routerLink="altaComercio" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Alta Comercio </a>
-            <a routerLink="actualizacionComercio" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización Comercio</a>
-          </div>
+      <div *ngIf="!isDisplayComercios" class="flex flex-col  w-full justify-between pl-0 ml-0">
+        <a routerLink="altaComercio" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Alta Comercio </a>
+        <a routerLink="actualizacionComercio" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización
+          Comercio</a>
+      </div>
       <a mat-list-item (click)="toggleDisplayPublicistas()">Publicistas</a>
-          <div *ngIf="!isDisplayPublicistas" class="flex flex-col  w-full justify-between pl-0 ml-0">
-            <a routerLink="altaPublicista" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Alta Publicista</a>
-            <a routerLink="liquidacionPublicistas" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Liquidación a Publicistas</a>
-            <a routerLink="listadoLiquidaciones" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Listado Liquidaciones </a>
-            <a routerLink="registroPagoPub"class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Registro de Pago</a>
-            <a routerLink="actualizacionPublicista" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización Publicista</a>
-          </div>
+      <div *ngIf="!isDisplayPublicistas" class="flex flex-col  w-full justify-between pl-0 ml-0">
+        <a routerLink="altaPublicista" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Alta Publicista</a>
+        <a routerLink="liquidacionPublicistas" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Liquidación a
+          Publicistas</a>
+        <a routerLink="listadoLiquidaciones" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Listado Liquidaciones
+        </a>
+        <a routerLink="registroPagoPub" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Registro de Pago</a>
+        <a routerLink="actualizacionPublicista" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización
+          Publicista</a>
+      </div>
       <a mat-list-item (click)="toggleDisplayContrataciones()">Contrataciones</a>
-          <div *ngIf="!isDisplayContrataciones" class="flex flex-col  w-full justify-between pl-0 ml-0">
-            <a routerLink="altaContratacion" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Alta Contratación</a>
-            <a routerLink="actualizacionContratacion" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización Contratación</a>
-          </div>
+      <div *ngIf="!isDisplayContrataciones" class="flex flex-col  w-full justify-between pl-0 ml-0">
+        <a routerLink="altaContratacion" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Alta Contratación</a>
+        <a routerLink="actualizacionContratacion" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización
+          Contratación</a>
+      </div>
       <a mat-list-item (click)="toggleDisplayPagos()">Pagos</a>
-          <div *ngIf="!isDisplayPagos" class="flex flex-col  w-full justify-between pl-0 ml-0">
-            <a routerLink="registroPago" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Registro de Pago</a>
-            <a routerLink="informeFaltaPago" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Informe Falta de Pago</a>
-          </div>
+      <div *ngIf="!isDisplayPagos" class="flex flex-col  w-full justify-between pl-0 ml-0">
+        <a routerLink="registroPago" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Registro de Pago</a>
+        <a routerLink="informeFaltaPago" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Informe Falta de Pago</a>
+      </div>
       <a mat-list-item (click)="toggleDisplayPublicidades()">Publicidades</a>
-          <div *ngIf="!isDisplayPublicidades" class="flex flex-col  w-full justify-between pl-0 ml-0">
-            <a routerLink="emisionOrdenes" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Emisión Ordenes</a>
-            <a routerLink="listadoPublicitario" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Listado Publicitario</a>
-          </div>
+      <div *ngIf="!isDisplayPublicidades" class="flex flex-col  w-full justify-between pl-0 ml-0">
+        <a routerLink="emisionOrdenes" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Emisión Ordenes</a>
+        <a routerLink="listadoPublicitario" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Listado Publicitario</a>
+      </div>
       <a mat-list-item (click)="toggleDisplayBloques()">Bloques</a>
-          <div *ngIf="!isDisplayBloques" class="flex flex-col  w-full justify-between pl-0 ml-0">
-            <a routerLink="actualizacionSpot" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización Spot</a>
-          </div>
+      <div *ngIf="!isDisplayBloques" class="flex flex-col  w-full justify-between pl-0 ml-0">
+        <a routerLink="actualizacionSpot" class="w-full h-full hover:bg-slate-400 py-2 px-6 ">Actualización Spot</a>
+      </div>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content >
+  <mat-sidenav-content>
     <mat-toolbar class="mat-elevation-z4 coloring-deg">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
@@ -57,9 +57,25 @@
       <span class="flex-1"></span>
       <mat-icon routerLink="logOut" *ngIf="isLoggedIn === false">account_circle</mat-icon>
       <a mat-button routerLink="login" *ngIf="isLoggedIn === false" routerLink="/login">Login</a>
-      
+
     </mat-toolbar>
     <!-- Add Content Here -->
     <ng-content></ng-content>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+</div>
+<div *ngIf="!lateral"class="h-full">
+    <mat-toolbar  class="mat-elevation-z4 coloring-deg">
+      <div class="flex items-center">
+        <img src="../../assets/logo.png" class="h-10 w-30 mr-2" alt="Logo">
+      </div>
+      <span class="flex-1"></span>
+      <mat-icon routerLink="logOut" *ngIf="isLoggedIn === false">account_circle</mat-icon>
+      <a mat-button routerLink="login" *ngIf="isLoggedIn === false" routerLink="/login">Login</a>
+    
+    </mat-toolbar>
+    <app-inicio>  </app-inicio>
+</div>
+
+

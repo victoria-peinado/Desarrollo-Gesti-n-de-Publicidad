@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input  } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -11,7 +11,8 @@ import { map, shareReplay } from 'rxjs/operators';
 })
 export class MainNavComponent {
   private breakpointObserver = inject(BreakpointObserver);
-
+  @Input() lateral: boolean = true;
+  
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
