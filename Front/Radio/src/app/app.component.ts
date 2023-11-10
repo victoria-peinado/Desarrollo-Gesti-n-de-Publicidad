@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
     filter((event: any) => event instanceof NavigationEnd)
   ).subscribe((event: NavigationEnd) => {
     // Verifica la ruta actual
-    if (event.url === '/inicio') {
+    if (event.url === '/') {
       // Si la ruta es /inicio, oculta el menú lateral
       this.isInicioRoute = true;
     } else {
