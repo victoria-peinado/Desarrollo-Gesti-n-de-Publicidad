@@ -70,3 +70,27 @@ export const getTradesByFantasyNameAndCUIT = async (req: any, res: any) => {
     res.status(500).send('Hubo un error');
   }
 };
+
+export const getTradesByCuit = async (req: any, res: any) => {
+  const { cuit } = req.params;
+
+  console.log('Hola mundo')
+  console.log(cuit)
+
+  try {
+    const billingHolder = await BillingHolder.findOne({ CUIT: cuit });
+
+    console.log(billingHolder)
+
+    if (!billingHolder) {
+      return res.status(404).json({ error: 'Billing holder no encontrado para el CUIT proporcionado.' });
+    }
+
+    const trades = await Trade.find({ billingHolderId: billingHolder._id });
+
+    res.json(trades);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};

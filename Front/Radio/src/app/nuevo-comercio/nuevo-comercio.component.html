@@ -29,61 +29,67 @@
     </div>
 </section>
 
-<section id="comerciosTitular">
+<section id="comerciosTitular" >
+  <div class="m-5">
+    <b class="text-lg">COMERCIOS DEL TITULAR</b>
+  </div>
+  
+  <div class="m-5">
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+    </mat-form-field>
+  </div>
+  
+  <div class="m-4 flex flex-row items-center justify-left">
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+    
+        <ng-container matColumnDef="fantasyName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre fantasía </th>
+          <td mat-cell *matCellDef="let row"> {{row.fantasyName}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Direccion </th>
+          <td mat-cell *matCellDef="let row"> {{row.address}}% </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="billingType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de facturación </th>
+          <td mat-cell *matCellDef="let row"> {{row.billingType}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="mail">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Mail </th>
+          <td mat-cell *matCellDef="let row"> {{row.mail}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="usualPaymentForm">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Forma Pago </th>
+          <td mat-cell *matCellDef="let row"> {{row.usualPaymentForm}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+          <td mat-cell *matCellDef="let row"> {{row.type}} </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+    
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+    </div>
     <div class="m-5">
-        <b class="text-lg">COMERCIOS DEL TITULAR</b>
+      <button mat-raised-button color="primary" (click)="showNewTrade()">Nuevo Comercio</button>
     </div>
-    <div class="m-4 flex flex-row items-center justify-left">
-        <div class="mat-elevation-z8">
-            <table mat-table [dataSource]="dataSource">
-          
-              <!-- Position Column -->
-              <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-              </ng-container>
-          
-              <!-- Name Column -->
-              <ng-container matColumnDef="address">
-                <th mat-header-cell *matHeaderCellDef> Direccion </th>
-                <td mat-cell *matCellDef="let element"> {{element.address}} </td>
-              </ng-container>
-          
-              <!-- Weight Column -->
-              <ng-container matColumnDef="billingType">
-                <th mat-header-cell *matHeaderCellDef> Tipo Facturacion </th>
-                <td mat-cell *matCellDef="let element"> {{element.billingType}} </td>
-              </ng-container>
-          
-              <!-- Symbol Column -->
-              <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef> Email </th>
-                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="wayToPay">
-                <th mat-header-cell *matHeaderCellDef> Forma Pago </th>
-                <td mat-cell *matCellDef="let element"> {{element.wayToPay}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="type">
-                <th mat-header-cell *matHeaderCellDef> Tipo </th>
-                <td mat-cell *matCellDef="let element"> {{element.type}} </td>
-              </ng-container>
-          
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-          
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                           showFirstLastButtons
-                           aria-label="Select page of periodic elements">
-            </mat-paginator>
-          </div>
-          <div class="m-5">
-            <button mat-raised-button color="primary" (click)="showNewTrade()">Nuevo Comercio</button>
-          </div>
-    </div>
+  </div>
+ 
 </section>
 
 <section id="nuevoComercio" *ngIf="mostrarNuevoComercio">
@@ -103,7 +109,7 @@
     </div>
     <div *ngIf="cuitInvalid" class="text-red-600 text-xs -mt-4 mb-3" color="warn" [innerHTML]="message">{{message}}</div>
     <div>
-      <button mat-raised-button color="primary" [disabled]="isButtonDisabled" (click)="verifyNameFantasy()">Siguiente</button>
+      <app-btn-degrade [disabled]="isButtonDisabled" (click)="verifyNameFantasy()">Siguiente</app-btn-degrade>
   </div>
 
   </div>
