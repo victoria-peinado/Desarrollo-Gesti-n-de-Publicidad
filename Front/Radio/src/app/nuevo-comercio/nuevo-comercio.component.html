@@ -37,7 +37,7 @@
   <div class="m-5">
     <mat-form-field>
       <mat-label>Filtrar</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Juguetes SRL" #input>
     </mat-form-field>
   </div>
   
@@ -83,7 +83,7 @@
         </tr>
       </table>
     
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Seleccionar página de usuarios"></mat-paginator>
     </div>
     <div class="m-5">
       <app-btn-degrade [text]="'Nuevo Comercio'" (click)="showNewTrade()"></app-btn-degrade>
@@ -116,43 +116,56 @@
             <div>
               <input matInput formControlName="address">
             </div>
+            <mat-error *ngIf="tradeForm.get('address')?.invalid">{{alertUser()}}</mat-error>
           </mat-form-field>
       </div>
   
       <div>
         <mat-form-field [color]="coloring">
           <mat-label>Tipo facturación</mat-label>
-            <div>
-              <input matInput formControlName="billingType">
-            </div>
-          </mat-form-field>
+          <mat-select formControlName="billingType">
+            <mat-option value="Responsable Inscripto">Responsable Inscripto</mat-option>
+            <mat-option value="Monotributo">Monotributo</mat-option>
+            <mat-option value="Otro">Otro</mat-option>
+          </mat-select>
+          <mat-error *ngIf="tradeForm.get('billingType')?.invalid">{{alertUser()}}</mat-error>
+        </mat-form-field>
       </div>
-  
+
       <div>
         <mat-form-field [color]="coloring">
           <mat-label>Mail</mat-label>
             <div>
               <input matInput formControlName="mail">
             </div>
-          </mat-form-field>
+            <mat-error *ngIf="tradeForm.get('mail')?.invalid">{{getMailErrorMessage()}}</mat-error>
+        </mat-form-field>
       </div>
-  
+
       <div>
         <mat-form-field [color]="coloring">
           <mat-label>Forma de pago usual</mat-label>
-            <div>
-              <input matInput formControlName="usualPaymentForm">
-            </div>
-          </mat-form-field>
+          <mat-select formControlName="usualPaymentForm">
+            <mat-option value="Efectivo">Efectivo</mat-option>
+            <mat-option value="Tarjeta de Crédito">Tarjeta de Crédito</mat-option>
+            <mat-option value="Tarjeta de Débito">Tarjeta de Débito</mat-option>
+            <mat-option value="Cheque">Cheque</mat-option>
+            <mat-option value="Otro">Otro</mat-option>
+          </mat-select>
+          <mat-error *ngIf="tradeForm.get('usualPaymentForm')?.invalid">{{alertUser()}}</mat-error>
+        </mat-form-field>
       </div>
-  
+
       <div>
         <mat-form-field [color]="coloring">
           <mat-label>Tipo</mat-label>
-            <div>
-              <input matInput formControlName="type">
-            </div>
-          </mat-form-field>
+          <mat-select formControlName="type">
+            <mat-option value="Empresa">Empresa</mat-option>
+            <mat-option value="PyME">PyME</mat-option>
+            <mat-option value="Otro">Otro</mat-option>
+          </mat-select>
+          <mat-error *ngIf="tradeForm.get('type')?.invalid">{{alertUser()}}</mat-error>
+        </mat-form-field>
       </div>
   
       <div>

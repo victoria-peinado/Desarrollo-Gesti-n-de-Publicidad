@@ -63,7 +63,7 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
       fantasyName: ['', Validators.required],
       address: ['', Validators.required],
       billingType: ['', Validators.required],
-      mail: ['', Validators.required],
+      mail: ['', [Validators.required, Validators.email]],
       usualPaymentForm: ['', Validators.required],
       type: ['', Validators.required],
     });
@@ -77,6 +77,14 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.obtenerComercios();
+  }
+
+  getMailErrorMessage() {
+    if (this.tradeForm.get('mail')?.hasError('required')) {
+      return '*Este campo es obligatorio.';
+    }
+
+    return this.tradeForm.get('mail')?.hasError('email') ? 'Email inválido.' : '';
   }
 
   obtenerComercios() {
@@ -136,7 +144,7 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
   createTrade(TRADE: Trade) {
     this._tradeService.createTrade(TRADE).subscribe(
       (data) => {
-        this.router.navigate(['/']);
+        this.obtenerComercios();
       },
       (error) => {
         console.log(error);
@@ -151,6 +159,10 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
 
   continueWithNewTrade() {
     this.continuarNuevoComercio = true;
+  }
+
+  alertUser() {
+    return '*Este campo es obligatorio.'
   }
 
   alertUserAboutError(mess: string) {
@@ -179,6 +191,7 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
             } else {
               this.addTrade();
               this.continueWithNewTrade();
+              alert('Comercio añadido exitosamente');
             }
           },
           (error: any) => {
