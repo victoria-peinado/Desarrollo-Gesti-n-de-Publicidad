@@ -31,15 +31,23 @@ export class AltaComercioComponent {
   redirectToNuevoComercio() {
     this.router.navigate(['/altaComercio/nuevoComercio']);
   }
+  
 
   onInput() {
     this.isButtonDisabled = !this.cuit;
 
     if (this.isButtonDisabled) {
-      this.alertUserAboutError('*Este campo es obligatorio.');
+      this.alertUserAboutError('*Este campo es <strong>obligatorio</strong>.');
     } else {
       this.cuitInvalid = false;
       this.coloring = 'primary';
+    }
+  }
+
+  validateNumberInput(event: any) {
+    const inputChar = String.fromCharCode(event.charCode);
+    if (!/^\d+$/.test(inputChar)) {
+      event.preventDefault();
     }
   }
 
@@ -64,7 +72,7 @@ export class AltaComercioComponent {
       (error: any) => {
         console.error('Error: ', error);
         this.alertUserAboutError(
-          'Cuit incorrecto. Por favor, ingrese un Cuit válido.'
+          'Cuit <strong>incorrecto</strong>. Por favor, ingrese un Cuit válido.'
         );
       }
     );

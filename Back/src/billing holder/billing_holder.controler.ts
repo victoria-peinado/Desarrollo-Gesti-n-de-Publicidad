@@ -46,7 +46,7 @@ export const getBillingHolderByCUIT = async (req: any, res: any) => {
     const billingHolder = await BillingHolder.findOne({ CUIT: cuit });
 
     if (!billingHolder) {
-      return res.status(404).json({ msg: "Billing holder doesn't exist" });
+      return res.status(404).json({ msg: "Billing holder NOT FOUNDED" });
     }
 
     res.json(billingHolder);

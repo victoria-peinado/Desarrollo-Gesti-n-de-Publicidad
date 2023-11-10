@@ -25,7 +25,6 @@ export class MyDataService {
     return this.http.post('http://localhost:3000/api/historys', history);
   }
 
-  // trade
   getTrades(): Observable<any> {
     return this.http.get(this.urlTrade);
   }
@@ -42,6 +41,15 @@ export class MyDataService {
   getBillingHolderByCUIT(cuit: string): Observable<any> {
     return this.http.get('http://localhost:3000/api/billingHolders/cuit/' + cuit);
   }
+
+
+  getTradesByFantasyNameAndCUIT(nombreFantasia: string, cuit: string): Observable<any> {
+
+    console.log("siiiiiiiiiiiiii", nombreFantasia);
+    console.log("siiiiiiiiiiiiiiii", cuit)
+    return this.http.get('http://localhost:3000/api/trades/search?fantasyName=' + nombreFantasia + '&cuit=' + cuit);
+  }
+  
 
 
   getTitulares() {

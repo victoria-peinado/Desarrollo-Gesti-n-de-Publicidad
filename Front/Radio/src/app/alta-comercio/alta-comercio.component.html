@@ -4,12 +4,12 @@
         <mat-form-field [color]="coloring" class="mt-5">
             <mat-label>Cuit</mat-label>
             <div>
-                <input matInput [(ngModel)]="cuit" maxlength="11" #cuitInput (ngModelChange)="onInput()">
+                <input matInput [(ngModel)]="cuit" maxlength="11" #cuitInput (ngModelChange)="onInput()" (keypress)="validateNumberInput($event)">
                 <div class="asterisk">*</div>
             </div>
         </mat-form-field>
     </div>
-    <div *ngIf="cuitInvalid" class="text-red-600 text-xs -mt-4 mb-3" color="warn">{{message}}</div>
+    <div *ngIf="cuitInvalid" class="text-red-600 text-xs -mt-4 mb-3" color="warn" [innerHTML]="message">{{message}}</div>
     <div>
         <button mat-raised-button color="white" class="mr-2" (click)="redirectToHome()">Cancelar</button>
         <button mat-raised-button color="primary" class="ml-2" [disabled]="isButtonDisabled" (click)="verifyCuit()">Siguiente</button>

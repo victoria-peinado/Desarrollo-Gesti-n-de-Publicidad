@@ -90,18 +90,21 @@
   <div class="m-5">
       <b class="text-lg">NUEVO COMERCIO</b>
   </div>
-  <div class="m-4 flex flex-row items-center justify-left">
+  <div class="inline-block ml-4 mr-4">
   
-      <div class="inline-block ml-4 mr-4">
-          <mat-form-field>
-            <mat-label>Nombre fantasia</mat-label>
-            <input matInput>
-          </mat-form-field>
-      </div>
-
-      <div class="m-5">
-        <button mat-raised-button color="primary" (click)="continueWithNewTrade()">Sigue</button>
-      </div>
+    <div >
+      <mat-form-field [color]="coloring" class="mt-5">
+        <mat-label>Nombre fantasia</mat-label>
+          <div>
+            <input matInput [(ngModel)]="nombreFantasia" #nombreFantasiaInput (ngModelChange)="onInput()">
+            <div class="asterisk">*</div>
+          </div>
+      </mat-form-field>
+    </div>
+    <div *ngIf="cuitInvalid" class="text-red-600 text-xs -mt-4 mb-3" color="warn" [innerHTML]="message">{{message}}</div>
+    <div>
+      <button mat-raised-button color="primary" [disabled]="isButtonDisabled" (click)="verifyNameFantasy()">Siguiente</button>
+  </div>
 
   </div>
 </section>
