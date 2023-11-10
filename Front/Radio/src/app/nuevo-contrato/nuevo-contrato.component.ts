@@ -20,7 +20,7 @@ export class NuevoContratoComponent implements OnInit{
   coloring: ThemePalette = "primary";
   tutular:any =null
   comercio:any =null
-  comercios:any =new Set()
+  comercios:any =null
   fechaIn:Date|null=null
   fechaFin:Date|null=null
   fecehaR:Date|null=null
@@ -47,6 +47,7 @@ export class NuevoContratoComponent implements OnInit{
         (result: any) => {
           if (result) {
             this.tutular = result
+            this.getComers()
             console.log(this.tutular)
           } 
           
@@ -61,7 +62,20 @@ export class NuevoContratoComponent implements OnInit{
     }
     
   }
-  getComers() {
+  getComers(){
+       this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
+
+
+      if (Array.isArray(response)&& this.tutular!=null) {
+        // El objeto de respuesta ya es un arreglo, no necesitas acceder a la propiedad 'data'.
+      this.comercios=response
+        console.log(this.comercios)
+      } else {
+        console.error('La respuesta no es un arreglo.');
+      }
+    });
+  }
+  getComer() {
   if(this.nombre!=null){
     this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
 
@@ -114,7 +128,7 @@ fechaIValida() {
     const fechaInp= new Date(this.fechaIn)
     console.log(fechaInp)
     console.log(fechaActual2)
-    return fechaInp >= fechaActual2; // aaaaDevuelve true si la fecha es mayor o igual a la fecha actual.
+    return fechaInp >= fechaActual2; // Devuelve true si la fecha es mayor o igual a la fecha actual.
   }
 }
 fechaOValida(){

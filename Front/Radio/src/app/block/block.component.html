@@ -8,17 +8,17 @@
     <mat-select hideRequiredMarke required [(ngModel)]="selectedValue" name="selectedValue"  (ngModelChange)="getHistory()" #inputBloque>
       <mat-option hideRequiredMarke *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
     </mat-select>
+    <mat-error>* Requerido</mat-error>
     <mat-label><strong> Spot</strong></mat-label>
   </mat-form-field>
  
   <p *ngIf="selectedValue !== null && selectedValue !== undefined"> Hora Inicio:{{selectedValue.startTime}}</p>
   <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Fecha ultima actualizacion:{{last.startTime}}</p>
   <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual:{{last.precio}}</p>
-  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="coloring" >
+  <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring" >
     <mat-label>Nuevo Precio</mat-label>
-    <!--  PEDIR AYUDAAAAAAA appearance="outline"-->
-    
-    <input matInput placeholder="Nuevo precio" required name="nuevoPrecio" [(ngModel)]="nuevoPrecio" #inputPrecio>
+    <input matInput  required name="nuevoPrecio" [(ngModel)]="nuevoPrecio" #inputPrecio>
+    <mat-error>* Requerido</mat-error>
   </mat-form-field>
   <div  class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="inValido">*Por favor, ingrese un bloque y precio válido.</div>
   <div>

@@ -1,1 +1,2 @@
-<button mat-raised-button class="coloring-deg" color="primary" [disabled]="disabled">{{ text }}</button>
+<button mat-raised-button [class.coloring-deg]="!disabled" [class.disabled-background]="disabled" color="primary"
+  [disabled]="disabled">{{ text }}</button>
