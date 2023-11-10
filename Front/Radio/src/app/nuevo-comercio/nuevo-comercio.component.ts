@@ -21,8 +21,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
   styleUrls: ['./nuevo-comercio.component.scss'],
 })
 export class NuevoComercioComponent implements OnInit, AfterViewInit {
-  @ViewChild('nombreFantasiaInput', { static: false })
-  cuitInputRef!: ElementRef;
+  @ViewChild('nombreFantasiaInput', { static: false }) nombreFantasiaInputRef!: ElementRef;
 
   displayedColumns: string[] = [
     'fantasyName',
@@ -46,16 +45,19 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
   condicionFinal: string;
   nombreFantasia: string = '';
   coloring: ThemePalette = 'primary';
-  cuitInvalid: boolean = false;
+  nombreFantasiaInvalid: boolean = false;
   isButtonDisabled: boolean = true;
   message: string = '';
+
+  mostrarNuevoComercio = false;
+  continuarNuevoComercio = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private _tradeService: MyDataService,
     private aRouter: ActivatedRoute,
-    private sharedDataService: SharedDataService
+    private sharedDataService: SharedDataService,
   ) {
     this.tradeForm = this.fb.group({
       fantasyName: ['', Validators.required],
@@ -143,9 +145,6 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
     );
   }
 
-  mostrarNuevoComercio = false;
-  continuarNuevoComercio = false;
-
   showNewTrade() {
     this.mostrarNuevoComercio = true;
   }
@@ -154,32 +153,21 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
     this.continuarNuevoComercio = true;
   }
 
-  onInput() {
-    this.isButtonDisabled = !this.nombreFantasia;
-
-    if (this.isButtonDisabled) {
-      this.alertUserAboutError('*Este campo es <strong>obligatorio</strong>.');
-    } else {
-      this.cuitInvalid = false;
-      this.coloring = 'primary';
-    }
-  }
-
   alertUserAboutError(mess: string) {
-    this.cuitInvalid = true;
+    this.nombreFantasiaInvalid = true;
     this.coloring = 'warn';
     this.message = mess;
 
-    const cuitInputElement = this.cuitInputRef.nativeElement;
+    const cuitInputElement = this.nombreFantasiaInputRef.nativeElement;
     cuitInputElement.click();
     cuitInputElement.focus();
   }
 
   verifyNameFantasy() {
+    this.nombreFantasia = this.nombreFantasiaInputRef.nativeElement.value;
     if (this.nombreFantasia && this.cuit) {
-      this._tradeService
-        .getTradesByFantasyNameAndCUIT(this.nombreFantasia, this.cuit)
-        .subscribe(
+      
+      this._tradeService.getTradesByFantasyNameAndCUIT(this.nombreFantasia, this.cuit).subscribe(
           (trades: Trade[]) => {
             if (
               trades &&
@@ -189,6 +177,7 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
                 'Nombre de fantasía <strong>repetido</strong>'
               );
             } else {
+              this.addTrade();
               this.continueWithNewTrade();
             }
           },

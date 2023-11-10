@@ -36,7 +36,7 @@
   
   <div class="m-5">
     <mat-form-field>
-      <mat-label>Filter</mat-label>
+      <mat-label>Filtrar</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
     </mat-form-field>
   </div>
@@ -79,100 +79,87 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          <td class="mat-cell" colspan="4">No hay datos que coincidan con el filtro: "{{input.value}}"</td>
         </tr>
       </table>
     
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
     </div>
     <div class="m-5">
-      <button mat-raised-button color="primary" (click)="showNewTrade()">Nuevo Comercio</button>
+      <app-btn-degrade [text]="'Nuevo Comercio'" (click)="showNewTrade()"></app-btn-degrade>
     </div>
   </div>
  
 </section>
 
-<section id="nuevoComercio" *ngIf="mostrarNuevoComercio">
-  <div class="m-5">
-      <b class="text-lg">NUEVO COMERCIO</b>
-  </div>
-  <div class="inline-block ml-4 mr-4">
-  
-    <div >
-      <mat-form-field [color]="coloring" class="mt-5">
-        <mat-label>Nombre fantasia</mat-label>
-          <div>
-            <input matInput [(ngModel)]="nombreFantasia" #nombreFantasiaInput (ngModelChange)="onInput()">
-            <div class="asterisk">*</div>
-          </div>
-      </mat-form-field>
-    </div>
-    <div *ngIf="cuitInvalid" class="text-red-600 text-xs -mt-4 mb-3" color="warn" [innerHTML]="message">{{message}}</div>
-    <div>
-      <app-btn-degrade [disabled]="isButtonDisabled" (click)="verifyNameFantasy()">Siguiente</app-btn-degrade>
-  </div>
+<form class="mt-3" [formGroup]="tradeForm" (ngSubmit)="verifyNameFantasy()">
+  <section id="nuevoComercio" *ngIf="mostrarNuevoComercio">
 
-  </div>
-</section>
-
-<form class="mt-3" [formGroup]="tradeForm" (ngSubmit)="addTrade()">
-  <section id="comercio" *ngIf="continuarNuevoComercio">
     <div class="m-5">
-        <b class="text-lg">COMERCIO</b>
+        <b class="text-lg">NUEVO COMERCIO</b>
     </div>
-    <div class="m-4 flex flex-row items-center justify-left">
-    
-        <div class="inline-block ml-4 mr-4">
-            <p class="text-3xs ml-10 text-left">NOMBRE FANTASIA</p>
-            <mat-form-field class="-mt-2 " appearance="outline">
-                <input matInput formControlName="fantasyName">
-            </mat-form-field>
-        </div>
-    
-        <div class="inline-block ml-4 mr-4">
-            <p class="text-3xs ml-10 text-left">DIRECCION</p>
-            <mat-form-field class="-mt-2" appearance="outline">
-                <input matInput formControlName="address">
-            </mat-form-field>
-        </div>
-    
-        <div class="inline-block ml-4 mr-4">
-          <p class="text-3xs ml-10 text-left">TIPO FACTURACION</p>
-          <mat-form-field class="-mt-2" appearance="outline">
+  
+    <div class="inline-block ml-4 mr-4">
+      <div>
+        <mat-form-field [color]="coloring">
+          <mat-label>Nombre fantasia</mat-label>
+            <div>
+              <input matInput #nombreFantasiaInput formControlName="fantasyName">
+            </div>
+          </mat-form-field>
+      </div>
+      <div *ngIf="nombreFantasiaInvalid" class="text-red-600 text-xs -mt-4 mb-3" color="warn" [innerHTML]="message">{{message}}</div>
+      
+      <div>
+        <mat-form-field [color]="coloring">
+          <mat-label>Direccion</mat-label>
+            <div>
+              <input matInput formControlName="address">
+            </div>
+          </mat-form-field>
+      </div>
+  
+      <div>
+        <mat-form-field [color]="coloring">
+          <mat-label>Tipo facturación</mat-label>
+            <div>
               <input matInput formControlName="billingType">
+            </div>
           </mat-form-field>
       </div>
-
-    </div>
-
-    <div class="m-4 flex flex-row items-center justify-left">
-    
-      <div class="inline-block ml-4 mr-4">
-          <p class="text-3xs ml-10 text-left">MAIL</p>
-          <mat-form-field class="-mt-2 " appearance="outline">
+  
+      <div>
+        <mat-form-field [color]="coloring">
+          <mat-label>Mail</mat-label>
+            <div>
               <input matInput formControlName="mail">
+            </div>
           </mat-form-field>
       </div>
-
-      <div class="inline-block ml-4 mr-4">
-          <p class="text-3xs ml-10 text-left">FORMA DE PAGO HABITUAL</p>
-          <mat-form-field class="-mt-2" appearance="outline">
+  
+      <div>
+        <mat-form-field [color]="coloring">
+          <mat-label>Forma de pago usual</mat-label>
+            <div>
               <input matInput formControlName="usualPaymentForm">
+            </div>
           </mat-form-field>
       </div>
-
-      <div class="inline-block ml-4 mr-4">
-        <p class="text-3xs ml-10 text-left">TIPO COMERCIO</p>
-        <mat-form-field class="-mt-2" appearance="outline">
-            <input matInput formControlName="type">
-        </mat-form-field>
-    </div>
-
-      <div class="m-5">
-        <button mat-raised-button color="primary" type="submit" [disabled]="tradeForm.invalid">ACEPTAR</button>
+  
+      <div>
+        <mat-form-field [color]="coloring">
+          <mat-label>Tipo</mat-label>
+            <div>
+              <input matInput formControlName="type">
+            </div>
+          </mat-form-field>
       </div>
-
-  </div>
+  
+      <div>
+        <app-btn-degrade type="submit" [disabled]="tradeForm.invalid" [text]="'Continuar'"></app-btn-degrade>
+      </div>
+  
+    </div>
   </section>
 </form>
 
