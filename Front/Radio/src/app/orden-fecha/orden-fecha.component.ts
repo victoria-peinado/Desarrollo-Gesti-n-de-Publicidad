@@ -4,7 +4,7 @@ import{OrdenBLoqueComponent} from '../orden-bloque/orden-bloque.component'
 @Component({
   selector: 'app-orden-fecha',
   templateUrl: './orden-fecha.component.html',
-  styleUrls: ['./orden-fecha.component.scss']
+ 
 })
 export class OrdenFechaComponent {
  @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef

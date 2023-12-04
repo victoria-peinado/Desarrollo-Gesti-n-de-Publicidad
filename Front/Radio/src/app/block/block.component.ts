@@ -7,7 +7,7 @@ import { ThemePalette } from '@angular/material/core/index.js';
 @Component({
   selector: 'app-block',
   templateUrl: './block.component.html',
-  styleUrls: ['./block.component.scss']
+  
 })
 export class BlockComponent implements OnInit{
    @ViewChild('inputBloque') inputBloque: any;

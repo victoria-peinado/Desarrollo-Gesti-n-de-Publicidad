@@ -6,7 +6,7 @@ import { OnInit } from '@angular/core';
 @Component({
   selector: 'app-orden-bloque',
   templateUrl: './orden-bloque.component.html',
-  styleUrls: ['./orden-bloque.component.scss']
+
 })
 export class OrdenBLoqueComponent implements OnInit{
   constructor(private myDataService: MyDataService) { }
