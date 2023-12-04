@@ -41,7 +41,6 @@ export class BlockComponent implements OnInit{
       this.blocks = data;
       this.blocks = this.blocks.data;
        this.isBlocksEmpty = !this.blocks || this.blocks.length === 0;
-      console.log(this.blocks);
     } );
     
   }
@@ -81,7 +80,6 @@ export class BlockComponent implements OnInit{
       // Realiza la solicitud POST para cada bloque
       this.myDataService.createBlock(block).subscribe(
         (response) => {
-          console.log('Bloque creado:', response);
           // Puedes realizar acciones adicionales después de crear un bloque
           this.getBlocks();
         },
@@ -93,8 +91,7 @@ export class BlockComponent implements OnInit{
     });
   }
   verify() {
-    console.log(this.selectedValue);
-    console.log(this.nuevoPrecio);
+
     if (!this.isCreateHistoyDisabled() ) {
       this.inValido = false;
       this.createHistory();
@@ -128,7 +125,6 @@ createHistory() {
     const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     // Obten el valor del precio desde el input (debes almacenar esto en una propiedad del componente)
     const precio = this.nuevoPrecio;
-    console.log(precio);
 
     // Obtén el id del bloque seleccionado (asumiendo que este valor se almacena en selectedValue.id)
     const idBlock = this.selectedValue.id;
@@ -143,7 +139,7 @@ createHistory() {
     // Ahora puedes usar newHistory como necesites, por ejemplo, enviarlo a tu servicio para crear un historial
     this.myDataService.createHistory(newHistory).subscribe(
       (response) => {
-        console.log('Historial creado:', response);
+        //console.log('Historial creado:', response);
         // Puedes realizar acciones adicionales después de crear un historial
         this.getHistory();
       },

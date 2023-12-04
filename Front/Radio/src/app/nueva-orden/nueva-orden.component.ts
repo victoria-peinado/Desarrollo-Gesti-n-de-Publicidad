@@ -37,7 +37,6 @@ export class NuevaOrdenComponent implements OnInit{
       blocks = blocks.data;
       this.dataSource = blocks;
     } );
-    console.log(this.dataSource);
   }
   onCheckboxChange(index: number, day: string) {
   // Aquí puedes registrar las celdas tildadas en un array o realizar otras acciones.

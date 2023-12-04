@@ -48,14 +48,13 @@ export class NuevoContratoComponent implements OnInit{
           if (result) {
             this.tutular = result
             this.getComers()
-            console.log(this.tutular)
+            
           } 
           
         },
         (error: any) => {
-          console.log('7')
-          this.titularValido()
-           console.log('6')
+          //this.titularValido()
+          // poner un mensaje de error del backend
         }
 
       );
@@ -69,7 +68,6 @@ export class NuevoContratoComponent implements OnInit{
       if (Array.isArray(response)&& this.tutular!=null) {
         // El objeto de respuesta ya es un arreglo, no necesitas acceder a la propiedad 'data'.
       this.comercios=response
-        console.log(this.comercios)
       } else {
         console.error('La respuesta no es un arreglo.');
       }
@@ -88,7 +86,6 @@ export class NuevoContratoComponent implements OnInit{
             this.comercio= tit
           }
         }
-        console.log(this.comercio)
       } else {
         console.error('La respuesta no es un arreglo.');
       }
@@ -101,19 +98,18 @@ export class NuevoContratoComponent implements OnInit{
   //   for (const c of this.comercios){
   //     if(c.fantasyName==this.nombre)
   //         this.comercio=c
-  //       console.log(this.comercio)
   //   }
   // }
 titularValido() {
-// console.log('5',this.tutular)
+
 //   if (!this.tutular ) {
 //     // const cinput = this.cuitInputRef.nativeElement;
 //     // cinput.focus();
     
 //      this.coloring = "warn";
-//     console.log('coloring')
+
 //   }
- console.log('5')
+
 }
 fechaIValida() {
   if (this.fechaIn === null) {
@@ -126,8 +122,7 @@ fechaIValida() {
     const fechaActualFormateada = `${anio}-${mes}-${dia}`;
     const fechaActual2 = new Date(fechaActualFormateada)
     const fechaInp= new Date(this.fechaIn)
-    console.log(fechaInp)
-    console.log(fechaActual2)
+
     return fechaInp >= fechaActual2; // Devuelve true si la fecha es mayor o igual a la fecha actual.
   }
 }
@@ -136,8 +131,7 @@ fechaOValida(){
 }
 
   // verify() {
-  //   console.log(this.selectedValue);
-  //   console.log(this.nuevoPrecio);
+
   //   if (!this.isCreateHistoyDisabled() ) {
   //     this.inValido = false;
   //     this.createHistory();
@@ -170,7 +164,7 @@ isCreateContracDisabled() {
 //     const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 //     // Obten el valor del precio desde el input (debes almacenar esto en una propiedad del componente)
 //     const precio = this.nuevoPrecio;
-//     console.log(precio);
+
 
 //     // Obtén el id del bloque seleccionado (asumiendo que este valor se almacena en selectedValue.id)
 //     const idBlock = this.selectedValue.id;
@@ -185,7 +179,6 @@ isCreateContracDisabled() {
 //     // Ahora puedes usar newHistory como necesites, por ejemplo, enviarlo a tu servicio para crear un historial
 //     this.myDataService.createHistory(newHistory).subscribe(
 //       (response) => {
-//         console.log('Historial creado:', response);
 //         // Puedes realizar acciones adicionales después de crear un historial
 //         this.getHistory();
 //       },

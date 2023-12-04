@@ -94,7 +94,7 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
         this.dataSource.data = data;
       },
       (error) => {
-        console.log(error);
+        //console.log(error); caombiar por un pomnpout de error
       }
     );
     } else {
@@ -147,7 +147,7 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
         this.obtenerComercios();
       },
       (error) => {
-        console.log(error);
+         //console.log(error); caombiar por un pomnpout de error
         this.tradeForm.reset();
       }
     );
