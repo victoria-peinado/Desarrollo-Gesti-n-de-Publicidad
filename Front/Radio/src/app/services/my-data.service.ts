@@ -53,8 +53,4 @@ export class MyDataService {
   
 
 
-  getTitulares() {
-    return this.http.get('http://localhost:3000/api/titulares');
-  }
-
 }
