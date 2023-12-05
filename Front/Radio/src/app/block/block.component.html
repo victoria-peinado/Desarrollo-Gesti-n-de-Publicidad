@@ -1,30 +1,35 @@
-<h1 class="text-center ">Actualizacion Spot</h1>
-<form *ngIf="isBlocksEmpty"  class="flex flex-col items-center justify-center">
-<app-btn-degrade (click)="createBlocks()" [text]="'Crear Bloques'"></app-btn-degrade>
+<h1 class="text-center">Spot Update</h1>
+
+<form *ngIf="isBlocksEmpty" class="flex flex-col items-center justify-center">
+  <app-btn-degrade (click)="createBlocks()" [text]="'Create Blocks'"></app-btn-degrade>
 </form>
 
 <form *ngIf="!isBlocksEmpty" class="flex flex-col items-center justify-center">
-  <mat-form-field hideRequiredMarke floatLabel="auto" class="w-1/2" [color]="coloring">
-    <mat-select hideRequiredMarke required [(ngModel)]="selectedValue" name="selectedValue"  (ngModelChange)="getHistory()" #inputBloque>
-      <mat-option hideRequiredMarke *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
+  <mat-form-field hideRequiredMarker floatLabel="auto" class="w-1/2" [color]="coloring">
+    <mat-select hideRequiredMarker required [(ngModel)]="selectedValue" name="selectedValue"
+      (ngModelChange)="getHistory()" #inputBlock>
+      <mat-option hideRequiredMarker *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
     </mat-select>
-    <mat-error>* Requerido</mat-error>
+    <mat-error>* Required</mat-error>
     <mat-label><strong> Spot</strong></mat-label>
   </mat-form-field>
- 
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined"> Hora Inicio:{{selectedValue.startTime}}</p>
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Fecha ultima actualizacion:{{last.startTime}}</p>
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual:{{last.precio}}</p>
-  <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring" >
-    <mat-label>Nuevo Precio</mat-label>
-    <input matInput  required name="nuevoPrecio" [(ngModel)]="nuevoPrecio" #inputPrecio>
-    <mat-error>* Requerido</mat-error>
-  </mat-form-field>
-  <div  class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="inValido">*Por favor, ingrese un bloque y precio válido.</div>
-  <div>
-    <button mat-raised-button   (click)="redirectToHome()">Cancelar</button>
-    <span style="margin-left: 10px;"></span>
-    <app-btn-degrade [disabled]="isCreateHistoyDisabled()" (click)="verify()" > </app-btn-degrade>
-  </div>
 
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined"> Start Time: {{selectedValue.startTime}}</p>
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Last Update Date: {{last.startTime}}</p>
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Current Price: {{last.price}}</p>
+
+  <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
+    <mat-label>New Price</mat-label>
+    <input matInput required name="newPrice" [(ngModel)]="newPrice" #inputPrice>
+    <mat-error>* Required</mat-error>
+  </mat-form-field>
+
+  <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="isInvalid">*Please enter a valid block and
+    price.</div>
+
+  <div>
+    <button mat-raised-button (click)="redirectToHome()">Cancel</button>
+    <span style="margin-left: 10px;"></span>
+    <app-btn-degrade [disabled]="isCreateHistoryDisabled()" (click)="verify()">Submit</app-btn-degrade>
+  </div>
 </form>

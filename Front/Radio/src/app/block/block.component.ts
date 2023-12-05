@@ -1,32 +1,34 @@
-import { Component ,ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { MyDataService } from '../services/my-data.service';
-import { OnInit } from '@angular/core';
-import { take ,tap} from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
+
 @Component({
   selector: 'app-block',
   templateUrl: './block.component.html',
-  
 })
-export class BlockComponent implements OnInit{
-   @ViewChild('inputBloque') inputBloque: any;
-  @ViewChild('inputPrecio', { static: false }) precioInputRef!: ElementRef;
-  blocks: any
-  blocks$: any
-  selectedValue: any
-  last: any
-  nuevoPrecio: number | null=null 
-  inValido: boolean= false
-  isBlocksEmpty: boolean = true; // Inicialmente, asumimos que blocks está vacío
-  coloring: ThemePalette = "primary";
+export class BlockComponent implements OnInit {
+  @ViewChild('inputBlock') inputBlock: any;
+  @ViewChild('inputPrice', { static: false }) priceInputRef!: ElementRef;
+  blocks: any;
+  blocks$: any;
+  selectedValue: any;
+  last: any;
+  newPrice: number | null = null;
+  isInvalid: boolean = false;
+  isBlocksEmpty: boolean = true;
+  coloring: ThemePalette = 'primary';
   icon: string = 'display: none';
-  constructor(private myDataService: MyDataService,private router: Router) { }
-  toadd=[{
-  "startTime": "12:30:00",
-   "number": 30
-  
-}]
+
+  constructor(private myDataService: MyDataService, private router: Router) {}
+
+  toAdd = [
+    {
+      "startTime": "12:30:00",
+      "number": 30
+    }
+  ];
 
   redirectToHome() {
     this.router.navigate(['/']);
@@ -34,88 +36,75 @@ export class BlockComponent implements OnInit{
 
   ngOnInit() {
     this.getBlocks();
-
   }
+
   getBlocks() {
-    this.myDataService.getBlocks().pipe(take(1)).subscribe(data => {
+    this.myDataService.getBlocks().pipe(take(1)).subscribe((data) => {
       this.blocks = data;
       this.blocks = this.blocks.data;
-       this.isBlocksEmpty = !this.blocks || this.blocks.length === 0;
-    } );
-    
+      this.isBlocksEmpty = !this.blocks || this.blocks.length === 0;
+    });
   }
-   getHistory() {  
-  this.myDataService.getHistory().pipe(take(1)).subscribe((response: any) => {
-    // Verifica si la propiedad 'data' es un arreglo
-    if (Array.isArray(response.data)) {
-      // El resto del código para procesar la respuesta
-      let lastHistory = null;
 
-      // Obtén la fecha de hoy
-      const today = new Date();
+  getHistory() {
+    this.myDataService.getHistory().pipe(take(1)).subscribe((response: any) => {
+      if (Array.isArray(response.data)) {
+        let lastHistory = null;
+        const today = new Date();
 
-      for (const history of response.data) {
-        // Convierte la fecha del historial a un objeto de fecha
-        const historyDate = new Date(history.startTime);
+        for (const history of response.data) {
+          const historyDate = new Date(history.startTime);
 
-        if (historyDate < today && history.idBlock === this.selectedValue.id) {
-          // Si la fecha del historial es anterior a hoy y el idBlock coincide con selectedValue.id
-          // verifica si es la más reciente
-          if (!lastHistory || historyDate > new Date(lastHistory.startTime)) {
-            lastHistory = history;
+          if (historyDate < today && history.idBlock === this.selectedValue.id) {
+            if (!lastHistory || historyDate > new Date(lastHistory.startTime)) {
+              lastHistory = history;
+            }
           }
         }
+
+        this.last = lastHistory;
+      } else {
+        console.error('The "data" property is not an array in the response.');
       }
+    });
+  }
 
-      // Ahora, lastHistory contiene el último historial válido
-
-      this.last = lastHistory;
-    } else {
-      console.error('La propiedad "data" no es un arreglo en la respuesta.');
-    }
-  });
-}
- createBlocks() {
-    this.toadd.forEach((block) => {
-      // Realiza la solicitud POST para cada bloque
+  createBlocks() {
+    this.toAdd.forEach((block) => {
       this.myDataService.createBlock(block).subscribe(
         (response) => {
-          // Puedes realizar acciones adicionales después de crear un bloque
           this.getBlocks();
         },
         (error) => {
-          console.error('Error al crear bloque:', error);
-          // Maneja los errores aquí
+          console.error('Error creating block:', error);
         }
       );
     });
   }
-  verify() {
 
-    if (!this.isCreateHistoyDisabled() ) {
-      this.inValido = false;
+  verify() {
+    if (!this.isCreateHistoryDisabled()) {
+      this.isInvalid = false;
       this.createHistory();
-     
     } else {
-      this.inValido = true;
-    this.coloring = "warn";
-    this.icon = "";
-    if(!this.selectedValue){
-     this.inputBloque.focus(); 
-      
-    }else{
-      const precioInputElement = this.precioInputRef.nativeElement;
-      precioInputElement.focus();
+      this.isInvalid = true;
+      this.coloring = 'warn';
+      this.icon = '';
+      if (!this.selectedValue) {
+        this.inputBlock.focus();
+      } else {
+        const priceInputElement = this.priceInputRef.nativeElement;
+        priceInputElement.focus();
+      }
     }
-    
-    }
-  }  
-isCreateHistoyDisabled() {
-  return !this.selectedValue || !this.nuevoPrecio|| this.nuevoPrecio < 0|| isNaN(this.nuevoPrecio);
-}  
-createHistory() {
-    // Obtén la fecha de hoy en el formato "yyyy-MM-dd"
-    const today = new Date(); // Esto ya incluirá la hora actual, minutos y segundos
+  }
+
+  isCreateHistoryDisabled() {
+    return !this.selectedValue || !this.newPrice || this.newPrice < 0 || isNaN(this.newPrice);
+  }
+
+  createHistory() {
+    const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
@@ -123,31 +112,23 @@ createHistory() {
     const minutes = String(today.getMinutes()).padStart(2, '0');
     const seconds = String(today.getSeconds()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    // Obten el valor del precio desde el input (debes almacenar esto en una propiedad del componente)
-    const precio = this.nuevoPrecio;
 
-    // Obtén el id del bloque seleccionado (asumiendo que este valor se almacena en selectedValue.id)
+    const price = this.newPrice;
     const idBlock = this.selectedValue.id;
 
-    // Crea el objeto newHistory con los valores requeridos
     const newHistory = {
       startTime: formattedDate,
-      precio: precio,
+      price: price,
       idBlock: idBlock
     };
 
-    // Ahora puedes usar newHistory como necesites, por ejemplo, enviarlo a tu servicio para crear un historial
     this.myDataService.createHistory(newHistory).subscribe(
       (response) => {
-        //console.log('Historial creado:', response);
-        // Puedes realizar acciones adicionales después de crear un historial
         this.getHistory();
       },
       (error) => {
-        console.error('Error al crear historial:', error);
-        // Maneja los errores aquí
+        console.error('Error creating history:', error);
       }
     );
   }
 }
-
