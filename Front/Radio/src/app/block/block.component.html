@@ -1,7 +1,7 @@
-<h1 class="text-center">Spot Update</h1>
+<h1 class="text-center">Actualización Spot</h1>
 
 <form *ngIf="isBlocksEmpty" class="flex flex-col items-center justify-center">
-  <app-btn-degrade (click)="createBlocks()" [text]="'Create Blocks'"></app-btn-degrade>
+  <app-btn-degrade (click)="createBlocks()" [text]="'Crear Spots'"></app-btn-degrade>
 </form>
 
 <form *ngIf="!isBlocksEmpty" class="flex flex-col items-center justify-center">
@@ -10,22 +10,21 @@
       (ngModelChange)="getHistory()" #inputBlock>
       <mat-option hideRequiredMarker *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
     </mat-select>
-    <mat-error>* Required</mat-error>
+    <mat-error>* Requerido</mat-error>
     <mat-label><strong> Spot</strong></mat-label>
   </mat-form-field>
 
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined"> Start Time: {{selectedValue.startTime}}</p>
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Last Update Date: {{last.startTime}}</p>
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Current Price: {{last.price}}</p>
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined"> Hora inicio: {{selectedValue.startTime}}</p>
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Ultima fecha actualizacion: {{last.startTime}}</p>
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual: {{last.price}}</p>
 
   <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
-    <mat-label>New Price</mat-label>
+    <mat-label>Nuevo precio</mat-label>
     <input matInput required name="newPrice" [(ngModel)]="newPrice" #inputPrice>
-    <mat-error>* Required</mat-error>
+    <mat-error>* Requerido</mat-error>
   </mat-form-field>
 
-  <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="isInvalid">*Please enter a valid block and
-    price.</div>
+  <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="isInvalid">*Por favor ingrese un bloque y precio válido.</div>
 
   <div>
     <button mat-raised-button (click)="redirectToHome()">Cancel</button>
