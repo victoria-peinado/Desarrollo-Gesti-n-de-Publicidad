@@ -10,183 +10,106 @@ import { Validator } from '@angular/forms';
   templateUrl: './nuevo-contrato.component.html',
   styleUrls: ['./nuevo-contrato.component.scss']
 })
-export class NuevoContratoComponent implements OnInit{
-  @ViewChild('inputBloque') inputBloque: any;
-  @ViewChild('inputPrecio', { static: false }) precioInputRef!: ElementRef;
+export class NuevoContratoComponent implements OnInit {
+  @ViewChild('inputBlock') inputBlock: any;
+  @ViewChild('inputPrice', { static: false }) priceInputRef!: ElementRef;
   @ViewChild('inputCuit', { static: false }) cuitInputRef!: ElementRef;
-  nombre: string | any =null
-  cuit:any =null
-  inValido: boolean= false
+  name: string | any = null;
+  cuit: any = null;
+  invalid: boolean = false;
   coloring: ThemePalette = "primary";
-  tutular:any =null
-  comercio:any =null
-  comercios:any =null
-  fechaIn:Date|null=null
-  fechaFin:Date|null=null
-  fecehaR:Date|null=null
-  obs:string|null=null    
+  holder: any = null;
+  business: any = null;
+  businesses: any = null;
+  startDate: Date | null = null;
+  endDate: Date | null = null;
+  regDate: Date | null = null;
+  notes: string | null = null;
 
-  constructor(private myDataService: MyDataService,private router: Router) { }
-  ngOnInit(){
-    // const today = new Date(); 
-    // const year = today.getFullYear();
-    // const month = String(today.getMonth() + 1).padStart(2, '0');
-    // const day = String(today.getDate()).padStart(2, '0');
-    // const formattedDate = `${year}-${month}-${day}`;
-    this.fecehaR= new Date()
+  constructor(private myDataService: MyDataService, private router: Router) {}
 
+  ngOnInit() {
+    this.regDate = new Date();
   }
+
   redirectToHome() {
     this.router.navigate(['/']);
   }
 
-  getTitular(){
-    if(this.cuit!=null){
-  
+  getHolder() {
+    if (this.cuit != null) {
       this.myDataService.getBillingHolderByCUIT(this.cuit).subscribe(
         (result: any) => {
           if (result) {
-            this.tutular = result
-            this.getComers()
-            
-          } 
-          
+            this.holder = result;
+            this.getBusinesses();
+          }
         },
         (error: any) => {
-          //this.titularValido()
-          // poner un mensaje de error del backend
+          //this.validHolder()
+          // show backend error message
         }
-
       );
     }
-    
   }
-  getComers(){
-       this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
 
-
-      if (Array.isArray(response)&& this.tutular!=null) {
-        // El objeto de respuesta ya es un arreglo, no necesitas acceder a la propiedad 'data'.
-      this.comercios=response
-      } else {
-        console.error('La respuesta no es un arreglo.');
-      }
-    });
-  }
-  getComer() {
-  if(this.nombre!=null){
+  getBusinesses() {
     this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
-
-
-      if (Array.isArray(response)&& this.tutular!=null) {
-        // El objeto de respuesta ya es un arreglo, no necesitas acceder a la propiedad 'data'.
-        for (const tit of response) {
-
-          if (tit.fantasyName === this.nombre && tit.billingHolderId===this.tutular._id) {
-            this.comercio= tit
-          }
-        }
+      if (Array.isArray(response) && this.holder != null) {
+        // The response object is already an array; no need to access the 'data' property.
+        this.businesses = response;
       } else {
         console.error('La respuesta no es un arreglo.');
       }
     });
   }
 
-}
-  // getComer(){
-  //   //Rocorre comercios y poner en comercio el que tiene el mismo nombre que this.nnombre
-  //   for (const c of this.comercios){
-  //     if(c.fantasyName==this.nombre)
-  //         this.comercio=c
-  //   }
-  // }
-titularValido() {
-
-//   if (!this.tutular ) {
-//     // const cinput = this.cuitInputRef.nativeElement;
-//     // cinput.focus();
-    
-//      this.coloring = "warn";
-
-//   }
-
-}
-fechaIValida() {
-  if (this.fechaIn === null) {
-    return false; // La fecha es nula, por lo que no es válida.
-  } else {
-    const fechaActual = new Date();
-    const anio = fechaActual.getFullYear();
-    const mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0'); // Asegura que tenga 2 dígitos
-    const dia = fechaActual.getDate().toString().padStart(2, '0'); // Asegura que tenga 2 dígitos
-    const fechaActualFormateada = `${anio}-${mes}-${dia}`;
-    const fechaActual2 = new Date(fechaActualFormateada)
-    const fechaInp= new Date(this.fechaIn)
-
-    return fechaInp >= fechaActual2; // Devuelve true si la fecha es mayor o igual a la fecha actual.
+  getBusiness() {
+    if (this.name != null) {
+      this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
+        if (Array.isArray(response) && this.holder != null) {
+          // The response object is already an array; no need to access the 'data' property.
+          for (const bus of response) {
+            if (bus.fantasyName === this.name && bus.billingHolderId === this.holder._id) {
+              this.business = bus;
+            }
+          }
+        } else {
+          console.error('La respuesta no es un arreglo.');
+        }
+      });
+    }
   }
-}
-fechaOValida(){
-  return this.fechaFin === null  || this.fechaIn !== null && this.fechaFin > this.fechaIn 
-}
 
-  // verify() {
+  validHolder() {
+    // if (!this.holder) {
+    //   // const cinput = this.cuitInputRef.nativeElement;
+    //   // cinput.focus();
+    //   this.coloring = "warn";
+    // }
+  }
 
-  //   if (!this.isCreateHistoyDisabled() ) {
-  //     this.inValido = false;
-  //     this.createHistory();
-     
-  //   } else {
-  //     this.inValido = true;
-  //   this.coloring = "warn";
-  //   if(!this.selectedValue){
-  //    this.inputBloque.focus(); 
-      
-  //   }else{
-  //     const precioInputElement = this.precioInputRef.nativeElement;
-  //     precioInputElement.focus();
-  //   }
-    
-  //   }
-  // }  
-isCreateContracDisabled() {
-  return !this.tutular || !this.comercio||!this.fechaOValida()||!this.fechaIValida();
-}  
-// createContrac() {
-//     // Obtén la fecha de hoy en el formato "yyyy-MM-dd"
-//     const today = new Date(); // Esto ya incluirá la hora actual, minutos y segundos
-//     const year = today.getFullYear();
-//     const month = String(today.getMonth() + 1).padStart(2, '0');
-//     const day = String(today.getDate()).padStart(2, '0');
-//     const hours = String(today.getHours()).padStart(2, '0');
-//     const minutes = String(today.getMinutes()).padStart(2, '0');
-//     const seconds = String(today.getSeconds()).padStart(2, '0');
-//     const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-//     // Obten el valor del precio desde el input (debes almacenar esto en una propiedad del componente)
-//     const precio = this.nuevoPrecio;
+  startDateValid() {
+    if (this.startDate === null) {
+      return false;
+    } else {
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+      const day = currentDate.getDate().toString().padStart(2, '0');
+      const currentDateFormatted = `${year}-${month}-${day}`;
+      const currentDate2 = new Date(currentDateFormatted);
+      const startDateInput = new Date(this.startDate);
 
+      return startDateInput >= currentDate2;
+    }
+  }
 
-//     // Obtén el id del bloque seleccionado (asumiendo que este valor se almacena en selectedValue.id)
-//     const idBlock = this.selectedValue.id;
+  endDateValid() {
+    return this.endDate === null || (this.startDate !== null && this.endDate > this.startDate);
+  }
 
-//     // Crea el objeto newHistory con los valores requeridos
-//     const newHistory = {
-//       startTime: formattedDate,
-//       precio: precio,
-//       idBlock: idBlock
-//     };
-
-//     // Ahora puedes usar newHistory como necesites, por ejemplo, enviarlo a tu servicio para crear un historial
-//     this.myDataService.createHistory(newHistory).subscribe(
-//       (response) => {
-//         // Puedes realizar acciones adicionales después de crear un historial
-//         this.getHistory();
-//       },
-//       (error) => {
-//         console.error('Error al crear historial:', error);
-//         // Maneja los errores aquí
-//       }
-//     );
-//   }
-
+  isCreateContractDisabled() {
+    return !this.holder || !this.business || !this.endDateValid() || !this.startDateValid();
+  }
 }

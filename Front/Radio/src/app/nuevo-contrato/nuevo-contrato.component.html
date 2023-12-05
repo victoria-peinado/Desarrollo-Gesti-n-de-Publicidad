@@ -1,66 +1,65 @@
+<h1 class="text-center">Nuevo Contrato</h1>
 
-  <h1 class="text-center ">Nuevo contrato</h1>
+<div class="flex flex-col items-center justify-center">
 
-  <div class="flex flex-col items-center justify-center">
+  <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
 
-    <mat-form-field hideRequiredMarker  class="w-1/2" [color]="coloring">
-
-      <mat-label>Cuit Titular</mat-label>
-      <input matInput maxlength="11"  (focusout)="getTitular()" required name="cuit" [(ngModel)]="cuit"
-        #inputCuit="ngModel">
-        <div class="asterisk">*</div>
-      <mat-error *ngIf="!tutular&&inputCuit.touched">* Requerido</mat-error>
-      <mat-hint *ngIf="!tutular&&inputCuit.touched" [ngStyle]="{'color': 'red'}">* Ingrese un titular registrado</mat-hint>
-    </mat-form-field>
-    <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="tutular">
-      <p> Nombre:{{tutular.businessName}}</p>
-    </div>
-
-    <mat-form-field hideRequiredMarker  class="w-1/2" [color]="coloring">
-      <mat-label>Nombre del Comercio</mat-label>
-      <!-- <input matInput placeholder="Nombre" required name="nombre" (focusout)="getComers()" [(ngModel)]="nombre"
-        #inputNombre="ngModel" [disabled]="!tutular"> -->
-      <mat-select hideRequiredMarke required [(ngModel)]="comercio" name="selectedValue" [disabled]="!tutular"
-        #inputBloque>
-        <mat-option hideRequiredMarke *ngFor="let c of comercios" [value]="c">{{c.fantasyName}}</mat-option>
-      </mat-select>
-      <div class="asterisk">*</div>
-      <mat-error >* Requerido</mat-error>
-      
-    </mat-form-field>
-    <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="this.comercio">
-      <p> Direccion:{{comercio.address}}</p>
-      <p> Email:{{comercio.mail}}</p>
-    </div>
-    <mat-form-field hideRequiredMarker  class="w-1/2" [color]="coloring">
-      <mat-label>Fecha de Inicico</mat-label>
-      <input type="date" matInput placeholder="Fecha Inicico" required name="fechaI" [(ngModel)]="fechaIn" #inputFI="ngModel">
-      <div class="asterisk">*</div>
-      <mat-error >* Requerido</mat-error>
-    <mat-hint *ngIf="!fechaIValida()&&inputFI.touched" [ngStyle]="{'color': 'red'}">* Ingrese una fecha mayor a la actual</mat-hint>
-    </mat-form-field>
-
-    <mat-form-field hideRequiredMarker  class="w-1/2" [color]="coloring">
-      <mat-label>Fecha de Fenalización</mat-label>
-      <input type="date" matInput placeholder="Fecha Fin" name="fechaF" [(ngModel)]="fechaFin" #inputFF="ngModel">
-      <mat-error>* Requerido</mat-error>
-      <mat-hint *ngIf="!fechaOValida()&&inputFF.touched" [ngStyle]="{'color': 'red'}">* Ingrese una fecha mayor a la de inicio</mat-hint>
-    </mat-form-field>
-
-    <mat-form-field hideRequiredMarker  class="w-1/2" [color]="coloring">
-      <mat-label>Observaciones</mat-label>
-      <input matInput placeholder="Obs."  name="obs" [(ngModel)]="obs" #inputObs>
-    </mat-form-field>
-
-    <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="inValido">
-      *Por favor,ingrese u cuit de un titular, un nombre de comercio y fechas validas.
-    </div>
-
-    <div>
-      <button mat-raised-button (click)="redirectToHome()">Cancelar</button>
-      <span style="margin-left: 10px;"></span>
-      <app-btn-degrade [disabled]="isCreateContracDisabled()"> </app-btn-degrade>
-    </div>
-
+    <mat-label>CUIT del Titular</mat-label>
+    <input matInput maxlength="11" (focusout)="getHolder()" required name="cuit" [(ngModel)]="cuit"
+      #inputCuit="ngModel">
+    <div class="asterisk">*</div>
+    <mat-error *ngIf="!holder && inputCuit.touched">* Requerido</mat-error>
+    <mat-hint *ngIf="!holder && inputCuit.touched" [ngStyle]="{'color': 'red'}">* Ingrese un titular
+      registrado</mat-hint>
+  </mat-form-field>
+  <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="holder">
+    <p>Nombre: {{holder.businessName}}</p>
   </div>
 
+  <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
+    <mat-label>Nombre del Comercio</mat-label>
+    <mat-select hideRequiredMarker required [(ngModel)]="business" name="selectedValue" [disabled]="!holder"
+      #inputBlock>
+      <mat-option hideRequiredMarker *ngFor="let b of businesses" [value]="b">{{b.fantasyName}}</mat-option>
+    </mat-select>
+    <div class="asterisk">*</div>
+    <mat-error>* Requerido</mat-error>
+  </mat-form-field>
+  <div class="text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="business">
+    <p>Dirección: {{business.address}}</p>
+    <p>Email: {{business.mail}}</p>
+  </div>
+  <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
+    <mat-label>Fecha de Inicio</mat-label>
+    <input type="date" matInput placeholder="Fecha Inicio" required name="startDate" [(ngModel)]="startDate"
+      #inputStartDate="ngModel">
+    <div class="asterisk">*</div>
+    <mat-error>* Requerido</mat-error>
+    <mat-hint *ngIf="!startDateValid() && inputStartDate.touched" [ngStyle]="{'color': 'red'}">* Ingrese una fecha mayor
+      a la actual</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
+    <mat-label>Fecha de Finalización</mat-label>
+    <input type="date" matInput placeholder="Fecha Fin" name="endDate" [(ngModel)]="endDate" #inputEndDate="ngModel">
+    <mat-error>* Requerido</mat-error>
+    <mat-hint *ngIf="!endDateValid() && inputEndDate.touched" [ngStyle]="{'color': 'red'}">* Ingrese una fecha mayor a
+      la de inicio</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
+    <mat-label>Observaciones</mat-label>
+    <input matInput placeholder="Obs." name="notes" [(ngModel)]="notes" #inputNotes>
+  </mat-form-field>
+
+  <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="invalid">
+    * Por favor, ingrese un CUIT de un titular, un nombre de comercio y fechas válidas.
+  </div>
+
+  <div>
+    <button mat-raised-button (click)="redirectToHome()">Cancelar</button>
+    <span style="margin-left: 10px;"></span>
+    <app-btn-degrade [disabled]="isCreateContractDisabled()"> </app-btn-degrade>
+  </div>
+
+</div>
