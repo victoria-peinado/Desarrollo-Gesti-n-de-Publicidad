@@ -20,7 +20,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
   templateUrl: './nuevo-comercio.component.html',
   styleUrls: ['./nuevo-comercio.component.scss'],
 })
-export class NuevoComercioComponent implements OnInit, AfterViewInit {
+export class NuevoComercioComponent implements OnInit {
   @ViewChild('nombreFantasiaInput', { static: false }) nombreFantasiaInputRef!: ElementRef;
 
   displayedColumns: string[] = [
@@ -31,7 +31,9 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
     'usualPaymentForm',
     'type',
   ];
-  dataSource: MatTableDataSource<Trade> = new MatTableDataSource<Trade>([]); // Inicializar con un arreglo vacío
+
+
+  trades: Trade[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -91,31 +93,17 @@ export class NuevoComercioComponent implements OnInit, AfterViewInit {
     if(this.cuit) {
     this._tradeService.getTradesByCuit(this.cuit).subscribe(
       (data) => {
-        this.dataSource.data = data;
+        this.trades = data;
       },
       (error) => {
-        //console.log(error); caombiar por un pomnpout de error
+        console.log(error);
       }
     );
     } else {
-      console.error(' cuit no proporcionado.');
+      console.error('Cuit no proporcionado.');
     }
   }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
+  
   addTrade() {
     if (this.cuit) {
       this._tradeService.getBillingHolderByCUIT(this.cuit).subscribe(
