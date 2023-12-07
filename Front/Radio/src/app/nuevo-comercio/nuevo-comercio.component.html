@@ -38,9 +38,9 @@
 <div id="table 2">
   <div class="p-5 h-screen">
 
-      <div class="m-5">
-        <b class="text-lg">COMERCIOS DEL TITULAR</b>
-      </div>
+    <div class="m-5 text-center md:text-left bg-red-500 sm:bg-none">
+      <b class="text-lg">COMERCIOS DEL TITULAR</b>
+    </div>    
 
       <div class="overflow-auto rounded-lg shadow hidden md:block">
           <table class="w-full" *ngIf="trades.length > 0">
@@ -80,28 +80,43 @@
       </div>
 
       <div *ngIf="trades.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-          <div *ngFor="let trade of trades" class="bg-white space-y-2 p-4 rounded-lg shadow">
-              <div class="flex items-center space-x-2 text-sm">
-                  <div>
-                      <a href="#" class="text-blue font-bold hover:underline">{{trade.fantasyName}}</a>
-                  </div>
-                  <div class="text-gray-500">{{trade.address}}</div>
-                  <div>
-                    <span [ngClass]="{
-                      'bg-yellow-200 text-yellow-800': trade.type === 'Empresa',
-                      'bg-green-200 text-green-800': trade.type === 'PyME',
-                      'bg-gray-200 text-gray-800': trade.type === 'Otro'
-                    }" 
-                    class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50">
-                    {{trade.type}}</span>
-                  </div>
-              </div>
-              <div class="text-sm text-gray-700">
-                <a href="#" class="font-bold text-blue-500 hover:underline">{{trade.mail}}</a>
-              </div>
-              <div class="text-sm text-gray-700">{{trade.billingType}}</div>
-              <div class="text-sm font-medium text-black">{{trade.usualPaymentForm}}</div>
+        <div id="tarjetas" *ngFor="let trade of trades" class="bg-white space-y-2 p-4 rounded-lg shadow relative">
+
+          <div class="flex items-center space-x-2 text-sm">
+            <div>
+              <a href="#" class="text-blue font-bold hover:underline">{{trade.fantasyName}}</a>
+            </div>
+            <div class="text-gray-500">{{trade.address}}</div>
+            <div>
+              <span [ngClass]="{
+                'bg-yellow-200 text-yellow-800': trade.type === 'Empresa',
+                'bg-green-200 text-green-800': trade.type === 'PyME',
+                'bg-gray-200 text-gray-800': trade.type === 'Otro'
+              }" class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50">
+              {{trade.type}}</span>
+            </div>
           </div>
+      
+          <div *ngIf="visibleContent[trade.fantasyName] || band " class="text-sm text-gray-700">
+            <a href="#" class="font-bold text-blue-500 hover:underline">{{trade.mail}}</a>
+          </div>
+      
+          <div *ngIf="visibleContent[trade.fantasyName] || band" class="text-sm text-gray-700">
+            {{trade.billingType}}
+          </div>
+
+          <div *ngIf="visibleContent[trade.fantasyName] || band" class="text-sm font-medium text-black">
+            {{trade.usualPaymentForm}}
+          </div>
+      
+          <button *ngIf="isScreenSmall()" (click)="toggleCardContent(trade)" class="absolute top-0 right-0 p-2 focus:outline-none group">
+            <mat-icon class="text-gray-500 group-hover:bg-gray-200 rounded-full">
+              expand_more
+            </mat-icon>
+          </button>
+          
+
+        </div>
       </div>
       
   </div>

@@ -4,6 +4,8 @@ import {
   ViewChild,
   ElementRef,
   OnInit,
+  ChangeDetectorRef,
+  HostListener
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -23,6 +25,11 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 export class NuevoComercioComponent implements OnInit {
   @ViewChild('nombreFantasiaInput', { static: false }) nombreFantasiaInputRef!: ElementRef;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.band = window.innerWidth > 640;
+  }
+
   displayedColumns: string[] = [
     'fantasyName',
     'address',
@@ -34,6 +41,7 @@ export class NuevoComercioComponent implements OnInit {
 
 
   trades: Trade[] = [];
+  band: boolean = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -54,12 +62,15 @@ export class NuevoComercioComponent implements OnInit {
   mostrarNuevoComercio = false;
   continuarNuevoComercio = false;
 
+  visibleContent: { [key: string]: boolean } = { };
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private _tradeService: MyDataService,
     private aRouter: ActivatedRoute,
     private sharedDataService: SharedDataService,
+    private cdRef: ChangeDetectorRef,
   ) {
     this.tradeForm = this.fb.group({
       fantasyName: ['', Validators.required],
@@ -103,6 +114,15 @@ export class NuevoComercioComponent implements OnInit {
       console.error('Cuit no proporcionado.');
     }
   }
+
+  toggleCardContent(trade: Trade) {
+    this.visibleContent[trade.fantasyName] = !this.visibleContent[trade.fantasyName];
+}
+
+isScreenSmall(): boolean {
+  // Verificar si el tamaño de la pantalla es 'sm' o menor
+  return window.innerWidth <= 640; // Ajusta según tus necesidades
+}
   
   addTrade() {
     if (this.cuit) {
