@@ -16,7 +16,8 @@
 
   <p *ngIf="selectedValue !== null && selectedValue !== undefined"> Hora inicio: {{selectedValue.startTime}}</p>
   <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Ultima fecha actualizacion: {{last.startTime}}</p>
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual: {{last.price}}</p>
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual: {{last.precio}}</p> 
+  <!-- Cuidado esto va a tener que cambiarse en el backend  no deberia ser precio si no price -->
 
   <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
     <mat-label>Nuevo precio</mat-label>

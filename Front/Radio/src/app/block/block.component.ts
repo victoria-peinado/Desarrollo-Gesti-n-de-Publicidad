@@ -63,6 +63,7 @@ export class BlockComponent implements OnInit {
         }
 
         this.last = lastHistory;
+     
       } else {
         console.error('The "data" property is not an array in the response.');
       }
