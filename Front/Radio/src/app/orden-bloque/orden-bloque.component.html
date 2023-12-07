@@ -3,6 +3,6 @@
     <mat-select hideRequiredMarke required [(ngModel)]="selectedValue" name="selectedValue" #inputBloque>
       <mat-option hideRequiredMarke *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
     </mat-select>
-    <mat-label><strong> Spot</strong></mat-label>
+    <mat-label><strong> Bloque</strong></mat-label>
   </mat-form-field>
 </form>

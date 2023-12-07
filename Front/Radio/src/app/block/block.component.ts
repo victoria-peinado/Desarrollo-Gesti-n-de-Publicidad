@@ -114,12 +114,12 @@ export class BlockComponent implements OnInit {
     const seconds = String(today.getSeconds()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-    const price = this.newPrice;
+    const price = this.newPrice; 
     const idBlock = this.selectedValue.id;
 
     const newHistory = {
       startTime: formattedDate,
-      price: price,
+      precio: price, /// va a tener que cambiar a price
       idBlock: idBlock
     };
 
