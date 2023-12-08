@@ -35,12 +35,17 @@
 </div>
 
 
-<div id="table 2">
+<div id="table">
   <div class="p-5 h-screen">
 
-    <div class="m-5 text-center md:text-left bg-red-500 sm:bg-none">
+    <div class="m-5 text-center md:text-left">
       <b class="text-lg">COMERCIOS DEL TITULAR</b>
     </div>    
+
+    <mat-form-field id="filtro">
+      <mat-label>Filtrar</mat-label>
+      <input matInput [(ngModel)]="inputfilter" (input)="filterTable()">
+    </mat-form-field>
 
       <div class="overflow-auto rounded-lg shadow hidden md:block">
           <table class="w-full" *ngIf="trades.length > 0">

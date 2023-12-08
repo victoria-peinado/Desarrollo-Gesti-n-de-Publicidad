@@ -30,6 +30,8 @@ export class NuevoComercioComponent implements OnInit {
     this.band = window.innerWidth > 640;
   }
 
+  inputfilter: string = '';
+
   displayedColumns: string[] = [
     'fantasyName',
     'address',
@@ -41,6 +43,8 @@ export class NuevoComercioComponent implements OnInit {
 
 
   trades: Trade[] = [];
+  allTrades: Trade[] = [];
+
   band: boolean = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -100,20 +104,59 @@ export class NuevoComercioComponent implements OnInit {
     return this.tradeForm.get('mail')?.hasError('email') ? 'Email inválido.' : '';
   }
 
+  filterTable() {
+    const filterValue = this.normalizeString(this.inputfilter.toLowerCase().trim());
+  
+    if (!filterValue) {
+      this.trades = [...this.allTrades];
+    } else {
+      this.trades = this.allTrades.filter((trade) =>
+        Object.values(trade).some(
+          (value) =>
+            value &&
+            this.normalizeString(value.toString().toLowerCase()).includes(filterValue)
+        )
+      );
+    }
+  
+    if (this.trades.length === 0) {
+      this.trades = [
+        {
+          fantasyName: 'no coincide con la búsqueda',
+          address: '',
+          billingType: '',
+          mail: '',
+          usualPaymentForm: '',
+          type: '',
+          billingHolderId: '',
+        },
+      ];
+    }
+  }
+
+  normalizeString(str: string): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  
+  
+  
+
   obtenerComercios() {
-    if(this.cuit) {
-    this._tradeService.getTradesByCuit(this.cuit).subscribe(
-      (data) => {
-        this.trades = data;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    if (this.cuit) {
+      this._tradeService.getTradesByCuit(this.cuit).subscribe(
+        (data) => {
+          this.allTrades = data;
+          this.trades = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     } else {
       console.error('Cuit no proporcionado.');
     }
   }
+  
 
   toggleCardContent(trade: Trade) {
     this.visibleContent[trade.fantasyName] = !this.visibleContent[trade.fantasyName];
