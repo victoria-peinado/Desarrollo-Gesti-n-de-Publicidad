@@ -1,13 +1,4 @@
-
-<div *ngIf="isInicioRoute"class="h-full">
-  <main-nav [lateral]="false">
+<main-nav [lateral]="!isInicioRoute">
   
-    <router-outlet></router-outlet>
-  </main-nav>
-</div>
-<div *ngIf="!isInicioRoute" class="h-full">
-  <main-nav [lateral]="true">
-  
-    <router-outlet></router-outlet>
-  </main-nav>
-</div>
+  <router-outlet></router-outlet>
+</main-nav>

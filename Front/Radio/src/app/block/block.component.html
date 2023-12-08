@@ -1,7 +1,7 @@
-<h1 class="text-center">Actualización Spot</h1>
+<h1 class="text-center">Actualización Bloque</h1>
 
 <form *ngIf="isBlocksEmpty" class="flex flex-col items-center justify-center">
-  <app-btn-degrade (click)="createBlocks()" [text]="'Crear Spots'"></app-btn-degrade>
+  <app-btn-degrade (click)="createBlocks()" [text]="'Crear Bloques'"></app-btn-degrade>
 </form>
 
 <form *ngIf="!isBlocksEmpty" class="flex flex-col items-center justify-center">
@@ -11,12 +11,13 @@
       <mat-option hideRequiredMarker *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
     </mat-select>
     <mat-error>* Requerido</mat-error>
-    <mat-label><strong> Spot</strong></mat-label>
+    <mat-label><strong> Bloque</strong></mat-label>
   </mat-form-field>
 
   <p *ngIf="selectedValue !== null && selectedValue !== undefined"> Hora inicio: {{selectedValue.startTime}}</p>
   <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Ultima fecha actualizacion: {{last.startTime}}</p>
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual: {{last.price}}</p>
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual: {{last.precio}}</p> 
+  <!-- Cuidado esto va a tener que cambiarse en el backend  no deberia ser precio si no price -->
 
   <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
     <mat-label>Nuevo precio</mat-label>
