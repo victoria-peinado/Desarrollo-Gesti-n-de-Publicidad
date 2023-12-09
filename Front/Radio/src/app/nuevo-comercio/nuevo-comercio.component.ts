@@ -68,6 +68,9 @@ export class NuevoComercioComponent implements OnInit {
 
   visibleContent: { [key: string]: boolean } = { };
 
+  sortColumnKey: string = '';
+  sortOrder: 'asc' | 'desc' = 'asc';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -138,14 +141,49 @@ export class NuevoComercioComponent implements OnInit {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
   
-  
+  sortColumn(columnKey: string) {
+
+    if (this.sortColumnKey === columnKey) {
+        this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+
+        if (this.sortOrder === 'asc') {
+          this.trades = this.allTrades.slice()
+          this.sortColumnKey = '';
+        }
+
+    } else {
+        this.sortOrder = 'asc';
+        this.sortColumnKey = columnKey; // sortColumnKey = 'fantasyName'
+    }
+
+    this.sortTable();
+}
+
+sortTable() {
+  if(this.sortColumnKey) {
+      const compareFunction = (a: Trade, b: Trade, key: keyof Trade) => {
+          const valueA = (a[key] || '').toString().toLowerCase();
+          const valueB = (b[key] || '').toString().toLowerCase();
+          return this.sortOrder === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      };
+
+
+      if (Object.keys(this.trades[0]).includes(this.sortColumnKey)) { // Object.keys(obj) devuelve un array de strings que representan los nombres de las propiedades del objeto en el argumento
+          this.trades.sort((a, b) => compareFunction(a, b, this.sortColumnKey as keyof Trade));
+      }
+    }
+}
+
+
+
+
   
 
   obtenerComercios() {
     if (this.cuit) {
       this._tradeService.getTradesByCuit(this.cuit).subscribe(
         (data) => {
-          this.allTrades = data;
+          this.allTrades = data.slice();
           this.trades = data;
         },
         (error) => {
