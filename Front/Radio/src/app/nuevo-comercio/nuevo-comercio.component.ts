@@ -5,7 +5,7 @@ import {
   ElementRef,
   OnInit,
   ChangeDetectorRef,
-  HostListener
+  HostListener,
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -16,8 +16,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SharedDataService } from '../services/shared-data.service';
 import { ThemePalette } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-nuevo-comercio',
@@ -25,18 +30,25 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   styleUrls: ['./nuevo-comercio.component.scss'],
   animations: [
     trigger('rotateArrow', [
-      state('down', style({
-        transform: 'rotate(0deg)'
-      })),
-      state('up', style({
-        transform: 'rotate(180deg)'
-      })),
-      transition('down <=> up', animate('0.2s ease-in-out'))
-    ])
-  ]
+      state(
+        'down',
+        style({
+          transform: 'rotate(0deg)',
+        })
+      ),
+      state(
+        'up',
+        style({
+          transform: 'rotate(180deg)',
+        })
+      ),
+      transition('down <=> up', animate('0.2s ease-in-out')),
+    ]),
+  ],
 })
 export class NuevoComercioComponent implements OnInit {
-  @ViewChild('nombreFantasiaInput', { static: false }) nombreFantasiaInputRef!: ElementRef;
+  @ViewChild('nombreFantasiaInput', { static: false })
+  nombreFantasiaInputRef!: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
@@ -53,7 +65,6 @@ export class NuevoComercioComponent implements OnInit {
     'usualPaymentForm',
     'type',
   ];
-
 
   trades: Trade[] = [];
   allTrades: Trade[] = [];
@@ -79,7 +90,7 @@ export class NuevoComercioComponent implements OnInit {
   mostrarNuevoComercio = false;
   continuarNuevoComercio = false;
 
-  visibleContent: { [key: string]: boolean } = { };
+  visibleContent: { [key: string]: boolean } = {};
 
   sortColumnKey: string = '';
   sortOrder: 'asc' | 'desc' = 'asc';
@@ -97,7 +108,7 @@ export class NuevoComercioComponent implements OnInit {
     private _tradeService: MyDataService,
     private aRouter: ActivatedRoute,
     private sharedDataService: SharedDataService,
-    private cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef
   ) {
     this.tradeForm = this.fb.group({
       fantasyName: ['', Validators.required],
@@ -128,8 +139,10 @@ export class NuevoComercioComponent implements OnInit {
   }
 
   filterTable() {
-    const filterValue = this.normalizeString(this.inputfilter.toLowerCase().trim());
-  
+    const filterValue = this.normalizeString(
+      this.inputfilter.toLowerCase().trim()
+    );
+
     if (!filterValue) {
       this.trades = [...this.allTrades];
     } else {
@@ -137,11 +150,13 @@ export class NuevoComercioComponent implements OnInit {
         Object.values(trade).some(
           (value) =>
             value &&
-            this.normalizeString(value.toString().toLowerCase()).includes(filterValue)
+            this.normalizeString(value.toString().toLowerCase()).includes(
+              filterValue
+            )
         )
       );
     }
-  
+
     if (this.trades.length === 0) {
       this.trades = [
         {
@@ -158,79 +173,92 @@ export class NuevoComercioComponent implements OnInit {
   }
 
   normalizeString(str: string): string {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
-  
+
   sortColumn(columnKey: string) {
-
     if (this.sortColumnKey === columnKey) {
-        this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
 
-        if (this.sortOrder === 'asc') {
-          this.trades = this.allTrades.slice()
-          this.sortColumnKey = '';
-        }
-
+      if (this.sortOrder === 'asc') {
+        this.trades = this.allTrades.slice();
+        this.sortColumnKey = '';
+      }
     } else {
-        this.sortOrder = 'asc';
-        this.sortColumnKey = columnKey; // sortColumnKey = 'fantasyName'
+      this.sortOrder = 'asc';
+      this.sortColumnKey = columnKey; // sortColumnKey = 'fantasyName'
     }
 
     this.sortTable();
-}
+  }
 
-sortTable() {
-  if(this.sortColumnKey) {
+  sortTable() {
+    if (this.sortColumnKey) {
       const compareFunction = (a: Trade, b: Trade, key: keyof Trade) => {
-          const valueA = (a[key] || '').toString().toLowerCase();
-          const valueB = (b[key] || '').toString().toLowerCase();
-          return this.sortOrder === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+        const valueA = (a[key] || '').toString().toLowerCase();
+        const valueB = (b[key] || '').toString().toLowerCase();
+        return this.sortOrder === 'asc'
+          ? valueA.localeCompare(valueB)
+          : valueB.localeCompare(valueA);
       };
 
-
-      if (Object.keys(this.trades[0]).includes(this.sortColumnKey)) { // Object.keys(obj) devuelve un array de strings que representan los nombres de las propiedades del objeto en el argumento
-          this.trades.sort((a, b) => compareFunction(a, b, this.sortColumnKey as keyof Trade));
+      if (Object.keys(this.trades[0]).includes(this.sortColumnKey)) {
+        // Object.keys(obj) devuelve un array de strings que representan los nombres de las propiedades del objeto en el argumento
+        this.trades.sort((a, b) =>
+          compareFunction(a, b, this.sortColumnKey as keyof Trade)
+        );
       }
     }
-}
+  }
 
-
-
-
-  
-
-  obtenerComercios() {
+  getComercios() {
     if (this.cuit) {
-      this._tradeService.getTradesByCuit(this.cuit).subscribe(
-        (data) => {
+      this._tradeService.getTradesByCuit(this.cuit).subscribe({
+        next: (data) => {
           this.allTrades = data.slice();
           this.trades = data;
         },
-        (error) => {
+        error: (error) => {
           console.log(error);
-        }
-      );
+        },
+      });
     } else {
       console.error('Cuit no proporcionado.');
     }
   }
-  
+
+  obtenerComercios() {
+    if (this.cuit) {
+      this._tradeService.getTradesByCuit(this.cuit).subscribe({
+        next: (data) => {
+          this.allTrades = data.slice();
+          this.trades = data;
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+    } else {
+      console.error('Cuit no proporcionado.');
+    }
+  }
 
   toggleCardContent(trade: Trade) {
-  this.rotationAngles[trade.fantasyName] = (this.rotationAngles[trade.fantasyName] || 0) + 180;
-  this.visibleContent[trade.fantasyName] = !this.visibleContent[trade.fantasyName];
-}
+    this.rotationAngles[trade.fantasyName] =
+      (this.rotationAngles[trade.fantasyName] || 0) + 180;
+    this.visibleContent[trade.fantasyName] =
+      !this.visibleContent[trade.fantasyName];
+  }
 
+  isScreenSmall(): boolean {
+    // Verificar si el tamaño de la pantalla es 'sm' o menor
+    return window.innerWidth <= 640; // Ajusta según tus necesidades
+  }
 
-isScreenSmall(): boolean {
-  // Verificar si el tamaño de la pantalla es 'sm' o menor
-  return window.innerWidth <= 640; // Ajusta según tus necesidades
-}
-  
   addTrade() {
     if (this.cuit) {
-      this._tradeService.getBillingHolderByCUIT(this.cuit).subscribe(
-        (billingHolderId: any) => {
+      this._tradeService.getBillingHolderByCUIT(this.cuit).subscribe({
+        next: (billingHolderId: any) => {
           const TRADE: Trade = {
             fantasyName: this.tradeForm.get('fantasyName')?.value,
             address: this.tradeForm.get('address')?.value,
@@ -243,25 +271,25 @@ isScreenSmall(): boolean {
 
           this.createTrade(TRADE);
         },
-        (error) => {
+        error: (error) => {
           console.error(error);
-        }
-      );
+        },
+      });
     } else {
       console.error('El CUIT no está definido.');
     }
   }
 
   createTrade(TRADE: Trade) {
-    this._tradeService.createTrade(TRADE).subscribe(
-      (data) => {
+    this._tradeService.createTrade(TRADE).subscribe({
+      next: (data) => {
         this.obtenerComercios();
       },
-      (error) => {
-         //console.log(error); caombiar por un pomnpout de error
+      error: (error) => {
+        //console.log(error); caombiar por un pomnpout de error
         this.tradeForm.reset();
-      }
-    );
+      },
+    });
   }
 
   showNewTrade() {
@@ -273,7 +301,7 @@ isScreenSmall(): boolean {
   }
 
   alertUser() {
-    return '*Este campo es obligatorio.'
+    return '*Este campo es obligatorio.';
   }
 
   alertUserAboutError(mess: string) {
@@ -289,9 +317,10 @@ isScreenSmall(): boolean {
   verifyNameFantasy() {
     this.nombreFantasia = this.nombreFantasiaInputRef.nativeElement.value;
     if (this.nombreFantasia && this.cuit) {
-      
-      this._tradeService.getTradesByFantasyNameAndCUIT(this.nombreFantasia, this.cuit).subscribe(
-          (trades: Trade[]) => {
+      this._tradeService
+        .getTradesByFantasyNameAndCUIT(this.nombreFantasia, this.cuit)
+        .subscribe({
+          next: (trades: Trade[]) => {
             if (
               trades &&
               trades.some((trade) => trade.fantasyName === this.nombreFantasia)
@@ -305,13 +334,13 @@ isScreenSmall(): boolean {
               alert('Comercio añadido exitosamente');
             }
           },
-          (error: any) => {
+          error: (error: any) => {
             console.error('Error en la solicitud:', error);
             this.alertUserAboutError(
               'Error al verificar el nombre de fantasía.'
             );
-          }
-        );
+          },
+        });
     } else {
       console.error('Nombre de fantasía o cuit no proporcionados.');
     }

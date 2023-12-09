@@ -84,14 +84,14 @@ getBlocks() {
 
   createBlocks() {
     this.toAdd.forEach((block) => {
-      this.myDataService.createBlock(block).subscribe(
-        (response) => {
+      this.myDataService.createBlock(block).subscribe({
+        next: response => {
           this.getBlocks();
         },
-        (error) => {
+        error: error => {
           console.error('Error creating block:', error);
         }
-      );
+      });
     });
   }
 
@@ -136,13 +136,13 @@ getBlocks() {
       idBlock: idBlock
     };
 
-    this.myDataService.createHistory(newHistory).subscribe(
-      (response) => {
+    this.myDataService.createHistory(newHistory).subscribe({
+      next: response => {
         this.getHistory();
       },
-      (error) => {
+      error: error => {
         console.error('Error creating history:', error);
       }
-    );
+    });
   }
 }

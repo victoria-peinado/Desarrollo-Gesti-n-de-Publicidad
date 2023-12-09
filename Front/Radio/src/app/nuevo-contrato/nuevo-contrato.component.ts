@@ -38,35 +38,37 @@ export class NuevoContratoComponent implements OnInit {
 
   getHolder() {
     if (this.cuit != null) {
-      this.myDataService.getBillingHolderByCUIT(this.cuit).subscribe(
-        (result: any) => {
+      this.myDataService.getBillingHolderByCUIT(this.cuit).subscribe({
+        next: (result: any) => {
           if (result) {
             this.holder = result;
             this.getBusinesses();
           }
         },
-        (error: any) => {
+        error: (error: any) => {
           //this.validHolder()
           // show backend error message
         }
-      );
+      });
     }
   }
 
   getBusinesses() {
-    this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
+    this.myDataService.getTrades().pipe(take(1)).subscribe({
+      next: (response: any) => {
       if (Array.isArray(response) && this.holder != null) {
         // The response object is already an array; no need to access the 'data' property.
         this.businesses = response;
       } else {
         console.error('La respuesta no es un arreglo.');
       }
-    });
+    }});
   }
 
   getBusiness() {
     if (this.name != null) {
-      this.myDataService.getTrades().pipe(take(1)).subscribe((response: any) => {
+      this.myDataService.getTrades().pipe(take(1)).subscribe({
+        next: (response: any) => {
         if (Array.isArray(response) && this.holder != null) {
           // The response object is already an array; no need to access the 'data' property.
           for (const bus of response) {
@@ -77,7 +79,7 @@ export class NuevoContratoComponent implements OnInit {
         } else {
           console.error('La respuesta no es un arreglo.');
         }
-      });
+      }});
     }
   }
 
