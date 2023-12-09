@@ -16,11 +16,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SharedDataService } from '../services/shared-data.service';
 import { ThemePalette } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+
 
 @Component({
   selector: 'app-nuevo-comercio',
   templateUrl: './nuevo-comercio.component.html',
   styleUrls: ['./nuevo-comercio.component.scss'],
+  animations: [
+    trigger('rotateArrow', [
+      state('down', style({
+        transform: 'rotate(0deg)'
+      })),
+      state('up', style({
+        transform: 'rotate(180deg)'
+      })),
+      transition('down <=> up', animate('0.2s ease-in-out'))
+    ])
+  ]
 })
 export class NuevoComercioComponent implements OnInit {
   @ViewChild('nombreFantasiaInput', { static: false }) nombreFantasiaInputRef!: ElementRef;
@@ -70,6 +83,13 @@ export class NuevoComercioComponent implements OnInit {
 
   sortColumnKey: string = '';
   sortOrder: 'asc' | 'desc' = 'asc';
+
+  rotationAngle: number = 0;
+  rotationAngles: { [key: string]: number } = {};
+
+  rotateIcon() {
+    this.rotationAngle += 180;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -197,8 +217,10 @@ sortTable() {
   
 
   toggleCardContent(trade: Trade) {
-    this.visibleContent[trade.fantasyName] = !this.visibleContent[trade.fantasyName];
+  this.rotationAngles[trade.fantasyName] = (this.rotationAngles[trade.fantasyName] || 0) + 180;
+  this.visibleContent[trade.fantasyName] = !this.visibleContent[trade.fantasyName];
 }
+
 
 isScreenSmall(): boolean {
   // Verificar si el tamaño de la pantalla es 'sm' o menor

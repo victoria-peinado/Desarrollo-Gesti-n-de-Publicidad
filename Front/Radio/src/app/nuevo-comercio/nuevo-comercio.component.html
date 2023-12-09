@@ -150,11 +150,18 @@
             {{trade.usualPaymentForm}}
           </div>
       
-          <button *ngIf="isScreenSmall()" (click)="toggleCardContent(trade)" class="absolute top-0 right-0 p-2 focus:outline-none group">
-            <mat-icon class="text-gray-500 group-hover:bg-gray-200 rounded-full">
-              expand_more
-            </mat-icon>
+          <button
+            id="flechita"
+            *ngIf="isScreenSmall()"
+            (click)="toggleCardContent(trade)"
+            class="absolute top-0 right-0 p-2 focus:outline-none group"
+            [@rotateArrow]="visibleContent[trade.fantasyName] ? 'up' : 'down'"
+          >
+            <mat-icon class="text-gray-500">expand_more</mat-icon>
           </button>
+
+
+          
           
 
         </div>
