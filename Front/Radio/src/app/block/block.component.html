@@ -4,7 +4,7 @@
   <app-btn-degrade (click)="createBlocks()" [text]="'Crear Bloques'"></app-btn-degrade>
 </form>
 
-<form *ngIf="!isBlocksEmpty" class="flex flex-col items-center justify-center">
+<form *ngIf="!isBlocksEmpty"   class="flex flex-col items-center justify-center">
   <mat-form-field hideRequiredMarker floatLabel="auto" class="w-1/2" [color]="coloring">
     <mat-select hideRequiredMarker required [(ngModel)]="selectedValue" name="selectedValue"
       (ngModelChange)="getHistory()" #inputBlock>
@@ -21,8 +21,9 @@
 
   <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
     <mat-label>Nuevo precio</mat-label>
-    <input matInput required name="newPrice" [(ngModel)]="newPrice" #inputPrice>
-    <mat-error>* Requerido</mat-error>
+    <input matInput required name="newPrice" [(ngModel)]="newPrice" #inputPrice
+    (keydown.enter)="$event.preventDefault()">
+    <mat-error>* Requerido  </mat-error>
   </mat-form-field>
 
   <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="isInvalid">*Por favor ingrese un bloque y precio válido.</div>
@@ -30,6 +31,6 @@
   <div>
     <button mat-raised-button (click)="redirectToHome()">Cancel</button>
     <span style="margin-left: 10px;"></span>
-    <app-btn-degrade [disabled]="isCreateHistoryDisabled()" (click)="verify()">Submit</app-btn-degrade>
+    <app-btn-degrade [disabled]="isCreateHistoryDisabled()"  (click)="verify()">Submit</app-btn-degrade>
   </div>
 </form>

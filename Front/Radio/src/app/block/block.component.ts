@@ -3,6 +3,9 @@ import { MyDataService } from '../services/my-data.service';
 import { take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
+import{Block} from '../models/block';
+import { ApiResponse } from '../models/api_response.js';
+import {blockPriceHistory } from '../models/block-price-history';
 
 @Component({
   selector: 'app-block',
@@ -11,8 +14,8 @@ import { ThemePalette } from '@angular/material/core/index.js';
 export class BlockComponent implements OnInit {
   @ViewChild('inputBlock') inputBlock: any;
   @ViewChild('inputPrice', { static: false }) priceInputRef!: ElementRef;
-  blocks: any;
-  blocks$: any;
+  blocks:Block[]=[];
+  blocks$:Block[]=[];
   selectedValue: any;
   last: any;
   newPrice: number | null = null;
@@ -31,6 +34,7 @@ export class BlockComponent implements OnInit {
   ];
 
   redirectToHome() {
+    console.log('Redirecting to home...');
     this.router.navigate(['/']);
   }
 
@@ -38,16 +42,21 @@ export class BlockComponent implements OnInit {
     this.getBlocks();
   }
 
-  getBlocks() {
-    this.myDataService.getBlocks().pipe(take(1)).subscribe((data) => {
-      this.blocks = data;
-      this.blocks = this.blocks.data;
+getBlocks() {
+  this.myDataService.getBlocks().pipe(take(1)).subscribe({
+    next: (data: ApiResponse<Block[]>) => {
+      console.log('Blocks:', data);
+      this.blocks = data.data;
       this.isBlocksEmpty = !this.blocks || this.blocks.length === 0;
-    });
-  }
-
-  getHistory() {
-    this.myDataService.getHistory().pipe(take(1)).subscribe((response: any) => {
+    },
+    error: (error: any) => {
+      console.error('Error fetching blocks:', error);
+    }
+  } as any);
+}
+ getHistory() {
+  this.myDataService.getHistory().pipe(take(1)).subscribe({
+    next: (response: ApiResponse<blockPriceHistory>) => {
       if (Array.isArray(response.data)) {
         let lastHistory = null;
         const today = new Date();
@@ -63,12 +72,15 @@ export class BlockComponent implements OnInit {
         }
 
         this.last = lastHistory;
-     
       } else {
         console.error('The "data" property is not an array in the response.');
       }
-    });
-  }
+    },
+    error: (error: any) => {
+      console.error('Error fetching history:', error);
+    }
+  }as any);
+}
 
   createBlocks() {
     this.toAdd.forEach((block) => {
@@ -103,6 +115,7 @@ export class BlockComponent implements OnInit {
   isCreateHistoryDisabled() {
     return !this.selectedValue || !this.newPrice || this.newPrice < 0 || isNaN(this.newPrice);
   }
+
 
   createHistory() {
     const today = new Date();
