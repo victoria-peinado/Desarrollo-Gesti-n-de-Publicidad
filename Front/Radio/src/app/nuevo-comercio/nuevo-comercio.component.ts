@@ -130,6 +130,58 @@ export class NuevoComercioComponent implements OnInit {
     this.obtenerComercios();
   }
 
+  // lógica transición flecha y ordenamiento
+  textoMarcado: boolean = false;
+  click: number = 0;
+  salb: boolean = false;
+  entb: boolean = false;
+  entro: boolean = true;
+  
+
+  marcarNegrita(key: string) {
+
+    this.click = this.click + 1;
+
+    if(this.click == 1) {
+      this.textoMarcado = !this.textoMarcado;
+    };
+
+    if(this.click == 3) {
+      this.entro = false;
+      this.textoMarcado = !this.textoMarcado;
+      this.click = 0;
+    };
+
+    this.sortColumn(key);
+    
+  }
+
+  salida() {
+    if(this.click == 0){
+      console.log('salió');
+      this.entb = false;
+      this.salb = true;
+      
+
+      // Restablecer posición inicial después de un tiempo suficiente para que termine la transición
+      setTimeout(() => {
+        this.salb = false;
+      }, 200); // 300ms es la duración de la transición
+    }
+  }
+
+  entrada() {
+    if(this.click ==0){
+      console.log('entró');
+      this.entro = true;
+      this.entb = true;
+    }
+  }
+
+
+
+
+
   getMailErrorMessage() {
     if (this.tradeForm.get('mail')?.hasError('required')) {
       return '*Este campo es obligatorio.';

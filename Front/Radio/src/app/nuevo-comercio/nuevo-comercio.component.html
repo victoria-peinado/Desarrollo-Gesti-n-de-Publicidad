@@ -34,7 +34,6 @@
   <app-btn-degrade [text]="'Nuevo Comercio'" (click)="showNewTrade()"></app-btn-degrade>
 </div>
 
-
 <div id="table">
   <div class="p-5 h-screen">
 
@@ -51,46 +50,46 @@
           <table class="w-full" *ngIf="trades.length > 0">
               <thead class="bg-gray-200 border-b-2 border-gray-200">
                   <tr>
-                    <th (click)="sortColumn('fantasyName')" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('fantasyName')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Nombre fantasía
-                      <button class="absolute text-gray-700">
-                          <mat-icon class="text-sm font-bold">{{ sortOrder === 'asc' ? 'north' : 'south' }}</mat-icon>
-                      </button>
+                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                        {{ click == 2 ? 'south' : 'north' }}
+                      </mat-icon>
                     </th>
 
-                    <th (click)="sortColumn('address')" class="w-24 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('address')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Dirección
-                      <button *ngIf="sortColumnKey === 'address'" class="absolute text-gray-700">
-                          <mat-icon class="text-sm font-bold">{{ sortOrder === 'asc' ? 'north' : 'south' }}</mat-icon>
-                      </button>
+                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                        {{ click == 2 ? 'south' : 'north' }}
+                      </mat-icon>
                     </th>
 
-                    <th (click)="sortColumn('billingType')" class="w-32 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('billingType')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Tipo Facturación
-                      <button *ngIf="sortColumnKey === 'billingType'" class="absolute text-gray-700">
-                          <mat-icon class="text-sm font-bold">{{ sortOrder === 'asc' ? 'north' : 'south' }}</mat-icon>
-                      </button>
+                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                        {{ click == 2 ? 'south' : 'north' }}
+                      </mat-icon>
                     </th>
 
-                    <th (click)="sortColumn('mail')" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('mail')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Email
-                      <button *ngIf="sortColumnKey === 'mail'" class="absolute text-gray-700">
-                          <mat-icon class="text-sm font-bold">{{ sortOrder === 'asc' ? 'north' : 'south' }}</mat-icon>
-                      </button>
+                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                        {{ click == 2 ? 'south' : 'north' }}
+                      </mat-icon>
                     </th>
 
-                    <th (click)="sortColumn('usualPaymentForm')" class="w-24 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('usualPaymentForm')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Forma Pago
-                      <button *ngIf="sortColumnKey === 'usualPaymentForm'" class="absolute text-gray-700">
-                          <mat-icon class="text-sm font-bold">{{ sortOrder === 'asc' ? 'north' : 'south' }}</mat-icon>
-                      </button>
+                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                        {{ click == 2 ? 'south' : 'north' }}
+                      </mat-icon>
                     </th>
 
-                    <th (click)="sortColumn('type')" class="w-24 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('type')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Tipo
-                      <button *ngIf="sortColumnKey === 'type'" class="absolute text-gray-700">
-                          <mat-icon class="text-sm font-bold">{{ sortOrder === 'asc' ? 'north' : 'south' }}</mat-icon>
-                      </button>
+                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                        {{ click == 2 ? 'south' : 'north' }}
+                      </mat-icon>
                     </th>
 
                   </tr>
@@ -159,10 +158,6 @@
           >
             <mat-icon class="text-gray-500">expand_more</mat-icon>
           </button>
-
-
-          
-          
 
         </div>
       </div>
