@@ -4,33 +4,40 @@
   <app-btn-degrade (click)="createBlocks()" [text]="'Crear Bloques'"></app-btn-degrade>
 </form>
 
-<form *ngIf="!isBlocksEmpty"   class="flex flex-col items-center justify-center">
-  <mat-form-field hideRequiredMarker floatLabel="auto" class="w-1/2" [color]="coloring">
-    <mat-select hideRequiredMarker required [(ngModel)]="selectedValue" name="selectedValue"
-      (ngModelChange)="getHistory()" #inputBlock>
-      <mat-option hideRequiredMarker *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
-    </mat-select>
-    <mat-error>* Requerido</mat-error>
+<form *ngIf="!isBlocksEmpty" [formGroup]="form" class="flex flex-col items-center justify-center"
+  (keydown.enter)="$event.preventDefault()">
+
+  <mat-form-field floatLabel="auto" class="w-1/2">
     <mat-label><strong> Bloque</strong></mat-label>
+    <mat-select formControlName="selectedBlock" (ngModelChange)="selectedBlock(price)">
+      <mat-option *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
+    </mat-select>
   </mat-form-field>
+  <div *ngIf="form.get('selectedBlock')?.invalid && form.get('selectedBlock')?.touched"
+    class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
+    <mat-error *ngIf="form.get('selectedBlock')?.errors?.['required']">* Requerido</mat-error>
+  </div>
 
   <p *ngIf="selectedValue !== null && selectedValue !== undefined"> Hora inicio: {{selectedValue.startTime}}</p>
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Ultima fecha actualizacion: {{last.startTime}}</p>
-  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual: {{last.precio}}</p> 
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Ultima fecha actualizacion:
+    {{last.startTime}}
+  </p>
+  <p *ngIf="selectedValue !== null && selectedValue !== undefined && last"> Precio Actual: {{last.precio}}</p>
   <!-- Cuidado esto va a tener que cambiarse en el backend  no deberia ser precio si no price -->
-
-  <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
+  <mat-form-field class="w-1/2">
     <mat-label>Nuevo precio</mat-label>
-    <input matInput required name="newPrice" [(ngModel)]="newPrice" #inputPrice
-    (keydown.enter)="$event.preventDefault()">
-    <mat-error>* Requerido  </mat-error>
+    <input matInput formControlName="inputPrice"(keydown.enter)="form.valid && submit()" #price>
   </mat-form-field>
-
-  <div class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn" *ngIf="isInvalid">*Por favor ingrese un bloque y precio válido.</div>
-
-  <div>
-    <button mat-raised-button (click)="redirectToHome()">Cancel</button>
-    <span style="margin-left: 10px;"></span>
-    <app-btn-degrade [disabled]="isCreateHistoryDisabled()"  (click)="verify()">Submit</app-btn-degrade>
+  <div *ngIf="form.get('inputPrice')?.invalid && form.get('inputPrice')?.touched"
+    class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
+    <mat-error *ngIf="form.get('inputPrice')?.errors?.['required']">* Requerido</mat-error>
+    <mat-error *ngIf="form.get('inputPrice')?.errors?.['pattern']">* Solo números</mat-error>
+    <mat-error *ngIf="form.get('inputPrice')?.errors?.['min']">* Debe ser mayor a 0</mat-error>
   </div>
+  <div class="flex flex-row items-center justify-center">
+    <button mat-raised-button routerLink="/">Cancelar</button>
+    <span style="margin-left: 10px;"></span>
+    <app-btn-degrade [disabled]="form.invalid" (click)="submit()" ></app-btn-degrade>
+  </div>
+
 </form>
