@@ -97,14 +97,14 @@ export class BlockComponent implements OnInit {
 
   createBlocks() {
     this.toAdd.forEach((block) => {
-      this.myDataService.createBlock(block).subscribe(
-        (response) => {
+      this.myDataService.createBlock(block).subscribe({
+        next: response => {
           this.getBlocks();
         },
-        (error) => {
+        error: error => {
           console.error('Error creating block:', error);
         }
-      );
+      });
     });
   }
 
@@ -122,23 +122,13 @@ export class BlockComponent implements OnInit {
       idBlock: idBlock
     };
 
-    this.myDataService.createHistory(newHistory).subscribe(
-      (response) => {
+    this.myDataService.createHistory(newHistory).subscribe({
+      next: response => {
         this.getHistory();
       },
-      (error) => {
+      error: error => {
         console.error('Error creating history:', error);
       }
-    );
-
-  }
-  focusNext(next: any): void {
-    setTimeout(() => {
-      next.click();
     });
-
-  }
-  submit() {
-    this.createHistory()
   }
 }

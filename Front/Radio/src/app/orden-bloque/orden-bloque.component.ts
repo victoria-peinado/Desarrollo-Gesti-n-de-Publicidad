@@ -16,11 +16,12 @@ export class OrdenBLoqueComponent implements OnInit{
     this.getBLoques();
   }
   getBLoques() {
-    this.myDataService.getBlocks().pipe(take(1)).subscribe(data => {
+    this.myDataService.getBlocks().pipe(take(1)).subscribe({
+      next: data => {
       let blocks :any
       blocks = data;
       blocks = blocks.data;
       this.blocks= blocks;
-    } );
+    }});
   }
 }

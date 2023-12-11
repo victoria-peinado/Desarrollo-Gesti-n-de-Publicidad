@@ -62,19 +62,19 @@ export class AltaComercioComponent {
   }
 
   verifyCuit() {
-    this._BillingHolderService.getBillingHolderByCUIT(this.cuit).subscribe(
-      (billingHolder: any) => {
+    this._BillingHolderService.getBillingHolderByCUIT(this.cuit).subscribe({
+      next: (billingHolder: any) => {
         this.sharedDataService.setCuit(billingHolder.CUIT);
         this.sharedDataService.setRazonSocial(billingHolder.businessName);
         this.sharedDataService.setCondicionFinal(billingHolder.fiscalCondition);
         this.redirectToNuevoComercio();
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error('Error: ', error);
         this.alertUserAboutError(
           'Cuit <strong>incorrecto</strong>. Por favor, ingrese un Cuit válido.'
         );
       }
-    );
+    });
   }
 }

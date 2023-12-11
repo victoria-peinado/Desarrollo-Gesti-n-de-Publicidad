@@ -33,12 +33,13 @@ export class NuevaOrdenComponent implements OnInit {
   }
 
   getBlocks() {
-    this.myDataService.getBlocks().pipe(take(1)).subscribe(data => {
+    this.myDataService.getBlocks().pipe(take(1)).subscribe({
+      next: data => {
       let blocks: any;
       blocks = data;
       blocks = blocks.data;
       this.data = blocks;
-    });
+    }});
   }
 
   onCheckboxChange(index: number, day: string) {
