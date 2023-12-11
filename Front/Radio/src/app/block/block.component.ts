@@ -41,21 +41,18 @@ export class BlockComponent implements OnInit {
       "number": 30
     }
   ];
-
-  redirectToHome() {
-    this.router.navigate(['/']);
-  }
-
+// get the blocks blocks to the droppdown, it is excecuted when the component is loaded
   ngOnInit() {
     this.getBlocks();
   }
+//gets the last hitory, set the selected block and focus on the next input
   selectedBlock(next: any) {
     this.selectedValue = this.form.get('selectedBlock')?.value
     this.getHistory();
     this.focusNext(next);
 
   }
-
+//get the blocks of the database
   getBlocks() {
     this.myDataService.getBlocks().pipe(take(1)).subscribe({
       next: (data: ApiResponse<Block[]>) => {
@@ -67,6 +64,7 @@ export class BlockComponent implements OnInit {
       }
     } as any);
   }
+//get the last history of the selected block
   getHistory() {
     this.myDataService.getHistory().pipe(take(1)).subscribe({
       next: (response: ApiResponse<blockPriceHistory>) => {
@@ -107,7 +105,16 @@ export class BlockComponent implements OnInit {
       });
     });
   }
-
+  //focus on the next input
+  focusNext(next: any): void {
+    setTimeout(() => {
+      next.click();
+    });
+  }
+  //call the createHistory function
+  submit() {
+    this.createHistory()
+  }
 
 
   createHistory() {
