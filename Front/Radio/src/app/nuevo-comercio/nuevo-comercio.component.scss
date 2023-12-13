@@ -17,3 +17,36 @@ th {
     user-select: none;
   }
 
+  .flechita {
+    color: rgb(155, 155, 155);
+    margin-left: 3px;
+    font-weight: bold;
+    position: absolute;
+    font-size: 0.875rem/* 14px */;
+    line-height: 1.25rem/* 20px */;
+    transform: translateY(3px);
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  
+th:hover .flechita {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .negrita {
+    color: black;
+    font-weight: bold;
+    opacity: 1;
+  }
+  
+ 
+  
+  .salida {
+    transform: translateY(-3px);
+    opacity: 0;
+  }
+  
+  .entrada {
+    transform: translateY(0px);
+  }
