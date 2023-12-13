@@ -7,7 +7,7 @@ import { Block } from '../models/block';
 import { ApiResponse } from '../models/api_response.js';
 import { blockPriceHistory } from '../models/block-price-history';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-
+import { parse } from 'date-fns';
 @Component({
   selector: 'app-block',
   templateUrl: './block.component.html',
@@ -73,16 +73,17 @@ export class BlockComponent implements OnInit {
           const today = new Date();
 
           for (const history of response.data) {
-            const historyDate = new Date(history.startTime);
+            const historyDate = parse(history.startTime, "dd/MM/yyyy, HH:mm:ss", new Date());
 
             if (this.selectedValue && historyDate < today && history.idBlock === this.selectedValue.id) {
-              if (!lastHistory || historyDate > new Date(lastHistory.startTime)) {
+              if (!lastHistory || historyDate >  parse(lastHistory.startTime, "dd/MM/yyyy, HH:mm:ss", new Date())){
                 lastHistory = history;
               }
             }
           }
 
           this.last = lastHistory;
+        
         } else {
           console.error('The "data" property is not an array in the response.');
         }
@@ -120,7 +121,7 @@ export class BlockComponent implements OnInit {
   createHistory() {
     const today = new Date();
     const fechaCompleta = today.toLocaleString();// ver si guarda en la base un date o string .toLocaleDateString(); te da sin la hora
-    const price = this.form.get('inputPrice')?.value;
+    const price = parseFloat(this.form.get('inputPrice')?.value || '0');
     const idBlock = this.selectedValue!.id;
 
     const newHistory = {
@@ -128,7 +129,6 @@ export class BlockComponent implements OnInit {
       precio: price, /// va a tener que cambiar a price
       idBlock: idBlock
     };
-
     this.myDataService.createHistory(newHistory).subscribe({
       next: response => {
         this.getHistory();

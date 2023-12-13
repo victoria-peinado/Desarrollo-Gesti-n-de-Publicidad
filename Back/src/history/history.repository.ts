@@ -3,7 +3,7 @@ import { History } from './history.entity.js';
 
 const historyList: History[] = [
   new History(
-    '2023-10-08',
+    '13/12/2023, 18:06:12',
     11,
     'a02b91bc-3769-4221-beb1-d7a3aeba7dad',
     'a02b91bc-3769-4221-beb1-d7a3aeba7dad'
