@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { DummyComponent } from './dummy/dummy.component';
 import { BlockComponent } from './block/block.component';
 import { RouterModule, Routes } from '@angular/router';
 import { UserLoginComponent } from './user-login/user-login.component';
@@ -17,17 +16,17 @@ const routes: Routes = [
   { path:'altaComercio', component: AltaComercioComponent },
   { path:'altaComercio/nuevoComercio', component: NuevoComercioComponent },
   { path:'actualizacionComercio', component: ActualizacionComercioComponent },
-  { path:'altaPublicista', component: DummyComponent },
-  { path:'liquidacionPublicistas', component: DummyComponent },
-  { path:'listadoLiquidaciones', component: DummyComponent },
-  { path:'registroPagoPub', component: DummyComponent },
-  { path:'actualizacionPublicista', component: DummyComponent },
+  { path:'altaPublicista', component: InicioComponent },
+  { path:'liquidacionPublicistas', component: InicioComponent },
+  { path:'listadoLiquidaciones', component: InicioComponent },
+  { path:'registroPagoPub', component: InicioComponent },
+  { path:'actualizacionPublicista', component: InicioComponent },
   { path:'altaContratacion', component: NuevoContratoComponent },
-  { path:'actualizacionContratacion', component: DummyComponent },
-  { path:'registroPago', component: DummyComponent },
-  { path:'informeFaltaPago', component: DummyComponent },
+  { path:'actualizacionContratacion', component: InicioComponent },
+  { path:'registroPago', component: InicioComponent },
+  { path:'informeFaltaPago', component: InicioComponent },
   { path:'emisionOrdenes', component: NuevaOrdenComponent },
-  { path:'listadoPublicitario', component: DummyComponent },
+  { path:'listadoPublicitario', component: InicioComponent },
   { path:'actualizacionBLoque', component: BlockComponent },
   { path: '**', redirectTo: '', pathMatch: 'full'} // cuando el usuario pone una ruta inexistente redirige a http://localhost:4200
 

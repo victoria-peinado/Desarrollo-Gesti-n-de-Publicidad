@@ -1,8 +1,7 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MyDataService } from '../services/my-data.service';
 import { take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { ThemePalette } from '@angular/material/core/index.js';
 import { Block } from '../models/block';
 import { ApiResponse } from '../models/api_response.js';
 import { blockPriceHistory } from '../models/block-price-history';
@@ -13,16 +12,12 @@ import { parse } from 'date-fns';
   templateUrl: './block.component.html',
 })
 export class BlockComponent implements OnInit {
-  @ViewChild('inputBlock') inputBlock: any;
-  @ViewChild('inputPrice', { static: false }) priceInputRef!: ElementRef;
   blocks: Block[] = [];
   blocks$: Block[] = [];
   selectedValue: Block | null = null;
   last: blockPriceHistory | null = null;
-  isInvalid: boolean = false;
   isBlocksEmpty: boolean = true;
-  coloring: ThemePalette = 'primary';
-  icon: string = 'display: none';
+  
 
   form: FormGroup;
   constructor(private myDataService: MyDataService, private router: Router, private fb: FormBuilder) {
@@ -34,14 +29,14 @@ export class BlockComponent implements OnInit {
 
     })
   }
-
+//blocks to create if ther is no other block
   toAdd = [
     {
       "startTime": "12:30:00",
       "number": 30
     }
   ];
-// get the blocks blocks to the droppdown, it is excecuted when the component is loaded
+// get the blocks , it is excecuted when the component is loaded
   ngOnInit() {
     this.getBlocks();
   }

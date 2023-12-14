@@ -8,7 +8,6 @@ import { MainNavComponent } from './main-nav/main-nav.component';
 import { BlockComponent } from './block/block.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DummyComponent } from './dummy/dummy.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
 import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
@@ -26,7 +25,6 @@ import { InicioComponent } from './inicio/inicio.component';
   declarations: [
     AppComponent,
     MainNavComponent,
-    DummyComponent,
     BlockComponent,
     UserLoginComponent,
     AltaComercioComponent,
