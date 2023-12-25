@@ -1,5 +1,5 @@
 export class billingHolder{
-    id?: number;
+    _id?: number;
     cuit: string;
     businessName: string;
     fiscalCondition: string;

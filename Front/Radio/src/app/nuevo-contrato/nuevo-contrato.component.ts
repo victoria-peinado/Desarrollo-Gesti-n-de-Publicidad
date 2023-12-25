@@ -5,6 +5,8 @@ import { take ,tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
 import { Validator } from '@angular/forms';
+import { billingHolder } from '../models/billing-holder.js';
+import { Trade } from '../models/trade.js';
 @Component({
   selector: 'app-nuevo-contrato',
   templateUrl: './nuevo-contrato.component.html',
@@ -15,12 +17,12 @@ export class NuevoContratoComponent implements OnInit {
   @ViewChild('inputPrice', { static: false }) priceInputRef!: ElementRef;
   @ViewChild('inputCuit', { static: false }) cuitInputRef!: ElementRef;
   name: string | any = null;
-  cuit: any = null;
+  cuit: string|null = null;
   invalid: boolean = false;
   coloring: ThemePalette = "primary";
-  holder: any = null;
-  business: any = null;
-  businesses: any = null;
+  holder: billingHolder|null= null;
+  business: Trade|null = null;
+  businesses: Trade[]| null = null;
   startDate: Date | null = null;
   endDate: Date | null = null;
   regDate: Date | null = null;
