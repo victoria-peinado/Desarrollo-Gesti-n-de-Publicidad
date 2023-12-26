@@ -5,8 +5,8 @@
   <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
 
     <mat-label>CUIT del Titular</mat-label>
-    <input matInput maxlength="11" (focusout)="getHolder()" required name="cuit" [(ngModel)]="cuit"
-      #inputCuit="ngModel">
+    <input matInput maxlength="11" (input)="getHolder()" required name="cuit" [(ngModel)]="cuit"
+      #inputCuit="ngModel" (keydown.enter)="focusNext(inputBlock)">
     <div class="asterisk">*</div>
     <mat-error *ngIf="!holder && inputCuit.touched">* Requerido</mat-error>
     <mat-hint *ngIf="!holder && inputCuit.touched" [ngStyle]="{'color': 'red'}">* Ingrese un titular
@@ -19,7 +19,7 @@
   <mat-form-field hideRequiredMarker class="w-1/2" [color]="coloring">
     <mat-label>Nombre del Comercio</mat-label>
     <mat-select hideRequiredMarker required [(ngModel)]="business" name="selectedValue" [disabled]="!holder"
-      #inputBlock>
+      #inputBlock (selectionChange)="focusNext(inputStartDate)">
       <mat-option hideRequiredMarker *ngFor="let b of businesses" [value]="b">{{b.fantasyName}}</mat-option>
     </mat-select>
     <div class="asterisk">*</div>
@@ -57,7 +57,7 @@
   </div>
 
   <div>
-    <button mat-raised-button (click)="redirectToHome()">Cancelar</button>
+    <button mat-raised-button routerLink="/">Cancelar</button>
     <span style="margin-left: 10px;"></span>
     <app-btn-degrade [disabled]="isCreateContractDisabled()"> </app-btn-degrade>
   </div>

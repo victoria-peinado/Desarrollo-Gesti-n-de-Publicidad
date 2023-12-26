@@ -22,7 +22,7 @@ export class NuevoContratoComponent implements OnInit {
   coloring: ThemePalette = "primary";
   holder: billingHolder|null= null;
   business: Trade|null = null;
-  businesses: Trade[]| null = null;
+  businesses: Trade[]= [];
   startDate: Date | null = null;
   endDate: Date | null = null;
   regDate: Date | null = null;
@@ -31,14 +31,13 @@ export class NuevoContratoComponent implements OnInit {
   constructor(private myDataService: MyDataService, private router: Router) {}
 
   ngOnInit() {
-    this.regDate = new Date();
-  }
-
-  redirectToHome() {
-    this.router.navigate(['/']);
+    this.regDate = new Date();//esto lo deberia hacer una funcion create
   }
 
   getHolder() {
+    this.businesses = []; 
+    this.business=null;
+    this.holder=null;
     if (this.cuit != null) {
       this.myDataService.getBillingHolderByCUIT(this.cuit).subscribe({
         next: (result: any) => {
@@ -48,50 +47,33 @@ export class NuevoContratoComponent implements OnInit {
           }
         },
         error: (error: any) => {
-          //this.validHolder()
-          // show backend error message
+
         }
       });
     }
   }
 
-  getBusinesses() {
-    this.myDataService.getTrades().pipe(take(1)).subscribe({
-      next: (response: any) => {
-      if (Array.isArray(response) && this.holder != null) {
-        // The response object is already an array; no need to access the 'data' property.
-        this.businesses = response;
-      } else {
-        console.error('La respuesta no es un arreglo.');
-      }
-    }});
-  }
 
-  getBusiness() {
-    if (this.name != null) {
+  getBusinesses() {
+
       this.myDataService.getTrades().pipe(take(1)).subscribe({
         next: (response: any) => {
         if (Array.isArray(response) && this.holder != null) {
           // The response object is already an array; no need to access the 'data' property.
           for (const bus of response) {
-            if (bus.fantasyName === this.name && bus.billingHolderId === this.holder._id) {
-              this.business = bus;
+            if ( bus.billingHolderId === this.holder._id) {
+              this.businesses.push(bus);
             }
           }
-        } else {
+        } 
+        else {
           console.error('La respuesta no es un arreglo.');
         }
       }});
-    }
+    
   }
 
-  validHolder() {
-    // if (!this.holder) {
-    //   // const cinput = this.cuitInputRef.nativeElement;
-    //   // cinput.focus();
-    //   this.coloring = "warn";
-    // }
-  }
+
 
   startDateValid() {
     if (this.startDate === null) {
@@ -111,6 +93,13 @@ export class NuevoContratoComponent implements OnInit {
 
   endDateValid() {
     return this.endDate === null || (this.startDate !== null && this.endDate > this.startDate);
+  }
+
+  focusNext(next: any): void {
+    setTimeout(() => {
+      
+      next.focus();
+    });
   }
 
   isCreateContractDisabled() {
