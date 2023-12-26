@@ -2,7 +2,7 @@
 
 <form class="flex flex-col items-center justify-center">
 
-  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" [color]="colorPalette">
+  <mat-form-field hideRequiredMarker floatLabel="always" class="w-1/2" >
     <mat-label>Número Contratación</mat-label>
     <!-- PEDIR AYUDA appearance="outline" -->
     <input matInput placeholder="Número de Contratación" required name="number" [(ngModel)]="number" #inputNumber>
@@ -40,7 +40,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let block of data; let i = index">
+        <tr *ngFor="let block of blocks; let i = index">
           <td class="px-6 py-4 whitespace-no-wrap">{{block.startTime}}</td>
           <td class="px-6 py-4 whitespace-no-wrap">
             <mat-checkbox (change)="onCheckboxChange(i, 'Lunes')"></mat-checkbox>

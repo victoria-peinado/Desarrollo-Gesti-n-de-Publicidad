@@ -5,6 +5,8 @@ import { take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
 import { OrdenFechaComponent } from '../orden-fecha/orden-fecha.component';
+import { Block } from '../models/block'
+import { ApiResponse } from '../models/api_response.js';
 
 @Component({
   selector: 'app-nueva-orden',
@@ -13,12 +15,11 @@ import { OrdenFechaComponent } from '../orden-fecha/orden-fecha.component';
 })
 export class NuevaOrdenComponent implements OnInit {
   @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef;
-  number: any = null;
+  number: number|null = null;
   isInvalid: boolean = false;
-  colorPalette: ThemePalette = "primary";
-  data: any | null = null;
   date: any | null = null;
   same: any = true;
+  blocks: Block[] = [];
 
   displayedColumns: string[] = ['Bloque', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
@@ -32,23 +33,24 @@ export class NuevaOrdenComponent implements OnInit {
     this.getBlocks();
   }
 
+//get the blocks of the database
   getBlocks() {
     this.myDataService.getBlocks().pipe(take(1)).subscribe({
-      next: data => {
-      let blocks: any;
-      blocks = data;
-      blocks = blocks.data;
-      this.data = blocks;
-    }});
+      next: (data: ApiResponse<Block[]>) => {
+        this.blocks = data.data;
+      },
+      error: (error: any) => {
+        console.log('Error fetching blocks:', error);
+      }
+    } as any);
   }
-
   onCheckboxChange(index: number, day: string) {
-    // Aquí puedes registrar las celdas tildadas en un array o realizar otras acciones.
-    if (this.data[index][day]) {
-      // La celda está tildada, realiza la lógica necesaria.
-    } else {
-      // La celda está destildada, realiza la lógica necesaria.
-    }
+    // // Aquí puedes registrar las celdas tildadas en un array o realizar otras acciones.
+    // if (this.blocks[index][day]) {
+    //   // La celda está tildada, realiza la lógica necesaria.
+    // } else {
+    //   // La celda está destildada, realiza la lógica necesaria.
+    // }
   }
 
   createDate() {

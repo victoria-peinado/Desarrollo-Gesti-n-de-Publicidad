@@ -13,7 +13,6 @@ import { parse } from 'date-fns';
 })
 export class BlockComponent implements OnInit {
   blocks: Block[] = [];
-  blocks$: Block[] = [];
   selectedValue: Block | null = null;
   last: blockPriceHistory | null = null;
   isBlocksEmpty: boolean = true;

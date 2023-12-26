@@ -16,7 +16,7 @@ export class NuevoContratoComponent implements OnInit {
   @ViewChild('inputBlock') inputBlock: any;
   @ViewChild('inputPrice', { static: false }) priceInputRef!: ElementRef;
   @ViewChild('inputCuit', { static: false }) cuitInputRef!: ElementRef;
-  name: string | any = null;
+  name: string | null  = null;
   cuit: string|null = null;
   invalid: boolean = false;
   coloring: ThemePalette = "primary";
