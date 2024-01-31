@@ -52,9 +52,14 @@ export class ShopListComponent implements OnInit {
         next: (data) => {
           this.allTrades = data.slice();
           this.trades = data;
+          console.log('si hay comercios');
+          console.log(this.trades);
         },
         error: (error) => {
           console.log(error);
+          this.trades = [];
+          console.log('no hay comercios');
+          console.log(this.trades);
         },
       });
     } else {
