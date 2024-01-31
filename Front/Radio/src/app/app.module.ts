@@ -18,7 +18,8 @@ import { OrdenFechaComponent } from './orden-fecha/orden-fecha.component';
 import { OrdenBLoqueComponent } from './orden-bloque/orden-bloque.component';
 import { ActualizacionComercioComponent } from './actualizacion-comercio/actualizacion-comercio.component';
 import { InicioComponent } from './inicio/inicio.component';
-
+import { NewOwnerContactShopComponent } from './alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
+import { ShopListComponent } from './shop-list/shop-list.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { InicioComponent } from './inicio/inicio.component';
     BlockComponent,
     UserLoginComponent,
     AltaComercioComponent,
+    NewOwnerContactShopComponent,
     NuevoComercioComponent,
     BtnDegradeComponent,
     NuevoContratoComponent,
@@ -35,7 +37,8 @@ import { InicioComponent } from './inicio/inicio.component';
     OrdenFechaComponent,
     OrdenBLoqueComponent,
     ActualizacionComercioComponent,
-    InicioComponent
+    InicioComponent,
+    ShopListComponent
   ],
   imports: [
     BrowserModule,

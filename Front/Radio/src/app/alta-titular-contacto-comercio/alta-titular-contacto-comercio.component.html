@@ -1,0 +1,62 @@
+<mat-stepper orientation="vertical" linear=True #stepper>
+  <mat-step  label="Datos Titular" completed =false>
+    <!-- <app-datos-titular></app-datos-titular> -->
+    <div class="m-5">
+      <button mat-raised-button color="primary" matStepperNext>Continuar</button>
+    </div>
+  </mat-step>
+  <mat-step label="Datos Comercio" completed =false>
+    <!-- <app-datos-comercio></app-datos-comercio> -->
+    <div class="m-5">
+      <button mat-raised-button color="primary" matStepperNext>Continuar</button>
+    </div>
+  </mat-step>
+  <mat-step label="Datos Contacto" completed =false>
+    <!-- <app-datos-contacto></app-datos-contacto> -->
+    <div class="m-5">
+      <button mat-raised-button color="primary" matStepperNext>Continuar</button>
+    </div>
+  </mat-step>
+</mat-stepper>
+
+<!-- 
+
+<section id="titular">
+    <div class="m-5">
+        <b class="text-lg">TITULAR</b>
+    </div>
+    <div class="m-4 flex flex-row items-center justify-left">
+    
+        <div class="inline-block ml-4 mr-4">
+            <mat-form-field class="-mt-2 " >
+                <mat-label>CUIT</mat-label>
+                <input matInput [value]="cuit" >
+            </mat-form-field>
+        </div>
+    
+        <div class="inline-block ml-4 mr-4">
+            <mat-form-field class="-mt-2" >
+                <mat-label>Razón social</mat-label>
+                <input matInput [value]="razonSocial" >
+            </mat-form-field>
+        </div>
+    
+        <div class="inline-block ml-4 mr-4">
+          <mat-form-field class="-mt-2" >
+              <mat-label>Condición fiscal</mat-label>
+              <input matInput [value]="condicionFinal" >
+          </mat-form-field>
+      </div>
+
+
+    </div>
+</section> -->
+
+
+<!-- <div class="m-5">
+  <app-btn-degrade [text]="'Nuevo Comercio'" (click)="showNewTrade()"></app-btn-degrade>
+</div> -->
+
+
+
+

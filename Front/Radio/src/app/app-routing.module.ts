@@ -8,12 +8,16 @@ import { NuevoContratoComponent } from './nuevo-contrato/nuevo-contrato.componen
 import { NuevaOrdenComponent } from './nueva-orden/nueva-orden.component';
 import { ActualizacionComercioComponent } from './actualizacion-comercio/actualizacion-comercio.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { NewOwnerContactShopComponent } from './alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
+import { ShopListComponent } from './shop-list/shop-list.component';
 
 const routes: Routes = [
   { path:'', component: InicioComponent },
   { path:'inicio', component: InicioComponent  },
+  { path:'listaComercios', component: AltaComercioComponent},
   { path:'login', component: UserLoginComponent  },
-  { path:'altaComercio', component: AltaComercioComponent },
+  { path:'altaComercio/listaComercios', component: ShopListComponent},
+  { path:'altaComercio', component: NewOwnerContactShopComponent},
   { path:'altaComercio/nuevoComercio', component: NuevoComercioComponent },
   { path:'actualizacionComercio', component: ActualizacionComercioComponent },
   { path:'altaPublicista', component: InicioComponent },
