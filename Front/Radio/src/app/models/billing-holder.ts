@@ -1,4 +1,4 @@
-export class billingHolder{
+export class BillingHolder{
     _id?: number;
     cuit: string;
     businessName: string;

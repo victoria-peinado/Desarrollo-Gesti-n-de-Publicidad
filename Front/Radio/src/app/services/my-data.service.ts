@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Trade } from '../models/trade';
+import { BillingHolder } from '../models/billing-holder';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +51,16 @@ export class MyDataService {
   getTradesByFantasyNameAndCUIT(nombreFantasia: string, cuit: string): Observable<any> {
     return this.http.get('http://localhost:3000/api/trades/search?fantasyName=' + nombreFantasia + '&cuit=' + cuit);
   }
-  
-
+ 
+  // Servicio myDataService
+  deleteOwner(id: string): Observable<any> {
+  return this.http.delete(`http://localhost:3000/api/billingHolders/${id}`);
+}
+  createOwner(owner: BillingHolder) {
+    return this.http.post('http://localhost:3000/api/billingHolders', owner);
+  }
+  updateOwner(owner: BillingHolder) {
+    return this.http.put('http://localhost:3000/api/billingHolders', owner);
+  }
 
 }

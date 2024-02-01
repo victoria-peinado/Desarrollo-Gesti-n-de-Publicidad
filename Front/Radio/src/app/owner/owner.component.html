@@ -1,0 +1,80 @@
+<h1 *ngIf="crud=='create'" class="text-center">Selección titular</h1>
+<h1 *ngIf="crud=='update'"class="text-center">Modificación titular</h1>
+<h1 *ngIf="crud=='delete'" class="text-center">Baja titular</h1>
+
+<form  [formGroup]="form" class="flex flex-col items-center justify-center">
+  <mat-form-field class="w-1/2">
+    <mat-label>Cuit</mat-label>
+    <input matInput formControlName="inputCuit"(ngModelChange)="onCuitChange()" maxlength="11" #iCuit>
+  </mat-form-field>
+  <div *ngIf="form.get('inputCuit')?.invalid && form.get('inputCuit')?.touched" class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
+    <mat-error *ngIf="form.get('inputCuit')?.errors?.['required']">* Requerido</mat-error>
+    <mat-error *ngIf="form.get('inputCuit')?.errors?.['pattern']">* Solo números</mat-error>
+    <mat-error *ngIf="form.get('inputCuit')?.errors?.['minlength']">* Debe tener 11 caracteres</mat-error>
+  </div>
+</form>
+<div *ngIf="isUded==true  && crud=='create'" class="flex flex-col items-center justify-center">
+  <p>Ese cuit ya se encuentra registrado con los siguientes datos:
+  </p>
+  <p> Razón social: {{name}}</p>
+  <p> Condición fiscal: {{condition}}</p>
+  <app-shop-list [cuit]="cuit"></app-shop-list>
+</div>
+<form  [formGroup]="formCreate" *ngIf="isUded==false && crud=='create'" class="flex flex-col items-center justify-center"
+  (keydown.enter)="$event.preventDefault()">
+  <p> Complete los siguientes datos</p>
+  <mat-form-field floatLabel="auto" class="w-1/2">
+    <mat-label><strong> Condición fiscal</strong></mat-label>
+    <mat-select formControlName="inputCondition" (ngModelChange)="focusNext(price)" #iCond>
+      <mat-option *ngFor="let opcion of conditions" [value]="opcion">
+          {{ opcion }}
+     </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="formCreate.get('inputCondition')?.invalid && formCreate.get('inputCondition')?.touched"
+    class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
+    <mat-error *ngIf="formCreate.get('inputCondition')?.errors?.['required']">* Requerido</mat-error>
+  </div>
+
+  <mat-form-field class="w-1/2">
+    <mat-label>Razón social</mat-label>
+    <input matInput formControlName="inputName"(keydown.enter)="formCreate.valid && submit()" #price>
+  </mat-form-field>
+  <div *ngIf="formCreate.get('inputName')?.invalid && formCreate.get('inputName')?.touched"
+    class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
+    <mat-error *ngIf="formCreate.get('inputName')?.errors?.['required']">* Requerido</mat-error>
+  </div>
+</form>
+<div *ngIf="isUded==false  && crud!='create'" class="flex flex-col items-center justify-center">
+  <p>Ese cuit no se encuentra registrado</p>
+</div>
+<form  [formGroup]="formUpdate" *ngIf="isUded==true && crud=='update'" class="flex flex-col items-center justify-center"
+  (keydown.enter)="$event.preventDefault()">
+  <p> Cambie los datos necesarios (excepto cuit)</p>
+  <mat-form-field floatLabel="auto" class="w-1/2">
+    <mat-label><strong> Condición fiscal</strong></mat-label>
+    <mat-select formControlName="inputCondition" [(ngModel)]="condition"  #iCond>
+      <mat-option *ngFor="let opcion of conditions" [value]="opcion">
+          {{ opcion }}
+     </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="formUpdate.get('inputCondition')?.invalid && formUpdate.get('inputCondition')?.touched"
+    class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
+    <mat-error *ngIf="formUpdate.get('inputCondition')?.errors?.['required']">* Requerido</mat-error>
+  </div>
+
+  <mat-form-field class="w-1/2">
+    <mat-label>Razón social</mat-label>
+    <input matInput formControlName="inputName"(keydown.enter)="formUpdate.valid && submit()" [(ngModel)]="name" #price>
+  </mat-form-field>
+  <div *ngIf="formUpdate.get('inputName')?.invalid && formUpdate.get('inputName')?.touched"
+    class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
+    <mat-error *ngIf="formUpdate.get('inputName')?.errors?.['required']">* Requerido</mat-error>
+  </div>
+</form>
+<div class="flex flex-row items-center justify-center">
+    <button mat-raised-button routerLink="/">Cancelar</button>
+    <app-btn-degrade *ngIf="crud=='create'" [disabled]="(formCreate.invalid|| form.invalid) && isUded!=true" (click)="submit()" class="ml-2"></app-btn-degrade>
+    <app-btn-degrade *ngIf="crud!='create'" [disabled]="isUded!=true" (click)="submit()" class="ml-2"></app-btn-degrade>
+</div> 

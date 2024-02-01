@@ -5,7 +5,7 @@ import { take ,tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
 import { Validator } from '@angular/forms';
-import { billingHolder } from '../models/billing-holder.js';
+import { BillingHolder } from '../models/billing-holder.js';
 import { Trade } from '../models/trade.js';
 @Component({
   selector: 'app-nuevo-contrato',
@@ -20,7 +20,7 @@ export class NuevoContratoComponent implements OnInit {
   cuit: string|null = null;
   invalid: boolean = false;
   coloring: ThemePalette = "primary";
-  holder: billingHolder|null= null;
+  holder: BillingHolder|null= null;
   business: Trade|null = null;
   businesses: Trade[]= [];
   startDate: Date | null = null;

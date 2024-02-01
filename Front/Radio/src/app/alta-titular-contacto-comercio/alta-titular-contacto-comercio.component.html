@@ -1,8 +1,7 @@
 <mat-stepper orientation="vertical" linear=True #stepper>
   <mat-step  label="Datos Titular" completed =false>
     <!-- <app-datos-titular></app-datos-titular> -->
-   
-    <app-shop-list [cuit]="'11111111111'"></app-shop-list>
+    <app-owner [crud]="'create'"></app-owner>
     <div class="m-5">
       <button mat-raised-button color="primary" matStepperNext>Continuar</button>
     </div>
