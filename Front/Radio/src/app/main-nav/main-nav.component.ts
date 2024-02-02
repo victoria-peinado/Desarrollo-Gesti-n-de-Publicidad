@@ -19,29 +19,37 @@ export class MainNavComponent {
       shareReplay()
     );
 
-  isDisplayComercios= true;
-  isDisplayPublicistas= true;
-  isDisplayContrataciones= true;
-  isDisplayPagos= true;
-  isDisplayPublicidades= true;
-  isDisplayBloques= true;
+  isDisplayComercios= true
+  isDisplayPublicistas= true
+  isDisplayContrataciones= true
+  isDisplayPagos= true
+  isDisplayPublicidades= true
+  isDisplayBloques= true
+  isDisplayOwner=true
+  isDispayContact=true
   toggleDisplayComercios(){
-    this.isDisplayComercios = !this.isDisplayComercios;
+    this.isDisplayComercios = !this.isDisplayComercios
   }
   toggleDisplayPublicistas(){ 
-    this.isDisplayPublicistas = !this.isDisplayPublicistas;
+    this.isDisplayPublicistas = !this.isDisplayPublicistas
   }
   toggleDisplayContrataciones(){
-    this.isDisplayContrataciones = !this.isDisplayContrataciones;
+    this.isDisplayContrataciones = !this.isDisplayContrataciones
   }
   toggleDisplayPagos(){
-    this.isDisplayPagos = !this.isDisplayPagos;
+    this.isDisplayPagos = !this.isDisplayPagos
   }
   toggleDisplayPublicidades(){
-    this.isDisplayPublicidades = !this.isDisplayPublicidades;
+    this.isDisplayPublicidades = !this.isDisplayPublicidades
   }
   toggleDisplayBloques(){
-    this.isDisplayBloques = !this.isDisplayBloques;
+    this.isDisplayBloques = !this.isDisplayBloques
+  }
+  toggleDisplayOwner(){
+    this.isDisplayOwner= !this.isDisplayOwner
+  }
+  toggleDisplayContact(){
+    this.isDispayContact=!this.isDispayContact
   }
   isLoggedIn= false;
 }

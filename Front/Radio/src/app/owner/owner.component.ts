@@ -3,12 +3,13 @@ import { MyDataService } from '../services/my-data.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { BillingHolder } from '../models/billing-holder';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-owner',
   templateUrl: 'owner.component.html',
 })
-export class OwnerComponent  {
+export class OwnerComponent implements OnInit {
   @Input() crud: string = '';
   id:string='';
   cuit:string='';
@@ -36,7 +37,7 @@ export class OwnerComponent  {
   formCreate: FormGroup;
   formUpdate: FormGroup;
 
-  constructor(private myDataService: MyDataService, private router: Router, private fb: FormBuilder
+  constructor(private myDataService: MyDataService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute
     ) {
     this.form = this.fb.group({
       inputCuit: ['',[Validators.required,  Validators.min(0), Validators.pattern("[0-9]*"),Validators.minLength(11),
@@ -53,6 +54,9 @@ export class OwnerComponent  {
       inputCondition: ['',[Validators.required]]
 
     })
+  }
+   ngOnInit() {
+    this.crud = this.route.snapshot.data['crud'] || this.crud; // this is addes so you can use the router with diferents parameters
   }
 
 //validates tthe cuit

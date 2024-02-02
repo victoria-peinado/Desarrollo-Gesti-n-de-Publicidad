@@ -31,4 +31,5 @@ export class SharedDataService {
   getCondicionFinal(): string {
     return this.condicionFinal;
   }
+  
 }

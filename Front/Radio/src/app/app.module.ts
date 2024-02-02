@@ -21,6 +21,7 @@ import { InicioComponent } from './inicio/inicio.component';
 import { NewOwnerContactShopComponent } from './alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
 import { ShopListComponent } from './shop-list/shop-list.component';
 import { OwnerComponent } from './owner/owner.component';
+import { ContactComponent } from './contact/contact.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { OwnerComponent } from './owner/owner.component';
     ActualizacionComercioComponent,
     InicioComponent,
     ShopListComponent,
-    OwnerComponent
+    OwnerComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,

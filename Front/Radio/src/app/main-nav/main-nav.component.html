@@ -44,6 +44,18 @@
       <div *ngIf="!isDisplayBloques" class="flex flex-col  w-full justify-between pl-0 ml-0">
         <a routerLink="actualizacionBLoque" class="w-full h-full hover:bg-gray-100 py-2 px-6 ">Actualización Bloque</a>
       </div>
+      <a mat-list-item (click)="toggleDisplayOwner()">Titular</a>
+      <div *ngIf="!isDisplayOwner" class="flex flex-col  w-full justify-between pl-0 ml-0">
+        <a routerLink="addOwner" class="w-full h-full hover:bg-gray-100 py-2 px-6 ">Alta/Consulta datos</a>
+        <a routerLink="updateOwner" class="w-full h-full hover:bg-gray-100 py-2 px-6 ">Edicion</a>
+        <a routerLink="deleteOwner" class="w-full h-full hover:bg-gray-100 py-2 px-6 ">Baja</a>
+      </div>
+      <a mat-list-item (click)="toggleDisplayContact()">Contacto</a>
+      <div *ngIf="!isDispayContact" class="flex flex-col  w-full justify-between pl-0 ml-0">
+        <a routerLink="addContact" class="w-full h-full hover:bg-gray-100 py-2 px-6 ">Alta/Consulta datos</a>
+        <a routerLink="updateContact" class="w-full h-full hover:bg-gray-100 py-2 px-6 ">Edicion</a>
+        <a routerLink="deleteContact" class="w-full h-full hover:bg-gray-100 py-2 px-6 ">Baja</a>
+      </div>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

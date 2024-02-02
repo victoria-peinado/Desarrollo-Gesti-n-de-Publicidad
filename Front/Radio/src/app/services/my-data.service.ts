@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Trade } from '../models/trade';
 import { BillingHolder } from '../models/billing-holder';
+import { Contact } from '../models/contact';
 
 @Injectable({
   providedIn: 'root'
@@ -54,13 +55,27 @@ export class MyDataService {
  
   // Servicio myDataService
   deleteOwner(id: string): Observable<any> {
-  return this.http.delete(`http://localhost:3000/api/billingHolders/${id}`);
+  return this.http.delete(`http://localhost:3000/api/owner/${id}`);
 }
   createOwner(owner: BillingHolder) {
-    return this.http.post('http://localhost:3000/api/billingHolders', owner);
+    return this.http.post('http://localhost:3000/api/owner', owner);
   }
   updateOwner(owner: BillingHolder) {
-    return this.http.put('http://localhost:3000/api/billingHolders', owner);
+    return this.http.put('http://localhost:3000/api/owner', owner);
   }
+
+  getContactByDni(dni:string): Observable<any> {
+    return this.http.get('http://localhost:3000/api/contact/dni/' + dni);
+  }
+  deleteContact(id: string): Observable<any> {
+  return this.http.delete(`http://localhost:3000/api/contact/${id}`);
+}
+  createContact(contact: Contact) {
+    return this.http.post('http://localhost:3000/api/contact', contact);
+  }
+  updateContact(contact: Contact) {
+    return this.http.put('http://localhost:3000/api/contact', contact);
+  }
+
 
 }
