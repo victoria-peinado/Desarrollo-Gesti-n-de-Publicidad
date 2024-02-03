@@ -24,7 +24,7 @@
   <p> Complete los siguientes datos</p>
   <mat-form-field floatLabel="auto" class="w-1/2">
     <mat-label><strong> Apellido</strong></mat-label>
-   <input matInput formControlName="inputLastname"(keydown.enter)="formCreate.valid && submit()">
+   <input matInput formControlName="inputLastname">
   </mat-form-field>
   <div *ngIf="formCreate.get('inputLastname')?.invalid && formCreate.get('inputLastname')?.touched"
     class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
@@ -33,13 +33,34 @@
 
   <mat-form-field class="w-1/2">
     <mat-label>Nombre</mat-label>
-    <input matInput formControlName="inputName"(keydown.enter)="formCreate.valid && submit()" #price>
+    <input matInput formControlName="inputName" #price>
   </mat-form-field>
   <div *ngIf="formCreate.get('inputName')?.invalid && formCreate.get('inputName')?.touched"
     class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
     <mat-error *ngIf="formCreate.get('inputName')?.errors?.['required']">* Requerido</mat-error>
   </div>
+  <div class="flex">
+    <h2>Contactos</h2>
+    <button mat-raised-button type="button" (click)="addContactCreate()"class="m-2 mt-0">+ Contacto</button>
+  </div>
+   
+  <div formArrayName="contacts" *ngFor="let contact of contactsCreate.controls; let i=index" class="flex flex-col items-center justify-center w-full">
+    <div [formGroupName]="i" class="flex flex-col items-center justify-center w-full">
+      <mat-form-field class="w-1/2">
+        <mat-label>Contacto</mat-label>
+        <input matInput formControlName="contact">
+      </mat-form-field>
+      <!-- <div *ngIf="formUpdate.get('contacts').at(i).get('contact')?.invalid && formUpdate.get('contacts').at(i).get('contact')?.touched"
+        class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
+        <mat-error *ngIf="formUpdate.get('contacts').at(i).get('contact')?.errors?.['required']">* Requerido</mat-error>
+        <mat-error *ngIf="formUpdate.get('contacts').at(i).get('contact')?.errors?.['pattern']">* Solo números</mat-error>
+        <mat-error *ngIf="formUpdate.get('contacts').at(i).get('contact')?.errors?.['minlength']">* Debe tener 8 caracteres</mat-error>
+      </div> -->
+    </div>
+  </div>
+
 </form>
+
 <div *ngIf="isUded==false  && crud!='create'" class="flex flex-col items-center justify-center">
   <p>Ese dni no se encuentra registrado</p>
 </div>
@@ -48,7 +69,7 @@
   <p> Cambie los datos necesarios (excepto dni)</p>
   <mat-form-field floatLabel="auto" class="w-1/2">
     <mat-label><strong> Apellido</strong></mat-label>
-    <input matInput formControlName="inputLastname"(keydown.enter)="formCreate.valid && submit()">
+    <input matInput formControlName="inputLastname">
   </mat-form-field>
   <div *ngIf="formUpdate.get('inputLastname')?.invalid && formUpdate.get('inputLastname')?.touched"
     class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
@@ -57,12 +78,14 @@
 
   <mat-form-field class="w-1/2">
     <mat-label>Nombre</mat-label>
-    <input matInput formControlName="inputName"(keydown.enter)="formUpdate.valid && submit()" [(ngModel)]="name" #price>
+    <input matInput formControlName="inputName" [(ngModel)]="name" #price>
   </mat-form-field>
   <div *ngIf="formUpdate.get('inputName')?.invalid && formUpdate.get('inputName')?.touched"
     class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
     <mat-error *ngIf="formUpdate.get('inputName')?.errors?.['required']">* Requerido</mat-error>
   </div>
+
+
 </form>
 <div class="flex flex-row items-center justify-center">
     <button mat-raised-button routerLink="/">Cancelar</button>

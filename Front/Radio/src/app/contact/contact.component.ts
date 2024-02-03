@@ -1,7 +1,7 @@
 import { Component, OnInit,Input } from '@angular/core';
 import { MyDataService } from '../services/my-data.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Contact } from '../models/contact'; 
 
@@ -15,7 +15,7 @@ export class ContactComponent implements OnInit {
   dni:string='';
   name:string='';
   lastname:string=''; 
-  isUded:boolean|null=null;
+  isUded:boolean|null=false;
 
 
   form: FormGroup;
@@ -31,27 +31,60 @@ export class ContactComponent implements OnInit {
     })
       this.formCreate = this.fb.group({
       inputName:  ['',[Validators.required]],
-      inputLastname: ['',[Validators.required]]
+      inputLastname: ['',[Validators.required]],
+      contacts: new FormArray([
+        new FormGroup({
+          contact : new FormControl('',[Validators.required]) 
+        })
+      ])
 
     })
        this.formUpdate = this.fb.group({
       inputName:  ['',[Validators.required]],
-      inputLAstname: ['',[Validators.required]]
+      inputLAstname: ['',[Validators.required]],
+      contacts:this.fb.array([
+        this.fb.group({
+          contact :['',[Validators.required]] 
+        })
+      ]),
 
     })
   }
    ngOnInit() {
     this.crud = this.route.snapshot.data['crud'] || this.crud; // this is addes so you can use the router with diferents parameters
   }
-
+get contactsCreate() {
+  return this.formCreate.get('contacts') as FormArray;
+}
+get contactsUpdate() {
+  return this.formUpdate.get('contacts') as FormArray;
+}
 //validates tthe dni
   onDniChange() {
-  if (this.form.get('inputDni')?.valid&&this.form.get('inputDni')?.value.length==11) {
-    // Llama a la función que deseas ejecutar cuando el dni es válido
+  if (this.form.get('inputDni')?.valid&&this.form.get('inputDni')?.value.length==8 ){
+  
     this.dni=this.form.get('inputDni')?.value;
     this.getDniData();
    }
   }
+  addContactUpdate(){
+  this.contactsUpdate.push(this.fb.group({
+      contact: ['']
+    }));
+  }
+  addContactCreate(){
+  this.contactsCreate.push(this.fb.group({
+    contact: ['']
+  }));
+  }
+  removeContactCreate(i:number){
+    const d =<FormArray>this.formCreate.get('contacts');
+    d.removeAt(i);
+  }
+  removeContactUpdate(i:number){
+    const d =<FormArray>this.formUpdate.get('contacts');
+    d.removeAt(i);
+  } 
   //get data of the contact with that dni
   getDniData() {
     this.myDataService.getContactByDni(this.dni).subscribe({
@@ -80,7 +113,12 @@ export class ContactComponent implements OnInit {
   }
   //call the crud contact function
   submit() {
-    const contact = new Contact(this.dni, this.formCreate.get('inputName')?.value, this.formCreate.get('inputLastname')?.value,[]);
+    const contact = new Contact(
+      this.dni, 
+      this.formCreate.get('inputName')?.value, 
+      this.formCreate.get('inputLastname')?.value,
+      this.getNonEmptyContactsArray(this.formCreate.value))
+    console.log(contact)
     if(this.isUded==true){
         if(this.crud=='update'){
           this.updateContact(contact);
@@ -129,6 +167,19 @@ export class ContactComponent implements OnInit {
       }
     });
   }
+  prueba(){
+    console.log(JSON.stringify(this.formCreate.value, null,2))
+  }
+  //transform the form value to a array of strings
+  getNonEmptyContactsArray(formValue: any): string[] {
+  
+  const contacts = formValue.contacts || [];
 
+  const nonEmptyContacts = contacts
+    .map((contact: { contact: string }) => contact.contact)
+    .filter((contact: string) => contact.trim() !== "");
+
+  return nonEmptyContacts;
+}
 
 }
