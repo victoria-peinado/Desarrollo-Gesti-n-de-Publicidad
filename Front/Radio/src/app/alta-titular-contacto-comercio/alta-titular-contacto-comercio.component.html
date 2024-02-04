@@ -1,63 +1,15 @@
-<mat-stepper orientation="vertical" linear=True #stepper>
-  <mat-step  label="Datos Titular" completed =false>
-    <!-- <app-datos-titular></app-datos-titular> -->
-    <app-owner [crud]="'create'"></app-owner>
-    <div class="m-5">
-      <button mat-raised-button color="primary" matStepperNext>Continuar</button>
-    </div>
+<mat-stepper orientation="vertical" linear="True" #stepper >
+  <mat-step label="Datos Titular" completed="false" editable="false" #1>
+<app-owner [crud]="'create'" (completed)="completed()" (ownerData)="completedOwner($event)"></app-owner>
+    <div class="m-5"></div>
   </mat-step>
-  <mat-step label="Datos Comercio" completed =false>
-    <!-- <app-datos-comercio></app-datos-comercio> -->
-    <div class="m-5">
-      <button mat-raised-button color="primary" matStepperNext>Continuar</button>
-    </div>
+  <mat-step label="Datos Contacto" completed="false" #2 editable="false">
+<app-contact [crud]="'create'" (completed)="completed()" (contactData)="completedContact($event)"></app-contact>
+    <div class="m-5"></div>
   </mat-step>
-  <mat-step label="Datos Contacto" completed =false>
-    <!-- <app-datos-contacto></app-datos-contacto> -->
-    <div class="m-5">
-      <button mat-raised-button color="primary" matStepperNext>Continuar</button>
-    </div>
+  <mat-step label="Datos Comercio" #3 editable="false" completed="false" >
+    <app-shop [crud]="'create'"[cuit]="owner?.cuit??''" (completed)="completed()"></app-shop>
+    <div class="m-5"></div>
   </mat-step>
 </mat-stepper>
-
-<!-- 
-
-<section id="titular">
-    <div class="m-5">
-        <b class="text-lg">TITULAR</b>
-    </div>
-    <div class="m-4 flex flex-row items-center justify-left">
-    
-        <div class="inline-block ml-4 mr-4">
-            <mat-form-field class="-mt-2 " >
-                <mat-label>CUIT</mat-label>
-                <input matInput [value]="cuit" >
-            </mat-form-field>
-        </div>
-    
-        <div class="inline-block ml-4 mr-4">
-            <mat-form-field class="-mt-2" >
-                <mat-label>Razón social</mat-label>
-                <input matInput [value]="razonSocial" >
-            </mat-form-field>
-        </div>
-    
-        <div class="inline-block ml-4 mr-4">
-          <mat-form-field class="-mt-2" >
-              <mat-label>Condición fiscal</mat-label>
-              <input matInput [value]="condicionFinal" >
-          </mat-form-field>
-      </div>
-
-
-    </div>
-</section> -->
-
-
-<!-- <div class="m-5">
-  <app-btn-degrade [text]="'Nuevo Comercio'" (click)="showNewTrade()"></app-btn-degrade>
-</div> -->
-
-
-
 

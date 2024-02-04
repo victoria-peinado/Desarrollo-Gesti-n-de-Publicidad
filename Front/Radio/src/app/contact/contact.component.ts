@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input, EventEmitter, Output } from '@angular/core';
 import { MyDataService } from '../services/my-data.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
@@ -11,7 +11,10 @@ import { Contact } from '../models/contact';
 })
 export class ContactComponent implements OnInit {
   @Input() crud: string = '';
-  id:string='';
+  @Output() completed= new EventEmitter<boolean>();
+  @Output() contactData= new EventEmitter<Contact>();
+  contact: Contact | undefined;
+  id:any;
   dni:string='';
   name:string='';
   lastname:string=''; 
@@ -89,11 +92,11 @@ get contactsUpdate() {
   getDniData() {
     this.myDataService.getContactByDni(this.dni).subscribe({
       
-      next: (contact: any) => {
-        this.id = contact.id;
+      next: (contact: Contact) => {
         this.name = contact.name;
         this.lastname = contact.lastname;
         this.isUded = true;
+        this.contact=contact;
       },
       error: (error: any) => {
         if (error.status == 404) {
@@ -132,12 +135,14 @@ get contactsUpdate() {
             this.createContact(contact);
           }
       }
-
+        this.completed.emit(true);
+        this.contactData.emit(contact);
   }
  //create contact
  createContact(contact: Contact) {
     this.myDataService.createContact(contact).subscribe({
       next: (contact: any) => {
+         this.contact=contact;
         this.router.navigate(['/contact']);
       },
       error: (error: any) => {
@@ -149,6 +154,7 @@ get contactsUpdate() {
   updateContact(contact:Contact) {
     this.myDataService.updateContact(contact).subscribe({
       next: (conatact: any) => {
+         this.contact=contact;
         this.router.navigate(['/contact']);
       },
       error: (error: any) => {
@@ -160,6 +166,7 @@ get contactsUpdate() {
   deleteContact() {
     this.myDataService.deleteContact(this.id).subscribe({
       next: (contact: any) => {
+         this.contact=contact;
         this.router.navigate(['/contact']);
       },
       error: (error: any) => {

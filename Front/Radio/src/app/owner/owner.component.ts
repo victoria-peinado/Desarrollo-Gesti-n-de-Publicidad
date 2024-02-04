@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
 import { MyDataService } from '../services/my-data.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -11,7 +11,10 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class OwnerComponent implements OnInit {
   @Input() crud: string = '';
-  id:string='';
+  @Output() completed= new EventEmitter<boolean>();
+  @Output() ownerData= new EventEmitter<BillingHolder>();
+  owner: BillingHolder | undefined;
+  id:any;
   cuit:string='';
   name:string='aaa';
   condition:string=''; 
@@ -72,11 +75,12 @@ export class OwnerComponent implements OnInit {
   getCuitData() {
     this.myDataService.getBillingHolderByCUIT(this.cuit).subscribe({
       
-      next: (billingHolder: any) => {
-        this.id = billingHolder.id;
+      next: (billingHolder: BillingHolder) => {
+        this.id = billingHolder._id;
         this.name = billingHolder.businessName;
         this.condition = billingHolder.fiscalCondition;
         this.isUded = true;
+        this.owner=billingHolder;
       },
       error: (error: any) => {
         if (error.status == 404) {
@@ -110,12 +114,15 @@ export class OwnerComponent implements OnInit {
             this.createOwner(owner);
           }
       }
+      this.completed.emit(true);
+      this.ownerData.emit(owner);
 
   }
  //create owner
  createOwner(owner: BillingHolder) {
     this.myDataService.createOwner(owner).subscribe({
       next: (billingHolder: any) => {
+        this.owner=billingHolder;
         this.router.navigate(['/owner']);
       },
       error: (error: any) => {
@@ -127,6 +134,7 @@ export class OwnerComponent implements OnInit {
   updateOwner(owner:BillingHolder) {
     this.myDataService.updateOwner(owner).subscribe({
       next: (billingHolder: any) => {
+        this.owner=billingHolder;
         this.router.navigate(['/owner']);
       },
       error: (error: any) => {
@@ -138,6 +146,7 @@ export class OwnerComponent implements OnInit {
   deleteOwner() {
     this.myDataService.deleteOwner(this.id).subscribe({
       next: (billingHolder: any) => {
+        this.owner=billingHolder;
         this.router.navigate(['/owner']);
       },
       error: (error: any) => {

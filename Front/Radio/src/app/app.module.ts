@@ -22,6 +22,7 @@ import { NewOwnerContactShopComponent } from './alta-titular-contacto-comercio/a
 import { ShopListComponent } from './shop-list/shop-list.component';
 import { OwnerComponent } from './owner/owner.component';
 import { ContactComponent } from './contact/contact.component';
+import { ShopComponent } from './shop/shop.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { ContactComponent } from './contact/contact.component';
     InicioComponent,
     ShopListComponent,
     OwnerComponent,
-    ContactComponent
+    ContactComponent,
+    ShopComponent
   ],
   imports: [
     BrowserModule,
