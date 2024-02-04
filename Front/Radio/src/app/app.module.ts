@@ -23,6 +23,7 @@ import { ShopListComponent } from './shop-list/shop-list.component';
 import { OwnerComponent } from './owner/owner.component';
 import { ContactComponent } from './contact/contact.component';
 import { ShopComponent } from './shop/shop.component';
+import { BlockListComponent } from './block-list/block-list.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { ShopComponent } from './shop/shop.component';
     ShopListComponent,
     OwnerComponent,
     ContactComponent,
-    ShopComponent
+    ShopComponent,
+    BlockListComponent
   ],
   imports: [
     BrowserModule,

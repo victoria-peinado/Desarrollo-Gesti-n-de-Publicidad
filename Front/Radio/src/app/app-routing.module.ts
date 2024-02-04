@@ -12,6 +12,7 @@ import { NewOwnerContactShopComponent } from './alta-titular-contacto-comercio/a
 import { ShopListComponent } from './shop-list/shop-list.component';
 import { OwnerComponent } from './owner/owner.component';
 import { ContactComponent } from './contact/contact.component';
+import { BlockListComponent } from './block-list/block-list.component';
 
 const routes: Routes = [
   { path:'', component: InicioComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path:'actualizacionContratacion', component: InicioComponent },
   //blocks and history ruting
   { path:'actualizacionBLoque', component: BlockComponent },
+  {path:'bolockList', component: BlockListComponent},
   //owner ruting
   { path: 'addOwner', component: OwnerComponent, data: { crud: 'create' } },
   { path: 'updateOwner', component: OwnerComponent, data: { crud: 'update' } },
@@ -36,6 +38,7 @@ const routes: Routes = [
   { path: 'addContact', component: ContactComponent, data: { crud: 'create' } },
   { path: 'updateContact', component: ContactComponent, data: { crud: 'update' } },
   { path: 'deleteContact', component: ContactComponent, data: { crud: 'delete' } },
+
 
   { path:'altaPublicista', component: InicioComponent },
   { path:'liquidacionPublicistas', component: InicioComponent },
