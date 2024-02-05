@@ -1,35 +1,10 @@
-<<<<<<< Updated upstream
-import {  Component,  ViewChild} from '@angular/core';
-import { MatStepper } from '@angular/material/stepper';
-import { BillingHolder } from '../models/billing-holder';
-import { Contact } from '../models/contact';
-import { Trade } from '../models/trade'
-=======
-import {
-  AfterViewInit,
-  Component,
-  ViewChild,
-  ElementRef,
-  OnInit,
-  ChangeDetectorRef,
-  HostListener,
-} from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+
+import { Component, ViewChild } from '@angular/core';
 import { Shop } from 'src/app/models/shop';
-import { MyDataService } from 'src/app/services/my-data.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SharedDataService } from '../services/shared-data.service';
-import { ThemePalette } from '@angular/material/core';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
->>>>>>> Stashed changes
+import { MatStepper } from '@angular/material/stepper/index.js';
+import { Owner } from '../models/owner.js';
+import { Contact } from '../models/contact.js';
+
 @Component({
   selector: 'app-alta-titular-contacto-comercio',
   templateUrl: './alta-titular-contacto-comercio.component.html',
@@ -37,7 +12,7 @@ import {
 })
 export class NewOwnerContactShopComponent  {
   @ViewChild('stepper') stepper!: MatStepper;
-  owner: BillingHolder|undefined;
+  owner: Owner|undefined;
   contact: Contact|undefined;
   
   completed() {
@@ -47,7 +22,7 @@ export class NewOwnerContactShopComponent  {
     console.log('completed'); 
     this.stepper.next();
   } 
-  completedOwner(event: BillingHolder|undefined) {
+  completedOwner(event: Owner|undefined) {
     this.owner = event??undefined;
     console.log(this.owner?.cuit);
   }
@@ -56,7 +31,7 @@ export class NewOwnerContactShopComponent  {
     console.log(this.contact?.dni);
     
   }
-  completedShop(event: Trade|undefined) {
+  completedShop(event: Shop|undefined) {
     console.log(event);
   }
 
