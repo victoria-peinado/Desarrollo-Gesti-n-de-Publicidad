@@ -1,5 +1,5 @@
 <h1 *ngIf="crud=='create'" class="text-center">Creaciòn Comercio</h1>
-<form *ngIf="crud == 'create'" [formGroup]="formCreate" (ngSubmit)="addTrade()"
+<form *ngIf="crud == 'create'" [formGroup]="formCreate" (ngSubmit)="addShop()"
   class="flex flex-col items-center justify-center mt-3" (keydown.enter)="$event.preventDefault()">
   <mat-form-field floatLabel="auto" class="w-1/2">
     <mat-label>Nombre fantasía</mat-label>
