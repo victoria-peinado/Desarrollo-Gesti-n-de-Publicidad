@@ -1,0 +1,84 @@
+### GET ALL
+GET http://localhost:3001/api/shop
+ 
+ 
+### ID
+@id = 654ae5ac10991fd247130c51
+
+###GET ONE
+GET http://localhost:3001/api/shop/{{id}}
+
+
+
+
+###GET BY OWNER ID
+GET http://localhost:3001/api/shop/owner/654ae5cd10991fd247130c52
+
+
+
+### POST
+# @name createShop
+POST http://localhost:3001/api/shop
+Content-Type: application/json
+
+{
+    "fantasyName": "Transporte DJJB",
+    "address": "12 de Abril 0596",
+    "billingType": "Resposable Inscripto",
+    "mail": "djjb@gmail.com",
+    "usualPaymentForm": "Efectivo",
+    "type": "PyME",
+    "contact": "654ad0d341b4fa27919f8af8",
+    "owner": "654ada122beba8847bd81fa9"
+}
+
+
+
+###PUT 
+PUT http://localhost:3001/api/shop/{{id}}
+Content-Type: application/json 
+
+
+
+##{
+    "fantasyName": "Transporte DJJB",
+    "address": "12 de Abril 0596",
+    "billingType": "Sin comprobante Fiscal",
+    "mail": "djjb@gmail.com",
+    "usualPaymentForm": "Efectivo",
+    "type": "PyME"
+##}
+
+#DUDA: en el PUT le tengo que pasar todos los atributos o 
+# solo los que quiero cambiar?
+
+
+### DELETE
+DELETE http://localhost:3001/api/shop/654ae79c10991fd247130c53
+
+
+
+
+### 
+POST http://localhost:3001/api/shop
+Content-Type: application/json
+
+{
+    "fantasyName": "Moda Creativa Boutique",
+    "address": "Calle Elegante 432",
+    "billingType": "Monotributo",
+    "mail": "moda@creativaboutique.com",
+    "usualPaymentForm": "Tarjeta de Débito",
+    "type": "Empresa",
+    "contact": "654ad0d341b4fa27919f8af8",
+    "owner": "65c08f45ad3fb943fc5cb295"
+}
+
+
+### get shop by cuit and fantasyName
+GET http://localhost:3001/api/shop/search?fantasyName=Transporte%20DJJB&cuit=23224249969
+Content-Type: application/json
+
+### get shops by cuit
+GET http://localhost:3001/api/shop/25440249659
+Content-Type: application/json

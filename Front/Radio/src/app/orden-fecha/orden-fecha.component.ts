@@ -8,7 +8,7 @@ import{OrdenBLoqueComponent} from '../orden-bloque/orden-bloque.component'
 })
 export class OrdenFechaComponent {
  @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef
- crearBloque(){
+ createBlock(){
    this.container.createComponent(OrdenBLoqueComponent)
  }
 }

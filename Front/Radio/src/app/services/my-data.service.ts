@@ -1,80 +1,80 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Trade } from '../models/trade';
-import { BillingHolder } from '../models/billing-holder';
+import { Shop } from '../models/shop';
+import { Owner } from '../models/owner';
 import { Contact } from '../models/contact';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MyDataService {
 
-  urlTrade = 'http://localhost:3000/api/trades/';
+  private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
   getBlocks() {
-    return this.http.get('http://localhost:3000/api/blocks');
+    return this.http.get(`${this.apiUrl}block`);
   }
   createBlock(block:any) {
-    return this.http.post('http://localhost:3000/api/blocks', block);
+    return this.http.post(`${this.apiUrl}block`, block);
   }
   getHistory() {
-    return this.http.get('http://localhost:3000/api/historys');
+    return this.http.get(`${this.apiUrl}historys`);
   }
   createHistory(history:any) {
-    return this.http.post('http://localhost:3000/api/historys', history);
+    return this.http.post(`${this.apiUrl}historys`, history);
   }
 
-  getTrades(): Observable<any> {
-    return this.http.get(this.urlTrade);
+  getShops(): Observable<any> {
+    return this.http.get(`${this.apiUrl}shop`);
   }
 
-  createTrade(trade: Trade): Observable<any> {
-    return this.http.post(this.urlTrade, trade);
+  createShop(Shop: Shop): Observable<any> {
+    return this.http.post(`${this.apiUrl}shop`, Shop);
   }
 
-  getTrade(id: string): Observable<any> {
-    return this.http.get(this.urlTrade + id);
+  getShop(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}shop/${id}`);
   }
 
-  getTradesByCuit(cuit: string): Observable<any> {
-    return this.http.get('http://localhost:3000/api/trades/' + cuit);
+  getShopsByCuit(cuit: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}shop/${cuit}`);
   }
-
   
-  getBillingHolderByCUIT(cuit: string): Observable<any> {
-    return this.http.get('http://localhost:3000/api/billingHolders/cuit/' + cuit);
+  getOwnerByCuit(cuit: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}owner/cuit/${cuit}`);
   }
 
 
-  getTradesByFantasyNameAndCUIT(nombreFantasia: string, cuit: string): Observable<any> {
-    return this.http.get('http://localhost:3000/api/trades/search?fantasyName=' + nombreFantasia + '&cuit=' + cuit);
+  getShopsByCuitAndFantasyName(fantasyName: string, cuit: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}shop/search?fantasyName=${fantasyName}&cuit=${cuit}`);
   }
  
   // Servicio myDataService
   deleteOwner(id: string): Observable<any> {
-  return this.http.delete(`http://localhost:3000/api/owner/${id}`);
+  return this.http.delete(`${this.apiUrl}owner/${id}`);
 }
-  createOwner(owner: BillingHolder) {
-    return this.http.post('http://localhost:3000/api/owner', owner);
+  createOwner(owner: Owner) {
+    return this.http.post(`${this.apiUrl}owner`, owner);
   }
-  updateOwner(owner: BillingHolder) {
-    return this.http.put('http://localhost:3000/api/owner', owner);
+  updateOwner(owner: Owner) {
+    return this.http.put(`${this.apiUrl}owner`, owner);
   }
 
-  getContactByDni(dni:string): Observable<any> {
-    return this.http.get('http://localhost:3000/api/contact/dni/' + dni);
+  getContactByDni(dni: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}contact/dni/${dni}`);
   }
   deleteContact(id: string): Observable<any> {
-  return this.http.delete(`http://localhost:3000/api/contact/${id}`);
+  return this.http.delete(`${this.apiUrl}contact/${id}`);
 }
   createContact(contact: Contact) {
-    return this.http.post('http://localhost:3000/api/contact', contact);
+    return this.http.post(`${this.apiUrl}contact`, contact);
   }
   updateContact(contact: Contact) {
-    return this.http.put('http://localhost:3000/api/contact', contact);
+    return this.http.put(`${this.apiUrl}contact`, contact);
   }
 
 

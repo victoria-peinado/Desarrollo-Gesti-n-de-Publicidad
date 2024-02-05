@@ -1,28 +1,14 @@
-import {
-  AfterViewInit,
-  Component,
-  ViewChild,
-  ElementRef,
-  OnInit,
-  ChangeDetectorRef,
-  HostListener,
-} from '@angular/core';
+import { AfterViewInit, Component, ViewChild, ElementRef, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Trade } from 'src/app/models/trade';
+import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedDataService } from '../services/shared-data.service';
 import { ThemePalette } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-nuevo-comercio',
@@ -30,25 +16,15 @@ import {
   styleUrls: ['./nuevo-comercio.component.scss'],
   animations: [
     trigger('rotateArrow', [
-      state(
-        'down',
-        style({
-          transform: 'rotate(0deg)',
-        })
-      ),
-      state(
-        'up',
-        style({
-          transform: 'rotate(180deg)',
-        })
-      ),
+      state('down', style({transform: 'rotate(0deg)'})),
+      state('up', style({transform: 'rotate(180deg)'})),
       transition('down <=> up', animate('0.2s ease-in-out')),
     ]),
   ],
 })
 export class NuevoComercioComponent implements OnInit {
-  @ViewChild('nombreFantasiaInput', { static: false })
-  nombreFantasiaInputRef!: ElementRef;
+  @ViewChild('fantasyNameInput', { static: false })
+  fantasyNameInputRef!: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
@@ -66,29 +42,30 @@ export class NuevoComercioComponent implements OnInit {
     'type',
   ];
 
-  trades: Trade[] = [];
-  allTrades: Trade[] = [];
+  shops: Shop[] = [];
+  allShops: Shop[] = [];
 
   band: boolean = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  tradeForm: FormGroup;
+  shopForm: FormGroup;
   titulo = 'Crear Comercio';
   id: string | null;
 
   cuit: string;
-  razonSocial: string;
-  condicionFinal: string;
-  nombreFantasia: string = '';
+  businessName: string;
+  fiscalCondition: string;
+  fantasyName: string = '';
   coloring: ThemePalette = 'primary';
-  nombreFantasiaInvalid: boolean = false;
+  fantasyNameInvalid: boolean = false;
   isButtonDisabled: boolean = true;
   message: string = '';
+  messageAboutShops: string = "No hay comercios para mostrar.";
 
-  mostrarNuevoComercio = false;
-  continuarNuevoComercio = false;
+  showingNewShop = false;
+  continueNewShop = false;
 
   visibleContent: { [key: string]: boolean } = {};
 
@@ -105,12 +82,12 @@ export class NuevoComercioComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private _tradeService: MyDataService,
+    private _shopService: MyDataService,
     private aRouter: ActivatedRoute,
     private sharedDataService: SharedDataService,
     private cdRef: ChangeDetectorRef
   ) {
-    this.tradeForm = this.fb.group({
+    this.shopForm = this.fb.group({
       fantasyName: ['', Validators.required],
       address: ['', Validators.required],
       billingType: ['', Validators.required],
@@ -122,8 +99,8 @@ export class NuevoComercioComponent implements OnInit {
     this.id = this.aRouter.snapshot.paramMap.get('id');
 
     this.cuit = this.sharedDataService.getCuit();
-    this.razonSocial = this.sharedDataService.getRazonSocial();
-    this.condicionFinal = this.sharedDataService.getCondicionFinal();
+    this.businessName = this.sharedDataService.getbusinessName();
+    this.fiscalCondition = this.sharedDataService.getfiscalCondition();
   }
 
   ngOnInit(): void {
@@ -131,11 +108,11 @@ export class NuevoComercioComponent implements OnInit {
   }
 
   // lógica transición flecha y ordenamiento
-  textoMarcado: boolean = false;
+  markedText: boolean = false;
   click: number = 0;
   salb: boolean = false;
   entb: boolean = false;
-  entro: boolean = true;
+  enter: boolean = true;
   
 
   marcarNegrita(key: string) {
@@ -143,12 +120,12 @@ export class NuevoComercioComponent implements OnInit {
     this.click = this.click + 1;
 
     if(this.click == 1) {
-      this.textoMarcado = !this.textoMarcado;
+      this.markedText = !this.markedText;
     };
 
     if(this.click == 3) {
-      this.entro = false;
-      this.textoMarcado = !this.textoMarcado;
+      this.enter = false;
+      this.markedText = !this.markedText;
       this.click = 0;
     };
 
@@ -156,9 +133,8 @@ export class NuevoComercioComponent implements OnInit {
     
   }
 
-  salida() {
+  output() {
     if(this.click == 0){
-      console.log('salió');
       this.entb = false;
       this.salb = true;
       
@@ -170,25 +146,24 @@ export class NuevoComercioComponent implements OnInit {
     }
   }
 
-  entrada() {
+  input() {
     if(this.click ==0){
-      console.log('entró');
-      this.entro = true;
+      this.enter = true;
       this.entb = true;
     }
   }
 
 
 
-
-
   getMailErrorMessage() {
-    if (this.tradeForm.get('mail')?.hasError('required')) {
+    if (this.shopForm.get('mail')?.hasError('required')) {
       return '*Este campo es obligatorio.';
     }
 
-    return this.tradeForm.get('mail')?.hasError('email') ? 'Email inválido.' : '';
+    return this.shopForm.get('mail')?.hasError('email') ? 'Email inválido.' : '';
   }
+
+  noShops: boolean = false;
 
   filterTable() {
     const filterValue = this.normalizeString(
@@ -196,10 +171,10 @@ export class NuevoComercioComponent implements OnInit {
     );
 
     if (!filterValue) {
-      this.trades = [...this.allTrades];
+      this.shops = [...this.allShops];
     } else {
-      this.trades = this.allTrades.filter((trade) =>
-        Object.values(trade).some(
+      this.shops = this.allShops.filter((Shop) =>
+        Object.values(Shop).some(
           (value) =>
             value &&
             this.normalizeString(value.toString().toLowerCase()).includes(
@@ -209,18 +184,8 @@ export class NuevoComercioComponent implements OnInit {
       );
     }
 
-    if (this.trades.length === 0) {
-      this.trades = [
-        {
-          fantasyName: 'no coincide con la búsqueda',
-          address: '',
-          billingType: '',
-          mail: '',
-          usualPaymentForm: '',
-          type: '',
-          billingHolderId: '',
-        },
-      ];
+    if (this.shops.length === 0) {
+      this.messageAboutShops = "No coincide con la búsqueda.";
     }
   }
 
@@ -233,7 +198,7 @@ export class NuevoComercioComponent implements OnInit {
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
 
       if (this.sortOrder === 'asc') {
-        this.trades = this.allTrades.slice();
+        this.shops = this.allShops.slice();
         this.sortColumnKey = '';
       }
     } else {
@@ -246,7 +211,7 @@ export class NuevoComercioComponent implements OnInit {
 
   sortTable() {
     if (this.sortColumnKey) {
-      const compareFunction = (a: Trade, b: Trade, key: keyof Trade) => {
+      const compareFunction = (a: Shop, b: Shop, key: keyof Shop) => {
         const valueA = (a[key] || '').toString().toLowerCase();
         const valueB = (b[key] || '').toString().toLowerCase();
         return this.sortOrder === 'asc'
@@ -254,10 +219,10 @@ export class NuevoComercioComponent implements OnInit {
           : valueB.localeCompare(valueA);
       };
 
-      if (Object.keys(this.trades[0]).includes(this.sortColumnKey)) {
+      if (Object.keys(this.shops[0]).includes(this.sortColumnKey)) {
         // Object.keys(obj) devuelve un array de strings que representan los nombres de las propiedades del objeto en el argumento
-        this.trades.sort((a, b) =>
-          compareFunction(a, b, this.sortColumnKey as keyof Trade)
+        this.shops.sort((a, b) =>
+          compareFunction(a, b, this.sortColumnKey as keyof Shop)
         );
       }
     }
@@ -265,12 +230,12 @@ export class NuevoComercioComponent implements OnInit {
 
   getComercios() {
     if (this.cuit) {
-      this._tradeService.getTradesByCuit(this.cuit).subscribe({
-        next: (data) => {
-          this.allTrades = data.slice();
-          this.trades = data;
+      this._shopService.getShopsByCuit(this.cuit).subscribe({
+        next: (response: any) => {
+          this.allShops = response.data.slice();
+          this.shops = response.data;
         },
-        error: (error) => {
+        error: (error: any) => {
           console.log(error);
         },
       });
@@ -280,13 +245,14 @@ export class NuevoComercioComponent implements OnInit {
   }
 
   obtenerComercios() {
+
     if (this.cuit) {
-      this._tradeService.getTradesByCuit(this.cuit).subscribe({
-        next: (data) => {
-          this.allTrades = data.slice();
-          this.trades = data;
+      this._shopService.getShopsByCuit(this.cuit).subscribe({
+        next: (response: any) => {
+          this.allShops = response.data.slice();
+          this.shops = response.data;
         },
-        error: (error) => {
+        error: (error: any) => {
           console.log(error);
         },
       });
@@ -295,11 +261,11 @@ export class NuevoComercioComponent implements OnInit {
     }
   }
 
-  toggleCardContent(trade: Trade) {
-    this.rotationAngles[trade.fantasyName] =
-      (this.rotationAngles[trade.fantasyName] || 0) + 180;
-    this.visibleContent[trade.fantasyName] =
-      !this.visibleContent[trade.fantasyName];
+  toggleCardContent(shop: Shop) {
+    this.rotationAngles[shop.fantasyName] =
+      (this.rotationAngles[shop.fantasyName] || 0) + 180;
+    this.visibleContent[shop.fantasyName] =
+      !this.visibleContent[shop.fantasyName];
   }
 
   isScreenSmall(): boolean {
@@ -307,21 +273,24 @@ export class NuevoComercioComponent implements OnInit {
     return window.innerWidth <= 640; // Ajusta según tus necesidades
   }
 
-  addTrade() {
+  addShop() {
     if (this.cuit) {
-      this._tradeService.getBillingHolderByCUIT(this.cuit).subscribe({
-        next: (billingHolderId: any) => {
-          const TRADE: Trade = {
-            fantasyName: this.tradeForm.get('fantasyName')?.value,
-            address: this.tradeForm.get('address')?.value,
-            billingType: this.tradeForm.get('billingType')?.value,
-            mail: this.tradeForm.get('mail')?.value,
-            usualPaymentForm: this.tradeForm.get('usualPaymentForm')?.value,
-            type: this.tradeForm.get('type')?.value,
-            billingHolderId: billingHolderId,
+      this._shopService.getOwnerByCuit(this.cuit).subscribe({
+        next: (ownerId: any) => {
+          const Shop: Shop = {
+            regDate: this.shopForm.get('regDate')?.value,
+            fantasyName: this.shopForm.get('fantasyName')?.value,
+            address: this.shopForm.get('address')?.value,
+            billingType: this.shopForm.get('billingType')?.value,
+            mail: this.shopForm.get('mail')?.value,
+            usualPaymentForm: this.shopForm.get('usualPaymentForm')?.value,
+            type: this.shopForm.get('type')?.value,
+            owner: ownerId,
+            contact: this.shopForm.get('contact')?.value,
+            contracts: [],
           };
 
-          this.createTrade(TRADE);
+          this.createShop(Shop);
         },
         error: (error) => {
           console.error(error);
@@ -332,24 +301,24 @@ export class NuevoComercioComponent implements OnInit {
     }
   }
 
-  createTrade(TRADE: Trade) {
-    this._tradeService.createTrade(TRADE).subscribe({
+  createShop(SHOP: Shop) {
+    this._shopService.createShop(SHOP).subscribe({
       next: (data) => {
         this.obtenerComercios();
       },
       error: (error) => {
         //console.log(error); caombiar por un pomnpout de error
-        this.tradeForm.reset();
+        this.shopForm.reset();
       },
     });
   }
 
-  showNewTrade() {
-    this.mostrarNuevoComercio = true;
+  showNewShop() {
+    this.showingNewShop = true;
   }
 
-  continueWithNewTrade() {
-    this.continuarNuevoComercio = true;
+  continueWithNewShop() {
+    this.continueNewShop = true;
   }
 
   alertUser() {
@@ -357,32 +326,32 @@ export class NuevoComercioComponent implements OnInit {
   }
 
   alertUserAboutError(mess: string) {
-    this.nombreFantasiaInvalid = true;
+    this.fantasyNameInvalid = true;
     this.coloring = 'warn';
     this.message = mess;
 
-    const cuitInputElement = this.nombreFantasiaInputRef.nativeElement;
+    const cuitInputElement = this.fantasyNameInputRef.nativeElement;
     cuitInputElement.click();
     cuitInputElement.focus();
   }
 
   verifyNameFantasy() {
-    this.nombreFantasia = this.nombreFantasiaInputRef.nativeElement.value;
-    if (this.nombreFantasia && this.cuit) {
-      this._tradeService
-        .getTradesByFantasyNameAndCUIT(this.nombreFantasia, this.cuit)
+    this.fantasyName = this.fantasyNameInputRef.nativeElement.value;
+    if (this.fantasyName && this.cuit) {
+      this._shopService
+        .getShopsByCuitAndFantasyName(this.fantasyName, this.cuit)
         .subscribe({
-          next: (trades: Trade[]) => {
+          next: (shops: Shop[]) => {
             if (
-              trades &&
-              trades.some((trade) => trade.fantasyName === this.nombreFantasia)
+              shops &&
+              shops.some((Shop) => Shop.fantasyName === this.fantasyName)
             ) {
               this.alertUserAboutError(
                 'Nombre de fantasía <strong>repetido</strong>'
               );
             } else {
-              this.addTrade();
-              this.continueWithNewTrade();
+              this.addShop();
+              this.continueWithNewShop();
               alert('Comercio añadido exitosamente');
             }
           },

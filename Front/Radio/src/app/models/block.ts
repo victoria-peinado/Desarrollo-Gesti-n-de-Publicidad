@@ -1,9 +1,12 @@
 export class Block {
-    id?: string;
-    number: string;
+    _id?: string;
+    numBlock: string;
     startTime: string;
-    constructor( numbre: string, startTime: string) {
-        this.number = numbre;
+    prices: string[];
+    
+    constructor(numBlock: string, startTime: string, prices: string[]) {
+        this.numBlock = numBlock;
         this.startTime = startTime;
+        this.prices = prices;
     }
 }

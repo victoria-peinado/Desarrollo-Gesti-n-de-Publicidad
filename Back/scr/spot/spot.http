@@ -1,0 +1,39 @@
+### findAll
+GET http://localhost:3001/api/spot
+
+## ID
+@id = {{createspot.response.body.data.id}}
+ 
+### GET ONE
+GET http://localhost:3001/api/spot/{{id}}
+
+### POST
+# @name createspot
+POST http://localhost:3001/api/spot
+Content-Type: application/json
+
+{
+    "name": "Audio_TransporteDJJB_10-23",
+    "long": "00:00:54",
+    "order": ""
+
+}
+
+### PUTH Modifica todo el objeto -idempotente-
+PUT http://localhost:3001/api/spot/{{id}}
+Content-Type: application/json
+
+{
+    "name": "Audio_PuntoConsumo_11-23",
+    "long": "",
+    "order": ""
+
+}
+
+
+
+
+###DELETE
+DELETE http://localhost:3001/api/spot/{{id}}
+
+##DUDA me esta diciendo que lo borro cuando realmente no existe el spoto.

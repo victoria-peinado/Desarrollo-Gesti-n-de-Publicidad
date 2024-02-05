@@ -1,5 +1,5 @@
 import { Component, OnInit,Input } from '@angular/core';
-import { Trade } from 'src/app/models/trade';
+import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
@@ -20,8 +20,8 @@ export class ShopListComponent implements OnInit {
 
   inputfilter: string = '';
   displayedColumns: string[] = ['fantasyName', 'address', 'billingType', 'mail', 'usualPaymentForm', 'type'];
-  trades: Trade[] = [];
-  allTrades: Trade[] = [];
+  shops: Shop[] = [];
+  allshops: Shop[] = [];
   band: boolean = true;
   mostrarNuevoComercio = false;
   continuarNuevoComercio = false;
@@ -37,7 +37,7 @@ export class ShopListComponent implements OnInit {
   sortOrder: 'asc' | 'desc' = 'asc';
   rotationAngles: { [key: string]: number } = {};
 
-  constructor(  private _tradeService: MyDataService  ) {
+  constructor(  private _shopService: MyDataService  ) {
     //this.cuit = '11111111111';//this.sharedDataService.getCuit();
   }
 
@@ -48,14 +48,14 @@ export class ShopListComponent implements OnInit {
 
     obtenerComercios() {
     if (this.cuit) {
-      this._tradeService.getTradesByCuit(this.cuit).subscribe({
+      this._shopService.getShopsByCuit(this.cuit).subscribe({
         next: (data) => {
-          this.allTrades = data.slice();
-          this.trades = data;
+          this.allshops = data.slice();
+          this.shops = data;
         },
         error: (error) => {
           console.log(error);
-          this.trades = [];
+          this.shops = [];
 
         },
       });
@@ -82,7 +82,7 @@ export class ShopListComponent implements OnInit {
   }
 
   
-  salida() {
+  output() {
     if(this.click == 0){
       console.log('salió');
       this.entb = false;
@@ -96,7 +96,7 @@ export class ShopListComponent implements OnInit {
     }
   }
 
-  entrada() {
+  input() {
     if(this.click ==0){
       console.log('entró');
       this.entro = true;
@@ -110,10 +110,10 @@ export class ShopListComponent implements OnInit {
     const filterValue = this.normalizeString(this.inputfilter.toLowerCase().trim());
 
     if (!filterValue) {
-      this.trades = [...this.allTrades];
+      this.shops = [...this.allshops];
     } else {
-      this.trades = this.allTrades.filter((trade) =>
-        Object.values(trade).some(
+      this.shops = this.allshops.filter((Shop) =>
+        Object.values(Shop).some(
           (value) =>
             value &&
             this.normalizeString(value.toString().toLowerCase()).includes(filterValue)
@@ -121,8 +121,8 @@ export class ShopListComponent implements OnInit {
       );
     }
 
-    if (this.trades.length === 0) {
-      this.trades = [{ fantasyName: 'no coincide con la búsqueda', address: '', billingType: '', mail: '', usualPaymentForm: '', type: '', billingHolderId: '' }];
+    if (this.shops.length === 0) {
+      this.shops = [{ regDate: new Date(), fantasyName: 'no coincide con la búsqueda', address: '', billingType: '', mail: '', usualPaymentForm: '', type: '', owner: '', contact: '', contracts: [''] }];
     }
   }
 
@@ -135,7 +135,7 @@ export class ShopListComponent implements OnInit {
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
 
       if (this.sortOrder === 'asc') {
-        this.trades = this.allTrades.slice();
+        this.shops = this.allshops.slice();
         this.sortColumnKey = '';
       }
     } else {
@@ -148,14 +148,14 @@ export class ShopListComponent implements OnInit {
 
   sortTable() {
     if (this.sortColumnKey) {
-      const compareFunction = (a: Trade, b: Trade, key: keyof Trade) => {
+      const compareFunction = (a: Shop, b: Shop, key: keyof Shop) => {
         const valueA = (a[key] || '').toString().toLowerCase();
         const valueB = (b[key] || '').toString().toLowerCase();
         return this.sortOrder === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
       };
 
-      if (Object.keys(this.trades[0]).includes(this.sortColumnKey)) {
-        this.trades.sort((a, b) => compareFunction(a, b, this.sortColumnKey as keyof Trade));
+      if (Object.keys(this.shops[0]).includes(this.sortColumnKey)) {
+        this.shops.sort((a, b) => compareFunction(a, b, this.sortColumnKey as keyof Shop));
       }
     }
   }
@@ -163,9 +163,9 @@ export class ShopListComponent implements OnInit {
 
 
 
-  toggleCardContent(trade: Trade) {
-    this.rotationAngles[trade.fantasyName] = (this.rotationAngles[trade.fantasyName] || 0) + 180;
-    this.visibleContent[trade.fantasyName] = !this.visibleContent[trade.fantasyName];
+  toggleCardContent(Shop: Shop) {
+    this.rotationAngles[Shop.fantasyName] = (this.rotationAngles[Shop.fantasyName] || 0) + 180;
+    this.visibleContent[Shop.fantasyName] = !this.visibleContent[Shop.fantasyName];
   }
 
   isScreenSmall(): boolean {

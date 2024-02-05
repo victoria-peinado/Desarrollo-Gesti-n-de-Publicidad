@@ -1,5 +1,5 @@
 export class blockPriceHistory {
-    id?: string;
+    _id?: string;
     precio: number; //hay que ponerle price en vez de precio
     startTime: string;
     idBlock: string;

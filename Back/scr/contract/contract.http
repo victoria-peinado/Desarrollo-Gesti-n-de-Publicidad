@@ -1,0 +1,40 @@
+### GET ALL
+GET http://localhost:3001/api/contract
+   
+  
+### ID
+@idShop = 6549b1cb9814910bc8096e11
+
+@id = 654aefd5c3991db2b0d46152
+
+###GET ONE
+GET http://localhost:3001/api/contract/{{id}}
+
+### POST
+# @name createContract
+POST http://localhost:3001/api/contract
+Content-Type: application/json
+ 
+ {
+        "dateFrom" : "7-11-2023",
+        "dateTo" :"",
+        "observations" : "quiere estar al final de la tanda.",
+        "shop": "654ae5ac10991fd247130c51"
+}
+
+
+
+###PUT
+PUT http://localhost:3001/api/contract/{{id}}
+Content-Type: application/json 
+
+{
+    "dateFrom" : "7-11-2023",
+    "dateTo" :"7-12-2023",
+    "observations" : "",
+    "shop": "654ae5ac10991fd247130c51"
+}
+
+
+### DELETE
+DELETE http://localhost:3001/api/contract/654aed4d961cc2bb7cc7c756

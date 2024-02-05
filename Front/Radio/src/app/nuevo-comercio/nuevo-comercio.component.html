@@ -14,14 +14,14 @@
         <div class="inline-block ml-4 mr-4">
             <p class="text-3xs ml-10 text-left">RAZON SOCIAL</p>
             <mat-form-field class="-mt-2" appearance="outline">
-                <input matInput [value]="razonSocial" readonly>
+                <input matInput [value]="businessName" readonly>
             </mat-form-field>
         </div>
     
         <div class="inline-block ml-4 mr-4">
           <p class="text-3xs ml-10 text-left">CONDICION FISCAL</p>
           <mat-form-field class="-mt-2" appearance="outline">
-              <input matInput [value]="condicionFinal" readonly>
+              <input matInput [value]="fiscalCondition" readonly>
           </mat-form-field>
       </div>
 
@@ -31,63 +31,79 @@
 
 
 <div class="m-5">
-  <app-btn-degrade [text]="'Nuevo Comercio'" (click)="showNewTrade()"></app-btn-degrade>
+  <app-btn-degrade [text]="'Nuevo Comercio'" (click)="showNewShop()"></app-btn-degrade>
 </div>
 
 <div id="table">
   <div class="p-5 h-screen">
 
-    <div class="m-5 text-center md:text-left">
+    <div class="mb-2 text-center md:text-left">
       <b class="text-lg">COMERCIOS DEL TITULAR</b>
     </div>    
 
-    <mat-form-field id="filtro">
-      <mat-label>Filtrar</mat-label>
-      <input matInput [(ngModel)]="inputfilter" (input)="filterTable()">
-    </mat-form-field>
+
 
       <div class="overflow-auto rounded-lg shadow hidden md:block">
-          <table class="w-full" *ngIf="trades.length > 0">
-              <thead class="bg-gray-200 border-b-2 border-gray-200">
+          <table class="w-full">
+              <thead class="bg-white border-b-2 border-gray-400">
+
+                <tr>
+                  <td colspan="6" class="p-3 text-sm">
+                    <div class="flex items-center">
+                      <div class="bg-gray-100 p-2 rounded-md flex" style="min-width: 100px;">
+                        <mat-icon class="mr-2">search</mat-icon>
+                        <input
+                          [(ngModel)]="inputfilter"
+                          (input)="filterTable()"
+                          [disabled]="allShops.length === 0"
+                          class="w-48 bg-gray-100 outline-none"
+                          placeholder="Buscar comercio"
+                        />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                
+
                   <tr>
-                    <th (click)="marcarNegrita('fantasyName')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('fantasyName')" (mouseenter)="input()" (mouseleave)="output()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Nombre fantasía
-                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                      <mat-icon #flechitaElement [style.visibility]="enter || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': markedText, 'input': entb, 'output': salb}">
                         {{ click == 2 ? 'south' : 'north' }}
                       </mat-icon>
                     </th>
 
-                    <th (click)="marcarNegrita('address')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('address')" (mouseenter)="input()" (mouseleave)="output()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Dirección
-                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                      <mat-icon #flechitaElement [style.visibility]="enter || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': markedText, 'input': entb, 'output': salb}">
                         {{ click == 2 ? 'south' : 'north' }}
                       </mat-icon>
                     </th>
 
-                    <th (click)="marcarNegrita('billingType')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('billingType')" (mouseenter)="input()" (mouseleave)="output()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Tipo Facturación
-                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                      <mat-icon #flechitaElement [style.visibility]="enter || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': markedText, 'input': entb, 'output': salb}">
                         {{ click == 2 ? 'south' : 'north' }}
                       </mat-icon>
                     </th>
 
-                    <th (click)="marcarNegrita('mail')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('mail')" (mouseenter)="input()" (mouseleave)="output()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Email
-                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                      <mat-icon #flechitaElement [style.visibility]="enter || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': markedText, 'input': entb, 'output': salb}">
                         {{ click == 2 ? 'south' : 'north' }}
                       </mat-icon>
                     </th>
 
-                    <th (click)="marcarNegrita('usualPaymentForm')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('usualPaymentForm')" (mouseenter)="input()" (mouseleave)="output()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Forma Pago
-                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                      <mat-icon #flechitaElement [style.visibility]="enter || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': markedText, 'input': entb, 'output': salb}">
                         {{ click == 2 ? 'south' : 'north' }}
                       </mat-icon>
                     </th>
 
-                    <th (click)="marcarNegrita('type')" (mouseenter)="entrada()" (mouseleave)="salida()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
+                    <th (click)="marcarNegrita('type')" (mouseenter)="input()" (mouseleave)="output()" class="w-40 p-3 text-sm front-semibold tracking-wide text-left cursor-pointer">
                       Tipo
-                      <mat-icon #flechitaElement [style.visibility]="entro || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': textoMarcado, 'entrada': entb, 'salida': salb}">
+                      <mat-icon #flechitaElement [style.visibility]="enter || click == 1 || click == 2 ? 'visible' : 'hidden'" class="flechita" [ngClass]="{'negrita': markedText, 'input': entb, 'output': salb}">
                         {{ click == 2 ? 'south' : 'north' }}
                       </mat-icon>
                     </th>
@@ -96,65 +112,76 @@
               </thead>
   
               <tbody class="divide-y divide-gray-100">
-                  <tr *ngFor="let trade of trades" class="bg-white">
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{trade.fantasyName}}</td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{trade.address}}</td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{trade.billingType}}</td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      <a href="#" class="font-bold text-blue-500 hover:underline">{{trade.mail}}</a>
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{trade.usualPaymentForm}}</td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      <span [ngClass]="{
-                        'bg-yellow-200 text-yellow-800': trade.type === 'Empresa',
-                        'bg-green-200 text-green-800': trade.type === 'PyME',
-                        'bg-gray-200 text-gray-800': trade.type === 'Otro'
-                      }" 
-                      class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50">
-                      {{trade.type}}</span>
-                    </td>
+                <ng-container *ngIf="shops.length > 0; else noShopsTemplate">
+                  <ng-container *ngFor="let shop of shops; let i = index">
+                    <tr [class.bg-white]="i % 2 !== 0" [class.bg-gray-100]="i % 2 === 0">
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{shop.fantasyName}}</td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{shop.address}}</td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{shop.billingType}}</td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        <a href="" class="font-bold text-blue-500 hover:underline">{{shop.mail}}</a>
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{shop.usualPaymentForm}}</td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        <span [ngClass]="{
+                          'bg-yellow-200 text-yellow-800': shop.type === 'Empresa',
+                          'bg-green-200 text-green-800': shop.type === 'PyME',
+                          'bg-gray-200 text-gray-800': shop.type === 'Otro'
+                        }" 
+                        class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50">
+                        {{shop.type}}</span>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              
+                <ng-template #noShopsTemplate>
+                  <tr class="bg-white">
+                    <td colspan="6" class="p-3 text-sm text-gray-700 whitespace-nowrap">{{messageAboutShops}}</td>
                   </tr>
+                </ng-template>
               </tbody>
+              
 
           </table>
       </div>
 
-      <div *ngIf="trades.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-        <div id="tarjetas" *ngFor="let trade of trades" class="bg-white space-y-2 p-4 rounded-lg shadow relative">
+      <div *ngIf="shops.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+        <div id="tarjetas" *ngFor="let shop of shops" class="bg-white space-y-2 p-4 rounded-lg shadow relative">
 
           <div class="flex items-center space-x-2 text-sm">
             <div>
-              <a href="#" class="text-blue font-bold hover:underline">{{trade.fantasyName}}</a>
+              <a href="#" class="text-blue font-bold hover:underline">{{shop.fantasyName}}</a>
             </div>
-            <div class="text-gray-500">{{trade.address}}</div>
+            <div class="text-gray-500">{{shop.address}}</div>
             <div>
               <span [ngClass]="{
-                'bg-yellow-200 text-yellow-800': trade.type === 'Empresa',
-                'bg-green-200 text-green-800': trade.type === 'PyME',
-                'bg-gray-200 text-gray-800': trade.type === 'Otro'
+                'bg-yellow-200 text-yellow-800': shop.type === 'Empresa',
+                'bg-green-200 text-green-800': shop.type === 'PyME',
+                'bg-gray-200 text-gray-800': shop.type === 'Otro'
               }" class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50">
-              {{trade.type}}</span>
+              {{shop.type}}</span>
             </div>
           </div>
       
-          <div *ngIf="visibleContent[trade.fantasyName] || band " class="text-sm text-gray-700">
-            <a href="#" class="font-bold text-blue-500 hover:underline">{{trade.mail}}</a>
+          <div *ngIf="visibleContent[shop.fantasyName] || band " class="text-sm text-gray-700">
+            <a href="#" class="font-bold text-blue-500 hover:underline">{{shop.mail}}</a>
           </div>
       
-          <div *ngIf="visibleContent[trade.fantasyName] || band" class="text-sm text-gray-700">
-            {{trade.billingType}}
+          <div *ngIf="visibleContent[shop.fantasyName] || band" class="text-sm text-gray-700">
+            {{shop.billingType}}
           </div>
 
-          <div *ngIf="visibleContent[trade.fantasyName] || band" class="text-sm font-medium text-black">
-            {{trade.usualPaymentForm}}
+          <div *ngIf="visibleContent[shop.fantasyName] || band" class="text-sm font-medium text-black">
+            {{shop.usualPaymentForm}}
           </div>
       
           <button
             id="flechita"
             *ngIf="isScreenSmall()"
-            (click)="toggleCardContent(trade)"
+            (click)="toggleCardContent(shop)"
             class="absolute top-0 right-0 p-2 focus:outline-none group"
-            [@rotateArrow]="visibleContent[trade.fantasyName] ? 'up' : 'down'"
+            [@rotateArrow]="visibleContent[shop.fantasyName] ? 'up' : 'down'"
           >
             <mat-icon class="text-gray-500">expand_more</mat-icon>
           </button>
@@ -165,8 +192,8 @@
   </div>
 </div>
 
-<form class="mt-3" [formGroup]="tradeForm" (ngSubmit)="verifyNameFantasy()">
-  <section id="nuevoComercio" *ngIf="mostrarNuevoComercio">
+<form class="mt-3" [formGroup]="shopForm" (ngSubmit)="verifyNameFantasy()">
+  <section id="nuevoComercio" *ngIf="showingNewShop">
 
     <div class="m-5">
         <b class="text-lg">NUEVO COMERCIO</b>
@@ -181,7 +208,7 @@
             </div>
           </mat-form-field>
       </div>
-      <div *ngIf="nombreFantasiaInvalid" class="text-red-600 text-xs -mt-4 mb-3" color="warn" [innerHTML]="message">{{message}}</div>
+      <div *ngIf="fantasyNameInvalid" class="text-red-600 text-xs -mt-4 mb-3" color="warn" [innerHTML]="message">{{message}}</div>
       
       <div>
         <mat-form-field [color]="coloring">
@@ -189,7 +216,7 @@
             <div>
               <input matInput formControlName="address">
             </div>
-            <mat-error *ngIf="tradeForm.get('address')?.invalid">{{alertUser()}}</mat-error>
+            <mat-error *ngIf="shopForm.get('address')?.invalid">{{alertUser()}}</mat-error>
           </mat-form-field>
       </div>
   
@@ -201,7 +228,7 @@
             <mat-option value="Monotributo">Monotributo</mat-option>
             <mat-option value="Otro">Otro</mat-option>
           </mat-select>
-          <mat-error *ngIf="tradeForm.get('billingType')?.invalid">{{alertUser()}}</mat-error>
+          <mat-error *ngIf="shopForm.get('billingType')?.invalid">{{alertUser()}}</mat-error>
         </mat-form-field>
       </div>
 
@@ -211,7 +238,7 @@
             <div>
               <input matInput formControlName="mail">
             </div>
-            <mat-error *ngIf="tradeForm.get('mail')?.invalid">{{getMailErrorMessage()}}</mat-error>
+            <mat-error *ngIf="shopForm.get('mail')?.invalid">{{getMailErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
 
@@ -225,7 +252,7 @@
             <mat-option value="Cheque">Cheque</mat-option>
             <mat-option value="Otro">Otro</mat-option>
           </mat-select>
-          <mat-error *ngIf="tradeForm.get('usualPaymentForm')?.invalid">{{alertUser()}}</mat-error>
+          <mat-error *ngIf="shopForm.get('usualPaymentForm')?.invalid">{{alertUser()}}</mat-error>
         </mat-form-field>
       </div>
 
@@ -237,19 +264,19 @@
             <mat-option value="PyME">PyME</mat-option>
             <mat-option value="Otro">Otro</mat-option>
           </mat-select>
-          <mat-error *ngIf="tradeForm.get('type')?.invalid">{{alertUser()}}</mat-error>
+          <mat-error *ngIf="shopForm.get('type')?.invalid">{{alertUser()}}</mat-error>
         </mat-form-field>
       </div>
   
       <div>
-        <app-btn-degrade type="submit" [disabled]="tradeForm.invalid" [text]="'Continuar'"></app-btn-degrade>
+        <app-btn-degrade type="submit" [disabled]="shopForm.invalid" [text]="'Continuar'"></app-btn-degrade>
       </div>
   
     </div>
   </section>
 </form>
 
-<section id="comercio" *ngIf="continuarNuevoComercio">
+<section id="comercio" *ngIf="continueNewShop">
   <div class="m-5">
       <b class="text-lg">CONTACTO</b>
   </div>

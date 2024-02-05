@@ -5,31 +5,31 @@ import { Injectable } from '@angular/core';
 })
 export class SharedDataService {
   private cuit: string = '';
-  private razonSocial: string = '';
-  private condicionFinal: string = '';
+  private businessName: string = '';
+  private fiscalCondition: string = '';
 
   setCuit(cuit: string) {
     this.cuit = cuit;
   }
 
-  setRazonSocial(razonSocial: string) {
-    this.razonSocial = razonSocial;
+  setBusinessName(businessName: string) {
+    this.businessName = businessName;
   }
 
-  setCondicionFinal(condicionFinal: string) {
-    this.condicionFinal = condicionFinal;
+  setFiscalCondition(fiscalCondition: string) {
+    this.fiscalCondition = fiscalCondition;
   }
 
   getCuit(): string {
     return this.cuit;
   }
 
-  getRazonSocial(): string {
-    return this.razonSocial;
+  getbusinessName(): string {
+    return this.businessName;
   }
 
-  getCondicionFinal(): string {
-    return this.condicionFinal;
+  getfiscalCondition(): string {
+    return this.fiscalCondition;
   }
   
 }

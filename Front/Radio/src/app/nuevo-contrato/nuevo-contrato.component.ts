@@ -5,8 +5,8 @@ import { take ,tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
 import { Validator } from '@angular/forms';
-import { BillingHolder } from '../models/billing-holder.js';
-import { Trade } from '../models/trade.js';
+import { Owner } from '../models/owner.js';
+import { Shop } from '../models/shop.js';
 @Component({
   selector: 'app-nuevo-contrato',
   templateUrl: './nuevo-contrato.component.html',
@@ -20,9 +20,9 @@ export class NuevoContratoComponent implements OnInit {
   cuit: string|null = null;
   invalid: boolean = false;
   coloring: ThemePalette = "primary";
-  holder: BillingHolder|null= null;
-  business: Trade|null = null;
-  businesses: Trade[]= [];
+  holder: Owner|null= null;
+  business: Shop|null = null;
+  businesses: Shop[]= [];
   startDate: Date | null = null;
   endDate: Date | null = null;
   regDate: Date | null = null;
@@ -39,7 +39,7 @@ export class NuevoContratoComponent implements OnInit {
     this.business=null;
     this.holder=null;
     if (this.cuit != null) {
-      this.myDataService.getBillingHolderByCUIT(this.cuit).subscribe({
+      this.myDataService.getOwnerByCuit(this.cuit).subscribe({
         next: (result: any) => {
           if (result) {
             this.holder = result;
@@ -56,12 +56,12 @@ export class NuevoContratoComponent implements OnInit {
 
   getBusinesses() {
 
-      this.myDataService.getTrades().pipe(take(1)).subscribe({
+      this.myDataService.getShops().pipe(take(1)).subscribe({
         next: (response: any) => {
         if (Array.isArray(response) && this.holder != null) {
           // The response object is already an array; no need to access the 'data' property.
           for (const bus of response) {
-            if ( bus.billingHolderId === this.holder._id) {
+            if ( bus.OwnerId === this.holder._id) {
               this.businesses.push(bus);
             }
           }

@@ -120,6 +120,7 @@ get contactsUpdate() {
       this.dni, 
       this.formCreate.get('inputName')?.value, 
       this.formCreate.get('inputLastname')?.value,
+      this.getNonEmptyContactsArray(this.formCreate.value),
       this.getNonEmptyContactsArray(this.formCreate.value))
     console.log(contact)
     if(this.isUded==true){

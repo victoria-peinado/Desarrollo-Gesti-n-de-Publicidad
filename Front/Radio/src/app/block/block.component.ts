@@ -69,7 +69,7 @@ export class BlockComponent implements OnInit {
           for (const history of response.data) {
             const historyDate = parse(history.startTime, "dd/MM/yyyy, HH:mm:ss", new Date());
 
-            if (this.selectedValue && historyDate < today && history.idBlock === this.selectedValue.id) {
+            if (this.selectedValue && historyDate < today && history.idBlock === this.selectedValue._id) {
               if (!lastHistory || historyDate >  parse(lastHistory.startTime, "dd/MM/yyyy, HH:mm:ss", new Date())){
                 lastHistory = history;
               }
@@ -116,7 +116,7 @@ export class BlockComponent implements OnInit {
     const today = new Date();
     const fechaCompleta = today.toLocaleString();// ver si guarda en la base un date o string .toLocaleDateString(); te da sin la hora
     const price = parseFloat(this.form.get('inputPrice')?.value || '0');
-    const idBlock = this.selectedValue!.id;
+    const idBlock = this.selectedValue!._id;
 
     const newHistory = {
       startTime: fechaCompleta,

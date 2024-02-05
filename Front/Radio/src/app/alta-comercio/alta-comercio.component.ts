@@ -3,6 +3,7 @@ import { ThemePalette } from '@angular/material/core/index.js';
 import { Router } from '@angular/router';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { SharedDataService } from '../services/shared-data.service';
+import { Owner } from '../models/owner.js';
 
 @Component({
   selector: 'app-alta-comercio',
@@ -20,7 +21,7 @@ export class AltaComercioComponent {
 
   constructor(
     private router: Router,
-    private _BillingHolderService: MyDataService,
+    private _ownerService: MyDataService,
     private sharedDataService: SharedDataService
   ) {}
 
@@ -62,11 +63,13 @@ export class AltaComercioComponent {
   }
 
   verifyCuit() {
-    this._BillingHolderService.getBillingHolderByCUIT(this.cuit).subscribe({
-      next: (billingHolder: any) => {
-        this.sharedDataService.setCuit(billingHolder.CUIT);
-        this.sharedDataService.setRazonSocial(billingHolder.businessName);
-        this.sharedDataService.setCondicionFinal(billingHolder.fiscalCondition);
+    this._ownerService.getOwnerByCuit(this.cuit).subscribe({
+      next: (response: any) => {
+        const owner: Owner = response.data;
+        
+        this.sharedDataService.setCuit(owner.cuit);
+        this.sharedDataService.setBusinessName(owner.businessName);
+        this.sharedDataService.setFiscalCondition(owner.fiscalCondition);
         this.redirectToNuevoComercio();
       },
       error: (error: any) => {

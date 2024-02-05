@@ -1,0 +1,46 @@
+### findAll
+GET http://localhost:3001/api/order
+ 
+## ID
+@id = 654e406e97ea9f854e9fa08e
+ 
+### GET ONE
+GET http://localhost:3001/api/order/{{id}}
+
+### POST
+# @name createorder
+POST http://localhost:3001/api/order
+Content-Type: application/json
+
+{
+        
+        "nameStrategy": "Ofertas Noviembre",
+        "obs": "quiere estar al final de la tanda",
+        "showName": "Siempre Al Dia",
+        "month": "11-2023",
+        "contract": "654aefd5c3991db2b0d46152",
+        "spot": "654e3fbc97ea9f854e9fa08b"
+
+}
+
+### PUTH Modifica todo el objeto -idempotente-
+PUT http://localhost:3001/api/order/{{id}}
+Content-Type: application/json
+
+{
+       "nameStrategy": "",
+        "obs": "",
+        "showName": "",
+        "month": "MM-AAAA",
+        "contract": "",
+        "spot": ""
+
+}
+
+
+
+
+###DELETE
+DELETE http://localhost:3001/api/order/{{id}}
+
+##DUDA me esta diciendo que lo borro cuando realmente no existe el ordero.

@@ -1,8 +1,35 @@
+<<<<<<< Updated upstream
 import {  Component,  ViewChild} from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 import { BillingHolder } from '../models/billing-holder';
 import { Contact } from '../models/contact';
 import { Trade } from '../models/trade'
+=======
+import {
+  AfterViewInit,
+  Component,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  ChangeDetectorRef,
+  HostListener,
+} from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { Shop } from 'src/app/models/shop';
+import { MyDataService } from 'src/app/services/my-data.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SharedDataService } from '../services/shared-data.service';
+import { ThemePalette } from '@angular/material/core';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+} from '@angular/animations';
+>>>>>>> Stashed changes
 @Component({
   selector: 'app-alta-titular-contacto-comercio',
   templateUrl: './alta-titular-contacto-comercio.component.html',

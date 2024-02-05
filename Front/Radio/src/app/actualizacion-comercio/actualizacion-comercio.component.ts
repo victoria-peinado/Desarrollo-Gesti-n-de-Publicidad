@@ -8,17 +8,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class ActualizacionComercioComponent {
 
-  updateTradeForm: FormGroup;
+  updateShopForm: FormGroup;
 
 
   constructor (private fb: FormBuilder) {
-    this.updateTradeForm = this.fb.group({
-      CUIT: ['', Validators.required],
+    this.updateShopForm = this.fb.group({
+      cuit: ['', Validators.required],
       fantasyName: ['', Validators.required],
     })
   }
 
-  updateTrade() {
+  updateShop() {
     console.log('Hola mundo')
   }
 

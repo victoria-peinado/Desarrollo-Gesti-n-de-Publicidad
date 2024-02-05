@@ -10,7 +10,7 @@
   <mat-form-field floatLabel="auto" class="w-1/2">
     <mat-label><strong> Bloque</strong></mat-label>
     <mat-select formControlName="selectedBlock" (ngModelChange)="selectedBlock(price)">
-      <mat-option *ngFor="let block of blocks" [value]="block">{{block.number}}</mat-option>
+      <mat-option *ngFor="let block of blocks" [value]="block">{{block.numBlock}}</mat-option>
     </mat-select>
   </mat-form-field>
   <div *ngIf="form.get('selectedBlock')?.invalid && form.get('selectedBlock')?.touched"
