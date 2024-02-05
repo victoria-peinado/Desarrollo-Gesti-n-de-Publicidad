@@ -1,5 +1,5 @@
 export class Order {
-    _id?: string;
+    id?: string;
     numOrder: string;
     regDate: Date;
     totalAds: number;

@@ -62,7 +62,7 @@ export class AltaComercioComponent {
     this.myDataService.getOwnerByCuit(this.cuit).subscribe({
       next: (response: any) => {
         const owner: Owner = response.data;
-        this.id = owner._id;
+        this.id = owner.id;
         this.name = owner.businessName;
         this.condition = owner.fiscalCondition;
         this.isUded = true;

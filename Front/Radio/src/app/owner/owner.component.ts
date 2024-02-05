@@ -77,7 +77,7 @@ export class OwnerComponent implements OnInit {
       
       next: (response: any) => {
         const owner: Owner = response.data;
-        this.id = owner._id;
+        this.id = owner.id;
         this.name = owner.businessName;
         this.condition = owner.fiscalCondition;
         this.isUded = true;

@@ -1,5 +1,5 @@
 export class Block {
-    _id?: string;
+    id?: string;
     numBlock: string;
     startTime: string;
     prices: string[];

@@ -1,5 +1,5 @@
 export class Shop {
-    _id?: string;
+    id?: string;
     regDate: Date;
     fantasyName: string;
     address: string;

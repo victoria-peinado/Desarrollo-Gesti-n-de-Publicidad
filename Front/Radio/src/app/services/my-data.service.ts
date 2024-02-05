@@ -22,10 +22,10 @@ export class MyDataService {
     return this.http.post(`${this.apiUrl}block`, block);
   }
   getHistory() {
-    return this.http.get(`${this.apiUrl}historys`);
+    return this.http.get(`${this.apiUrl}price`);
   }
   createHistory(history:any) {
-    return this.http.post(`${this.apiUrl}historys`, history);
+    return this.http.post(`${this.apiUrl}price`, history);
   }
 
   getShops(): Observable<any> {

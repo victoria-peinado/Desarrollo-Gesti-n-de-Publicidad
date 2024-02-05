@@ -61,7 +61,7 @@ export class NuevoContratoComponent implements OnInit {
         if (Array.isArray(response) && this.holder != null) {
           // The response object is already an array; no need to access the 'data' property.
           for (const bus of response) {
-            if ( bus.OwnerId === this.holder._id) {
+            if ( bus.OwnerId === this.holder.id) {
               this.businesses.push(bus);
             }
           }
