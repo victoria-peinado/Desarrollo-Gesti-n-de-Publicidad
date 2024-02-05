@@ -12,8 +12,8 @@ import { ActivatedRoute } from '@angular/router';
 export class OwnerComponent implements OnInit {
   @Input() crud: string = '';
   @Output() completed= new EventEmitter<boolean>();
-  @Output() ownerData= new EventEmitter<BillingHolder>();
-  owner: BillingHolder | undefined;
+  @Output() ownerData= new EventEmitter<Owner>();
+  owner: Owner | undefined;
   id:any;
   cuit:string='';
   name:string='aaa';
@@ -75,12 +75,12 @@ export class OwnerComponent implements OnInit {
   getCuitData() {
     this.myDataService.getOwnerByCuit(this.cuit).subscribe({
       
-      next: (billingHolder: any) => {
-        this.id = billingHolder.id;
-        this.name = billingHolder.businessName;
-        this.condition = billingHolder.fiscalCondition;
+      next: (Owner: any) => {
+        this.id = Owner.id;
+        this.name = Owner.businessName;
+        this.condition = Owner.fiscalCondition;
         this.isUded = true;
-        this.owner=billingHolder;
+        this.owner=Owner;
       },
       error: (error: any) => {
         if (error.status == 404) {
@@ -121,7 +121,7 @@ export class OwnerComponent implements OnInit {
  //create owner
  createOwner(owner: Owner) {
     this.myDataService.createOwner(owner).subscribe({
-      next: (billingHolder: any) => {
+      next: (Owner: any) => {
         this.router.navigate(['/owner']);
       },
       error: (error: any) => {
@@ -132,7 +132,7 @@ export class OwnerComponent implements OnInit {
   //update owner
   updateOwner(owner:Owner) {
     this.myDataService.updateOwner(owner).subscribe({
-      next: (billingHolder: any) => {
+      next: (Owner: any) => {
         this.router.navigate(['/owner']);
       },
       error: (error: any) => {
@@ -143,7 +143,7 @@ export class OwnerComponent implements OnInit {
   //delete owner
   deleteOwner() {
     this.myDataService.deleteOwner(this.id).subscribe({
-      next: (billingHolder: any) => {
+      next: (Owner: any) => {
         this.router.navigate(['/owner']);
       },
       error: (error: any) => {

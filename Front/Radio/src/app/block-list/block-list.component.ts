@@ -91,7 +91,7 @@ export class BlockListComponent implements OnInit {
             this.lastElements = this.blocks
               .map((block) => {
                 const blockHistories = this.allElements
-                  .filter((history) => history.idBlock === block.id)
+                  .filter((history) => history.idBlock === block._id)
                   .sort((a, b) => {
                     const dateA = parse(
                       a.startTime,
@@ -128,11 +128,11 @@ export class BlockListComponent implements OnInit {
   combineElements() {
     this.combinedElements = this.blocks.map((block) => {
       const lastHistory = this.lastElements.find(
-        (history) => history?.idBlock === block.id
+        (history) => history?.idBlock === block._id
       );
 
       return {
-        number: block.number,
+        number: block.numBlock,
         startTimeBlock: block.startTime || '',
         precio: lastHistory?.precio || 0,
         startTime: lastHistory
@@ -142,8 +142,8 @@ export class BlockListComponent implements OnInit {
               new Date()
             ).toLocaleDateString()
           : '',
-        idBlock: block.id || '',
-        id: lastHistory?.id || '',
+        idBlock: block._id || '',
+        id: lastHistory?._id || '',
       };
     }) as CombinedElement[];
   }

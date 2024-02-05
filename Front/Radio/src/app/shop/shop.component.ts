@@ -1,10 +1,11 @@
 import {  Component,  ViewChild,  ElementRef,  OnInit,Input, Output, EventEmitter, ChangeDetectorRef} from '@angular/core';
-import { Trade } from 'src/app/models/trade';
+
 import { MyDataService } from 'src/app/services/my-data.service';
 import { FormBuilder, FormGroup, Validators , AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedDataService } from '../services/shared-data.service';
 import { ThemePalette } from '@angular/material/core';
+import { Shop } from '../models/shop.js';
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
@@ -14,12 +15,12 @@ export class ShopComponent  {
   @Input() crud: string = '';
   @Input() cuit: string = '';
   @Output() completed= new EventEmitter<boolean>();
-  @Output() completedShop= new EventEmitter<Trade>();
+  @Output() completedShop= new EventEmitter<Shop>();
   @ViewChild('nombreFantasiaInput', { static: false })
   nombreFantasiaInputRef!: ElementRef;
 
-  trades: Trade[] = [];
-  allTrades: Trade[] = [];
+  Shops: Shop[] = [];
+  allShops: Shop[] = [];
 
   band: boolean = true;
   
@@ -41,7 +42,7 @@ export class ShopComponent  {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private _tradeService: MyDataService,
+    private _ShopService: MyDataService,
     private aRouter: ActivatedRoute,
     private sharedDataService: SharedDataService,
     private cdRef: ChangeDetectorRef
@@ -58,16 +59,16 @@ export class ShopComponent  {
     this.id = this.aRouter.snapshot.paramMap.get('id');
 
     this.cuit = this.sharedDataService.getCuit();
-    this.razonSocial = this.sharedDataService.getRazonSocial();
-    this.condicionFinal = this.sharedDataService.getCondicionFinal();
+    this.razonSocial = this.sharedDataService.getbusinessName();
+    this.condicionFinal = this.sharedDataService.getfiscalCondition();
   }
 
   getComercios() {
     if (this.cuit) {
-      this._tradeService.getTradesByCuit(this.cuit).subscribe({
+      this._ShopService.getShopsByCuit(this.cuit).subscribe({
         next: (data) => {
-          this.allTrades = data.slice();
-          this.trades = data;
+          this.allShops = data.slice();
+          this.Shops = data;
         },
         error: (error) => {
           console.log(error);
@@ -80,22 +81,25 @@ export class ShopComponent  {
 
 
 
-  addTrade() {
+  addShop() {
     if (this.cuit) {
-      this._tradeService.getBillingHolderByCUIT(this.cuit).subscribe({
-        next: (billingHolderId: any) => {
-          const TRADE: Trade = {//creo que hay un error tipo por que billingHolderId es un string
+      this._ShopService.getOwnerByCuit(this.cuit).subscribe({
+        next: (owner: any) => {
+          const Shop: Shop = {
             fantasyName: this.formCreate.get('fantasyName')?.value,
             address: this.formCreate.get('address')?.value,
             billingType: this.formCreate.get('billingType')?.value,
             mail: this.formCreate.get('mail')?.value,
             usualPaymentForm: this.formCreate.get('usualPaymentForm')?.value,
             type: this.formCreate.get('type')?.value,
-            billingHolderId: billingHolderId,
+            owner: owner,
+            regDate: new Date(),
+            contact: '',
+            contracts: []
           };
 
-          this.createTrade(TRADE);
-          this.completedShop.emit(TRADE);
+          this.createShop(Shop);
+          this.completedShop.emit(Shop);
           this.completed.emit(true);
         },
         error: (error) => {
@@ -107,8 +111,8 @@ export class ShopComponent  {
     }
   }
 
-  createTrade(TRADE: Trade) {
-    this._tradeService.createTrade(TRADE).subscribe({
+  createShop(Shop: Shop) {
+    this._ShopService.createShop(Shop).subscribe({
       next: (data) => {
         //this.obtenerComercios();
       },
@@ -125,11 +129,11 @@ export class ShopComponent  {
       const fantasyName = control.value;
 
       if (fantasyName && this.cuit) {
-        this._tradeService
-          .getTradesByFantasyNameAndCUIT(fantasyName, this.cuit)
+        this._ShopService
+          .getShopsByCuitAndFantasyName(fantasyName, this.cuit)
           .subscribe({
-            next: (trades: Trade[]) => {
-              if (trades && trades.some((trade) => trade.fantasyName === fantasyName)) {
+            next: (Shops: Shop[]) => {
+              if (Shops && Shops.some((Shop) => Shop.fantasyName === fantasyName)) {
                 resolve({ fantasyNameTaken: true });
               } else {
                 resolve(null); // Sin error, fantasyName está disponible
