@@ -75,12 +75,13 @@ export class OwnerComponent implements OnInit {
   getCuitData() {
     this.myDataService.getOwnerByCuit(this.cuit).subscribe({
       
-      next: (Owner: any) => {
-        this.id = Owner.id;
-        this.name = Owner.businessName;
-        this.condition = Owner.fiscalCondition;
+      next: (response: any) => {
+        const owner: Owner = response.data;
+        this.id = owner._id;
+        this.name = owner.businessName;
+        this.condition = owner.fiscalCondition;
         this.isUded = true;
-        this.owner=Owner;
+        this.owner=owner;
       },
       error: (error: any) => {
         if (error.status == 404) {
@@ -91,6 +92,8 @@ export class OwnerComponent implements OnInit {
         }
       }
     });
+    console.log(this.owner);
+    
   }
   //focus on the next input
   focusNext(next: any): void {
