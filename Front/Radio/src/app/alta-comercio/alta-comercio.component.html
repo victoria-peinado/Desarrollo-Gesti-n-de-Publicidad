@@ -1,17 +1,26 @@
-<h1 class="title">Alta de un nuevo comercio</h1>
-<div class="flex flex-col items-center justify-center">
-    <div>
-        <mat-form-field [color]="coloring" class="mt-5">
-            <mat-label>Cuit</mat-label>
-            <div>
-                <input matInput [(ngModel)]="cuit" maxlength="11" #cuitInput (ngModelChange)="onInput()" (keypress)="validateNumberInput($event)">
-                <div class="asterisk">*</div>
-            </div>
-        </mat-form-field>
-    </div>
-    <div *ngIf="cuitInvalid" class="text-red-600 text-xs -mt-4 mb-3" color="warn" [innerHTML]="message">{{message}}</div>
-    <div>
-        <button mat-raised-button color="white" class="mr-2" (click)="redirectToHome()">Cancelar</button>
-        <app-btn-degrade class="ml-2" [disabled]="isButtonDisabled" (click)="verifyCuit()">Siguiente</app-btn-degrade>
-    </div>
+
+<h1  class="text-center">Lista del Titular</h1>
+
+<form  [formGroup]="form" class="flex flex-col items-center justify-center">
+  <mat-form-field class="w-1/2">
+    <mat-label>Cuit</mat-label>
+    <input matInput formControlName="inputCuit"(ngModelChange)="onCuitChange()" maxlength="11" #iCuit>
+  </mat-form-field>
+  <div *ngIf="form.get('inputCuit')?.invalid && form.get('inputCuit')?.touched" class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
+    <mat-error *ngIf="form.get('inputCuit')?.errors?.['required']">* Requerido</mat-error>
+    <mat-error *ngIf="form.get('inputCuit')?.errors?.['pattern']">* Solo números</mat-error>
+    <mat-error *ngIf="form.get('inputCuit')?.errors?.['minlength']">* Debe tener 11 caracteres</mat-error>
+  </div>
+</form>
+<div *ngIf="isUded==true" class="flex flex-col items-center justify-center">
+  <p>Ese cuit ya se encuentra registrado con los siguientes datos:
+  </p>
+  <p> Razón social: {{name}}</p>
+  <p> Condición fiscal: {{condition}}</p>
+  <app-shop-list [cuit]="cuit"></app-shop-list>
 </div>
+
+<div *ngIf="isUded==false" class="flex flex-col items-center justify-center">
+  <p>Ese cuit no se encuentra registrado</p>
+</div>
+

@@ -1,5 +1,5 @@
 export class Contact {
-    _id?: string;
+    id?: string;
     dni: string;
     name: string;
     lastname: string;

@@ -1,5 +1,5 @@
 export class Owner {
-    _id?: string;
+    id?: string;
     cuit: string;
     businessName: string;
     fiscalCondition: string;

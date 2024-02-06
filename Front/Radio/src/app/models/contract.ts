@@ -1,5 +1,5 @@
 export class Contract {
-    _id?: string;
+    id?: string;
     regDate: Date;
     dateFrom: Date;
     dateTo: Date;

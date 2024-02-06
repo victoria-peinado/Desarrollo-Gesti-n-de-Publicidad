@@ -1,5 +1,5 @@
 export class Price {
-    _id?: string;
+    id?: string;
     value: number;
     regDate: Date;
     block: string;
