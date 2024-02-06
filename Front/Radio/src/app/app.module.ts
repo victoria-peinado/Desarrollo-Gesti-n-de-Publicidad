@@ -24,6 +24,7 @@ import { OwnerComponent } from './owner/owner.component';
 import { ContactComponent } from './contact/contact.component';
 import { ShopComponent } from './shop/shop.component';
 import { BlockListComponent } from './block-list/block-list.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { BlockListComponent } from './block-list/block-list.component';
     OwnerComponent,
     ContactComponent,
     ShopComponent,
-    BlockListComponent
+    BlockListComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,

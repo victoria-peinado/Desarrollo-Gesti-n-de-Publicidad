@@ -22,14 +22,14 @@ POST http://localhost:3001/api/shop
 Content-Type: application/json
 
 {
-    "fantasyName": "Transporte DJJB",
-    "address": "12 de Abril 0596",
+    "fantasyName": "Juguetes SRL",
+    "address": "Córdoba 2333",
     "billingType": "Resposable Inscripto",
-    "mail": "djjb@gmail.com",
+    "mail": "juguetes-srl@gmail.com",
     "usualPaymentForm": "Efectivo",
-    "type": "PyME",
+    "type": "Empresa",
     "contact": "654ad0d341b4fa27919f8af8",
-    "owner": "654ada122beba8847bd81fa9"
+    "owner": "65c08f2dad3fb943fc5cb294"
 }
 
 

@@ -9,7 +9,10 @@ import { SharedDataService } from '../services/shared-data.service';
 import { ThemePalette } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
+type allowedColumns = 'fantasyName' | 'address' | 'billingType' | 'mail' | 'usualPaymentForm' | 'type';
 @Component({
   selector: 'app-nuevo-comercio',
   templateUrl: './nuevo-comercio.component.html',
@@ -22,6 +25,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     ]),
   ],
 })
+
 export class NuevoComercioComponent implements OnInit {
   @ViewChild('fantasyNameInput', { static: false })
   fantasyNameInputRef!: ElementRef;
@@ -85,7 +89,8 @@ export class NuevoComercioComponent implements OnInit {
     private _shopService: MyDataService,
     private aRouter: ActivatedRoute,
     private sharedDataService: SharedDataService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    public dialog: MatDialog
   ) {
     this.shopForm = this.fb.group({
       fantasyName: ['', Validators.required],
@@ -108,27 +113,29 @@ export class NuevoComercioComponent implements OnInit {
   }
 
   // lógica transición flecha y ordenamiento
-  markedText: boolean = false;
   click: number = 0;
   salb: boolean = false;
   entb: boolean = false;
   enter: boolean = true;
+  column!: allowedColumns;
+
+
   
 
-  marcarNegrita(key: string) {
+  marcarNegrita(key: allowedColumns) {
+
+    if(!(this.column === key)) {
+      this.click = 0;
+    }
 
     this.click = this.click + 1;
 
-    if(this.click == 1) {
-      this.markedText = !this.markedText;
-    };
-
     if(this.click == 3) {
       this.enter = false;
-      this.markedText = !this.markedText;
       this.click = 0;
     };
 
+    this.column = key;
     this.sortColumn(key);
     
   }
@@ -153,8 +160,27 @@ export class NuevoComercioComponent implements OnInit {
     }
   }
 
+confirmDelete(shop: Shop): void {
 
+  const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    width: '250px',
+    data: { name: shop.fantasyName }
+  });
 
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this._shopService.deleteShop(shop).subscribe({
+        next: (response: any) => {
+          this.obtenerComercios();
+        },
+        error: (error: any) => {
+          //console.log(error); caombiar por un pomnpout de error
+          console.log(error)
+        },
+      });
+    }
+  });
+}
   getMailErrorMessage() {
     if (this.shopForm.get('mail')?.hasError('required')) {
       return '*Este campo es obligatorio.';

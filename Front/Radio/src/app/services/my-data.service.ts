@@ -43,6 +43,10 @@ export class MyDataService {
   getShopsByCuit(cuit: string): Observable<any> {
     return this.http.get(`${this.apiUrl}shop/${cuit}`);
   }
+
+  deleteShop(shop: Shop): Observable<any> {
+    return this.http.delete(`${this.apiUrl}shop/${shop.id}`);
+  }
   
   getOwnerByCuit(cuit: string): Observable<any> {
     return this.http.get(`${this.apiUrl}owner/cuit/${cuit}`);
