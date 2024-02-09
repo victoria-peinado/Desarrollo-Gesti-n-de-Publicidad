@@ -4,7 +4,7 @@
 <form  [formGroup]="form" class="flex flex-col items-center justify-center">
   <mat-form-field class="w-1/2">
     <mat-label>Cuit</mat-label>
-    <input matInput formControlName="inputCuit"(ngModelChange)="onCuitChange()" maxlength="11" #iCuit>
+    <input matInput formControlName="inputCuit" (ngModelChange)="onCuitChange()" maxlength="11" #iCuit>
   </mat-form-field>
   <div *ngIf="form.get('inputCuit')?.invalid && form.get('inputCuit')?.touched" class="text-red-600 text-xs -mt-4 mb-3 ml-8" color="warn">
     <mat-error *ngIf="form.get('inputCuit')?.errors?.['required']">* Requerido</mat-error>

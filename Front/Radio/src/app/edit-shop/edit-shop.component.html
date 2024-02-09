@@ -1,0 +1,105 @@
+
+  
+<form class="mt-3 relative" [formGroup]="shopForm" (ngSubmit)="verifyNameFantasy()">
+    <div *ngIf="showSpinner" class="overlay">
+        <mat-spinner class="spinner"></mat-spinner>
+    </div>
+
+    <section class="m-6" id="edicionComercio">
+  
+      <div class="text-center">
+          <b class="text-lg">EDICIÓN DE COMERCIO</b>
+      </div>
+
+      <div class="m-4 flex justify-center">
+        <div>
+            <div class="flex">
+                <div class="mr-2">
+                    <mat-form-field [color]="coloring">
+                      <mat-label>Nombre fantasia</mat-label>
+                        <div>
+                          <input matInput formControlName="fantasyName">
+                        </div>
+                      </mat-form-field>
+                      <div *ngIf="fantasyNameInvalid" style="color: #f44336" class="text-xs -mt-4 mb-3 ml-4" color="warn" [innerHTML]="message">{{message}}</div>
+                  </div>
+                  
+                  
+                  <div class="ml-2">
+                    <mat-form-field [color]="coloring">
+                      <mat-label>Direccion</mat-label>
+                        <div>
+                          <input matInput formControlName="address">
+                        </div>
+                        <mat-error *ngIf="shopForm.get('address')?.invalid">{{alertUser()}}</mat-error>
+                      </mat-form-field>
+                  </div>
+            </div>
+            
+            <div class="flex">
+                <div class="mr-2">
+                    <mat-form-field [color]="coloring">
+                      <mat-label>Tipo facturación</mat-label>
+                      <mat-select formControlName="billingType">
+                        <mat-option value="Responsable Inscripto">Responsable Inscripto</mat-option>
+                        <mat-option value="Monotributo">Monotributo</mat-option>
+                        <mat-option value="Otro">Otro</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="shopForm.get('billingType')?.invalid">{{alertUser()}}</mat-error>
+                    </mat-form-field>
+                  </div>
+            
+                  <div class="ml-2">
+                    <mat-form-field [color]="coloring">
+                      <mat-label>Mail</mat-label>
+                        <div>
+                          <input matInput formControlName="mail">
+                        </div>
+                        <mat-error *ngIf="shopForm.get('mail')?.invalid">{{getMailErrorMessage()}}</mat-error>
+                    </mat-form-field>
+                  </div>
+            </div>
+        
+            <div class="flex">
+                <div class="mr-2">
+                    <mat-form-field [color]="coloring">
+                      <mat-label>Forma de pago usual</mat-label>
+                      <mat-select formControlName="usualPaymentForm">
+                        <mat-option value="Efectivo">Efectivo</mat-option>
+                        <mat-option value="Tarjeta de Crédito">Tarjeta de Crédito</mat-option>
+                        <mat-option value="Tarjeta de Débito">Tarjeta de Débito</mat-option>
+                        <mat-option value="Cheque">Cheque</mat-option>
+                        <mat-option value="Otro">Otro</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="shopForm.get('usualPaymentForm')?.invalid">{{alertUser()}}</mat-error>
+                    </mat-form-field>
+                  </div>
+            
+                  <div class="ml-2">
+                    <mat-form-field [color]="coloring">
+                      <mat-label>Tipo</mat-label>
+                      <mat-select formControlName="type">
+                        <mat-option value="Empresa">Empresa</mat-option>
+                        <mat-option value="PyME">PyME</mat-option>
+                        <mat-option value="Otro">Otro</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="shopForm.get('type')?.invalid">{{alertUser()}}</mat-error>
+                    </mat-form-field>
+                  </div>
+            </div>
+    
+            <div class="text-left">
+                <button class="mr-2" mat-raised-button (click)="cancelar()">Cancelar</button>
+                <app-btn-degrade class="ml-2" type="submit" [disabled]="shopForm.invalid" [text]="'Guardar'"></app-btn-degrade>
+            </div>
+    
+          </div>
+
+      </div>
+    
+      
+
+      
+
+    </section>
+  </form>

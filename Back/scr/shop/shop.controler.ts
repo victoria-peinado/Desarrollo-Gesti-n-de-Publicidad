@@ -96,7 +96,7 @@ async function getShopsByOwnerId(req: Request, res: Response) {
     try {
         const idOwner = req.params.ownerId
         const shops = await em.find(Shop, {owner: idOwner}, {populate: ['contact', 'owner']})
-        res.status(200).json({messagge: 'Shops found successfully', data: shops})
+        res.status(200).json({message: 'Shops found successfully', data: shops})
 
     } catch (error:any) {
         res.status(500).json({message: error.message})

@@ -2,7 +2,11 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { EditShopComponent } from '../edit-shop/edit-shop.component';
 
+type allowedColumns = 'fantasyName' | 'address' | 'billingType' | 'mail' | 'usualPaymentForm' | 'type';
 @Component({
   selector: 'app-shop-list',
   templateUrl: './shop-list.component.html',
@@ -36,6 +40,7 @@ export class ShopListComponent implements OnInit {
 
   shops: Shop[] = [];
   allShops: Shop[] = [];
+  column!: allowedColumns;
 
   band: boolean = true;
   titulo = 'Crear Comercio';
@@ -60,10 +65,10 @@ export class ShopListComponent implements OnInit {
     this.rotationAngle += 180;
   }
 
-  constructor(  private _shopService: MyDataService) {  }
+  constructor(  private _shopService: MyDataService, public dialog: MatDialog) {  }
 
   ngOnInit(): void {
-    this.obtenerComercios();
+    this.getComercios();
   }
 
   // lógica transición flecha y ordenamiento
@@ -73,22 +78,23 @@ export class ShopListComponent implements OnInit {
   entb: boolean = false;
   enter: boolean = true;
 
-  marcarNegrita(key: string) {
-    this.click = this.click + 1;
+  marcarNegrita(key: allowedColumns) {
 
-    if (this.click == 1) {
-      this.markedText = !this.markedText;
-    }
-
-    if (this.click == 3) {
-      this.enter = false;
-      this.markedText = !this.markedText;
+    if(!(this.column === key)) {
       this.click = 0;
     }
 
-    this.sortColumn(key);
-  }
+    this.click = this.click + 1;
 
+    if(this.click == 3) {
+      this.enter = false;
+      this.click = 0;
+    };
+
+    this.column = key;
+    this.sortColumn(key);
+    
+  }
   output() {
     if (this.click == 0) {
       this.entb = false;
@@ -108,6 +114,40 @@ export class ShopListComponent implements OnInit {
     }
   }
 
+  confirmDelete(shop: Shop): void {
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: { name: shop.fantasyName }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._shopService.deleteShop(shop).subscribe({
+          next: (response: any) => {
+            this.getComercios();
+          },
+          error: (error: any) => {
+            //console.log(error); caombiar por un pomnpout de error
+            console.log(error)
+          },
+        });
+      }
+    });
+  }
+
+  openEditDialog(shop: Shop) {
+    const dialogRef = this.dialog.open(EditShopComponent, {
+      width: '500px',
+      data: shop
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getComercios();
+      }
+    });
+  }
 
   noShops: boolean = false;
 
@@ -174,23 +214,8 @@ export class ShopListComponent implements OnInit {
     }
   }
 
-  getComercios() {
-    if (this.cuit) {
-      this._shopService.getShopsByCuit(this.cuit).subscribe({
-        next: (response: any) => {
-          this.allShops = response.data.slice();
-          this.shops = response.data;
-        },
-        error: (error: any) => {
-          console.log(error);
-        },
-      });
-    } else {
-      console.error('Cuit no proporcionado.');
-    }
-  }
 
-  obtenerComercios() {
+  getComercios() {
     if (this.cuit) {
       this._shopService.getShopsByCuit(this.cuit).subscribe({
         next: (response: any) => {

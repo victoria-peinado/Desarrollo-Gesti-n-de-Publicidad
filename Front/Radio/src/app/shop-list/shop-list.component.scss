@@ -18,16 +18,12 @@ th {
 }
 
 .flechita {
-  color: rgb(155, 155, 155);
+  color: rgb(100, 100, 100);
   margin-left: 3px;
   font-weight: bold;
   position: absolute;
-  font-size: 0.875rem
-    /* 14px */
-  ;
-  line-height: 1.25rem
-    /* 20px */
-  ;
+  font-size: 0.875rem/* 14px */;
+  line-height: 1.25rem/* 20px */;
   transform: translateY(3px);
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.2s ease;

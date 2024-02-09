@@ -47,14 +47,13 @@ export class AltaComercioComponent {
 
   //validates tthe cuit
   onCuitChange() {
-    if (
-      this.form.get('inputCuit')?.valid &&
-      this.form.get('inputCuit')?.value.length == 11
-    ) {
+    if (this.form.get('inputCuit')?.valid && this.form.get('inputCuit')?.value.length == 11) {
       // Llama a la función que deseas ejecutar cuando el CUIT es válido
       //this.cuitValidFunction();
       this.cuit = this.form.get('inputCuit')?.value;
       this.getCuitData();
+    } else {
+      this.isUded = false;
     }
   }
   //get data of the owner with that cuit
@@ -76,6 +75,5 @@ export class AltaComercioComponent {
         }
       },
     });
-    console.log(this.owner);
   }
 }

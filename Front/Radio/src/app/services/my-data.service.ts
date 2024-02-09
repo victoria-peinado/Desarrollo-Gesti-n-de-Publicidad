@@ -44,6 +44,14 @@ export class MyDataService {
     return this.http.get(`${this.apiUrl}shop/${cuit}`);
   }
 
+  getShopsByOwnerId(shop: Shop): Observable<any> {
+    return this.http.get(`${this.apiUrl}shop/owner/${shop.owner}`);
+  }
+
+  updateShop(shop: Shop): Observable<any> {
+    return this.http.put(`${this.apiUrl}shop/${shop.id}`, shop);
+  }
+
   deleteShop(shop: Shop): Observable<any> {
     return this.http.delete(`${this.apiUrl}shop/${shop.id}`);
   }

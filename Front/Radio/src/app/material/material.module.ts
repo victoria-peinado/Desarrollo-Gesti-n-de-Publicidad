@@ -13,6 +13,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 
@@ -31,7 +32,8 @@ const MaterialComponents = [
   MatPaginatorModule,
   MatCheckboxModule,
   MatStepperModule,
-  MatDialogModule
+  MatDialogModule,
+  MatProgressSpinnerModule,
   
 
 ]
