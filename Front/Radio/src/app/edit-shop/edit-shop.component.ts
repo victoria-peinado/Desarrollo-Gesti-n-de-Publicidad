@@ -54,7 +54,6 @@ export class EditShopComponent {
       this.shop.usualPaymentForm = this.shopForm.get('usualPaymentForm')?.value,
       this.shop.type = this.shopForm.get('type')?.value,
 
-      console.log(this.shop)
 
     this._shopService.updateShop(this.shop).subscribe({
       next: (response: any) => {
@@ -92,6 +91,7 @@ export class EditShopComponent {
 
 
   verifyNameFantasy() {
+
     this.showSpinner = true;
     const fantasyNameValue = this.shopForm.get('fantasyName')?.value;
     this._shopService.getShopsByOwnerId(this.shop).subscribe({

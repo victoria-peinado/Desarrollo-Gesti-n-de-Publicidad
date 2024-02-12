@@ -1,6 +1,6 @@
 
   
-<form class="mt-3 relative" [formGroup]="shopForm" (ngSubmit)="verifyNameFantasy()">
+<form class="mt-3 relative" [formGroup]="shopForm">
     <div *ngIf="showSpinner" class="overlay">
         <mat-spinner class="spinner"></mat-spinner>
     </div>
@@ -18,7 +18,7 @@
                     <mat-form-field [color]="coloring">
                       <mat-label>Nombre fantasia</mat-label>
                         <div>
-                          <input matInput formControlName="fantasyName">
+                          <input matInput formControlName="fantasyName" maxlength="30">
                         </div>
                       </mat-form-field>
                       <div *ngIf="fantasyNameInvalid" style="color: #f44336" class="text-xs -mt-4 mb-3 ml-4" color="warn" [innerHTML]="message">{{message}}</div>
@@ -29,7 +29,7 @@
                     <mat-form-field [color]="coloring">
                       <mat-label>Direccion</mat-label>
                         <div>
-                          <input matInput formControlName="address">
+                          <input matInput formControlName="address" maxlength="20">
                         </div>
                         <mat-error *ngIf="shopForm.get('address')?.invalid">{{alertUser()}}</mat-error>
                       </mat-form-field>
@@ -53,7 +53,7 @@
                     <mat-form-field [color]="coloring">
                       <mat-label>Mail</mat-label>
                         <div>
-                          <input matInput formControlName="mail">
+                          <input matInput formControlName="mail" maxlength="40">
                         </div>
                         <mat-error *ngIf="shopForm.get('mail')?.invalid">{{getMailErrorMessage()}}</mat-error>
                     </mat-form-field>
@@ -89,8 +89,8 @@
             </div>
     
             <div class="text-left">
-                <button class="mr-2" mat-raised-button (click)="cancelar()">Cancelar</button>
-                <app-btn-degrade class="ml-2" type="submit" [disabled]="shopForm.invalid" [text]="'Guardar'"></app-btn-degrade>
+                <button mat-raised-button class="mr-2" type="submit" (click)="cancelar()">Cancelar</button>
+                <app-btn-degrade class="ml-2" type="submit" [disabled]="shopForm.invalid" [text]="'Guardar'" (click)="verifyNameFantasy()"></app-btn-degrade>
             </div>
     
           </div>

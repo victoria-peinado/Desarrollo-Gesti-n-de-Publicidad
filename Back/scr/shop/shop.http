@@ -22,12 +22,12 @@ POST http://localhost:3001/api/shop
 Content-Type: application/json
 
 {
-    "fantasyName": "Juguetes SRL",
-    "address": "Córdoba 2333",
+    "fantasyName": "Librería Normita 8",
+    "address": "Belgrano 67",
     "billingType": "Resposable Inscripto",
-    "mail": "juguetes-srl@gmail.com",
+    "mail": "normita@gmail.com",
     "usualPaymentForm": "Efectivo",
-    "type": "Empresa",
+    "type": "Otro",
     "contact": "654ad0d341b4fa27919f8af8",
     "owner": "65c08f2dad3fb943fc5cb294"
 }

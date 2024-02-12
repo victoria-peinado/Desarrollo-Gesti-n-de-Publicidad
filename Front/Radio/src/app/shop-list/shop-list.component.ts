@@ -5,6 +5,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EditShopComponent } from '../edit-shop/edit-shop.component';
+import { PageEvent } from '@angular/material/paginator/index.js';
 
 type allowedColumns = 'fantasyName' | 'address' | 'billingType' | 'mail' | 'usualPaymentForm' | 'type';
 @Component({
@@ -206,7 +207,6 @@ export class ShopListComponent implements OnInit {
       };
 
       if (Object.keys(this.shops[0]).includes(this.sortColumnKey)) {
-        // Object.keys(obj) devuelve un array de strings que representan los nombres de las propiedades del objeto en el argumento
         this.shops.sort((a, b) =>
           compareFunction(a, b, this.sortColumnKey as keyof Shop)
         );
@@ -215,12 +215,14 @@ export class ShopListComponent implements OnInit {
   }
 
 
+  
   getComercios() {
     if (this.cuit) {
       this._shopService.getShopsByCuit(this.cuit).subscribe({
         next: (response: any) => {
           this.allShops = response.data.slice();
           this.shops = response.data;
+          this.length = this.shops.length;
         },
         error: (error: any) => {
           console.log(error);
@@ -243,5 +245,58 @@ export class ShopListComponent implements OnInit {
     return window.innerWidth <= 640; // Ajusta según tus necesidades
   }
 
+
+
+  pageSize: number = 5;
+  currentPage: number = 0; // Página actual
+
+  canNavigateBack(): boolean {
+    return this.currentPage > 0;
+  }
+
+  canNavigateForward(): boolean {
+    return (this.currentPage + 1) * this.pageSize < this.shops.length;
+  }
+
+  navigateBack(): void {
+    if (this.canNavigateBack()) {
+      this.currentPage--;
+    }
+  }
+
+  navigateForward(): void {
+    if (this.canNavigateForward()) {
+      this.currentPage++;
+    }
+  }
+
+  getDisplayedShops(): Shop[] {
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = Math.min(startIndex + this.pageSize, this.shops.length);
+    return this.shops.slice(startIndex, endIndex);
+  }
+
+
+  determineRowColor(index: number): string {
+    const alternatingColors = ["bg-gray-100", "bg-white"];
+    return alternatingColors[index % alternatingColors.length];
+  }
+
+
+  length: number = 0;
+  pageIndex = 0;
+  pageSizeOptions = [3, 5, 10, 25];
+  pageSizeNumber = 5;
+  hidePageSize = false;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  disabled = false;
+
+  pageEvent!: PageEvent;
+
+  handlePageEvent(event: PageEvent): void {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+  }
 
 }

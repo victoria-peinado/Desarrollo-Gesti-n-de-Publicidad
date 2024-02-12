@@ -18,7 +18,7 @@ th {
 }
 
 .flechita {
-  color: rgb(100, 100, 100);
+  color: rgba(31, 41, 55, 0.479);
   margin-left: 3px;
   font-weight: bold;
   position: absolute;
@@ -35,7 +35,7 @@ th:hover .flechita {
 }
 
 .negrita {
-  color: black;
+  color: rgb(31 41 55 / var(--tw-text-opacity));
   font-weight: bold;
   opacity: 1;
 }

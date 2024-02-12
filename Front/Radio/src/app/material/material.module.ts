@@ -14,7 +14,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
+import {MatMenuModule} from '@angular/material/menu';
 
 
 
@@ -34,7 +34,7 @@ const MaterialComponents = [
   MatStepperModule,
   MatDialogModule,
   MatProgressSpinnerModule,
-  
+  MatMenuModule,
 
 ]
 
