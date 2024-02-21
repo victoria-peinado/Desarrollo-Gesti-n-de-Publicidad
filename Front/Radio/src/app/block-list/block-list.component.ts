@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Block } from '../models/block';
-import { blockPriceHistory } from '../models/block-price-history';
+import { Price} from '../models/price';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { take, tap } from 'rxjs/operators';
 import { ApiResponse } from '../models/api_response.js';
@@ -17,7 +17,7 @@ interface CombinedElement {
   idBlock:string,
   number:string,
   startTimeBlock:String,
-  precio: number;
+  value: number;
   startTime: string;
   id:string
 }
@@ -38,9 +38,9 @@ export class BlockListComponent implements OnInit {
   @Input() cuit: string = '';
 
   inputfilter: string = '';
-  elements: blockPriceHistory[] = [];
-  allElements: blockPriceHistory[] = [];
-  lastElements: blockPriceHistory[] = [];
+  elements: Price[] = [];
+  allElements: Price[] = [];
+  lastElements: Price[] = [];
   blocks: Block[] = [];
   combinedElements: CombinedElement[] = [];
 
@@ -83,7 +83,8 @@ export class BlockListComponent implements OnInit {
       .getHistory()
       .pipe(take(1))
       .subscribe({
-        next: (response: ApiResponse<blockPriceHistory[]>) => {
+        next: (response: ApiResponse<Price[]>) => {
+          console.log(response);
           if (Array.isArray(response.data)) {
             this.allElements = response.data;
 
@@ -91,27 +92,25 @@ export class BlockListComponent implements OnInit {
             this.lastElements = this.blocks
               .map((block) => {
                 const blockHistories = this.allElements
-                  .filter((history) => history.idBlock === block.id)
-                  .sort((a, b) => {
-                    const dateA = parse(
-                      a.startTime,
-                      'dd/MM/yyyy, HH:mm:ss',
-                      new Date()
-                    );
-                    const dateB = parse(
-                      b.startTime,
-                      'dd/MM/yyyy, HH:mm:ss',
-                      new Date()
-                    );
-                    return dateB.getTime() - dateA.getTime();
-                  });
+                  .filter((history) => history.block.id === block.id)
+                  .sort(
+                    (a, b) =>
+                      new Date(b.regDate).getTime() -
+                      new Date(a.regDate).getTime()
+                  );
 
                 return blockHistories.length > 0 ? blockHistories[0] : null;
               })
-              .filter((history) => history !== null) as blockPriceHistory[];
+              .filter((history) => history !== null) as Price[];
+            // Ordenar lastElements por el número de bloque
+            this.lastElements.sort((a, b) => {
+              const numBlockA = parseInt(a.block.numBlock);
+              const numBlockB = parseInt(b.block.numBlock);
+              return numBlockA - numBlockB;
+            });
 
             // Llama a la función separada para combinar los elementos
-            this.combineElements();
+            // this.combineElements();
           } else {
             console.error(
               'The "data" property is not an array in the response.'
@@ -123,30 +122,29 @@ export class BlockListComponent implements OnInit {
         },
       } as any);
   }
+  // // Función para combinar this.blocks con this.lastElements
+  // combineElements() {
+  //   this.combinedElements = this.blocks.map((block) => {
+  //     const lastHistory = this.lastElements.find(
+  //       (history) => history?.idBlock === block.id
+  //     );
 
-  // Función para combinar this.blocks con this.lastElements
-  combineElements() {
-    this.combinedElements = this.blocks.map((block) => {
-      const lastHistory = this.lastElements.find(
-        (history) => history?.idBlock === block.id
-      );
-
-      return {
-        number: block.numBlock,
-        startTimeBlock: block.startTime || '',
-        precio: lastHistory?.precio || 0,
-        startTime: lastHistory
-          ? parse(
-              lastHistory.startTime,
-              'dd/MM/yyyy, HH:mm:ss',
-              new Date()
-            ).toLocaleDateString()
-          : '',
-        idBlock: block.id || '',
-        id: lastHistory?.id || '',
-      };
-    }) as CombinedElement[];
-  }
+  //     return {
+  //       number: block.numBlock,
+  //       startTimeBlock: block.startTime || '',
+  //       value: lastHistory?.value || 0,
+  //       startTime: lastHistory
+  //         ? parse(
+  //             lastHistory.startTime,
+  //             'dd/MM/yyyy, HH:mm:ss',
+  //             new Date()
+  //           ).toLocaleDateString()
+  //         : '',
+  //       idBlock: block.id || '',
+  //       id: lastHistory?.id || '',
+  //     };
+  //   }) as CombinedElement[];
+  // }
 
   marcarNegrita(key: string) {
     this.click = (this.click + 1) % 3;
@@ -207,11 +205,11 @@ export class BlockListComponent implements OnInit {
 
     if (this.elements.length === 0) {
       this.elements = [
-        {
-          idBlock: 'no coincide con la búsqueda',
-          startTime: '',
-          precio: 0,
-        },
+        // {
+        //   block: 'no coincide con la búsqueda',
+        //   regDate: new Date(),
+        //   value: 0,
+        // },
       ];
     }
   }
@@ -258,12 +256,16 @@ export class BlockListComponent implements OnInit {
     }
   }
 
-  toggleCardContent(element: CombinedElement) {
-    this.rotationAngles[element.idBlock] =
-      (this.rotationAngles[element.idBlock] || 0) + 180;
-    this.visibleContent[element.idBlock] =
-      !this.visibleContent[element.idBlock];
-    console.log(this.visibleContent[element.idBlock]);
+  toggleCardContent(element: Price) {
+    // Ensure element.block is defined before accessing its properties
+    if (element.block) {
+      // Use element.block.numBlock or any other property instead of element.idBlock
+      this.rotationAngles[element.block.numBlock] =
+        (this.rotationAngles[element.block.numBlock] || 0) + 180;
+      this.visibleContent[element.block.numBlock] =
+        !this.visibleContent[element.block.numBlock];
+      console.log(this.visibleContent[element.block.numBlock]);
+    }
   }
 
   isScreenSmall(): boolean {

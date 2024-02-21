@@ -4,7 +4,12 @@ import { take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Block } from '../models/block';
 import { ApiResponse } from '../models/api_response.js';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { parse } from 'date-fns';
 import { Price } from '../models/price';
 @Component({
@@ -47,8 +52,6 @@ export class BlockComponent implements OnInit {
   //gets the last hitory, set the selected block and focus on the next input
   selectedBlock(next: any) {
     this.selectedValue = this.form.get('selectedBlock')?.value;
-    console.log(this.selectedValue);
-    console.log(this.selectedValue?.id);
     this.getHistory();
     this.focusNext(next);
   }
@@ -60,14 +63,19 @@ export class BlockComponent implements OnInit {
       .subscribe({
         next: (data: ApiResponse<Block[]>) => {
           console.log(data.data);
-          this.blocks = data.data;
+          this.blocks = data.data.sort((a, b) => {
+            const numBlockA = parseInt(a.numBlock);
+            const numBlockB = parseInt(b.numBlock);
+            return numBlockA - numBlockB;
+          });
+          console.log(this.blocks);
+
           this.isBlocksEmpty = !this.blocks || this.blocks.length === 0;
         },
         error: (error: any) => {
           console.error('Error fetching blocks:', error);
         },
       } as any);
-
   }
   //get the last history of the selected block
   getHistory() {
@@ -82,10 +90,6 @@ export class BlockComponent implements OnInit {
 
             for (const history of response.data) {
               const historyDate = new Date(history.regDate);
-                console.log('History:', history);
-                console.log('History Date:', historyDate);
-                  console.log('Selected Block ID:', this.selectedValue?.id);
-                  console.log('Today:', today);
 
               if (
                 this.selectedValue &&
@@ -102,7 +106,6 @@ export class BlockComponent implements OnInit {
             }
 
             this.last = lastHistory;
-                console.log('Last:',this.last);
           } else {
             console.error(
               'The "data" property is not an array in the response.'
@@ -113,7 +116,6 @@ export class BlockComponent implements OnInit {
           console.error('Error fetching history:', error);
         },
       } as any);
-    console.log(this.last);
   }
 
   createBlocks() {

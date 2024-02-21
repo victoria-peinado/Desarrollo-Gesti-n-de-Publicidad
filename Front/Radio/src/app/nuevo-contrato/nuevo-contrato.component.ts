@@ -58,9 +58,9 @@ export class NuevoContratoComponent implements OnInit {
 
       this.myDataService.getShops().pipe(take(1)).subscribe({
         next: (response: any) => {
-        if (Array.isArray(response) && this.holder != null) {
+        if (Array.isArray(response.data) && this.holder != null) {
           // The response object is already an array; no need to access the 'data' property.
-          for (const bus of response) {
+          for (const bus of response.data) {
             if ( bus.OwnerId === this.holder.id) {
               this.businesses.push(bus);
             }

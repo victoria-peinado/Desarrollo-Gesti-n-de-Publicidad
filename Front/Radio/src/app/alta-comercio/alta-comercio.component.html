@@ -17,7 +17,7 @@
   </p>
   <p> Razón social: {{name}}</p>
   <p> Condición fiscal: {{condition}}</p>
-  <app-shop-list [cuit]="cuit"></app-shop-list>
+  <app-shop-list [cuit]="cuit" #tabla></app-shop-list>
 </div>
 
 <div *ngIf="isUded==false" class="flex flex-col items-center justify-center">
