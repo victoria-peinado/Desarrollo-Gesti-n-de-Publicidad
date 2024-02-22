@@ -15,6 +15,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatMenuModule} from '@angular/material/menu';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 
@@ -35,6 +37,8 @@ const MaterialComponents = [
   MatDialogModule,
   MatProgressSpinnerModule,
   MatMenuModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 
 ]
 

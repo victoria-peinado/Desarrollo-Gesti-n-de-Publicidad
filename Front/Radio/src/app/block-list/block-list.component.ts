@@ -12,7 +12,12 @@ import {
   transition,
   animate,
 } from '@angular/animations';
-
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 interface CombinedElement {
   idBlock:string,
   number:string,
@@ -43,7 +48,8 @@ export class BlockListComponent implements OnInit {
   lastElements: Price[] = [];
   blocks: Block[] = [];
   combinedElements: CombinedElement[] = [];
-
+  //form to filter the table
+  form: FormGroup;
   // lógica transición flecha y ordenamiento
   textoMarcado: boolean = false;
   click: number = 0;
@@ -56,7 +62,18 @@ export class BlockListComponent implements OnInit {
   sortOrder: 'asc' | 'desc' = 'asc';
   rotationAngles: { [key: string]: number } = {};
 
-  constructor(private myDataService: MyDataService) {}
+  constructor(
+    private myDataService: MyDataService,
+    private fb: FormBuilder
+  ) {
+    this.form = this.fb.group({
+      inputfilter: ['',[ Validators.min(0), Validators.pattern('[0-9]*'), Validators.max(48)] ],
+      inputMinPrice: ['', [ Validators.min(0), Validators.pattern('[0-9]*')],],
+      inputMaxPrice: ['',[ Validators.min(0), Validators.pattern('[0-9]*')],],
+      inputMinDate: [''],
+      inputMaxDate: [''],
+    });
+  }
 
   ngOnInit(): void {
     this.getBlocks();

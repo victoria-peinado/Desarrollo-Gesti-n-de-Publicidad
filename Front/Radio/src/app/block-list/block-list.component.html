@@ -14,11 +14,60 @@
 <div id="table" *ngIf="lastElements.length != 0" class="h-auto">
   <!-- Filter input field -->
   <div class="p-5 h-auto">
-    <mat-form-field id="filtro">
-      <mat-label>Filtrar</mat-label>
-      <!-- <input matInput [(ngModel)]="inputfilter" (input)="filterTable()" /> -->
-      <input matInput  (input)="filterTable()" />
+<form [formGroup]="form" class="flex flex-wrap justify-start items-start" (keydown.enter)="$event.preventDefault()">
+
+  <div class="w-full md:flex md:justify-start md:items-start mb-6">
+    <mat-form-field class="w-full md:w-1/3 lg:w-1/7">
+      <mat-label>Bloque</mat-label>
+      <input matInput formControlName="inputfilter">
+      <mat-error *ngIf="form.get('inputfilter')?.invalid && form.get('inputfilter')?.touched">
+        <ng-container *ngIf="form.get('inputfilter')?.errors?.['pattern']">* Solo números</ng-container>
+        <ng-container *ngIf="form.get('inputfilter')?.errors?.['min']">* Debe ser mayor o igual a 0</ng-container>
+      </mat-error>
     </mat-form-field>
+
+    <mat-form-field class="w-full md:w-1/3 lg:w-1/7">
+      <mat-label>Precio mínimo</mat-label>
+      <input matInput formControlName="inputMinPrice">
+      <mat-error *ngIf="form.get('inputMinPrice')?.invalid && form.get('inputMinPrice')?.touched">
+        <ng-container *ngIf="form.get('inputMinPrice')?.errors?.['pattern']">* Solo números</ng-container>
+        <ng-container *ngIf="form.get('inputMinPrice')?.errors?.['min']">* Debe ser mayor o igual a 0</ng-container>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-full md:w-1/3 lg:w-1/7">
+      <mat-label>Precio máximo</mat-label>
+      <input matInput formControlName="inputMaxPrice">
+      <mat-error *ngIf="form.get('inputMaxPrice')?.invalid && form.get('inputMaxPrice')?.touched">
+        <ng-container *ngIf="form.get('inputMaxPrice')?.errors?.['pattern']">* Solo números</ng-container>
+        <ng-container *ngIf="form.get('inputMaxPrice')?.errors?.['min']">* Debe ser mayor o igual a 0</ng-container>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-full md:w-1/3 lg:w-1/7">
+      <mat-label>Fecha mínima</mat-label>
+      <input matInput [matDatepicker]="minDatePicker" formControlName="inputMinDate">
+      <mat-datepicker-toggle matSuffix [for]="minDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #minDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="w-full md:w-1/3 lg:w-1/7">
+      <mat-label>Fecha máxima</mat-label>
+      <input matInput [matDatepicker]="maxDatePicker" formControlName="inputMaxDate">
+      <mat-datepicker-toggle matSuffix [for]="maxDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #maxDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="w-full flex justify-start items-start mb-6">
+      <app-btn-degrade [disabled]="form.invalid" [text]="'Filtrar'" (click)="filterTable()" class="ml-2 mt-2"></app-btn-degrade>
+    </div>
+  </div>
+
+</form>
+
+
+
+
     <!-- Desktop view: Display trades in a table -->
     <div class="overflow-auto rounded-lg shadow hidden md:block">
       <table class="w-full" *ngIf="lastElements.length > 0">
@@ -103,8 +152,7 @@
     </div>
     <!-- Mobile view: Display trades as cards -->
     <div *ngIf="lastElements.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-      <div id="tarjetas" *ngFor="let trade of lastElements"
-        class="bg-white space-y-2 p-4 rounded-lg shadow relative">
+      <div id="tarjetas" *ngFor="let trade of lastElements" class="bg-white space-y-2 p-4 rounded-lg shadow relative">
         <div class="flex items-center space-x-2 text-sm">
           <div>
             <a href="#" class="text-blue font-bold hover:underline">Nro: {{ trade.block.numBlock }}</a>
