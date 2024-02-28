@@ -62,14 +62,14 @@ export class BlockListComponent implements OnInit {
   sortOrder: 'asc' | 'desc' = 'asc';
   rotationAngles: { [key: string]: number } = {};
 
-  constructor(
-    private myDataService: MyDataService,
-    private fb: FormBuilder
-  ) {
+  constructor(private myDataService: MyDataService, private fb: FormBuilder) {
     this.form = this.fb.group({
-      inputfilter: ['',[ Validators.min(0), Validators.pattern('[0-9]*'), Validators.max(48)] ],
-      inputMinPrice: ['', [ Validators.min(0), Validators.pattern('[0-9]*')],],
-      inputMaxPrice: ['',[ Validators.min(0), Validators.pattern('[0-9]*')],],
+      inputfilter: [
+        '',
+        [Validators.min(0), Validators.pattern('[0-9]*'), Validators.max(48)],
+      ],
+      inputMinPrice: ['', [Validators.min(0), Validators.pattern('[0-9]*')]],
+      inputMaxPrice: ['', [Validators.min(0), Validators.pattern('[0-9]*')]],
       inputMinDate: [''],
       inputMaxDate: [''],
     });
@@ -119,6 +119,7 @@ export class BlockListComponent implements OnInit {
                 return blockHistories.length > 0 ? blockHistories[0] : null;
               })
               .filter((history) => history !== null) as Price[];
+            this.allElements = this.lastElements;
             // Ordenar lastElements por el número de bloque
             this.lastElements.sort((a, b) => {
               const numBlockA = parseInt(a.block.numBlock);
@@ -202,33 +203,43 @@ export class BlockListComponent implements OnInit {
   }
 
   filterTable() {
-    const filterValue = this.normalizeString(
-      this.inputfilter.toLowerCase().trim()
-    );
+    const inputfilter = this.form.get('inputfilter')?.value;
+    const inputMinPrice = this.form.get('inputMinPrice')?.value;
+    const inputMaxPrice = this.form.get('inputMaxPrice')?.value;
+    const inputMinDate = this.form.get('inputMinDate')?.value;
+    const inputMaxDate = this.form.get('inputMaxDate')?.value;
 
-    if (!filterValue) {
-      this.elements = [...this.allElements];
-    } else {
-      this.elements = this.allElements.filter((element) =>
-        Object.values(element).some(
-          (value) =>
-            value &&
-            this.normalizeString(value.toString().toLowerCase()).includes(
-              filterValue
-            )
-        )
-      );
-    }
+    this.lastElements = this.allElements.filter((element) => {
+      let passesFilter = true;
 
-    if (this.elements.length === 0) {
-      this.elements = [
-        // {
-        //   block: 'no coincide con la búsqueda',
-        //   regDate: new Date(),
-        //   value: 0,
-        // },
-      ];
-    }
+      // Filter by block
+      if (inputfilter && element.block.numBlock !== inputfilter) {
+        passesFilter = false;
+      }
+
+      // Filter by minimum price
+      if (inputMinPrice && element.value < inputMinPrice) {
+        passesFilter = false;
+      }
+
+      // Filter by maximum price
+      if (inputMaxPrice && element.value > inputMaxPrice) {
+        passesFilter = false;
+      }
+      console.log(element.regDate);
+      console.log(inputMinDate);
+      // Filter by minimum date
+      if (inputMinDate && new Date(element.regDate) < new Date(inputMinDate)) {
+        passesFilter = false;
+      }
+
+      // Filter by maximum date
+      if (inputMaxDate && new Date(element.regDate) > new Date(inputMaxDate)) {
+        passesFilter = false;
+      }
+
+      return passesFilter;
+    });
   }
 
   normalizeString(str: string): string {
