@@ -18,14 +18,6 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
-interface CombinedElement {
-  idBlock:string,
-  number:string,
-  startTimeBlock:String,
-  value: number;
-  startTime: string;
-  id:string
-}
 
 @Component({
   selector: 'app-block-list',
@@ -47,7 +39,7 @@ export class BlockListComponent implements OnInit {
   allElements: Price[] = [];
   lastElements: Price[] = [];
   blocks: Block[] = [];
-  combinedElements: CombinedElement[] = [];
+
   //form to filter the table
   form: FormGroup;
   // lógica transición flecha y ordenamiento
@@ -101,7 +93,6 @@ export class BlockListComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (response: ApiResponse<Price[]>) => {
-          console.log(response);
           if (Array.isArray(response.data)) {
             this.allElements = response.data;
 
@@ -142,7 +133,7 @@ export class BlockListComponent implements OnInit {
   }
   // // Función para combinar this.blocks con this.lastElements
   // combineElements() {
-  //   this.combinedElements = this.blocks.map((block) => {
+  //   this.Prices = this.blocks.map((block) => {
   //     const lastHistory = this.lastElements.find(
   //       (history) => history?.idBlock === block.id
   //     );
@@ -161,7 +152,7 @@ export class BlockListComponent implements OnInit {
   //       idBlock: block.id || '',
   //       id: lastHistory?.id || '',
   //     };
-  //   }) as CombinedElement[];
+  //   }) as Price[];
   // }
 
   marcarNegrita(key: string) {
@@ -183,7 +174,6 @@ export class BlockListComponent implements OnInit {
 
   salida() {
     if (this.click == 0) {
-      console.log('salió');
       this.entb = false;
       this.salb = true;
 
@@ -196,7 +186,6 @@ export class BlockListComponent implements OnInit {
 
   entrada() {
     if (this.click == 0) {
-      console.log('entró');
       this.entro = true;
       this.entb = true;
     }
@@ -226,8 +215,7 @@ export class BlockListComponent implements OnInit {
       if (inputMaxPrice && element.value > inputMaxPrice) {
         passesFilter = false;
       }
-      console.log(element.regDate);
-      console.log(inputMinDate);
+
       // Filter by minimum date
       if (inputMinDate && new Date(element.regDate) < new Date(inputMinDate)) {
         passesFilter = false;
@@ -263,26 +251,45 @@ export class BlockListComponent implements OnInit {
   }
 
   sortTable() {
+
     if (this.sortColumnKey) {
-      const compareFunction = (
-        a: CombinedElement,
-        b: CombinedElement,
-        key: keyof CombinedElement
-      ) => {
-        const valueA = (a[key] || '').toString().toLowerCase();
-        const valueB = (b[key] || '').toString().toLowerCase();
+      const compareFunction = (a: Price, b: Price, key: string) => {
+        const valueA = this.getPropertyValue(a, key);
+        const valueB = this.getPropertyValue(b, key);
+          if ( !isNaN(valueA)&& !isNaN(valueB)) {
+            return this.sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
+          }
+
         return this.sortOrder === 'asc'
           ? valueA.localeCompare(valueB)
           : valueB.localeCompare(valueA);
       };
 
-      if (Object.keys(this.combinedElements[0]).includes(this.sortColumnKey)) {
-        this.combinedElements.sort((a, b) =>
-          compareFunction(a, b, this.sortColumnKey as keyof CombinedElement)
+      // Verificar si la clave de clasificación es válida para un elemento de Price
+      // Si es una propiedad anidada, la función debería manejarla de manera diferente
+      const isNestedKey = this.sortColumnKey.includes('.');
+      if (isNestedKey) {
+        this.lastElements.sort((a: any, b: any) =>
+          compareFunction(a, b, this.sortColumnKey)
         );
+      } else {
+        if (Object.keys(this.lastElements[0]).includes(this.sortColumnKey)) {
+          this.lastElements.sort((a: any, b: any) =>
+            compareFunction(a, b, this.sortColumnKey as keyof Price)
+          );
+        }
       }
     }
   }
+
+  getPropertyValue(obj: any, key: string): any {
+    return key
+      .split('.')
+      .reduce((o, i) => o[i], obj)
+      .toString()
+      .toLowerCase();
+  }
+
 
   toggleCardContent(element: Price) {
     // Ensure element.block is defined before accessing its properties
@@ -292,7 +299,6 @@ export class BlockListComponent implements OnInit {
         (this.rotationAngles[element.block.numBlock] || 0) + 180;
       this.visibleContent[element.block.numBlock] =
         !this.visibleContent[element.block.numBlock];
-      console.log(this.visibleContent[element.block.numBlock]);
     }
   }
 
