@@ -6,7 +6,7 @@ export const orm = await MikroORM.init({
     entitiesTs: ['src/*/*.entity.ts'],
     dbName: 'Publicidades',
     type: 'mongo',
-    clientUrl: 'mongodb+srv://lautarobrancatti:dwsbrancatti@cluster0.lcibypz.mongodb.net/',
+    clientUrl: 'mongodb+srv://lautarobrancatti:dswbrancatti@cluster0.lcibypz.mongodb.net/',
     highlighter: new MongoHighlighter(),
     debug: true,
 })
