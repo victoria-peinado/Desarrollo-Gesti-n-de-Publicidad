@@ -19,10 +19,10 @@ import { priceRouter } from './price/price.routes.js';
 import { spotRouter } from './spot/spot.routes.js';
 import { orderRouter } from './order/order.routes.js';
 
-const PORT = 3001 || process.env.PORT;
+const PORT = process.env.PORT || 3001;
 
 const app = express();
-app.use(express.json());
+app.use(express.json());//middleware para parsear el body a json
 
 app.use(cors({ origin: 'http://localhost:4200' }));
 
@@ -46,12 +46,12 @@ app.use("/api/order", orderRouter)
 //RUTA POR DEFECTO CUANDO ESTA MAL LA URL INGRESADA
 
 app.use((_, res) => {
-  res.status(404).send({ messege: "Resourse not found" })
+  res.status(404).json({ messege: "Resourse not found" })
 })
 
 // LISTEN SERVIDOR
 
 app.listen(PORT, () => {
-  console.log("Server running in http:\\localhost:3001")
+  console.log("Server running in http:\\localhost:" + PORT)
 })
 
