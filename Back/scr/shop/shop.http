@@ -1,18 +1,22 @@
 ### GET ALL
+# @name allShops
 GET http://localhost:3001/api/shop
  
  
 ### ID
-@id = 654ae5ac10991fd247130c51
+@idFirst={{allShops.response.body.data[0].id}}
+@idOwner={{allShops.response.body.data[0].owner}}
 
-###GET ONE
-GET http://localhost:3001/api/shop/{{id}}
+@id={{createShop.response.body.data.id}}
+
+###GET ONE 
+GET http://localhost:3001/api/shop/33333333333
 
 
 
 
 ###GET BY OWNER ID
-GET http://localhost:3001/api/shop/owner/654ae5cd10991fd247130c52
+GET http://localhost:3001/api/shop/owner/{{idOwner}}
 
 
 
@@ -29,7 +33,7 @@ Content-Type: application/json
     "usualPaymentForm": "Efectivo",
     "type": "Otro",
     "contact": "654ad0d341b4fa27919f8af8",
-    "owner": "65c08f2dad3fb943fc5cb294"
+    "owner": "65c08f54ad3fb943fc5cb296"
 }
 
 
@@ -54,31 +58,13 @@ Content-Type: application/json
 
 
 ### DELETE
-DELETE http://localhost:3001/api/shop/654ae79c10991fd247130c53
-
-
-
-
-### 
-POST http://localhost:3001/api/shop
-Content-Type: application/json
-
-{
-    "fantasyName": "Moda Creativa Boutique",
-    "address": "Calle Elegante 432",
-    "billingType": "Monotributo",
-    "mail": "moda@creativaboutique.com",
-    "usualPaymentForm": "Tarjeta de Débito",
-    "type": "Empresa",
-    "contact": "654ad0d341b4fa27919f8af8",
-    "owner": "65c08f45ad3fb943fc5cb295"
-}
+DELETE http://localhost:3001/api/shop/{{id}}
 
 
 ### get shop by cuit and fantasyName
-GET http://localhost:3001/api/shop/search?fantasyName=Transporte%20DJJB&cuit=23224249969
+GET http://localhost:3001/api/shop/search?fantasyName=Librería Normita 8&cuit=33333333333
 Content-Type: application/json
 
 ### get shops by cuit
-GET http://localhost:3001/api/shop/25440249659
+GET http://localhost:3001/api/shop/33333333333
 Content-Type: application/json

@@ -13,8 +13,8 @@ POST http://localhost:3001/api/spot
 Content-Type: application/json
 
 {
-    "name": "Audio_TransporteDJJB_10-23",
-    "long": "00:00:54",
+    "name": "Audio",
+    "long": 7,
     "order": ""
 
 }
@@ -24,8 +24,8 @@ PUT http://localhost:3001/api/spot/{{id}}
 Content-Type: application/json
 
 {
-    "name": "Audio_PuntoConsumo_11-23",
-    "long": "",
+    "name": "Audio",
+    "long": 0,
     "order": ""
 
 }

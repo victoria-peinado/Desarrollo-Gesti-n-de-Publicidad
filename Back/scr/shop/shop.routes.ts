@@ -7,7 +7,7 @@ shopRouter.get('/search', getShopsByCuitAndFantasyName);
 shopRouter.get('/', sanitizeShopInput, findAll)
 shopRouter.post('/', sanitizeShopInput, add)
 shopRouter.get('/:cuit', getShopsByCuit);
-shopRouter.get('/:id', sanitizeShopInput, findOne)
+shopRouter.get('/:id', sanitizeShopInput, findOne)//no se esta usando
 shopRouter.get('/owner/:ownerId', getShopsByOwnerId)
 shopRouter.put('/:id', sanitizeShopInput, update)
 shopRouter.patch('/:id', sanitizeShopInput, update)

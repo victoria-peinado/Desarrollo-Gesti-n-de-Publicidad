@@ -23,7 +23,7 @@ POST http://localhost:3001/api/price/all/
 Content-Type: application/json
 
 {
-    "value": 150
+    "value": 3000
 }
 
 

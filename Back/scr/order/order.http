@@ -2,7 +2,7 @@
 GET http://localhost:3001/api/order
  
 ## ID
-@id = 654e406e97ea9f854e9fa08e
+@id = {{createorder.response.body.data.id}}   
  
 ### GET ONE
 GET http://localhost:3001/api/order/{{id}}
@@ -32,8 +32,8 @@ Content-Type: application/json
         "obs": "",
         "showName": "",
         "month": "MM-AAAA",
-        "contract": "",
-        "spot": ""
+        "contract": "654aefd5c3991db2b0d46152",
+        "spot": "654e3fbc97ea9f854e9fa08b"
 
 }
 
