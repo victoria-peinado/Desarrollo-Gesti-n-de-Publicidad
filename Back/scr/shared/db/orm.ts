@@ -11,7 +11,7 @@ export const orm = await MikroORM.init({
     debug: true,
 })
 
-export const syncShema =async () => {
+export const syncShema =async () => {//no se usa en mango
     const generator = orm.getSchemaGenerator()
      /*
     await generator.dropSchema()

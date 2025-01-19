@@ -1,32 +1,38 @@
 ### RUTAS DICEN BLOCKS en lugar de BLOCK
 
-### obtener todos los block
+### get all blocks
+# @name allBlocks
 GET http://localhost:3001/api/block
 
-    
-### obtener un block
-GET http://localhost:3001/api/block/654ea00bb050bda4bf4b6876
+@id ={{allBlocks.response.body.data[0].id}}    
+### Get one block
+GET http://localhost:3001/api/block/{{id}}
 
-### CREAR TODOS LOS BLOQUES
+
+### Creater a block
+POST http://localhost:3001/api/block
+Content-Type: application/json
+{
+  "numBlock": "30",
+  "startTime": "12:30:00"
+}
+
+### Creater all blocks
 POST http://localhost:3001/api/block/all
 Content-Type: application/json
 
 {
-  "startTime": "12:30:00",
-   "number": 30
+ 
 }
 
 ### modificar un block(PUT - recurso completo e idempotente)
-PUT http://localhost:3001/api/block/654ea00bb050bda4bf4b6885
-
+PUT http://localhost:3001/api/block/{{id}}
 {
     "numBlock": "99",
     "startTime": "16:10:00"
 }
 
 
-
-@id = 654cf9fe2a21a1f7dc60abc3
 ### modificar un block (PATCH - recurso parcial)
 PATCH http://localhost:3000/api/block/{{id}}
 Content-Type: application/json
