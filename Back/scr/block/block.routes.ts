@@ -9,5 +9,6 @@ blockRouter.post('/all', sanitizeBlockInput, addAll) // CREA TODOS LOS BLOQUES
 blockRouter.post('/', sanitizeBlockInput, add)//cera uno solo
 blockRouter.put('/:id', sanitizeBlockInput, update) // Agrega el middleware a la ruta PUT
 blockRouter.patch('/:id', sanitizeBlockInput, update)
-// blockRouter.delete('/:id', remove)
 blockRouter.delete('/deleteall/', removeAll) // BORRA TODOS LOS BLOQUES
+blockRouter.delete('/:id', remove)
+

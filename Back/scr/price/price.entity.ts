@@ -8,10 +8,10 @@ export class Price extends BaseEntity{
   @Property({nullable:false}) 
   value!: number              
 
-  @Property({type: DateTimeType})
+  @Property({type: DateTimeType, nullable:false})
   regDate = new Date()
 
-  @ManyToOne(() => Block)
+  @ManyToOne(() => Block,{ nullable: false })
   block!: Rel<Block> 
 }
 

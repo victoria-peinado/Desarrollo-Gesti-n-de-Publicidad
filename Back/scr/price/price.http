@@ -1,8 +1,10 @@
 ### findAll
+# @name findAll
 GET http://localhost:3001/api/price  
 
 ## ID
 @id = {{createprice.response.body.data.id}}
+@block= {{findAll.response.body.data[0].block.id}}
  
 ### GET ONE
 GET http://localhost:3001/api/price/{{id}}
@@ -14,7 +16,7 @@ Content-Type: application/json
 
 {
     "value": 100.00,
-    "block": "654d5510485fd4896e9edf7e"
+    "block": "{{block}}"
 }
 
 
@@ -35,8 +37,8 @@ PUT http://localhost:3001/api/price/{{id}}
 Content-Type: application/json
 
 {
-     "value": 100.00,
-     "block": "654d5510485fd4896e9edf7e"
+     "value": 200.00,
+     "block":   "{{block}}"
 }
 
 

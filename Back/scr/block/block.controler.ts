@@ -25,7 +25,7 @@ function sanitizeBlockInput(req: Request, res: Response, next: NextFunction) {
 
 async function findAll(req: Request, res: Response) {
   try {
-    const blocks = await em.find(Block, {});
+    const blocks = await em.find(Block, {},{populate:['prices']});
     res.status(200).json({ message: 'Find all Blocks', data: blocks });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -67,7 +67,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const block = em.getReference(Block, id);
+    const block = await em.findOneOrFail(Block, { id }, { populate: ['prices'] });
     await em.removeAndFlush(block);
     res.status(200).json({ message: 'Block deleted successfully', data: block });
   } catch (error: any) {
@@ -77,10 +77,10 @@ async function remove(req: Request, res: Response) {
 
 async function removeAll(req: Request, res: Response) {
   try {
-    const blocks = await em.find(Block , {})
-    console.log(blocks)
+    const blocks = await em.find(Block, {}, { populate: ['prices'] });
     em.remove(blocks)
     await em.flush()
+
     res.status(200).json({message: 'All blocks removed', data: blocks})
   }catch (error: any) {
         res.status(500).json({message: error.message})
