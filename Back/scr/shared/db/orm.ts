@@ -5,7 +5,7 @@ import { config } from "dotenv";
 //env variables
 config()
 const databaseName = process.env.DATABASE_NAME;
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = process.env.CONNECTION_STRING;
 
 
 export const orm = await MikroORM.init({
