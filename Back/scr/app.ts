@@ -18,22 +18,28 @@ import { blockRouter } from './block/block.routes.js';
 import { priceRouter } from './price/price.routes.js';
 import { spotRouter } from './spot/spot.routes.js';
 import { orderRouter } from './order/order.routes.js';
+import { config } from 'dotenv';
 
-const PORT = process.env.PORT || 3001;
+//env variables
+config()
+const port = process.env.PORT; 
+const front = process.env.FRONTEND_URL;
 
+//server
 const app = express();
+
+//base middlewares
 app.use(express.json());//middleware para parsear el body a json
+app.use(cors({ origin: front }));//acepts request from this origin only(frontend)
 
-app.use(cors({ origin: 'http://localhost:4200' }));
-
-//luego de los middlewares base
-app.use((req, res, next) => {
+//orm middleware
+app.use((req, res, next) => {//after base middlewares and before routes and bisiness milddlewares
   RequestContext.create(orm.em, next)
 })
 
-//antes de la tura y los middlewares de negocio
+//bisiness milddlewares as autentication or roles data validation
 
-
+//routes
 app.use("/api/contact", contactRouter)
 app.use("/api/contract", contractRouter)
 app.use("/api/shop", shopRouter)
@@ -43,7 +49,7 @@ app.use("/api/price", priceRouter)
 app.use("/api/spot", spotRouter)
 app.use("/api/order", orderRouter)
 
-//RUTA POR DEFECTO CUANDO ESTA MAL LA URL INGRESADA
+// default route for not found resources
 
 app.use((_, res) => {
   res.status(404).json({ messege: "Resourse not found" })
@@ -51,7 +57,7 @@ app.use((_, res) => {
 
 // LISTEN SERVIDOR
 
-app.listen(PORT, () => {
-  console.log("Server running in http:\\localhost:" + PORT)
+app.listen(port, () => {
+  console.log("Server running in http:\\localhost:" + port)
 })
 

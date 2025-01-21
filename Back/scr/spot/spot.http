@@ -14,7 +14,7 @@ Content-Type: application/json
 
 {
     "name": "Audio",
-    "long": 7,
+    "long": "00:00:54",
     "order": ""
 
 }
@@ -25,7 +25,7 @@ Content-Type: application/json
 
 {
     "name": "Audio",
-    "long": 0,
+    "long": "00:00:54",
     "order": ""
 
 }

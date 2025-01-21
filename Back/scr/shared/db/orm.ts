@@ -1,12 +1,19 @@
 import { MikroORM } from "@mikro-orm/core";
 import { MongoHighlighter } from "@mikro-orm/mongo-highlighter";
+import { config } from "dotenv";
+
+//env variables
+config()
+const databaseName = process.env.DATABASE_NAME;
+const databaseUrl = process.env.DATABASE_URL;
+
 
 export const orm = await MikroORM.init({
     entities: ['dist/*/*.entity.js'],
     entitiesTs: ['src/*/*.entity.ts'],
-    dbName: 'Publicidades',
+    dbName: databaseName,
     type: 'mongo',
-    clientUrl: 'mongodb+srv://lautarobrancatti:dswbrancatti@cluster0.lcibypz.mongodb.net/',
+    clientUrl: databaseUrl,
     highlighter: new MongoHighlighter(),
     debug: true,
 })
