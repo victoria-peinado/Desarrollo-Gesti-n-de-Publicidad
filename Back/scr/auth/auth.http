@@ -1,0 +1,56 @@
+### RUTAS DICEN BLOCKS en lugar de BLOCK
+
+### get all auths
+# @name allUsers
+GET http://localhost:3001/api/auth
+
+@id ={{allUsers.response.body.data[0].id}}    
+### Get one auth
+GET http://localhost:3001/api/auth/{{id}}
+
+
+### Creater a auth
+POST http://localhost:3001/api/auth/register
+Content-Type: application/json
+
+{
+ "username": "admin2",
+  "password": "admin2",
+  "role": "admin"
+}
+
+
+### modificar un auth(PUT - recurso completo e idempotente)
+PUT http://localhost:3001/api/auth/{{id}}
+
+{
+    "username": "admin",
+    "password": "admin",
+    "role": "admin"
+}
+
+
+# ### modificar un auth (PATCH - recurso parcial) #no esta implementado
+# PATCH http://localhost:3000/api/auth/{{id}}
+
+# Content-Type: application/json
+
+# {
+#   "username": "admin",
+#   "password": "admin",
+#   "role": "admin"
+# }
+
+### login
+POST http://localhost:3001/api/auth/login
+Content-Type: application/json
+
+{
+ "username": "admin",
+ "password": "admin"
+}
+
+### delete a auth
+DELETE http://localhost:3001/api/auth/{{id}}
+
+

@@ -18,6 +18,7 @@ import { blockRouter } from './block/block.routes.js';
 import { priceRouter } from './price/price.routes.js';
 import { spotRouter } from './spot/spot.routes.js';
 import { orderRouter } from './order/order.routes.js';
+import { authRouter } from './auth/auth.routes.js';
 import { config } from 'dotenv';
 
 //env variables
@@ -48,6 +49,7 @@ app.use("/api/block", blockRouter)
 app.use("/api/price", priceRouter)
 app.use("/api/spot", spotRouter)
 app.use("/api/order", orderRouter)
+app.use("/api/auth", authRouter)
 
 // default route for not found resources
 
