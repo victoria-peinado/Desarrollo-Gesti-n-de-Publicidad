@@ -3,11 +3,11 @@ import { findAll, findOne, add, update, remove, sanitizeContractInput, getByShop
 
 export const contractRouter = Router()
 
-contractRouter.get('/',sanitizeContractInput, findAll)
-contractRouter.get('/:id',sanitizeContractInput, findOne)
-contractRouter.get('/shop/:idShop', sanitizeContractInput, getByShop)
+contractRouter.get('/',findAll)
+contractRouter.get('/:id', findOne)
+contractRouter.get('/shop/:idShop',  getByShop)
 contractRouter.post('/',sanitizeContractInput, add)
 contractRouter.put('/:id', sanitizeContractInput,  update)
 contractRouter.patch('/:id', sanitizeContractInput, update)
-contractRouter.delete('/:id', sanitizeContractInput, remove)
+contractRouter.delete('/:id',  remove)
 

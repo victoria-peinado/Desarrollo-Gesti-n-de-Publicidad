@@ -4,9 +4,9 @@ import { findAll, findOne, add, update, remove, sanitizePriceInput, addAllPrices
 export const priceRouter = Router()
 
 priceRouter.get('/', findAll)
-priceRouter.get('/:id',sanitizePriceInput, findOne)
+priceRouter.get('/:id', findOne)
 priceRouter.post('/',sanitizePriceInput, add)
 priceRouter.post('/all/', sanitizePriceInput, addAllPrices)
 priceRouter.put('/:id',sanitizePriceInput, update)
 priceRouter.patch('/:id',sanitizePriceInput, update)
-priceRouter.delete('/:id', sanitizePriceInput, remove)
+priceRouter.delete('/:id',  remove)
