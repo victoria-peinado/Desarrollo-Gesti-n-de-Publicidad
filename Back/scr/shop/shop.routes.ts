@@ -5,7 +5,7 @@ export const shopRouter = Router()
 
 shopRouter.get('/search', getShopsByCuitAndFantasyName);
 shopRouter.get('/owner/:ownerId', getShopsByOwnerId); 
-shopRouter.get('/:cuit(\\d{11})', getShopsByCuit); // CUIT: exactamente 11 dígitos
+shopRouter.get('/:cuit(\\d{11})', getShopsByCuit); // CUIT: exactamente 11  dígitos
 shopRouter.get('/:id([a-zA-Z0-9-]+)',  findOne); // ID: UUID o alfanumérico  
 shopRouter.get('/', findAll);
 shopRouter.post('/', sanitizeShopInput, add)     
