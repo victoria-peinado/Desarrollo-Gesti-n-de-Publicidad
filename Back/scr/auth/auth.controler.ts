@@ -84,7 +84,7 @@ const login= async (req: Request, res: Response) => {
         {id: auth.id, role: auth.role}, 
         secret, 
         {expiresIn: '1h'})
-      res.status(200).json({message: 'User logged in successfully', data: token});
+      res.status(200).json({message: 'User logged in successfully', data: {  token: token }});
     }else{
       res.status(401).json({message: 'Invalid credentials', data:{valid: valid, secret: secret}});
     }
@@ -102,6 +102,7 @@ async function findOne(req: Request, res: Response) {
   }
 }
 const logout= async (req: Request, res: Response) => {
+  res.status(200).json({message: 'User logged out successfully'});
 }
 
 
@@ -142,4 +143,4 @@ async function remove(req: Request, res: Response) {
 
 
 
-export {sanitizeAuthInput, findAll, findOne, add, update, remove,  login, logout}
+export {sanitizeAuthInput, findAll, findOne, add, update, remove,  login, logout, verifyToken}

@@ -42,12 +42,21 @@ PUT http://localhost:3001/api/auth/{{id}}
 # }
 
 ### login
+# @name login
 POST http://localhost:3001/api/auth/login
 Content-Type: application/json
 
 {
  "username": "admin",
  "password": "admin"
+}
+
+### logout
+POST http://localhost:3001/api/auth/logout
+Authorization: Bearer {{login.response.body.data.token}}
+Content-Type: application/json
+
+{
 }
 
 ### delete a auth
