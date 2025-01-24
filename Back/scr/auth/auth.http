@@ -14,9 +14,9 @@ POST http://localhost:3001/api/auth/register
 Content-Type: application/json
 
 {
- "username": "admin2",
-  "password": "admin2",
-  "role": "admin"
+ "username": "user",
+  "password": "user",
+  "role": "user"
 }
 
 
@@ -47,10 +47,9 @@ POST http://localhost:3001/api/auth/login
 Content-Type: application/json
 
 {
- "username": "admin",
- "password": "admin"
+ "username": "user",
+ "password": "user"
 }
-
 ### logout
 POST http://localhost:3001/api/auth/logout
 Authorization: Bearer {{login.response.body.data.token}}

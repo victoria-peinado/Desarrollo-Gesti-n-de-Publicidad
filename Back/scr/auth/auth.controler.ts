@@ -47,7 +47,7 @@ async function verifyToken(req: Request, res: Response, next: NextFunction) {
 
       try {
         const decodeduser = await jwt.verify(token, secret); // Usamos await para esperar la verificación
-        //req.user= decodeduser;
+        Object.assign(req, { user: decodeduser });
         next(); // Continúa con la siguiente función
       } catch (err) {
         return res.status(403).json({ message: 'Invalid token' });
@@ -59,6 +59,19 @@ async function verifyToken(req: Request, res: Response, next: NextFunction) {
     return res.status(401).json({ message: 'Authorization header missing or incorrect format' });
   }
 }
+
+
+async function authorizeUserRoles(req: Request, res: Response, next: NextFunction, ...allowedRoles: string[]): Promise<void> {
+  console.log(req.user)
+  const userRole = req.user?.role || ''; 
+  if (!allowedRoles.includes(userRole)) {
+    res.status(403).json({ message: 'Access denied' });
+    return;
+  }
+
+  next();
+}
+
 async function add(req: Request, res: Response) {
    try {
     const auth = em.create(User, req.body.sanitizeInput);
@@ -143,4 +156,4 @@ async function remove(req: Request, res: Response) {
 
 
 
-export {sanitizeAuthInput, findAll, findOne, add, update, remove,  login, logout, verifyToken}
+export {sanitizeAuthInput, findAll, findOne, add, update, remove,  login, logout, verifyToken, authorizeUserRoles}
