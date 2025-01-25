@@ -14,9 +14,8 @@ POST http://localhost:3001/api/auth/register
 Content-Type: application/json
 
 {
- "username": "user",
-  "password": "user",
-  "role": "user"
+    "username": "user",
+   "role": "user"
 }
 
 
@@ -48,7 +47,7 @@ Content-Type: application/json
 
 {
  "username": "user",
- "password": "user"
+ "password": "user"  
 }
 ### logout
 POST http://localhost:3001/api/auth/logout
