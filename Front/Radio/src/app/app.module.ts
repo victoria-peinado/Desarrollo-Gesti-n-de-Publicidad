@@ -26,6 +26,7 @@ import { ShopComponent } from './shop/shop.component';
 import { BlockListComponent } from './block-list/block-list.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { EditShopComponent } from './edit-shop/edit-shop.component';
+import { FeedbackNotificationComponent } from './feedback-notification/feedback-notification.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { EditShopComponent } from './edit-shop/edit-shop.component';
     ShopComponent,
     BlockListComponent,
     ConfirmationDialogComponent,
-    EditShopComponent
+    EditShopComponent,
+    FeedbackNotificationComponent
   ],
   imports: [
     BrowserModule,
