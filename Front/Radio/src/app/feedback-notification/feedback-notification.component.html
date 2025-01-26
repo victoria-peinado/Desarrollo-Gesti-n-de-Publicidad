@@ -1,7 +1,13 @@
-<div class="notification" [ngClass]="{'show': showNotification}" [ngStyle]="{ 'background-color': status === 'success' ? '#d4edda' : '#f8d7da', 'color': status === 'success' ? '#155724' : '#721c24' }">
-    <span class="text">{{ message }}</span>
-    <button class="close-btn" (click)="hideNotification()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-  
+<div
+  class="notification"
+  [ngClass]="{ show: showNotification }"
+  [ngStyle]="{
+    'background-color': status === 'success' ? '#d4edda' : '#f8d7da',
+    color: status === 'success' ? '#155724' : '#721c24'
+  }"
+>
+  <span class="text">{{ message }}</span>
+  <button class="close-btn" (click)="hideNotification()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
