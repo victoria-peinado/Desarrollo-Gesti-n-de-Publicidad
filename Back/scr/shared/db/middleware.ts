@@ -1,6 +1,7 @@
 
 import { Request, Response, NextFunction } from 'express'
 import { z } from 'zod';
+import { fromZodError } from 'zod-validation-error';
 
 // ObjectId Validation for MongoDB IDs
 const ObjectIdSchema = z
@@ -18,11 +19,8 @@ const validateWithSchema = (schema: z.ZodSchema) => {
       next(); // Proceed to the next middleware
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // Return validation errors
-        const errorMessages = error.errors.map((err) => ({
-          path: err.path.join("."),
-          message: err.message,
-        }));
+        // Unify the path and message into a single string
+        const errorMessages = error.errors.map((err) => `${err.path.join(".")}: ${err.message}`);
         return res.status(400).json({ errors: errorMessages });
       }
       next(error); // Pass other errors to the error handler
