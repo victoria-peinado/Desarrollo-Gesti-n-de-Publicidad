@@ -1,2 +1,23 @@
-<button mat-raised-button [class.coloring-deg]="!disabled" [class.disabled-background]="disabled" color="primary"
-  [disabled]="disabled">{{ text }}</button>
+<button 
+  mat-raised-button
+  color="primary"
+
+  [ngClass]="{'coloring-deg': !disabled, 'disabled-background': disabled}" 
+  [disabled]="disabled"
+>
+  {{ text }}
+</button>
+
+<!-- FORMA ALTERNATIVA (EQUIVALENTE): -->
+
+<!-- <button
+  mat-raised-button
+  color="primary"
+
+  [class.coloring-deg]="!disabled"
+  [class.disabled-background]="disabled"
+  
+  [disabled]="disabled"
+>
+  {{ text }}
+</button> -->

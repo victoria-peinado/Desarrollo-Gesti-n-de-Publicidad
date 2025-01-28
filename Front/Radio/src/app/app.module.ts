@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +26,7 @@ import { ShopComponent } from './shop/shop.component';
 import { BlockListComponent } from './block-list/block-list.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { EditShopComponent } from './edit-shop/edit-shop.component';
+import { FeedbackNotificationComponent } from './feedback-notification/feedback-notification.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { EditShopComponent } from './edit-shop/edit-shop.component';
     ShopComponent,
     BlockListComponent,
     ConfirmationDialogComponent,
-    EditShopComponent
+    EditShopComponent,
+    FeedbackNotificationComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +65,7 @@ import { EditShopComponent } from './edit-shop/edit-shop.component';
     
   ],
   providers: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

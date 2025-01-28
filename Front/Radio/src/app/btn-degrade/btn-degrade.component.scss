@@ -1,20 +1,22 @@
-.coloring-deg {
-  background: #8400FF;
-  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #673AB7, #8400FF);
-  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #673AB7, #8400FF);
-  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: white;
-
-  cursor: pointer;
+button {
   transition: all 0.3s ease;
+
+  &.coloring-deg {
+    background: linear-gradient(to right, #673ab7, #b668ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to right, #673AB7, #b668ff); /* Chrome 10-25, Safari 5.1-6 */
+    color: #fff;
+    cursor: pointer;
+  }
+
+  &.disabled-background {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    pointer-events: auto; /* el [disabled] = true en HTML bloquea el elemento y la propiedad cursor: no funciona; para que funcione, es necesario esta línea */
+  }
+
+  &:hover:not(.disabled-background) {
+    transform: scale(1.05);
+  }
 }
-.disabled-background {
-  background: #ccc;
-  /* Color de fondo gris cuando está deshabilitado */
-  color: #666;
-  /* Color de texto gris cuando está deshabilitado */
-  cursor: not-allowed;
-  /* Cursor de "no permitido" cuando está deshabilitado */
-}
+
