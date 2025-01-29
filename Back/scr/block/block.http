@@ -10,11 +10,12 @@ GET http://localhost:3001/api/block/{{id}}
 
 
 ### Creater a block
+# @name createBlock
 POST http://localhost:3001/api/block
 Content-Type: application/json
 
 {
-  "numBlock": "55",
+  "numBlock": "100s0",
   "startTime": "12:30:00"
 }
 
@@ -27,26 +28,26 @@ Content-Type: application/json
 }
 
 ### modificar un block(PUT - recurso completo e idempotente)
-PUT http://localhost:3001/api/block/{{id}}
+PUT http://localhost:3001/api/block/{{createBlock.response.body.data.id}}
+Content-Type: application/json
 
 {
-    "numBlock": "99",
-    "startTime": "16:10:00"
+    "numBlock": "99s"
+
 }
 
 
-# ### modificar un block (PATCH - recurso parcial) #no esta implementado
-# PATCH http://localhost:3000/api/block/{{id}}
+### modificar un block (PATCH - recurso parcial) #no esta implementado
+PATCH http://localhost:3001/api/block/{{createBlock.response.body.data.id}}
+Content-Type: application/json
 
-# Content-Type: application/json
-
-# {
-#   "startTime": "23:30:00"
-# }
+{
+  "startTime": "23:00:00"
+}
 
 
 ### delete a block
-DELETE http://localhost:3001/api/block/{{id}}
+DELETE http://localhost:3001/api/block/{{createBlock.response.body.data.id}}
 
 
 
