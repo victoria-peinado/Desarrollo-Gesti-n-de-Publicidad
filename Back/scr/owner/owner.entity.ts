@@ -1,7 +1,7 @@
 import {Collection, Property, OneToMany, Entity} from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Shop,ShopSchema } from '../shop/shop.entity.js';
-import { validCuit } from '../shared/db/middleware.js';
+import {CuitSchema }from '../shared/db/schemas.js';
 import { z } from 'zod';
 @Entity()
 export class Owner extends BaseEntity{
@@ -33,10 +33,7 @@ export enum FiscalCondition {
 }
 
 export const OwnerSchema = z.object({
-  cuit: z
-    .string()
-    .length(11, 'CUIT must be exactly 11 digits')
-    .refine(validCuit, 'Invalid CUIT'),
+  cuit: CuitSchema,
   businessName: z.string().min(1, 'Business name is required'),
   fiscalCondition: z.nativeEnum(FiscalCondition),
   //shops: z.array(ShopSchema).optional()

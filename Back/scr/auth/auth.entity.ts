@@ -31,8 +31,5 @@ export const UserSchema = z.object({
   password: z.string().min(1, "Password is required and cannot be empty."),
   role: z.nativeEnum(UserRole), // Ensures `role` is required and must be a valid UserRole value
 });
-export const LoginSchema = z.object({
-  username: z.string().min(1, "Username is required."),
-  password: z.string().min(1, "Password is required and cannot be empty."),
-});
+export const LoginSchema = UserSchema.omit({ role: true });
 export const PartialUserSchema = UserSchema.partial();
