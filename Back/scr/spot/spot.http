@@ -1,11 +1,13 @@
 ### findAll
+# @name findAll
 GET http://localhost:3001/api/spot
 
 ## ID
+@idFirsth = {{findAll.response.body.data.0.id}} 
 @id = {{createspot.response.body.data.id}}
  
 ### GET ONE
-GET http://localhost:3001/api/spot/{{id}}
+GET http://localhost:3001/api/spot/{{idFirsth}}
 
 ### POST
 # @name createspot
@@ -14,8 +16,7 @@ Content-Type: application/json
 
 {
     "name": "Audio",
-    "long": "00:00:54",
-    "order": ""
+    "long": 1
 
 }
 
@@ -25,15 +26,20 @@ Content-Type: application/json
 
 {
     "name": "Audio",
-    "long": "00:00:54",
-    "order": ""
+    "long": 3
+
+}
+### PATCH Modifica solo los campos que se le pasan -no idempotente-
+PATCH http://localhost:3001/api/spot/{{id}}
+Content-Type: application/json
+
+{
+
+    "long": 4
 
 }
 
 
 
-
 ###DELETE
 DELETE http://localhost:3001/api/spot/{{id}}
-
-##DUDA me esta diciendo que lo borro cuando realmente no existe el spoto.

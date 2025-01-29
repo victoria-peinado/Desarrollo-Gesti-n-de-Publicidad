@@ -22,6 +22,15 @@ export class Owner extends BaseEntity{
   shops = new Collection<Shop>(this)
 }
 
+export enum FiscalCondition {
+ RESPONSABLE_INSCRIPTO = 'Responsable Inscripto',
+  CONSUMIDOR_FINAL = 'Consumidor Final',
+  MONOTRIBUTISTA = 'Monotributista',
+  IVA_EXENTO = 'IVA Exento',
+  PERSONA_NO_CATEGORIZADA = 'Persona no categorizada',
+  CLIENTE_EXTRANJERO = 'Cliente extranjero',
+  OTRO = 'Otro',
+}
 
 export const OwnerSchema = z.object({
   cuit: z
@@ -29,7 +38,7 @@ export const OwnerSchema = z.object({
     .length(11, 'CUIT must be exactly 11 digits')
     .refine(validCuit, 'Invalid CUIT'),
   businessName: z.string().min(1, 'Business name is required'),
-  fiscalCondition: z.string().min(1, 'Fiscal condition is required'),
+  fiscalCondition: z.nativeEnum(FiscalCondition),
   //shops: z.array(ShopSchema).optional()
 });
 export const ParcialOwnerSchema = OwnerSchema.partial();
