@@ -44,6 +44,6 @@ export const ContactSchema = z.object({
     }), {
       message: "Each contact must be a valid phone number or email address",
     }),
-  shops: z.array(ShopSchema).optional(), // Valida la relación con Shop
+  //shops: z.array(ShopSchema).optional(), // Valida la relación con Shop
 });
 export const ParcialContactSchema = ContactSchema.partial(); // Schema for partial updates
