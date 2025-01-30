@@ -30,7 +30,7 @@ PUT http://localhost:3001/api/order/{{id}}
 Content-Type: application/json
 
 {
-       "nameStrategy": "s",
+       "nameStrategy": "ss",
         "obs": "s",
         "showName": "s",
         "month": "03-2000",
