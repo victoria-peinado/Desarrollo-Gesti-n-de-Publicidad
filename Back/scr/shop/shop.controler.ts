@@ -105,23 +105,26 @@ async function getShopsByOwnerId(req: Request, res: Response) {
 };
 
 async function getShopsByCuitAndFantasyName(req: Request, res: Response) {
-    const { fantasyName, cuit } = req.query;
-  
-    try {
-      const owner = await em.findOne(Owner, { cuit: cuit as string });
-  
-      if (!owner) {
-        return res.status(404).json({ error: 'Owner not found for the provided cuit' });
-      }
-  
-      const shops = await em.find(Shop, { fantasyName: new RegExp(fantasyName as string, 'i'), owner });
-      res.status(200).json({messagge: 'Shops found successfully', data: shops})
-      
-    } catch (error:any) {
-      res.status(500).json({message: error.message})
+  const { fantasyName, cuit } = req.query;
+
+  try {
+    const owner = await em.findOne(Owner, { cuit: cuit as string });
+
+    if (!owner) {
+      return res.status(404).json({ error: 'Owner not found for the provided cuit' });
     }
+
+    const shops = await em.find(Shop, { fantasyName: new RegExp(fantasyName as string, 'i'), owner });
+
+    if (shops.length === 0) {
+      return res.status(404).json({ error: 'Shop not found' });
+    }
+
+    res.status(200).json({ message: 'Shops found successfully', data: shops });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 }
-  
 async function getShopsByCuit(req: Request, res: Response) {
     try {
         const cuit = req.params.cuit;

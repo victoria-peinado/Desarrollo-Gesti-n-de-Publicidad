@@ -4,7 +4,8 @@ import {Entity, Property, DateTimeType, OneToMany, ManyToOne, Collection, Rel} f
 import { Contact } from '../contact/contact.entity.js';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Contract } from '../contract/contract.entity.js';
-import { Owner } from '../owner/owner.entity.js';
+import { Owner, FiscalCondition } from '../owner/owner.entity.js';
+import {ObjectIdSchema} from '../shared/db/schemas.js';
 import { z } from 'zod';
 
 @Entity()
@@ -47,9 +48,24 @@ export class Shop extends BaseEntity{
     
 }
 
+enum PaymentMethod {
+  Efectivo = "Efectivo",
+  TarjetaDeCredito = "Tarjeta de Crédito",
+  TarjetaDeDebito = "Tarjeta de Débito",
+  Cheque = "Cheque",
+  Otro = "Otro",
+}
 
-export const ShopSchema = z.object({//TODO
-  id: z.number().int().positive(),
-  name: z.string().min(1, "El nombre es obligatorio"),
-  location: z.string().min(1, "La ubicación es obligatoria"),
+export const ShopSchema = z.object({
+  regDate: z.date().optional(), // Registration date, optional with a default value
+  fantasyName: z.string().min(1, { message: "Fantasy name is required" }), // Fantasy name, cannot be empty
+  address: z.string().min(1, { message: "Address is required" }), // Address, cannot be empty
+  billingType: z.nativeEnum(FiscalCondition), // Fiscal condition, validated against the FiscalCondition enum
+  mail: z.string().email({ message: "Invalid email address" }), // Email, must be valid
+  usualPaymentForm: z.nativeEnum(PaymentMethod).optional(), // Usual payment method, optional and validated against PaymentMethod enum
+  type: z.string().optional(), // Shop type, optional
+  contact: ObjectIdSchema, // Contact ID, must be a valid ObjectId
+  owner: ObjectIdSchema, // Owner ID, must be a valid ObjectId
 });
+export const ShopPutSchema = ShopSchema.omit({ regDate: true, contact:true, owner:true }); // Schema for full updates
+export const PartialShopSchema = ShopPutSchema.partial(); // Partial schema for updates

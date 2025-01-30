@@ -23,12 +23,18 @@ export class Owner extends BaseEntity{
 }
 
 export enum FiscalCondition {
- RESPONSABLE_INSCRIPTO = 'Responsable Inscripto',
+  RESPONSABLE_INSCRIPTO = 'Responsable Inscripto',
   CONSUMIDOR_FINAL = 'Consumidor Final',
   MONOTRIBUTISTA = 'Monotributista',
   IVA_EXENTO = 'IVA Exento',
-  PERSONA_NO_CATEGORIZADA = 'Persona no categorizada',
-  CLIENTE_EXTRANJERO = 'Cliente extranjero',
+  SUJETO_NO_CATEGORIZADO = 'Sujeto No Categorizado',
+  EXENTO = 'Exento',
+  SUJETO_EXTRANJERO = 'Sujeto Extranjero',
+  AGENTE_DE_PERCEPCION = 'Agente de Percepción',
+  AGENTE_DE_RETENCION = 'Agente de Retención',
+  NO_ALCANZADO_POR_IVA = 'No Alcanzado por IVA',
+  MONOTRIBUTISTA_SOCIAL = 'Monotributista Social',
+  AUTONOMO = 'Autónomo',
   OTRO = 'Otro',
 }
 
