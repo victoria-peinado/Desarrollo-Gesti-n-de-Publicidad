@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { t } from '@mikro-orm/core';
 import { config } from "dotenv";
+
 config() //env variables
 const databaseName = process.env.DATABASE_NAME;
 const databaseUrl = process.env.CONNECTION_STRING;
@@ -15,6 +16,8 @@ const secret = process.env.JWT_SECRET;
 
 const em = orm.em
 em.getRepository(User)
+
+
 
 
 

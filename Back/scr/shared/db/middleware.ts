@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { z, ZodError } from 'zod';
 import { ObjectIdSchema ,CuitSchema} from './schemas.js';
-
+import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 
 
 // Zod validation middleware
@@ -50,4 +50,30 @@ const validateCuit = (param: string) => {
   };
 };
 
-export { validateWithSchema, validateObjectId,  validateCuit };  
+export function createValueChecker<T extends object>(repository: EntityRepository<T>, fieldName: keyof T) {
+  return async (value: any): Promise<boolean> => {
+    const query = { [fieldName]: value } as FilterQuery<T>; 
+    const result = await repository.findOne(query);
+    return !!result;
+  };
+}
+const createFieldExistenceMiddleware = (repository: any, field: string) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const value = req.body[field]; // Obtener el valor del campo desde el cuerpo de la solicitud
+
+    if (!value) {
+      return res.status(400).json({ message: `Missing ${field}` });  // Si no hay valor, retornar error
+    }
+
+    // Verificar si el valor existe en la base de datos
+    const valueExists = await createValueChecker(repository, field)(value);
+
+    if (valueExists) {
+      return res.status(400).json({ message: `${field} already exists` });  // Si existe, retornar error
+    }
+
+    next();  // Si no existe, continuar con el siguiente middleware
+  };
+};
+
+export { validateWithSchema, validateObjectId,  validateCuit ,createFieldExistenceMiddleware};  
