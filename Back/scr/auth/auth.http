@@ -15,7 +15,7 @@ POST http://localhost:3001/api/auth/register
 Content-Type: application/json
 
 {
-    "username": "admin",
+    "username": "admin7",
     "password": "admin2",
     "role": "admin"
 }

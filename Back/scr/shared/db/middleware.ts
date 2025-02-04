@@ -50,23 +50,37 @@ const validateCuit = (param: string) => {
   };
 };
 
-export function createValueChecker<T extends object>(repository: EntityRepository<T>, fieldName: keyof T) {
-  return async (value: any): Promise<boolean> => {
-    const query = { [fieldName]: value } as FilterQuery<T>; 
+export function createValueChecker<T extends { id?: any }>(
+  repository: EntityRepository<T>,
+  fieldName: keyof T
+) {
+  return async (value: any, currentId?: any): Promise<boolean> => {
+    const query: FilterQuery<T> = { [fieldName]: value } as FilterQuery<T>;
     const result = await repository.findOne(query);
-    return !!result;
+
+    if (result) {
+      // Si se proporciona currentId y coincide con el id del resultado, es el mismo registro
+      if (currentId && result.id === currentId) {
+        return false; // No se considera una duplicación
+      }
+      return true; // Existe otro registro con el mismo valor
+    }
+
+    return false; // No existe ningún registro con el valor proporcionado
   };
 }
 const createFieldExistenceMiddleware = (repository: any, field: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const value = req.body[field]; // Obtener el valor del campo desde el cuerpo de la solicitud
-
+    const entityId = req.params.id; // Obtener el ID del objeto desde los parámetros de la ruta
     if (!value) {
       return res.status(400).json({ message: `Missing ${field}` });  // Si no hay valor, retornar error
     }
 
-    // Verificar si el valor existe en la base de datos
-    const valueExists = await createValueChecker(repository, field)(value);
+    
+
+    // Verificar si el valor existe en la base de datos, excluyendo el objeto actual
+    const valueExists = await createValueChecker(repository, field)(value, entityId);
 
     if (valueExists) {
       return res.status(400).json({ message: `${field} already exists` });  // Si existe, retornar error
@@ -82,18 +96,14 @@ const createFieldExistenceMiddleware = (repository: any, field: string) => {
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = req.body[field]; // Obtener el ID del campo
-
     if (!id) {
       return res.status(400).json({ message: `Missing ${field}` });
     }
-
     try {
       const entityExists = await repository.findOne(id);
-
       if (!entityExists) {
         return res.status(404).json({ message: `The provided ${field} does not exist.` });
       }
-
       next();
     } catch (error) {
       return res.status(500).json({ message: `Error validating ${field}` });

@@ -36,6 +36,7 @@ const em = orm.em;
     validateObjectId("id"), // Validate ObjectId
     validateWithSchema(UserSchema),
     sanitizeAuthInput, // Validate user data
+    createFieldExistenceMiddleware(em.getRepository(User), 'username'),
     update // Controller to update user
   );
 
@@ -44,6 +45,7 @@ const em = orm.em;
   validateObjectId("id"), // Validate ObjectId
   validateWithSchema(PartialUserSchema), // Validate with the partial schema
   sanitizeAuthInput, // Sanitize and hash password
+  createFieldExistenceMiddleware(em.getRepository(User), 'username'),
   update // Controller to update user
 );
 
