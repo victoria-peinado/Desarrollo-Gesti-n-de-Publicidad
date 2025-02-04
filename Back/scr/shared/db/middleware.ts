@@ -69,7 +69,7 @@ export function createValueChecker<T extends { id?: any }>(
     return false; // No existe ningún registro con el valor proporcionado
   };
 }
-const createFieldExistenceMiddleware = (repository: any, field: string) => {
+const validateUniqueField = (repository: any, field: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const value = req.body[field]; // Obtener el valor del campo desde el cuerpo de la solicitud
     const entityId = req.params.id; // Obtener el ID del objeto desde los parámetros de la ruta
@@ -110,4 +110,4 @@ const createFieldExistenceMiddleware = (repository: any, field: string) => {
     }
   };
 }
-export { validateWithSchema, validateObjectId,  validateCuit ,createFieldExistenceMiddleware,validateIdExistence};  
+export { validateWithSchema, validateObjectId,  validateCuit ,validateUniqueField,validateIdExistence};  

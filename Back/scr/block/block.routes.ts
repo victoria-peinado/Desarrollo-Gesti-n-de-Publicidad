@@ -1,54 +1,21 @@
 import { Router } from 'express'
 import { sanitizeBlockInput, findAll, findOne, add, update, remove, addAll, removeAll } from './block.controler.js'
 import { BlockSchema, ParcialBlockSchema } from './block.entity.js'
-import { validateWithSchema , validateObjectId} from '../shared/db/middleware.js'
+import { validateWithSchema , validateObjectId,validateUniqueField} from '../shared/db/middleware.js'
+import { orm } from '../shared/db/orm.js'; // for the unique field middleware
+import { Block } from './block.entity.js'
+
+
+const em = orm.em;
+const unique= validateUniqueField(em.getRepository(Block), "nroBlock");
 
 export const blockRouter = Router()
 
-// Get all blocks
 blockRouter.get('/', findAll)
-
-// Get a block by ID, validating the ObjectId
 blockRouter.get('/:id', validateObjectId('id'), findOne)
-
-// Create multiple blocks
-blockRouter.post(
-  '/all',
-    addAll  // Controller to add all blocks
-)
-
-// Create a single block
-blockRouter.post(
-  '/',
-  validateWithSchema(BlockSchema),  // Validate schema for creating a block
-  sanitizeBlockInput,  // Sanitize input data
-  add  // Controller to add the block
-)
-
-// Update a block by ID
-blockRouter.put(
-  '/:id',
-  validateObjectId('id'),  // Validate ObjectId
-  validateWithSchema(BlockSchema),  // Validate schema for updating the block
-  sanitizeBlockInput,  // Sanitize input data
-  update  // Controller to update the block
-)
-
-// Partially update a block by ID
-blockRouter.patch(
-  '/:id',
-  validateObjectId('id'),  // Validate ObjectId
-  validateWithSchema(ParcialBlockSchema),  // Validate schema for partial update
-  sanitizeBlockInput,  // Sanitize input data
-  update  // Controller to update the block
-)
-
-// Delete all blocks
+blockRouter.post('/all', addAll)
+blockRouter.post( '/', validateWithSchema(BlockSchema), sanitizeBlockInput, unique, add)
+blockRouter.put('/:id', validateObjectId('id'), validateWithSchema(BlockSchema),unique, sanitizeBlockInput, update)
+blockRouter.patch('/:id', validateObjectId('id'), validateWithSchema(ParcialBlockSchema), unique, sanitizeBlockInput, update)
 blockRouter.delete('/deleteall/', removeAll)
-
-// Delete a block by ID
-blockRouter.delete(
-  '/:id',
-  validateObjectId('id'),  // Validate ObjectId
-  remove  // Controller to delete the block
-)
+blockRouter.delete('/:id', validateObjectId('id'), remove)

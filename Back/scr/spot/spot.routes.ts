@@ -4,6 +4,7 @@ import { validateWithSchema , validateObjectId} from '../shared/db/middleware.js
 import { SpotSchema , ParcialSpotSchema} from "./spot.entity.js";
 
 
+
 export const spotRouter = Router()
 
 spotRouter.get('/',  findAll)
