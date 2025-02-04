@@ -60,3 +60,4 @@ const em = orm.em;
     authorizeUserRoles('admin', 'user'), 
     logout
   );
+  

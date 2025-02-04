@@ -76,4 +76,28 @@ const createFieldExistenceMiddleware = (repository: any, field: string) => {
   };
 };
 
-export { validateWithSchema, validateObjectId,  validateCuit ,createFieldExistenceMiddleware};  
+ function validateIdExistence<T extends object>(
+  repository: EntityRepository<T>, 
+  field: string
+) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.body[field]; // Obtener el ID del campo
+
+    if (!id) {
+      return res.status(400).json({ message: `Missing ${field}` });
+    }
+
+    try {
+      const entityExists = await repository.findOne(id);
+
+      if (!entityExists) {
+        return res.status(404).json({ message: `The provided ${field} does not exist.` });
+      }
+
+      next();
+    } catch (error) {
+      return res.status(500).json({ message: `Error validating ${field}` });
+    }
+  };
+}
+export { validateWithSchema, validateObjectId,  validateCuit ,createFieldExistenceMiddleware,validateIdExistence};  
