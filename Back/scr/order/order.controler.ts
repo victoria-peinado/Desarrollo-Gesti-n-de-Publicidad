@@ -17,6 +17,10 @@ function sanitizeOrderInput(req: Request, res: Response, next: NextFunction) {
         obs: req.body.obs,
         showName: req.body.showName,
         month: req.body.month,
+        regular: req.body.regular,
+        regStructure:req.body.regStructure,
+        cancelDate: req.body.cancelDate,
+        notRegStructure: req.body.notRegStructure,
         contract: req.body.contract,
         spot: req.body.spot
     }

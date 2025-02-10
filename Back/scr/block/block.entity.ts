@@ -3,6 +3,7 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Price, PriceSchema} from '../price/price.entity.js';
 import { isNumBlockUnique } from './block.controler.js';
 import { z } from 'zod';
+import { NumBlockSchema } from '../shared/db/schemas.js';
 
 @Entity()
 export class Block extends BaseEntity{
@@ -20,11 +21,7 @@ export class Block extends BaseEntity{
 
 // Define the BlockSchema, reusing PriceSchema
 export const BlockSchema = z.object({
-  numBlock: z
-    .string()
-    .min(1, "numBlock is required")
-    .max(100, "numBlock cannot exceed 100 characters")
-    .regex(/^\d+$/, "numBlock must be a valid number"),// Ensure numBlock is a valid number
+  numBlock: NumBlockSchema,
   startTime: z
     .string()
     .regex(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, "startTime must be in the format HH:mm:ss"), // Validate HH:mm:ss format

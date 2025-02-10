@@ -31,4 +31,26 @@ const CuitSchema = z
     return mod11 === 11 ? cuit[10] === '0' : mod11 === 10 ? false : cuit[10] === mod11.toString();
   }, 'CUIT inválido');
 
-export { ObjectIdSchema,  CuitSchema };
+  const NumBlockSchema = z
+    .string()
+    .min(1, "numBlock is required")
+    .max(100, "numBlock cannot exceed 100 characters")
+    .regex(/^\d+$/, "numBlock must be a valid number");// Ensure numBlock is a valid number
+
+const BlocksRegularSchema = z.object({
+  monday: z.array(NumBlockSchema),
+  tuesday: z.array(NumBlockSchema),
+  wednesday: z.array(NumBlockSchema),
+  thursday: z.array(NumBlockSchema),
+  friday: z.array(NumBlockSchema),
+  saturday: z.array(NumBlockSchema),
+  sunday: z.array(NumBlockSchema),
+});
+
+
+
+const TupleBlocksSchema = z.tuple([z.date(), z.array(NumBlockSchema)]);
+
+
+
+export { ObjectIdSchema,  CuitSchema, BlocksRegularSchema, TupleBlocksSchema, NumBlockSchema};

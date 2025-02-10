@@ -2,7 +2,7 @@ import { DateTimeType, Entity, ManyToOne, Rel, Property } from "@mikro-orm/core"
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Contract } from "../contract/contract.entity.js";
 import { Spot } from "../spot/spot.entity.js";
-import { ObjectIdSchema } from '../shared/db/schemas.js';
+import { ObjectIdSchema, BlocksRegularSchema, TupleBlocksSchema } from '../shared/db/schemas.js';
 import { object, z } from 'zod';
 
 @Entity()
@@ -42,6 +42,15 @@ export class Order extends BaseEntity {
      @Property({nullable:false}) //Ver si puede ser calculado o no. Podria ser en funcion de la fecha de la anterio.
      month?: string // deberia ser MM-AAAA
 
+     @Property({nullable: false})
+     regular: boolean = true
+
+     @Property({nullable: true})
+     regStructure?: [] 
+
+     @Property({nullable: true})
+     cancelDate?: Date
+
      @ManyToOne( ()=> Contract)
      contract!: Rel<Contract>
      
@@ -50,8 +59,9 @@ export class Order extends BaseEntity {
 
      //ManyToMany Deberiamos definir un nuevo objeto DIA-ORDEN-BLOQUE day_order_block{id_order, id_block, day} 
 
-     //DEBERIAMOS TENER DOS NUEVOS ATRIBUTOS - BOOL QUE SI ES REGULAR - ARRAY DE LOS REGULARES. 
-     //AGREGAR CAMPO FECHA CANCELACION
+     //DEBERIAMOS TENER DOS NUEVOS ATRIBUTOS - BOOL QUE SI ES REGULAR - ARRAY DE LOS REGULARES. LISTO
+
+     //AGREGAR CAMPO FECHA CANCELACION LISTO
 
 }
 export const OrderSchema = z.object({
@@ -66,8 +76,14 @@ export const OrderSchema = z.object({
   showName: z.string().min(1, { message: 'showName no puede estar vacío' }).optional(),
   liq: z.boolean().default(false),
   month: z.string().regex(/^\d{2}-\d{4}$/, { message: 'month debe tener el formato MM-AAAA' }).optional(),
+  regular: z.boolean().default(true),
+  regStructure: BlocksRegularSchema,
+  cancelDate: z.date().optional(),
+  //notRegStructure: TupleBlocksSchema, //ROMPE TODO O VA?
   contract: ObjectIdSchema,
   spot: ObjectIdSchema.optional(),
 });
+
+
 export const PutOrderSchema = OrderSchema.omit({contract:true, spot:true}); // Partial schema for updates
 export const PatchOrderSchema = OrderSchema.omit({contract:true, spot:true}).partial(); // Partial schema for updates
