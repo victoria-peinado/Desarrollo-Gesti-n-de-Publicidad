@@ -68,16 +68,16 @@ async function update(req: Request, res: Response)  {
 
 async function remove(req: Request, res: Response) {
     try {
-    const id = req.params.id
-    const price = em.getReference(Price, id)
-    await em.removeAndFlush(price)
-    res.status(200).json({message: 'Price deleted succesfully', data: price})
-    //duda: como verifico si realmente lo borra, porque 
-    //cuando no lo encuentra me dice que se borro igual, 
-    //pero realmente no se encontro el contacto.
-   } catch (error: any) {
-    res.status(500).json({message: error.message})
-   }
+        return res.status(403).json({ message: 'This operation is not allowed' });
+
+        // const id = req.params.id;
+        // const price = em.getReference(Price, id);
+        // await em.removeAndFlush(price);
+
+        // res.status(200).json({ message: 'Price deleted successfully', data: price });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
 async function addAllPrices (req: Request, res: Response){

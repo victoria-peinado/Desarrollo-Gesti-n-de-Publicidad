@@ -15,7 +15,7 @@ POST http://localhost:3001/api/spot
 Content-Type: application/json
 
 {
-    "name": "Audio",
+    "name": "borarr",
     "long": 1
 
 }
