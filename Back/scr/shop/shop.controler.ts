@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
 import { Shop } from "./shop.entity.js";
 import { Owner } from "../owner/owner.entity.js";
+import { Contract } from "../contract/contract.entity.js";
 
 
 const em = orm.em //entityManager
@@ -77,17 +78,18 @@ async function update(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
     try {
-    const id = req.params.id
-    const shop = await em.findOne(Shop, { id });
-    if (shop) {
+        const id = req.params.id;
+        const shop = await em.findOne(Shop, { id });
+        if (!shop) return res.status(404).json({ message: 'Shop not found' });
+
+        const isReferenced = await em.count(Contract, { shop: shop.id });
+        if (isReferenced > 0) return res.status(400).json({ message: 'Cannot delete shop because it is referenced in a contract' });
+
         await em.removeAndFlush(shop);
         res.status(200).json({ message: 'Shop deleted successfully', data: shop });
-    } else {
-        res.status(404).json({ message: 'Shop not found' });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
     }
-   } catch (error: any) {
-    res.status(500).json({message: error.message})
-   }
 }
 
 

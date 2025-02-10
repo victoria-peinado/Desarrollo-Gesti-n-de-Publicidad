@@ -14,6 +14,6 @@ export const orderRouter = Router()
 orderRouter.get('/', findAll);
 orderRouter.get('/:id', validateObjectId('id'), findOne); // Validate ID for finding an order by ID
 orderRouter.post('/', validateWithSchema(OrderSchema),validIdSpot, validIdContrac, sanitizeOrderInput, add); // Validate order schema and sanitize input before adding
-orderRouter.put('/:id', validateObjectId('id'), validateWithSchema(PutOrderSchema), validIdSpot, validIdContrac, sanitizeOrderInput, update); // Validate ID and order schema before updating
-orderRouter.patch('/:id', validateObjectId('id'), validateWithSchema(PatchOrderSchema),validIdSpot, validIdContrac, sanitizeOrderInput, update); // Validate ID and partial order schema before partial update
+orderRouter.put('/:id',validateWithSchema(PutOrderSchema), validateObjectId('id'),  validIdSpot, sanitizeOrderInput, update); // Validate ID and order schema before updating
+orderRouter.patch('/:id', validateWithSchema(PatchOrderSchema),validateObjectId('id'), validIdSpot,  sanitizeOrderInput, update); // Validate ID and partial order schema before partial update
 orderRouter.delete('/:id', validateObjectId('id'), remove); // Validate ID before deleting an order

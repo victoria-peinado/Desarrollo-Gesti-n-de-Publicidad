@@ -34,8 +34,8 @@ Content-Type: application/json
         "obs": "s",
         "showName": "s",
         "month": "03-2000",
-        "contract": "654aefd5c3991db2b0d46152",
-        "spot": "654e3fbc97ea9f85408b"
+        "contract": "654aefd5c3991db6152",
+        "spot": "654e3fbc97ea9f854e9fa08b"
 
 }
 

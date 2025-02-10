@@ -14,6 +14,7 @@ const validateWithSchema = (schema: z.ZodSchema) => {
       next(); // Proceed to the next middleware
     } catch (error) {
       if (error instanceof ZodError) {
+        console.log(error.errors);
         // Unify the path and message into a single string
         const errorMessages = error.errors.map((err) => `${err.path.join(".")}: ${err.message}`);
         return res.status(400).json({ errors: errorMessages });
@@ -90,15 +91,18 @@ const validateUniqueField = (repository: any, field: string) => {
   };
 };
 
- function validateIdExistence<T extends object>(
-  repository: EntityRepository<T>, 
+function validateIdExistence<T extends object>(
+  repository: EntityRepository<T>,
   field: string
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.body[field]; // Obtener el ID del campo
-    if (!id) {
-      return res.status(400).json({ message: `Missing ${field}` });
+    const id = req.body[field];
+
+    // Si el campo no está en la request, continuar sin validar
+    if (id === undefined) {
+      return next();
     }
+
     try {
       const entityExists = await repository.findOne(id);
       if (!entityExists) {

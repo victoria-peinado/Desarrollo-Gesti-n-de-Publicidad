@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
 import { Contact } from "./contact.entity.js";
+import{ Shop } from '../shop/shop.entity.js'
 
 
 const em = orm.em
@@ -66,17 +67,27 @@ async function update(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
     try {
-    const id = req.params.id
-    const contact = await em.findOne(Contact, { id });
-    if (contact) {
+        const id = req.params.id;
+
+        // Check if the contact exists
+        const contact = await em.findOne(Contact, { id });
+        if (!contact) {
+            return res.status(404).json({ message: 'Contact not found' });
+        }
+
+        // Check if the contact is referenced in any shop
+        const isReferenced = await em.count(Shop, { contact: contact.id });
+        if (isReferenced > 0) {
+            return res.status(400).json({ message: 'Cannot delete contact because it is referenced in a shop' });
+        }
+
+        // Delete the contact
         await em.removeAndFlush(contact);
         res.status(200).json({ message: 'Contact deleted successfully', data: contact });
-    } else {
-        res.status(404).json({ message: 'Contact not found' });
+
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
     }
-   } catch (error: any) {
-    res.status(500).json({message: error.message})
-   }
 }
 
 export {sanitizeContactInput, findAll, findOne, add, update, remove}

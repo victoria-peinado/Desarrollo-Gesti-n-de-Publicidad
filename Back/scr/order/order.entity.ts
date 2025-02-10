@@ -54,7 +54,7 @@ export class Order extends BaseEntity {
      @ManyToOne( ()=> Contract)
      contract!: Rel<Contract>
      
-     @ManyToOne( () => Spot)
+     @ManyToOne( () => Spot, { nullable: true })
      spot?: Rel<Spot> //lo pongo como cero por si no esta al momento de crearla
 
      //ManyToMany Deberiamos definir un nuevo objeto DIA-ORDEN-BLOQUE day_order_block{id_order, id_block, day} 
@@ -83,7 +83,6 @@ export const OrderSchema = z.object({
   contract: ObjectIdSchema,
   spot: ObjectIdSchema.optional(),
 });
+export const PutOrderSchema = OrderSchema.omit({contract:true}); // Partial schema for updates
+export const PatchOrderSchema = OrderSchema.omit({contract:true}).partial(); // Partial schema for updates
 
-
-export const PutOrderSchema = OrderSchema.omit({contract:true, spot:true}); // Partial schema for updates
-export const PatchOrderSchema = OrderSchema.omit({contract:true, spot:true}).partial(); // Partial schema for updates
