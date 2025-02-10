@@ -52,7 +52,11 @@ async function findOne(req: Request, res: Response) {
 
 async  function add(req: Request, res: Response) {
     try{
+        //calcular parametros
+        //un if para el estudio si es regular. 
         const order = em.create(Order, req.body.sanitizeInput)
+        //asignamos id
+        //relacionamos con otros objetos
         await em.flush()
         res.status(201).json({message: 'Order created succesfully', data: order})
     } catch(error: any) {
@@ -89,3 +93,12 @@ async function remove(req: Request, res: Response) {
 }
 
 export {sanitizeOrderInput, findAll, findOne, add, update, remove}
+
+// ORDEN REGULAR
+// Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]
+// Bloques_regular = [[lunes], [martes], [miercoles], [jueves], [viernes], [sabado], [domingo]]
+// bloques[lunes] = [1,2,4,5]
+// en este caso regular = true, tengo que construir las ternarias del mes. 
+
+// Bloque_NO_regular[(id, 1/1/25, [1,2,3,5]), (id, 2/1/25, [1,2,3,5]),.... ]
+// Nota mental: el id es mio, esto mismo lo registro en el objeto ternaria. Si o si, despues

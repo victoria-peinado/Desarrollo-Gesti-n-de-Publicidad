@@ -7,9 +7,11 @@ import { object, z } from 'zod';
 
 @Entity()
 export class Order extends BaseEntity {
+    //deberiamos fletar numOrden pues es id.
     @Property({nullable:true})
     numOrder?: string
 
+    //regDate se genera al crear el objeto. 
     @Property({type: DateTimeType})
     regDate?= new Date() 
 
@@ -46,7 +48,10 @@ export class Order extends BaseEntity {
      @ManyToOne( () => Spot)
      spot?: Rel<Spot> //lo pongo como cero por si no esta al momento de crearla
 
-     //ManyToMany
+     //ManyToMany Deberiamos definir un nuevo objeto DIA-ORDEN-BLOQUE day_order_block{id_order, id_block, day} 
+
+     //DEBERIAMOS TENER DOS NUEVOS ATRIBUTOS - BOOL QUE SI ES REGULAR - ARRAY DE LOS REGULARES. 
+     //AGREGAR CAMPO FECHA CANCELACION
 
 }
 export const OrderSchema = z.object({
