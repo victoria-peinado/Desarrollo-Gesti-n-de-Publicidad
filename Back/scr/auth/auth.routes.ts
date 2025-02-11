@@ -1,37 +1,24 @@
 import { Router } from 'express'
 import {  findAll, findOne, add, update, remove,login, logout} from './auth.controler.js'
-import { validUser,validLogin, sanitizeAuthInput, verifyToken, authorizeUserRoles } from './auth.middleware.js'
-import { validateInput ,checkID} from '../shared/db/middleware.js'; 
+import { UserSchema, LoginSchema, PartialUserSchema } from './auth.entity.js'
+import { validateWithSchema , validateObjectId,validateUniqueField} from '../shared/db/middleware.js'
+import { sanitizeAuthInput, verifyToken,authorizeUserRoles } from './auth.middleware.js'
+import { orm } from '../shared/db/orm.js'; // for the unique field middleware
+import { User } from './auth.entity.js'; // for the unique field middleware
 
-export const authRouter = Router()
+const em = orm.em;
+const unique = validateUniqueField(em.getRepository(User), 'username');
 
-authRouter.post('/login',
-  validLogin(),
-  validateInput,
-   login);
-
-authRouter.post('/logout',
-  verifyToken, // Primero verifica el token
-  (req, res, next) => authorizeUserRoles(req, res, next, 'admin', 'user'), // Define los roles permitidos
-  logout
-);
-
-authRouter.post('/register',
-  validUser(),
-  validateInput,
-  sanitizeAuthInput, add);
-authRouter.get('/', findAll);
-authRouter.get('/:id',
-  checkID(),
-  validateInput,
-  findOne);
-authRouter.put('/:id', 
-  checkID(),
-  validateInput,
-  update);
-authRouter.delete('/:id', 
-  checkID(),
-  validateInput,
-  remove);
+ export const authRouter = Router()
+  authRouter.get('/', findAll);
+  authRouter.get("/:id", validateObjectId("id"), findOne);
+  authRouter.post( "/register", validateWithSchema(UserSchema), sanitizeAuthInput, unique, add);
+  authRouter.post( "/login", validateWithSchema(LoginSchema), unique, login);
+  authRouter.post('/logout', verifyToken, authorizeUserRoles('admin', 'user'), logout);//is only for testing
+  authRouter.put("/:id",validateObjectId("id"), validateWithSchema(UserSchema), sanitizeAuthInput, unique, update);
+  authRouter.patch("/:id",validateObjectId("id"), validateWithSchema(PartialUserSchema), sanitizeAuthInput, unique, update);
+  authRouter.delete("/:id", validateObjectId("id"), remove);
+  
 
 
+  

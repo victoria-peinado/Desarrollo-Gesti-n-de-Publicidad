@@ -4,6 +4,7 @@
 import { NextFunction, Request, Response } from "express";;
 import { orm } from "../shared/db/orm.js";
 import { Owner } from "./owner.entity.js";
+import { Shop } from "../shop/shop.entity.js";
 
 const em = orm.em
 em.getRepository(Owner)
@@ -70,18 +71,19 @@ async function update(req: Request, res: Response)  {
 
 async function remove(req: Request, res: Response) {
     try {
-    const id = req.params.id
-    const owner = em.getReference(Owner, id)
-    await em.removeAndFlush(owner)
-    res.status(200).json({message: 'Owner deleted successfully', data: owner})
-    //duda: como verifico si realmente lo borra, porque 
-    //cuando no lo encuentra me dice que se borro igual, 
-    //pero realmente no se encontro el contacto.
-   } catch (error: any) {
-    res.status(500).json({message: error.message})
-   }
-}
+        const id = req.params.id;
+        const owner = await em.findOne(Owner, { id });
+        if (!owner) return res.status(404).json({ message: 'Owner not found' });
 
+        const isReferenced = await em.count(Shop, { owner: owner.id });
+        if (isReferenced > 0) return res.status(400).json({ message: 'Cannot delete owner because it is referenced in a shop' });
+
+        await em.removeAndFlush(owner);
+        res.status(200).json({ message: 'Owner deleted successfully', data: owner });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+}
 async function getOwnerByCuit(req: Request, res: Response) {
     try {
         const cuit = req.params.cuit;

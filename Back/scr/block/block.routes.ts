@@ -1,14 +1,21 @@
 import { Router } from 'express'
 import { sanitizeBlockInput, findAll, findOne, add, update, remove, addAll, removeAll } from './block.controler.js'
+import { BlockSchema, ParcialBlockSchema } from './block.entity.js'
+import { validateWithSchema , validateObjectId,validateUniqueField} from '../shared/db/middleware.js'
+import { orm } from '../shared/db/orm.js'; // for the unique field middleware
+import { Block } from './block.entity.js'
+
+
+const em = orm.em;
+const unique= validateUniqueField(em.getRepository(Block), "nroBlock");
 
 export const blockRouter = Router()
 
-blockRouter.get('/',  findAll)
-blockRouter.get('/:id',  findOne)
-blockRouter.post('/all', sanitizeBlockInput, addAll) // CREA TODOS LOS BLOQUES
-blockRouter.post('/', sanitizeBlockInput, add)//cera uno solo
-blockRouter.put('/:id', sanitizeBlockInput, update) // Agrega el middleware a la ruta PUT
-blockRouter.patch('/:id', sanitizeBlockInput, update)
-blockRouter.delete('/deleteall/', removeAll) // BORRA TODOS LOS BLOQUES
-blockRouter.delete('/:id', remove)
-
+blockRouter.get('/', findAll)
+blockRouter.get('/:id', validateObjectId('id'), findOne)
+blockRouter.post('/all', addAll)
+blockRouter.post( '/', validateWithSchema(BlockSchema), sanitizeBlockInput, unique, add)
+blockRouter.put('/:id', validateObjectId('id'), validateWithSchema(BlockSchema),unique, sanitizeBlockInput, update)
+blockRouter.patch('/:id', validateObjectId('id'), validateWithSchema(ParcialBlockSchema), unique, sanitizeBlockInput, update)
+blockRouter.delete('/deleteall/', removeAll)
+blockRouter.delete('/:id', validateObjectId('id'), remove)

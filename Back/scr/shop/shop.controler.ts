@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
 import { Shop } from "./shop.entity.js";
 import { Owner } from "../owner/owner.entity.js";
+import { Contract } from "../contract/contract.entity.js";
 
 
 const em = orm.em //entityManager
@@ -77,17 +78,18 @@ async function update(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
     try {
-    const id = req.params.id
-    const shop = await em.findOne(Shop, { id });
-    if (shop) {
+        const id = req.params.id;
+        const shop = await em.findOne(Shop, { id });
+        if (!shop) return res.status(404).json({ message: 'Shop not found' });
+
+        const isReferenced = await em.count(Contract, { shop: shop.id });
+        if (isReferenced > 0) return res.status(400).json({ message: 'Cannot delete shop because it is referenced in a contract' });
+
         await em.removeAndFlush(shop);
         res.status(200).json({ message: 'Shop deleted successfully', data: shop });
-    } else {
-        res.status(404).json({ message: 'Shop not found' });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
     }
-   } catch (error: any) {
-    res.status(500).json({message: error.message})
-   }
 }
 
 
@@ -105,23 +107,26 @@ async function getShopsByOwnerId(req: Request, res: Response) {
 };
 
 async function getShopsByCuitAndFantasyName(req: Request, res: Response) {
-    const { fantasyName, cuit } = req.query;
-  
-    try {
-      const owner = await em.findOne(Owner, { cuit: cuit as string });
-  
-      if (!owner) {
-        return res.status(404).json({ error: 'Owner not found for the provided cuit' });
-      }
-  
-      const shops = await em.find(Shop, { fantasyName: new RegExp(fantasyName as string, 'i'), owner });
-      res.status(200).json({messagge: 'Shops found successfully', data: shops})
-      
-    } catch (error:any) {
-      res.status(500).json({message: error.message})
+  const { fantasyName, cuit } = req.query;
+
+  try {
+    const owner = await em.findOne(Owner, { cuit: cuit as string });
+
+    if (!owner) {
+      return res.status(404).json({ error: 'Owner not found for the provided cuit' });
     }
+
+    const shops = await em.find(Shop, { fantasyName: new RegExp(fantasyName as string, 'i'), owner });
+
+    if (shops.length === 0) {
+      return res.status(404).json({ error: 'Shop not found' });
+    }
+
+    res.status(200).json({ message: 'Shops found successfully', data: shops });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 }
-  
 async function getShopsByCuit(req: Request, res: Response) {
     try {
         const cuit = req.params.cuit;

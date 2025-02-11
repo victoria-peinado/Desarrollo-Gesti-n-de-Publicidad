@@ -74,13 +74,15 @@ async function update(req: Request, res: Response)  {
 
 async function remove(req: Request, res: Response) {
     try {
-        const id = req.params.id
-        const contractToRemove = em.getReference(Contract, id)
-        await em.removeAndFlush(contractToRemove) //deberia estar sanitizada
-        
-        res.status(200).json({message: 'Contract removed sucesfully', data: contractToRemove})
+        return res.status(403).json({ message: 'This operation is not allowed' });
+
+        // const id = req.params.id;
+        // const contractToRemove = em.getReference(Contract, id);
+        // await em.removeAndFlush(contractToRemove); // Should be sanitized
+
+        // res.status(200).json({ message: 'Contract removed successfully', data: contractToRemove });
     } catch (error: any) {
-        res.status(500).json({message: error.message})
+        res.status(500).json({ message: error.message });
     }
 }
 

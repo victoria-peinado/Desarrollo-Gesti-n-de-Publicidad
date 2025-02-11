@@ -15,10 +15,10 @@ POST http://localhost:3001/api/contact
 Content-Type: application/json
 
 {
-    "dni": "5257214",
+    "dni": "5252145",
     "name": "Vicky",
     "lastname": "Carpinetti",
-    "contacts": ["3402428992"]
+    "contacts": ["34122838f@g.com"]
 
 }
 
@@ -27,7 +27,7 @@ PUT http://localhost:3001/api/contact/{{id}}
 Content-Type: application/json
 
 {
-    "dni": "5257214",
+    "dni": "52572142",
     "name": "Vicky",
     "lastname": "Pei",
     "contacts": ["3402428992"]

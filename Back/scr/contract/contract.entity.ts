@@ -4,6 +4,9 @@ import {Property, ManyToOne, DateTimeType, Entity, Rel, OneToMany, Collection} f
 import { Shop } from '../shop/shop.entity.js';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Order } from '../order/order.entity.js';
+import { ObjectIdSchema } from '../shared/db/schemas.js';
+import { z } from 'zod';
+import e from 'express';
 
 @Entity()
 export class Contract extends BaseEntity{
@@ -30,3 +33,19 @@ export class Contract extends BaseEntity{
     orders = new Collection<Order>(this)
 
 }
+
+
+export const ContractSchema = z.object({
+  regDate: z.coerce.date().optional(),
+  dateFrom: z.coerce.date(),
+  dateTo: z.coerce.date().optional(),
+  observations: z.string().optional(),
+  shop: ObjectIdSchema,
+//   orders: z.array(
+//     z.object({
+//       // Definir el esquema para la relación con Order aquí
+//     })
+//   ).optional(),
+});
+export const PutContractSchema = ContractSchema.omit({shop:true}).partial(); // Partial schema for updates
+export const PatchContractSchema = ContractSchema.omit({shop:true}).partial(); // Partial schema for updates

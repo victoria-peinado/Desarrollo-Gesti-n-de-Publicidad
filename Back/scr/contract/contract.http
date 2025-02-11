@@ -18,11 +18,11 @@ GET http://localhost:3001/api/contract/{{idfirst}}
 POST http://localhost:3001/api/contract
 Content-Type: application/json
  
- {
-        "dateFrom" : "7-11-2023",
-        "dateTo" :"",
-        "observations" : "quiere estar al final de la tanda.",
-        "shop": "{{idShop}}"
+{
+    "dateFrom" : "2023-11-07",
+    "dateTo" :"2023-12-07",
+    "observations" : "PEPPE",
+    "shop": "{{idShop}}"    
 }
 
 
@@ -33,12 +33,22 @@ PUT http://localhost:3001/api/contract/{{id}}
 Content-Type: application/json 
 
 {
-    "dateFrom" : "7-11-2023",
-    "dateTo" :"7-12-2023",
+    "dateFrom" : "2023-11-07",
+    "dateTo" :"2023-12-07",
     "observations" : "no se",
     "shop": "{{idShop}}"
 }
 
+### PATCH
+PATCH http://localhost:3001/api/contract/{{id}}
+Content-Type: application/json 
+
+{
+
+
+    "observations" : "si se",
+    "shop": "{{idShop}}"
+}
 
 ### DELETE
 DELETE http://localhost:3001/api/contract/{{id}}

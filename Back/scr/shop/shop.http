@@ -37,7 +37,7 @@ Content-Type: application/json
 {
     "fantasyName": "Librería Normita 8",
     "address": "Belgrano 67",
-    "billingType": "Resposable Inscripto",
+    "billingType": "Responsable Inscripto",
     "mail": "normita@gmail.com",
     "usualPaymentForm": "Efectivo",
     "type": "Otro",
@@ -45,16 +45,28 @@ Content-Type: application/json
     "owner": "{{idOwner}}"   
 }
 
-
-
-###PUT 
-PATCH  http://localhost:3001/api/shop/{{id}}
+### PUT
+PUT http://localhost:3001/api/shop/{{id}}
 Content-Type: application/json 
 
 {
     "fantasyName": "Transporte DJJB",
     "address": "12 de Abril 0596",
-    "billingType": "Sin comprobante Fiscal",
+    "billingType": "Otro",
+    "mail": "normitag@mail.com", 
+    "usualPaymentForm": "Efectivo",
+    "type": "PyME"
+}
+
+
+###Patch
+PATCH  http://localhost:3001/api/shop/{{id}}
+Content-Type: application/json 
+
+{
+  
+    "address": "12 de Abril 0596",
+    "billingType": "Consumidor Final",
     "mail": "djjb@gmail.com",
     "usualPaymentForm": "Efectivo",
     "type": "PyME"

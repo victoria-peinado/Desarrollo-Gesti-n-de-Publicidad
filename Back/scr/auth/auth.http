@@ -10,35 +10,36 @@ GET http://localhost:3001/api/auth/{{id}}
 
 
 ### Creater a auth
+# @name createAuth
 POST http://localhost:3001/api/auth/register
 Content-Type: application/json
 
 {
-    "username": "user",
-   "role": "user"
-}
-
-
-### modificar un auth(PUT - recurso completo e idempotente)
-PUT http://localhost:3001/api/auth/{{id}}
-
-{
-    "username": "admin",
-    "password": "admin",
+    "username": "admin7",
+    "password": "admin2",
     "role": "admin"
 }
 
 
-# ### modificar un auth (PATCH - recurso parcial) #no esta implementado
-# PATCH http://localhost:3000/api/auth/{{id}}
+### modificar un auth(PUT - recurso completo e idempotente)
+PUT http://localhost:3001/api/auth/{{createAuth.response.body.data.id}}
+Content-Type: application/json
 
-# Content-Type: application/json
+{
+    "username": "admin3",
+    "password": "admin3",
+    "role": "admin"
+  
+}
 
-# {
-#   "username": "admin",
-#   "password": "admin",
-#   "role": "admin"
-# }
+
+### modificar un auth (PATCH - recurso parcial) #no esta implementado
+PATCH http://localhost:3001/api/auth/{{createAuth.response.body.data.id}}
+Content-Type: application/json
+
+{
+ "a":3
+}
 
 ### login
 # @name login

@@ -23,6 +23,14 @@ function sanitizeBlockInput(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
+const isNumBlockUnique = async (numBlock: string) => {
+  // Query for an existing Block with the same numBlock
+  const existingBlock = await em.findOne(Block, { numBlock });
+
+  // Return true if there's no existing block, meaning the numBlock is unique
+  return !existingBlock;
+};
+
 async function findAll(req: Request, res: Response) {
   try {
     const blocks = await em.find(Block, {},{populate:['prices']});
@@ -118,4 +126,4 @@ async  function addAll(req: Request, res: Response) {
 //FIN DE FUNCIONES PARA CREAR TODOS LOS BLOQUES
 
 
-export {sanitizeBlockInput,  findAll, findOne, add, update, remove, removeAll, addAll}
+export {sanitizeBlockInput,  findAll, findOne, add, update, remove, removeAll, addAll, isNumBlockUnique}
