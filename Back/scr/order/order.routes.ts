@@ -5,10 +5,12 @@ import { OrderSchema, PatchOrderSchema, PutOrderSchema} from './order.entity.js'
 import { orm } from '../shared/db/orm.js'; // for the unique field middleware
 import { Contract } from "../contract/contract.entity.js";
 import { Spot } from "../spot/spot.entity.js";
+//import { Block } from "../block/block.entity.js";
 const em = orm.em;
 
 const validIdSpot=validateIdExistence(em.getRepository(Spot), "spot");
 const validIdContrac=validateIdExistence(em.getRepository(Contract), "contract");
+//const validIdBlock=validateIdExistence(em.getRepository(Block), "block");
 export const orderRouter = Router()
 
 orderRouter.get('/', findAll);

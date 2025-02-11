@@ -51,6 +51,9 @@ const BlocksRegularSchema = z.object({
 
 const TupleBlocksSchema = z.tuple([z.date(), z.array(NumBlockSchema)]);
 
+type BlocksRegularType = z.infer<typeof BlocksRegularSchema>
+
+type TupleBlocksType = z.infer<typeof TupleBlocksSchema>
 
 
-export { ObjectIdSchema,  CuitSchema, BlocksRegularSchema, TupleBlocksSchema, NumBlockSchema};
+export { ObjectIdSchema,  CuitSchema, BlocksRegularSchema, TupleBlocksSchema, NumBlockSchema, BlocksRegularType, TupleBlocksType};

@@ -1,9 +1,10 @@
-import { DateTimeType, Entity, ManyToOne, Rel, Property } from "@mikro-orm/core";
+import { DateTimeType, Entity, ManyToOne, Rel, Property, OneToMany, Collection } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Contract } from "../contract/contract.entity.js";
 import { Spot } from "../spot/spot.entity.js";
-import { ObjectIdSchema, BlocksRegularSchema, TupleBlocksSchema } from '../shared/db/schemas.js';
+import { ObjectIdSchema, BlocksRegularSchema, TupleBlocksSchema, BlocksRegularType } from '../shared/db/schemas.js';
 import { object, z } from 'zod';
+import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 
 @Entity()
 export class Order extends BaseEntity {
@@ -46,7 +47,7 @@ export class Order extends BaseEntity {
      regular: boolean = true
 
      @Property({nullable: true})
-     regStructure?: [] 
+     regStructure?: BlocksRegularType
 
      @Property({nullable: true})
      cancelDate?: Date
@@ -56,6 +57,9 @@ export class Order extends BaseEntity {
      
      @ManyToOne( () => Spot, { nullable: true })
      spot?: Rel<Spot> //lo pongo como cero por si no esta al momento de crearla
+
+     @OneToMany(()=> DayOrderBlock, dayordenblock => dayordenblock.id)
+     days_orders_blocks? = new Collection<DayOrderBlock>(this);
 
      //ManyToMany Deberiamos definir un nuevo objeto DIA-ORDEN-BLOQUE day_order_block{id_order, id_block, day} 
 
