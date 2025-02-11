@@ -27,6 +27,7 @@ import { BlockListComponent } from './block-list/block-list.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { EditShopComponent } from './edit-shop/edit-shop.component';
 import { FeedbackNotificationComponent } from './feedback-notification/feedback-notification.component';
+import { InputFieldComponent } from './input-field/input-field.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { FeedbackNotificationComponent } from './feedback-notification/feedback-
     BlockListComponent,
     ConfirmationDialogComponent,
     EditShopComponent,
-    FeedbackNotificationComponent
+    FeedbackNotificationComponent,
+    InputFieldComponent
   ],
   imports: [
     BrowserModule,

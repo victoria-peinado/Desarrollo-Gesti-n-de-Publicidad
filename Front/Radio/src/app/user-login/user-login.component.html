@@ -1,43 +1,56 @@
 <body>
-    <div class="wrapper">
-        <div mat-dialog-content class="flex flex-col items-center justify-center">
-            <div>
-                <h2 id="title">Login</h2>
-            </div>
-            
-            <div class="row -mb-2">
-                <mat-icon class="icon">person</mat-icon>
-                <mat-form-field appearance="outline">
-                    <input matInput type="text" placeholder="Usuario" required>
-                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" disabled>
-                        <mat-icon>nothing</mat-icon>
-                      </button>
-                </mat-form-field>
-            </div>
-    
-            <div class="row">
-                <mat-icon class="icon">lock</mat-icon>
-                <mat-form-field appearance="outline">
-                    <input matInput [type]="hide ? 'password' : 'text'" placeholder="Contraseña" required>
-                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                  </mat-form-field>
-            </div>
-    
-            <div class="forgot">
-                <a href="#" class="coloring">¿Olvidaste tu contraseña?</a>
-            </div>
-    
-            <div mat-dialog-actions>
-                <button mat-raised-button class="coloring-deg">Iniciar sesión</button>
-            </div>
-    
-            <div class="register-link"> <!--no se pq al usar <p> dentro de un <div>, el texto se subraya-->
-                <p>¿No tienes una cuenta?<a class="ml-2"
-                    href="#">Regístrate</a></p>
-            </div>
-            
+  <div class="wrapper">
+    <form
+      [formGroup]="login_form"
+      class="flex flex-col items-center justify-center"
+      (submit)="login()"
+    >
+      <div>
+        <h2 id="title">Login</h2>
+      </div>
+
+      <fieldset>
+        <div class="row -mb-2">
+          <app-input-field
+            icon="person"
+            label="Usuario"
+            placeholder="Ingrese su usuario"
+            type="text"
+            [control]="usernameControl"
+            [validations]="{ required: true}"
+          >
+          </app-input-field>
         </div>
-    </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="row -mb-2">
+          <app-input-field
+            icon="lock"
+            label="Contraseña"
+            placeholder="Ingrese su contraseña"
+            type="password"
+            [control]="passwordControl"
+            [validations]="{ required: true}"
+          >
+          </app-input-field>
+        </div>
+      </fieldset>
+
+      <div class="forgot">
+        <a href="#" class="coloring">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <div mat-dialog-actions>
+        <app-btn-degrade
+          [text]="'Iniciar Sesión'"
+          [disabled]="login_form.invalid"
+        ></app-btn-degrade>
+      </div>
+
+      <div class="register-link">
+        <p>¿No tienes una cuenta?<a class="ml-2" href="#">Regístrate</a></p>
+      </div>
+    </form>
+  </div>
 </body>

@@ -1,0 +1,32 @@
+.row {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-icon {
+    margin-right: 10px;
+    color: gray;
+    margin-bottom: 25px;
+  }
+  
+  .w-full {
+    width: 250px;
+  }
+  
+
+  .password-toggle {
+    position: absolute;
+    right: 0%;
+    top: 50%;
+    cursor: pointer;
+  
+    mat-icon {
+      font-size: 18px;
+    }
+  }
+  
+
+
+  mat-icon {
+    cursor: pointer;
+  }

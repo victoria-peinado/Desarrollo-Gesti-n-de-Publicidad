@@ -1,29 +1,31 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-feedback-notification',
   templateUrl: './feedback-notification.component.html',
-  styleUrls: ['./feedback-notification.component.scss']
+  styleUrls: ['./feedback-notification.component.scss'],
 })
-export class FeedbackNotificationComponent {
-  @Input() message: string = ''; // Mensaje a mostrar
-  @Input() status: 'success' | 'error' = 'success'; // Estado de la notificación
-  @Output() closeNotification = new EventEmitter<void>(); // Emisor de evento de cierre
+export class FeedbackNotificationComponent implements OnInit {
+  message: string = '';
+  status: 'success' | 'error' = 'success';
+  showNotification: boolean = false;
 
-  showNotification: boolean = false; // Control de visibilidad
+  constructor(private notificationService: NotificationService) {}
 
   ngOnInit() {
-    // Mostrar la notificación al inicio
-    this.showNotification = true;
+    this.notificationService.currentNotification.subscribe((notification) => {
+      if (notification) {
+        this.message = notification.message;
+        this.status = notification.status;
+        this.showNotification = true;
 
-    // Cerrar automáticamente después de 5 segundos
-    setTimeout(() => {
-      this.hideNotification();
-    }, 5000);
+        setTimeout(() => this.hideNotification(), 5000);
+      }
+    });
   }
 
   hideNotification() {
     this.showNotification = false;
-    this.closeNotification.emit(); // Emitir evento de cierre
   }
 }
