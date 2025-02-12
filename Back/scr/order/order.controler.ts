@@ -63,54 +63,56 @@ async function findOne(req: Request, res: Response) {
 
 // este metodo solo se llama para crear una nueva orden.
 async  function add(req: Request, res: Response) {
-    try{
-        let tuples: TupleBlocksType[] = []
-        let dateFrom: Date = new Date()
-        if (req.body.sanitizeInput.regular){
-            //controlar que todos los bloques existan, se puede hacer una funcion que los quite del arreglo y devuelva la lista de id.
-            const id = req.body.sanitizeInput.contract
-            const contract = await em.findOneOrFail(Contract, {id})
-            dateFrom = contract.dateFrom
-            if (compareAsc(dateFrom, new Date()) == -1){ // si = -1 desde esta antes que hoy por ende ya paso
-                dateFrom = addDays(new Date(), 1) // asignamos como inicio la fecha de mañana. 
-            } 
-            const regStructure = req.body.sanitizeInput.regStructure
-            tuples = createTuples(regStructure, dateFrom)
-        } else {
-            //las tuplas deberían venir del front.
+    // try{
+    //     // let tuples: TupleBlocksType[] = []
+    //     // let dateFrom: Date = new Date()
+    //     // if (req.body.sanitizeInput.regular){
+    //     //     //controlar que todos los bloques existan, se puede hacer una funcion que los quite del arreglo y devuelva la lista de id.
+    //     //     const id = req.body.sanitizeInput.contract
+    //     //     const contract = await em.findOneOrFail(Contract, {id})
+    //     //     dateFrom = contract.dateFrom
+    //     //     if (compareAsc(dateFrom, new Date()) == -1){ // si = -1 desde esta antes que hoy por ende ya paso
+    //     //         dateFrom = addDays(new Date(), 1) // asignamos como inicio la fecha de mañana. 
+    //     //     } 
+    //     //     const regStructure = req.body.sanitizeInput.regStructure
+    //     //     tuples = createTuples(regStructure, dateFrom)
+    //     // } else {
+    //     //     //las tuplas deberían venir del front.
             
-        }
-        let totalAds = 0
-        tuples.forEach(t => {totalAds = totalAds + t[1].length});
-        req.body.sanitizeInput.totalAds = totalAds
-        req.body.sanitizeInput.daysAmount = tuples.length
-        req.body.sanitizeInput.month = format(dateFrom, 'MM-yyyy' )
-        //calcular parametros
-        const order = em.create(Order, req.body.sanitizeInput)
-        const blocks = await em.find(Block, {},{populate:['prices']}) 
-        let ternarias: Array<DayOrderBlock> = []
-        let totalCost = 0
-        tuples.forEach(t => { 
-            t[1].forEach(b => {
-                let dob = em.create(DayOrderBlock, {day: t[0], block: b, order: order})
-                ternarias.push(dob)
-                let actual = blocks.find((e)=> e.id = b)
-                let prices_block = actual?.prices
-                let items = prices_block?.getItems()
-                let last_price = items?.at(-1)?.value
-                if (last_price == undefined) {last_price=0} //para que no se queje
-                totalCost = totalCost + last_price
-            });
-        });
-        order.totalCost = totalCost;
-        //asignamos id
-        //relacionamos con otros objetos tuplas
-        // ¿se guarda solo? ¿Ya esta?  deberia estar jajajaja. 
-        await em.flush()
-        res.status(201).json({message: 'Order created succesfully', data: order})
-    } catch(error: any) {
-        res.status(500).json({message: error.message})
-    }
+    //     // }
+    //     // let totalAds = 0
+    //     // tuples.forEach(t => {totalAds = totalAds + t[1].length});
+    //     // req.body.sanitizeInput.totalAds = totalAds
+    //     // req.body.sanitizeInput.daysAmount = tuples.length
+    //     // req.body.sanitizeInput.month = format(dateFrom, 'MM-yyyy' )
+    //     // //calcular parametros
+    //     const order = em.create(Order, req.body.sanitizeInput)
+    //     const blocks = await em.find(Block, {},{populate:['prices']}) 
+    //     let ternarias: Array<DayOrderBlock> = []
+    //     let totalCost = 0
+    //     // tuples.forEach(t => { 
+    //     //     t[1].forEach(b => {
+    //     //         let dob = em.create(DayOrderBlock, {day: t[0], block: b, order: order})
+    //     //         ternarias.push(dob)
+    //     //         let actual = blocks.find((e)=> e.id = b)
+    //     //         let prices_block = actual?.prices
+    //     //         let items = prices_block?.getItems()
+    //     //         let last_price = items?.at(-1)?.value
+    //     //         if (last_price == undefined) {last_price=0} //para que no se queje
+    //     //         totalCost = totalCost + last_price
+    //     //     });
+    //     // });
+    //     order.totalCost = totalCost;
+    //     //asignamos id
+    //     //relacionamos con otros objetos tuplas
+    //     // ¿se guarda solo? ¿Ya esta?  deberia estar jajajaja. 
+    //     await em.flush()
+    //     res.status(201).json({message: 'Order created succesfully', data: order})
+    // } catch(error: any) {
+    //     res.status(500).json({message: error.message})
+    // }
+
+    console.log('add order')
 }
 
 

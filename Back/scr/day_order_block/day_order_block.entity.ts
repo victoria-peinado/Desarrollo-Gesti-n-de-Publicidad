@@ -10,8 +10,8 @@ export class DayOrderBlock extends BaseEntity {
     @Property()
     day!: Date;
     
-    @OneToOne(()=>Block)
-    block!: Rel<Block>;
+    // @OneToOne(()=>Block)
+    // block!: Rel<Block>;
 
     @OneToOne(()=> Order)
     order!: Rel<Order>;

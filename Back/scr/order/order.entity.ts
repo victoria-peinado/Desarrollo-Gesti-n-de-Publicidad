@@ -58,8 +58,8 @@ export class Order extends BaseEntity {
      @ManyToOne( () => Spot, { nullable: true })
      spot?: Rel<Spot> //lo pongo como cero por si no esta al momento de crearla
 
-     @OneToMany(()=> DayOrderBlock, dayordenblock => dayordenblock.id)
-     days_orders_blocks? = new Collection<DayOrderBlock>(this);
+    //  @OneToMany(()=> DayOrderBlock, dayordenblock => dayordenblock.id)
+    //  days_orders_blocks? = new Collection<DayOrderBlock>(this);
 
      //ManyToMany Deberiamos definir un nuevo objeto DIA-ORDEN-BLOQUE day_order_block{id_order, id_block, day} 
 

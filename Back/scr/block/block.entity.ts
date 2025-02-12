@@ -18,8 +18,10 @@ export class Block extends BaseEntity{
     @OneToMany(() => Price, price => price.block, { cascade: [Cascade.ALL], orphanRemoval: true })//ver asundos de dependencias y cascadas
     prices = new Collection<Price>(this)
 
-     @OneToMany(()=> DayOrderBlock, dayordenblock => dayordenblock.id)
-     days_orders_blocks = new Collection<DayOrderBlock>(this);
+  // @OneToMany(() => DayOrderBlock, (dayOrderBlock) => dayOrderBlock.block)
+  // days_orders_blocks = new Collection<DayOrderBlock>(this);
+
+
 
 }
 
