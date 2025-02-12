@@ -1,11 +1,13 @@
 import { MikroORM } from "@mikro-orm/core";
 import { MongoHighlighter } from "@mikro-orm/mongo-highlighter";
-import { config } from "dotenv";
+import { env} from '../../config_env/config.js';
+
+console.log(env.DATABASE_NAME);
+console.log(env);
 
 //env variables
-config()
-const databaseName = process.env.DATABASE_NAME;
-const databaseUrl = process.env.CONNECTION_STRING;
+const databaseName = env.DATABASE_NAME;
+const databaseUrl = env.CONNECTION_STRING;
 
 
 export const orm = await MikroORM.init({

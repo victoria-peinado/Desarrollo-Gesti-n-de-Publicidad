@@ -19,19 +19,15 @@ import { priceRouter } from './price/price.routes.js';
 import { spotRouter } from './spot/spot.routes.js';
 import { orderRouter } from './order/order.routes.js';
 import { authRouter } from './auth/auth.routes.js';
-import { config } from 'dotenv';
-
-//env variables
-config()
-const port = process.env.PORT||3000; 
-const front = process.env.FRONTEND_URL;
+import {env} from './config_env/config.js';
 
 //server
 const app = express();
+console.log(env)
 
 //base middlewares
 app.use(express.json());//middleware para parsear el body a json
-app.use(cors({ origin: front }));//acepts request from this origin only(frontend)
+app.use(cors({ origin: env.FRONTEND_URL }));//acepts request from this origin only(frontend)
 
 //orm middleware
 app.use((req, res, next) => {//after base middlewares and before routes and bisiness milddlewares
@@ -59,7 +55,7 @@ app.use((_, res) => {
 
 // LISTEN SERVIDOR
 
-app.listen(port, () => {
-  console.log("Server running in http:\\localhost:" + port)
+app.listen(env.PORT, () => {
+  console.log("Server running in http:\\localhost:" + env.PORT)
 })
 
