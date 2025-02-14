@@ -11,8 +11,8 @@ const databaseUrl = env.CONNECTION_STRING;
 
 
 export const orm = await MikroORM.init({
-    entities: ['dist/*/*.entity.js'],
-    entitiesTs: ['src/*/*.entity.ts'],
+    entities: ['dist/**/*.entity.js'],
+    entitiesTs: ['src/**/*.entity.ts'],
     dbName: databaseName,
     type: 'mongo',
     clientUrl: databaseUrl,

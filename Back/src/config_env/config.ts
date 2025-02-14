@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Definir la ruta del archivo .env
-const envPath = path.resolve(__dirname, `../../environments/.env.${process.env.NODE_ENV}`);
+const envPath = path.resolve(__dirname, `../../../.env.${process.env.NODE_ENV}`);
 console.log("Loading environment from:", envPath); 
 
 const result = dotenv.config({ path: envPath });
