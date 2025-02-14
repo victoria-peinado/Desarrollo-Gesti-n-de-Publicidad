@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './material/material.module';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { BlockComponent } from './block/block.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
@@ -30,44 +30,36 @@ import { FeedbackNotificationComponent } from './feedback-notification/feedback-
 import { InputFieldComponent } from './input-field/input-field.component';
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    MainNavComponent,
-    BlockComponent,
-    UserLoginComponent,
-    AltaComercioComponent,
-    NewOwnerContactShopComponent,
-    NuevoComercioComponent,
-    BtnDegradeComponent,
-    NuevoContratoComponent,
-    NuevaOrdenComponent,
-    OrdenFechaComponent,
-    OrdenBLoqueComponent,
-    ActualizacionComercioComponent,
-    InicioComponent,
-    ShopListComponent,
-    OwnerComponent,
-    ContactComponent,
-    ShopComponent,
-    BlockListComponent,
-    ConfirmationDialogComponent,
-    EditShopComponent,
-    FeedbackNotificationComponent,
-    InputFieldComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-    
-  ],
-  providers: [],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        MainNavComponent,
+        BlockComponent,
+        UserLoginComponent,
+        AltaComercioComponent,
+        NewOwnerContactShopComponent,
+        NuevoComercioComponent,
+        BtnDegradeComponent,
+        NuevoContratoComponent,
+        NuevaOrdenComponent,
+        OrdenFechaComponent,
+        OrdenBLoqueComponent,
+        ActualizacionComercioComponent,
+        InicioComponent,
+        ShopListComponent,
+        OwnerComponent,
+        ContactComponent,
+        ShopComponent,
+        BlockListComponent,
+        ConfirmationDialogComponent,
+        EditShopComponent,
+        FeedbackNotificationComponent,
+        InputFieldComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MaterialModule,
+        FormsModule,
+        ReactiveFormsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
