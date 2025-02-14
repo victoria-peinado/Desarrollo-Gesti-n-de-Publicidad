@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Radio:build:production"
+              "buildTarget": "Radio:build:production"
             },
             "development": {
-              "browserTarget": "Radio:build:development"
+              "buildTarget": "Radio:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Radio:build"
+            "buildTarget": "Radio:build"
           }
         },
         "test": {
