@@ -90,6 +90,7 @@ The NPM package manager comes with Node.js and is required for this project.
 
 ### **Start the Backend**
 Make sure you are inside the `Back` folder:
+- Only for the first time execute npm run _start:dev or npm run _start:prd. Si estas usando linux tambien deberas usar estos comandos y borrar la carpeta dist antes de compilar.
 - Development mode:
     ```sh
     npm run start:dev
