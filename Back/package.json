@@ -8,7 +8,7 @@
     "build": "tsc -p ./tsconfig.json",
   "_start:dev": "cross-env NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/src/app.js\"",
     "_start:prod": "cross-env NODE_ENV=production node ./dist/src/app.js",
-    "clean": "rd /s /q dist",
+    "clean": "if [ -d \"dist\" ]; then rd /s /q dist; else echo \"dist directory does not exist, skipping clean.\"; fi",
     "start:dev": "npm run clean && npm run _start:dev",
     "start:prod": "npm run clean && npm run build && npm run _start:prod"
   },
