@@ -28,6 +28,7 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
 import { EditShopComponent } from './edit-shop/edit-shop.component';
 import { FeedbackNotificationComponent } from './feedback-notification/feedback-notification.component';
 import { InputFieldComponent } from './input-field/input-field.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 @NgModule({ declarations: [
@@ -61,5 +62,5 @@ import { InputFieldComponent } from './input-field/input-field.component';
         BrowserAnimationsModule,
         MaterialModule,
         FormsModule,
-        ReactiveFormsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        ReactiveFormsModule], providers: [provideHttpClient(withInterceptorsFromDi()), provideAnimationsAsync()] })
 export class AppModule { }
