@@ -1,0 +1,83 @@
+.header {
+    background-color: #D7E3FF;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 56px;
+}
+
+.sidenav-container {
+    height: 100vh;
+}
+
+.sidenav {
+    width: 200px;
+    border-right: 1px solid #C4C6D0;
+    border-radius: 0;
+}
+
+.btn-suboption {
+    text-align: left;
+}
+
+.btn-radio-fm.selected-radio-fm {
+    background-color: #C1D5F8;
+}
+
+.btn-option.selected-header {
+    background-color: #C1D5F8;
+}
+
+.btn-suboption.selected-menu {
+    background-color: #D7E3FF !important;
+    color: #1976D2 !important;
+    font-weight: bold;
+}
+
+.logo-radio {
+    width: 24px;
+    height: auto;
+    margin-right: 8px;
+}
+
+.logo-text-container {
+    display: inline-flex;
+    align-items: center;
+}
+
+.menu-options {
+    display: flex;
+    gap: 8px;
+}
+
+
+
+.header-menu {
+    display: none;
+
+    @media (max-width: 1024px) {
+        background-color: #D7E3FF;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    height: 56px;
+    z-index: 0;
+      }
+}
+
+.radio-name {
+    
+    @media (max-width: 1024px) {
+        display: none;
+    }
+}
+
+.sidenav-content {
+    display: flex;
+    flex-direction: row;
+    padding: 2rem 3rem; 
+}

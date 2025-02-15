@@ -29,6 +29,17 @@ import { EditShopComponent } from './edit-shop/edit-shop.component';
 import { FeedbackNotificationComponent } from './feedback-notification/feedback-notification.component';
 import { InputFieldComponent } from './input-field/input-field.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { RadioComponent } from './radio/radio.component';
+import { ComerciosPageComponent } from './pages/comercios-page/comercios-page.component';
+import { PublicistasPageComponent } from './pages/publicistas-page/publicistas-page.component';
+import { ContratacionesPageComponent } from './pages/contrataciones-page/contrataciones-page.component';
+import { PagosPageComponent } from './pages/pagos-page/pagos-page.component';
+import { PublicidadesPageComponent } from './pages/publicidades-page/publicidades-page.component';
+import { BloquesPageComponent } from './pages/bloques-page/bloques-page.component';
+import { TitularesPageComponent } from './pages/titulares-page/titulares-page.component';
+import { ContactosPageComponent } from './pages/contactos-page/contactos-page.component';
+import { AsuncionPageComponent } from './pages/asuncion-page/asuncion-page.component';
+import { PublicidadesEdicionSpotPageComponent } from './pages/publicidades-page/pages/publicidades-edicion-spot-page/publicidades-edicion-spot-page.component';
 
 
 @NgModule({ declarations: [
@@ -54,7 +65,18 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         ConfirmationDialogComponent,
         EditShopComponent,
         FeedbackNotificationComponent,
-        InputFieldComponent
+        InputFieldComponent,
+        RadioComponent,
+        ComerciosPageComponent,
+        PublicistasPageComponent,
+        ContratacionesPageComponent,
+        PagosPageComponent,
+        PublicidadesPageComponent,
+        BloquesPageComponent,
+        TitularesPageComponent,
+        ContactosPageComponent,
+        AsuncionPageComponent,
+        PublicidadesEdicionSpotPageComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

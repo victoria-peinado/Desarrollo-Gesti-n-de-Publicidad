@@ -13,11 +13,30 @@ import { ShopListComponent } from './shop-list/shop-list.component';
 import { OwnerComponent } from './owner/owner.component';
 import { ContactComponent } from './contact/contact.component';
 import { BlockListComponent } from './block-list/block-list.component';
+import { ComerciosPageComponent } from './pages/comercios-page/comercios-page.component';
+import { PublicistasPageComponent } from './pages/publicistas-page/publicistas-page.component';
+import { ContactosPageComponent } from './pages/contactos-page/contactos-page.component';
+import { TitularesPageComponent } from './pages/titulares-page/titulares-page.component';
+import { BloquesPageComponent } from './pages/bloques-page/bloques-page.component';
+import { PublicidadesPageComponent } from './pages/publicidades-page/publicidades-page.component';
+import { PagosPageComponent } from './pages/pagos-page/pagos-page.component';
+import { ContratacionesPageComponent } from './pages/contrataciones-page/contrataciones-page.component';
+import { AsuncionPageComponent } from './pages/asuncion-page/asuncion-page.component';
 
 const routes: Routes = [
   { path:'', component: InicioComponent },
   { path:'inicio', component: InicioComponent  },
   { path:'login', component: UserLoginComponent  },
+  // pages
+  { path: 'asuncion', component: AsuncionPageComponent },
+  { path: 'comercios/categories', component: ComerciosPageComponent },
+  { path: 'publicistas/categories', component: PublicistasPageComponent },
+  { path: 'contrataciones/categories', component: ContratacionesPageComponent },
+  { path: 'pagos/categories', component: PagosPageComponent },
+  { path: 'publicidades/categories', component: PublicidadesPageComponent },
+  { path: 'bloques/categories', component: BloquesPageComponent },
+  { path: 'titulares/categories', component: TitularesPageComponent },
+  { path: 'contactos/categories', component: ContactosPageComponent },
   // shop ruting
   { path:'listaComercios', component: AltaComercioComponent},
   { path:'altaComercio/listaComercios', component: ShopListComponent},
