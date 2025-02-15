@@ -49,14 +49,15 @@ The NPM package manager comes with Node.js and is required for this project.
 #### **Backend Configuration:**
 1. Navigate to the backend directory:
     ```sh
-    cd backend
+    cd Back
     ```
 2. Install backend dependencies:
     ```sh
     npm install
     ```
 3. Set up backend environment variables:
-   - Create three environment files inside the `backend` folder: `.env.development`, `.env.production`, and `.env.test`.
+   - Create three environment files inside the `Back` folder: `.env.development`, `.env.production`, and `.env.test`.
+   ![alt text](Documentacion/image.png)
    - Each file should contain the following variables:
      ```sh
      PORT=
@@ -73,7 +74,7 @@ The NPM package manager comes with Node.js and is required for this project.
 #### **Frontend Configuration:**
 1. Navigate to the frontend directory:
     ```sh
-    cd frontend
+    cd Front
     ```
 2. Install frontend dependencies:
     ```sh
@@ -88,7 +89,7 @@ The NPM package manager comes with Node.js and is required for this project.
 ## **Running the Application**
 
 ### **Start the Backend**
-Make sure you are inside the `backend` folder:
+Make sure you are inside the `Back` folder:
 - Development mode:
     ```sh
     npm run start:dev
@@ -99,6 +100,7 @@ Make sure you are inside the `backend` folder:
     ```
 
 ### **Start the Frontend**
+Make sure you are inside the `Front` folder:
 - Run the following command from the project's root directory:
     ```sh
     npx ng serve -o
