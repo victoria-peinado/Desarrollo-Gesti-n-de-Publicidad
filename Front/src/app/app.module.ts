@@ -40,6 +40,9 @@ import { TitularesPageComponent } from './pages/titulares-page/titulares-page.co
 import { ContactosPageComponent } from './pages/contactos-page/contactos-page.component';
 import { AsuncionPageComponent } from './pages/asuncion-page/asuncion-page.component';
 import { PublicidadesEdicionSpotPageComponent } from './pages/publicidades-page/pages/publicidades-edicion-spot-page/publicidades-edicion-spot-page.component';
+import { TitleAndSubtitleComponent } from './components/title-and-subtitle/title-and-subtitle.component';
+import { DatosAsociadosComponent } from './components/datos-asociados/datos-asociados.component';
+import { DialogComponent } from './components/dialog/dialog.component';
 
 
 @NgModule({ declarations: [
@@ -76,7 +79,11 @@ import { PublicidadesEdicionSpotPageComponent } from './pages/publicidades-page/
         TitularesPageComponent,
         ContactosPageComponent,
         AsuncionPageComponent,
-        PublicidadesEdicionSpotPageComponent
+        PublicidadesEdicionSpotPageComponent,
+        TitleAndSubtitleComponent,
+        DatosAsociadosComponent,
+        DialogComponent,
+        
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

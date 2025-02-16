@@ -1,1 +1,106 @@
-<p>publicidades-edicion-spot-page works!</p>
+<div id="edicion-spot">
+  <div id="datos-orden">
+    <app-title-and-subtitle
+    [title]="'Datos de la Orden'"
+    [subtitle]="'Ingresá el número de la Orden.'"
+  ></app-title-and-subtitle>
+
+  <form [formGroup]="nroOrden_form" (submit)="next()">
+    <div class="block-data">
+      <fieldset>
+        <app-input-field
+          label="Nro. Orden"
+          placeholder="Ejemplo: 25"
+          type="number"
+          [control]="nroOrdenControl"
+          [validations]="{ required: true }"
+        >
+        </app-input-field>
+      </fieldset>
+      <app-datos-asociados
+    [datos]="[
+      { atributo: 'Número Contratación', valor: '#1' },
+      { atributo: 'Nombre Comercio', valor: 'Informatiks SRL' },
+      { atributo: 'Razón Social', valor: 'Juan Pérez' }
+    ]"
+    [formularioValido]="send"
+  >
+  </app-datos-asociados>
+    </div>
+    
+
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="nroOrden_form.invalid"
+    >
+      Siguiente
+    </button>
+  </form>
+  </div>
+ 
+
+  <div id="datos-spot">
+    <app-title-and-subtitle
+      [title]="'Datos del nuevo Spot'"
+      [subtitle]="'Cargá el archivo del nuevo Spot.'"
+    ></app-title-and-subtitle>
+
+    <form [formGroup]="spot_form" (submit)="finalizar()">
+      <div class="block-data">
+        <fieldset>
+          <input 
+          type="file" 
+          accept="audio/*" 
+          #fileInput 
+          (change)="onFileSelected($event)" 
+          hidden
+        />
+        <button mat-raised-button color="primary" (click)="fileInput.click()">
+          <mat-icon>upload_file</mat-icon> Subir
+        </button>
+
+        </fieldset>
+        
+    
+        <div *ngIf="audioFile" class="audio">
+          <p>{{ audioFile.name }}</p>
+          <audio *ngIf="audioURL" controls>
+            <source [src]="audioURL" type="{{ audioFile.type }}">
+            Tu navegador no soporta el elemento de audio.
+          </audio>
+        </div>
+      </div>
+
+      <div class="datos-asociados">
+        <app-datos-asociados 
+        [datos]="[
+          { atributo: 'Número Spot', valor: '#34' },
+          { atributo: 'Duración', valor: duracionSpot },
+          { atributo: 'Nombre Spot', valor: audioFile?.name }
+        ]"
+        [formularioValido]="spot_form.valid"
+      >
+      </app-datos-asociados>
+      </div>
+    
+      
+
+      <button class="btn-actualizar-spot"
+      mat-flat-button
+      color="accent"
+      [disabled]="spot_form.invalid"
+      (click)="openDialog()"
+    >
+      Actualizar Spot
+    </button>
+
+    </form>
+  
+    
+  </div>
+  
+  
+
+  
+</div>

@@ -1,17 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-body{
-  font-family: 'Roboto', sans-serif;
-    font-family: 'Ubuntu', sans-serif;
-    margin: 0;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+body {
+  font-family: "Roboto", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  margin: 0;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden !important;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-.mdc-notched-outline__notch /*p solucionar bug de appearance="outline" del form-field*/
-{
+.mdc-notched-outline__notch /*p solucionar bug de appearance="outline" del form-field*/ {
   border-right: none;
 }
 
@@ -20,15 +25,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .coloring-deg {
-  background: #8400FF;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #6200ee, #8400FF);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #6200ee, #8400FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #8400ff; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #6200ee,
+    #8400ff
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #6200ee,
+    #8400ff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   color: white;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 :root {
-  --mat-list-item-text-color: #1976D2;
-
+  --mat-list-item-text-color: #1976d2;
 }

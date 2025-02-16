@@ -1,0 +1,10 @@
+<div class="datos-asociados" [class.inactivo]="!formularioValido">
+  <p>Datos Asociados</p>
+  @for (dato of datos; track dato) {
+  <div class="atributo-valor">
+    <span [ngClass]="{ atributo: formularioValido }">{{ dato.atributo }}:</span>
+    <span *ngIf="formularioValido">{{ dato.valor }}</span>
+  </div>
+
+  }
+</div>

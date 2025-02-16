@@ -1,0 +1,22 @@
+.block-data {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4rem;
+}
+
+.audio {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.datos-asociados {
+    padding: 2rem 0;
+}
+
+.btn-actualizar-spot {
+    margin-bottom: 5rem;
+
+}

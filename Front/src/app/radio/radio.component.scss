@@ -1,64 +1,64 @@
+
 .header {
-    background-color: #D7E3FF;
-    color: black;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px;
-    height: 56px;
-}
-
-.sidenav-container {
-    height: 100vh;
-}
-
-.sidenav {
-    width: 200px;
-    border-right: 1px solid #C4C6D0;
-    border-radius: 0;
-}
-
-.btn-suboption {
-    text-align: left;
-}
-
-.btn-radio-fm.selected-radio-fm {
-    background-color: #C1D5F8;
-}
-
-.btn-option.selected-header {
-    background-color: #C1D5F8;
-}
-
-.btn-suboption.selected-menu {
-    background-color: #D7E3FF !important;
-    color: #1976D2 !important;
-    font-weight: bold;
-}
-
-.logo-radio {
-    width: 24px;
-    height: auto;
-    margin-right: 8px;
-}
-
-.logo-text-container {
-    display: inline-flex;
-    align-items: center;
+  background-color: #d7e3ff;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 56px;
 }
 
 .menu-options {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
 }
 
+.sidenav-container {
+  height: 100vh;
+}
 
+.sidenav {
+  width: 200px;
+  border-right: 1px solid #c4c6d0;
+  border-radius: 0;
+}
+
+.btn-suboption {
+  text-align: left;
+}
+
+.selected-radio-fm {
+  background-color: #c1d5f8;
+}
+
+.selected-header {
+  background-color: #c1d5f8;
+}
+
+.btn-suboption.selected-menu {
+  background-color: #d7e3ff !important;
+  color: #1976d2 !important;
+  font-weight: bold;
+}
+
+.logo-radio {
+  width: 24px;
+  height: auto;
+  margin-right: 8px;
+}
+
+.logo-text-container {
+  display: inline-flex;
+  align-items: center;
+}
 
 .header-menu {
-    display: none;
+  display: none;
 
-    @media (max-width: 1024px) {
-        background-color: #D7E3FF;
+  @media (max-width: 1024px) {
+    background-color: #d7e3ff;
     color: black;
     display: flex;
     align-items: center;
@@ -66,18 +66,17 @@
     padding: 0 16px;
     height: 56px;
     z-index: 0;
-      }
+  }
 }
 
 .radio-name {
-    
-    @media (max-width: 1024px) {
-        display: none;
-    }
+  @media (max-width: 1024px) {
+    display: none;
+  }
 }
 
 .sidenav-content {
-    display: flex;
-    flex-direction: row;
-    padding: 2rem 3rem; 
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 3rem;
 }
