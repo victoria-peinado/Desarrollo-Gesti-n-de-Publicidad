@@ -73,13 +73,14 @@ For example, if your `.env` file contains:
    PORT=4000
     ```
 Then, modify your `.http`  files like this:
-    ```sh
+```sh
     @port = 4000
-    ```
+```
+
 5. Return to the project's root directory:
-    ```sh
+```sh
     cd ..
-    ```
+```
 
 #### **Frontend Configuration:**
 1. Navigate to the frontend directory:
