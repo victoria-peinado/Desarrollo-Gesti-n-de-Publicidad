@@ -68,19 +68,21 @@ The NPM package manager comes with Node.js and is required for this project.
      JWT_SECRET=
      ```
 4. If you are using `.http` files to test API requests, make sure to set the correct port before running any request.
-For example, if your `.env` file contains:
-    ```sh
-   PORT=4000
-    ```
-Then, modify your `.http`  files like this:
-```sh
-    @port = 4000
-```
+    For example, if your `.env` file contains:
+        ```sh
+    PORT=4000
+        ```
+    Then, modify your `.http`  files like this:
+        ```sh
+            @port = 4000
+        ```
+
+
 
 5. Return to the project's root directory:
-```sh
-    cd ..
-```
+    ```sh
+        cd ..
+    ```
 
 #### **Frontend Configuration:**
 1. Navigate to the frontend directory:
@@ -91,7 +93,7 @@ Then, modify your `.http`  files like this:
     ```sh
     npm install
     ```
-3. Configure frontend environment variables as needed. **TODO**
+3. Verify that the `apiUrl` values defined in  `Front/scr/environments` folder match the API URLs used in the backend `environments` configuration.
 4. Return to the project's root directory:
     ```sh
     cd ..
@@ -99,7 +101,6 @@ Then, modify your `.http`  files like this:
 
 ## **Running the Application**
 
-### **Start the Backend**
 ### **Start the Backend**  
 Make sure you are inside the `Back` folder.  
 - If this is your first time running the application, execute `npm run _start:dev` or `npm run _start:prd`. If you are using Linux, you must also delete the `dist` folder before compiling again.  
@@ -113,12 +114,21 @@ Make sure you are inside the `Back` folder.
     ```  
 
 ### **Start the Frontend**
-Make sure you are inside the `Front` folder: **TODO**
-- Run the following command from the project's root directory:
+The Front end by defaul uses `http://localhost:4200/`.
+Make sure you are inside the `Front` folder: 
+Run the following command from the project's `Front` directory:
+- Development mode:  
     ```sh
-    npx ng serve -o
-    ```
-
+    npx ng serve -o  
+    ```  
+- Production mode:  
+    ```sh
+    npx ng serve --configuration=production  -o 
+    ```  
+- Build:
+    ```sh
+        ng build  
+    ```  
 ## **Usage Examples**
 *(Include examples of how to use the application, along with screenshots or GIFs to demonstrate functionality.)*
 
