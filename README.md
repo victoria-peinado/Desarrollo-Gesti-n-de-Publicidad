@@ -57,7 +57,8 @@ The NPM package manager comes with Node.js and is required for this project.
     ```
 3. Set up backend environment variables:
    - Create three environment files inside the `Back` folder: `.env.development`, `.env.production`, and `.env.test`.
-   ![alt text](Documentacion/image.png)
+   ![IMAGEN](Documentacion/env.png)
+
    - Each file should contain the following variables:
      ```sh
      PORT=
@@ -66,7 +67,16 @@ The NPM package manager comes with Node.js and is required for this project.
      CONNECTION_STRING=
      JWT_SECRET=
      ```
-4. Return to the project's root directory:
+4. If you are using `.http` files to test API requests, make sure to set the correct port before running any request.
+For example, if your `.env` file contains:
+    ```sh
+   PORT=4000
+    ```
+Then, modify your `.http`  files like this:
+    ```sh
+    @port = 4000
+    ```
+5. Return to the project's root directory:
     ```sh
     cd ..
     ```
@@ -80,7 +90,7 @@ The NPM package manager comes with Node.js and is required for this project.
     ```sh
     npm install
     ```
-3. Configure frontend environment variables as needed.
+3. Configure frontend environment variables as needed. **TODO**
 4. Return to the project's root directory:
     ```sh
     cd ..
@@ -89,19 +99,20 @@ The NPM package manager comes with Node.js and is required for this project.
 ## **Running the Application**
 
 ### **Start the Backend**
-Make sure you are inside the `Back` folder:
-- Only for the first time execute npm run _start:dev or npm run _start:prd. Si estas usando linux tambien deberas usar estos comandos y borrar la carpeta dist antes de compilar.
-- Development mode:
+### **Start the Backend**  
+Make sure you are inside the `Back` folder.  
+- If this is your first time running the application, execute `npm run _start:dev` or `npm run _start:prd`. If you are using Linux, you must also delete the `dist` folder before compiling again.  
+- Development mode:  
     ```sh
-    npm run start:dev
-    ```
-- Production mode:
+    npm run start:dev  
+    ```  
+- Production mode:  
     ```sh
-    npm run start:prod
-    ```
+    npm run start:prod  
+    ```  
 
 ### **Start the Frontend**
-Make sure you are inside the `Front` folder:
+Make sure you are inside the `Front` folder: **TODO**
 - Run the following command from the project's root directory:
     ```sh
     npx ng serve -o
