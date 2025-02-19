@@ -134,6 +134,7 @@ Run the following command from the project's `Front` directory:
 
 ## **Running Tests**
 *(Explain how to run tests for both frontend and backend, including the necessary commands.)*
+npm run test en front
 
 ## **License**
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). See the `LICENSE` file for more details.

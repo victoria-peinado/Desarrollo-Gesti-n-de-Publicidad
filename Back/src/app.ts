@@ -25,6 +25,7 @@ import {env} from './config_env/config.js';
 const app = express();
 
 
+
 //base middlewares
 app.use(express.json());//middleware para parsear el body a json
 app.use(cors({ origin: env.FRONTEND_URL }));//acepts request from this origin only(frontend)
