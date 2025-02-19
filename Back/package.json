@@ -6,11 +6,13 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
-  "_start:dev": "cross-env NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/src/app.js\"",
+    "_start:dev": "cross-env NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/src/app.js\"",
     "_start:prod": "cross-env NODE_ENV=production node ./dist/src/app.js",
     "clean": " rd /s /q dist",
     "start:dev": "npm run clean && npm run _start:dev",
-    "start:prod": "npm run clean && npm run build && npm run _start:prod"
+    "start:prod": "npm run clean && npm run build && npm run _start:prod",
+    "test":"set NODE_OPTIONS=--experimental-vm-modules && jest --runInBand --detectOpenHandles --forceExit --coverage",
+    "test:watch": "set NODE_OPTIONS=--experimental-vm-modules && jest --watchAll --runInBand --detectOpenHandles --forceExit"
   },
   "keywords": [],
   "author": "",
@@ -22,7 +24,9 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "20.6.3",
     "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
     "prettier": "3.0.3",
+    "supertest": "^7.0.0",
     "tsc-watch": "6.0.4",
     "typescript": "5.2.2"
   },

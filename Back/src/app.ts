@@ -23,7 +23,7 @@ import {env} from './config_env/config.js';
 
 //server
 const app = express();
-console.log(env)
+
 
 //base middlewares
 app.use(express.json());//middleware para parsear el body a json
