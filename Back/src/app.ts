@@ -59,4 +59,5 @@ app.use((_, res) => {
 app.listen(env.PORT, () => {
   console.log("Server running in http:\\localhost:" + env.PORT)
 })
+export { app }
 
