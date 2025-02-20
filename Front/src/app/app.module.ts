@@ -83,7 +83,6 @@ import { DialogComponent } from './components/dialog/dialog.component';
         TitleAndSubtitleComponent,
         DatosAsociadosComponent,
         DialogComponent,
-        
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

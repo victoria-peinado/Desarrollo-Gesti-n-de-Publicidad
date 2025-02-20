@@ -1,3 +1,4 @@
+// datos-asociados.component.ts
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -8,4 +9,5 @@ import { Component, Input } from '@angular/core';
 export class DatosAsociadosComponent {
   @Input() datos: { atributo: string; valor?: string }[] = [];
   @Input() formularioValido = false;
+  @Input() cargando = false;
 }

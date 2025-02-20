@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import {
   MatDialog,
   MAT_DIALOG_DATA,
@@ -15,6 +15,7 @@ import {
   styleUrl: './dialog.component.scss'
 })
 export class DialogComponent {
+
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,

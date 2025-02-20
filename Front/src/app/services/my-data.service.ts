@@ -90,4 +90,16 @@ export class MyDataService {
   }
 
 
+  getOrderById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}order/${id}`);
+  }
+
+  getContractById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}contract/${id}`);
+  }
+
+  getOwnerById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}owner/${id}`);
+  }
+  
 }

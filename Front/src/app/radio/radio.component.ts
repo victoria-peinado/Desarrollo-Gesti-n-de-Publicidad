@@ -22,7 +22,6 @@ export class RadioComponent {
 
     this.options = [
       'Comercios',
-      'Publicistas',
       'Contrataciones',
       'Pagos',
       'Publicidades',
@@ -32,12 +31,11 @@ export class RadioComponent {
     ];
 
     this.subOptions = {
-      Comercios: ['Alta Comercios', 'Lista Comercios', 'Edición Comercio'],
-      Publicistas: ['A', 'B', 'C'],
+      Comercios: ['Alta Comercio', 'Listado Comercios', 'Edición Comercio'],
       Contrataciones: ['Alta Contratación', 'Edición Contratación'],
-      Pagos: ['Registrar Pago', 'Informe Falta Pago'],
+      Pagos: ['Registro Pago', 'Informe Falta Pago'],
       Publicidades: ['Emisión Órdenes', 'Listado Publicitario', 'Edición Spot'],
-      Bloques: ['Edición Bloque', 'Listado Bloques'],
+      Bloques: ['Listado Bloques', 'Edición Bloque'],
       Titulares: ['A', 'B', 'C'],
       Contactos: ['A', 'B', 'C'],
     };
