@@ -14,7 +14,6 @@ import { OwnerComponent } from './owner/owner.component';
 import { ContactComponent } from './contact/contact.component';
 import { BlockListComponent } from './block-list/block-list.component';
 import { ComerciosPageComponent } from './pages/comercios-page/comercios-page.component';
-import { PublicistasPageComponent } from './pages/publicistas-page/publicistas-page.component';
 import { ContactosPageComponent } from './pages/contactos-page/contactos-page.component';
 import { TitularesPageComponent } from './pages/titulares-page/titulares-page.component';
 import { BloquesPageComponent } from './pages/bloques-page/bloques-page.component';
@@ -31,7 +30,6 @@ const routes: Routes = [
   // pages
   { path: 'asuncion', component: AsuncionPageComponent },
   { path: 'comercios/categories', component: ComerciosPageComponent },
-  { path: 'publicistas/categories', component: PublicistasPageComponent },
   { path: 'contrataciones/categories', component: ContratacionesPageComponent },
   { path: 'pagos/categories', component: PagosPageComponent },
   { path: 'publicidades/categories', component: PublicidadesPageComponent },

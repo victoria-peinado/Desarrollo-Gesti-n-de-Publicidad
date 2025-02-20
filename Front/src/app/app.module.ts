@@ -31,7 +31,6 @@ import { InputFieldComponent } from './input-field/input-field.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { RadioComponent } from './radio/radio.component';
 import { ComerciosPageComponent } from './pages/comercios-page/comercios-page.component';
-import { PublicistasPageComponent } from './pages/publicistas-page/publicistas-page.component';
 import { ContratacionesPageComponent } from './pages/contrataciones-page/contrataciones-page.component';
 import { PagosPageComponent } from './pages/pagos-page/pagos-page.component';
 import { PublicidadesPageComponent } from './pages/publicidades-page/publicidades-page.component';
@@ -43,6 +42,24 @@ import { PublicidadesEdicionSpotPageComponent } from './pages/publicidades-page/
 import { TitleAndSubtitleComponent } from './components/title-and-subtitle/title-and-subtitle.component';
 import { DatosAsociadosComponent } from './components/datos-asociados/datos-asociados.component';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { AltaComercioCategoryComponent } from './pages/comercios-page/categories/alta-comercio-category/alta-comercio-category.component';
+import { ListadoComerciosCategoryComponent } from './pages/comercios-page/categories/listado-comercios-category/listado-comercios-category.component';
+import { EdicionComercioCategoryComponent } from './pages/comercios-page/categories/edicion-comercio-category/edicion-comercio-category.component';
+import { AltaContratacionCategoryComponent } from './pages/contrataciones-page/categories/alta-contratacion-category/alta-contratacion-category.component';
+import { EdicionContratacionCategoryComponent } from './pages/contrataciones-page/categories/edicion-contratacion-category/edicion-contratacion-category.component';
+import { RegistroPagoCategoryComponent } from './pages/pagos-page/categories/registro-pago-category/registro-pago-category.component';
+import { InformeFaltaPagoCategoryComponent } from './pages/pagos-page/categories/informe-falta-pago-category/informe-falta-pago-category.component';
+import { EmisionOrdenesCategoryComponent } from './pages/publicidades-page/categories/emision-ordenes-category/emision-ordenes-category.component';
+import { ListadoPublicitarioCategoryComponent } from './pages/publicidades-page/categories/listado-publicitario-category/listado-publicitario-category.component';
+import { EdicionSpotCategoryComponent } from './pages/publicidades-page/categories/edicion-spot-category/edicion-spot-category.component';
+import { AltaTitularCategoryComponent } from './pages/titulares-page/categories/alta-titular-category/alta-titular-category.component';
+import { ConsultaTitularCategoryComponent } from './pages/titulares-page/categories/consulta-titular-category/consulta-titular-category.component';
+import { EdicionTitularCategoryComponent } from './pages/titulares-page/categories/edicion-titular-category/edicion-titular-category.component';
+import { BajaTitularCategoryComponent } from './pages/titulares-page/categories/baja-titular-category/baja-titular-category.component';
+import { AltaContactoCategoryComponent } from './pages/contactos-page/categories/alta-contacto-category/alta-contacto-category.component';
+import { ConsultaContactoCategoryComponent } from './pages/contactos-page/categories/consulta-contacto-category/consulta-contacto-category.component';
+import { EdicionContactoCategoryComponent } from './pages/contactos-page/categories/edicion-contacto-category/edicion-contacto-category.component';
+import { BajaContactoCategoryComponent } from './pages/contactos-page/categories/baja-contacto-category/baja-contacto-category.component';
 
 
 @NgModule({ declarations: [
@@ -71,7 +88,6 @@ import { DialogComponent } from './components/dialog/dialog.component';
         InputFieldComponent,
         RadioComponent,
         ComerciosPageComponent,
-        PublicistasPageComponent,
         ContratacionesPageComponent,
         PagosPageComponent,
         PublicidadesPageComponent,
@@ -83,6 +99,24 @@ import { DialogComponent } from './components/dialog/dialog.component';
         TitleAndSubtitleComponent,
         DatosAsociadosComponent,
         DialogComponent,
+        AltaComercioCategoryComponent,
+        ListadoComerciosCategoryComponent,
+        EdicionComercioCategoryComponent,
+        AltaContratacionCategoryComponent,
+        EdicionContratacionCategoryComponent,
+        RegistroPagoCategoryComponent,
+        InformeFaltaPagoCategoryComponent,
+        EmisionOrdenesCategoryComponent,
+        ListadoPublicitarioCategoryComponent,
+        EdicionSpotCategoryComponent,
+        AltaTitularCategoryComponent,
+        ConsultaTitularCategoryComponent,
+        EdicionTitularCategoryComponent,
+        BajaTitularCategoryComponent,
+        AltaContactoCategoryComponent,
+        ConsultaContactoCategoryComponent,
+        EdicionContactoCategoryComponent,
+        BajaContactoCategoryComponent,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,
