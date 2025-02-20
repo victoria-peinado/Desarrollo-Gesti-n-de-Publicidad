@@ -1,1 +1,111 @@
-<p>edicion-spot-category works!</p>
+<div id="edicion-spot">
+    <div id="datos-orden">
+      <app-title-and-subtitle
+        [title]="'Datos de la Orden'"
+        [subtitle]="'Ingresá el número de la Orden.'"
+      ></app-title-and-subtitle>
+  
+      <form [formGroup]="nroOrden_form">
+        <div class="block-data">
+          <fieldset>
+            <app-input-field
+              label="Nro. Orden"
+              placeholder="Ejemplo: 25"
+              type="number"
+              [control]="nroOrdenControl"
+              [validations]="{ required: true }"
+            >
+            </app-input-field>
+          </fieldset>
+          <div class="datos-asociados">
+            <app-datos-asociados
+              [datos]="[
+                { atributo: 'Número Contratación', valor: contractId },
+                { atributo: 'Nombre Comercio', valor: fantasyName },
+                { atributo: 'Razón Social', valor: businessName }
+              ]"
+              [formularioValido]="orderFounded"
+              [cargando]="cargando"
+            >
+            </app-datos-asociados>
+  
+            @if (errorMessage) {
+            <button mat-button color="warn">
+              <mat-icon fontIcon="close"></mat-icon>
+              {{ errorMessage }}
+            </button>
+            } @else if (orderFounded) {
+            <button mat-button color="accent">
+              <mat-icon fontIcon="check"></mat-icon>
+              Orden existente.
+            </button>
+            }
+          </div>
+        </div>
+  
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="nroOrden_form.invalid"
+          (click)="siguiente()"
+        >
+          Siguiente
+        </button>
+      </form>
+    </div>
+  
+    <div *ngIf="orderFounded" id="datos-spot">
+      <app-title-and-subtitle
+        [title]="'Datos del nuevo Spot'"
+        [subtitle]="'Cargá el archivo del nuevo Spot.'"
+      ></app-title-and-subtitle>
+  
+      <form [formGroup]="spot_form" (submit)="finalizar()">
+        <div class="block-data">
+          <fieldset>
+            <input
+              type="file"
+              accept="audio/*"
+              #fileInput
+              (change)="onFileSelected($event)"
+              hidden
+            />
+            <button mat-raised-button color="primary" (click)="fileInput.click()">
+              <mat-icon>upload_file</mat-icon> Subir
+            </button>
+          </fieldset>
+  
+          <div *ngIf="audioFile" class="audio">
+            <p>{{ audioFile.name }}</p>
+            <audio *ngIf="audioURL" controls>
+              <source [src]="audioURL" type="{{ audioFile.type }}" />
+              Tu navegador no soporta el elemento de audio.
+            </audio>
+          </div>
+        </div>
+  
+        <div class="datos-asociados">
+          <app-datos-asociados
+            [datos]="[
+              { atributo: 'Número Spot', valor: '#34' },
+              { atributo: 'Duración', valor: duracionSpot },
+              { atributo: 'Nombre Spot', valor: audioFile?.name }
+            ]"
+            [formularioValido]="spot_form.valid"
+          >
+          </app-datos-asociados>
+        </div>
+  
+        <button
+          class="btn-actualizar-spot"
+          mat-flat-button
+          color="accent"
+          [disabled]="!spot_form.valid"
+          (click)="openDialog()"
+        >
+          Actualizar Spot
+        </button>
+      </form>
+    </div>
+  </div>
+  

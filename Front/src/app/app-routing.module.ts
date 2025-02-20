@@ -21,7 +21,7 @@ import { PublicidadesPageComponent } from './pages/publicidades-page/publicidade
 import { PagosPageComponent } from './pages/pagos-page/pagos-page.component';
 import { ContratacionesPageComponent } from './pages/contrataciones-page/contrataciones-page.component';
 import { AsuncionPageComponent } from './pages/asuncion-page/asuncion-page.component';
-import { PublicidadesEdicionSpotPageComponent } from './pages/publicidades-page/pages/publicidades-edicion-spot-page/publicidades-edicion-spot-page.component';
+import { EdicionSpotCategoryComponent } from './pages/publicidades-page/categories/edicion-spot-category/edicion-spot-category.component';
 
 const routes: Routes = [
   { path:'', component: InicioComponent },
@@ -37,7 +37,7 @@ const routes: Routes = [
   { path: 'titulares/categories', component: TitularesPageComponent },
   { path: 'contactos/categories', component: ContactosPageComponent },
   // subpages
-  { path: 'publicidades/edicion-spot', component: PublicidadesEdicionSpotPageComponent },
+  { path: 'publicidades/edicion-spot', component: EdicionSpotCategoryComponent },
   // shop ruting
   { path:'listaComercios', component: AltaComercioComponent},
   { path:'altaComercio/listaComercios', component: ShopListComponent},
