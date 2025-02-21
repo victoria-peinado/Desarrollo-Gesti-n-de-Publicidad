@@ -59,6 +59,8 @@ import { AltaContactoCategoryComponent } from './pages/contactos-page/categories
 import { ConsultaContactoCategoryComponent } from './pages/contactos-page/categories/consulta-contacto-category/consulta-contacto-category.component';
 import { EdicionContactoCategoryComponent } from './pages/contactos-page/categories/edicion-contacto-category/edicion-contacto-category.component';
 import { BajaContactoCategoryComponent } from './pages/contactos-page/categories/baja-contacto-category/baja-contacto-category.component';
+import { ListadoBloquesCategoryComponent } from './pages/bloques-page/categories/listado-bloques-category/listado-bloques-category.component';
+import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/edicion-bloque-category/edicion-bloque-category.component';
 
 
 @NgModule({ declarations: [
@@ -115,6 +117,8 @@ import { BajaContactoCategoryComponent } from './pages/contactos-page/categories
         ConsultaContactoCategoryComponent,
         EdicionContactoCategoryComponent,
         BajaContactoCategoryComponent,
+        ListadoBloquesCategoryComponent,
+        EdicionBloqueCategoryComponent,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

@@ -36,8 +36,8 @@ export class RadioComponent {
       Pagos: ['Registro Pago', 'Informe Falta Pago'],
       Publicidades: ['Emisión Órdenes', 'Listado Publicitario', 'Edición Spot'],
       Bloques: ['Listado Bloques', 'Edición Bloque'],
-      Titulares: ['A', 'B', 'C'],
-      Contactos: ['A', 'B', 'C'],
+      Titulares: ['Alta Titular', 'Consulta Titular', 'Edición Titular', 'Baja Titular'],
+      Contactos: ['Alta Contacto', 'Consulta Contacto', 'Edición Contacto', 'Baja Contacto'],
     };
   }
 
@@ -63,6 +63,7 @@ export class RadioComponent {
 
     this.selectedSubOption = subOption;
     const route: string = `/${this.normalizeText(this.selectedOption)}/${this.normalizeText(subOption)}`;
+    console.log(route);
     this.router.navigate([route]);
   }
 

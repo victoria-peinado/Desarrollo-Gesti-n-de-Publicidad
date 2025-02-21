@@ -21,7 +21,27 @@ import { PublicidadesPageComponent } from './pages/publicidades-page/publicidade
 import { PagosPageComponent } from './pages/pagos-page/pagos-page.component';
 import { ContratacionesPageComponent } from './pages/contrataciones-page/contrataciones-page.component';
 import { AsuncionPageComponent } from './pages/asuncion-page/asuncion-page.component';
+import { AltaComercioCategoryComponent } from './pages/comercios-page/categories/alta-comercio-category/alta-comercio-category.component';
+import { ListadoComerciosCategoryComponent } from './pages/comercios-page/categories/listado-comercios-category/listado-comercios-category.component';
+import { EdicionComercioCategoryComponent } from './pages/comercios-page/categories/edicion-comercio-category/edicion-comercio-category.component';
+import { AltaContratacionCategoryComponent } from './pages/contrataciones-page/categories/alta-contratacion-category/alta-contratacion-category.component';
+import { EdicionContratacionCategoryComponent } from './pages/contrataciones-page/categories/edicion-contratacion-category/edicion-contratacion-category.component';
+import { RegistroPagoCategoryComponent } from './pages/pagos-page/categories/registro-pago-category/registro-pago-category.component';
+import { InformeFaltaPagoCategoryComponent } from './pages/pagos-page/categories/informe-falta-pago-category/informe-falta-pago-category.component';
+import { EmisionOrdenesCategoryComponent } from './pages/publicidades-page/categories/emision-ordenes-category/emision-ordenes-category.component';
+import { ListadoPublicitarioCategoryComponent } from './pages/publicidades-page/categories/listado-publicitario-category/listado-publicitario-category.component';
 import { EdicionSpotCategoryComponent } from './pages/publicidades-page/categories/edicion-spot-category/edicion-spot-category.component';
+import { AltaTitularCategoryComponent } from './pages/titulares-page/categories/alta-titular-category/alta-titular-category.component';
+import { ConsultaTitularCategoryComponent } from './pages/titulares-page/categories/consulta-titular-category/consulta-titular-category.component';
+import { EdicionTitularCategoryComponent } from './pages/titulares-page/categories/edicion-titular-category/edicion-titular-category.component';
+import { BajaTitularCategoryComponent } from './pages/titulares-page/categories/baja-titular-category/baja-titular-category.component';
+import { AltaContactoCategoryComponent } from './pages/contactos-page/categories/alta-contacto-category/alta-contacto-category.component';
+import { ConsultaContactoCategoryComponent } from './pages/contactos-page/categories/consulta-contacto-category/consulta-contacto-category.component';
+import { EdicionContactoCategoryComponent } from './pages/contactos-page/categories/edicion-contacto-category/edicion-contacto-category.component';
+import { BajaContactoCategoryComponent } from './pages/contactos-page/categories/baja-contacto-category/baja-contacto-category.component';
+import { ListadoBloquesCategoryComponent } from './pages/bloques-page/categories/listado-bloques-category/listado-bloques-category.component';
+import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/edicion-bloque-category/edicion-bloque-category.component';
+
 
 const routes: Routes = [
   { path:'', component: InicioComponent },
@@ -36,8 +56,27 @@ const routes: Routes = [
   { path: 'bloques/categories', component: BloquesPageComponent },
   { path: 'titulares/categories', component: TitularesPageComponent },
   { path: 'contactos/categories', component: ContactosPageComponent },
-  // subpages
+  // categories
+  { path: 'comercios/alta-comercio', component: AltaComercioCategoryComponent },
+  { path: 'comercios/listado-comercios', component: ListadoComerciosCategoryComponent },
+  { path: 'comercios/edicion-comercio', component: EdicionComercioCategoryComponent },
+  { path: 'contrataciones/alta-contratacion', component: AltaContratacionCategoryComponent },
+  { path: 'contrataciones/edicion-contratacion', component: EdicionContratacionCategoryComponent },
+  { path: 'pagos/registro-pago', component: RegistroPagoCategoryComponent },
+  { path: 'pagos/informe-falta-pago', component: InformeFaltaPagoCategoryComponent },
+  { path: 'publicidades/emision-ordenes', component: EmisionOrdenesCategoryComponent },
+  { path: 'publicidades/listado-publicitario', component: ListadoPublicitarioCategoryComponent },
   { path: 'publicidades/edicion-spot', component: EdicionSpotCategoryComponent },
+  { path: 'bloques/listado-bloques', component: ListadoBloquesCategoryComponent },
+  { path: 'bloques/edicion-bloque', component: EdicionBloqueCategoryComponent },
+  { path: 'titulares/alta-titular', component: AltaTitularCategoryComponent },
+  { path: 'titulares/consulta-titular', component: ConsultaTitularCategoryComponent  },
+  { path: 'titulares/edicion-titular', component: EdicionTitularCategoryComponent },
+  { path: 'titulares/baja-titular', component: BajaTitularCategoryComponent },
+  { path: 'contactos/alta-contacto', component: AltaContactoCategoryComponent },
+  { path: 'contactos/consulta-contacto', component: ConsultaContactoCategoryComponent },
+  { path: 'contactos/edicion-contacto', component: EdicionContactoCategoryComponent },
+  { path: 'contactos/baja-contacto', component: BajaContactoCategoryComponent },
   // shop ruting
   { path:'listaComercios', component: AltaComercioComponent},
   { path:'altaComercio/listaComercios', component: ShopListComponent},
