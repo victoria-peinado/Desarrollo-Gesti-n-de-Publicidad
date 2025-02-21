@@ -1,41 +1,59 @@
 <div class="row">
   <mat-icon *ngIf="icon" class="input-icon">{{ icon }}</mat-icon>
 
-  <mat-form-field class="w-full">
-    <mat-label>{{ label }}</mat-label>
+  @if (mode === 'input') {
+    <mat-form-field class="w-full">
+      <mat-label>{{ label }}</mat-label>
 
-    <input
-      matInput
-      [type]="inputType"
-      [placeholder]="placeholder"
-      [formControl]="control"
-      [(ngModel)]="value"
-    />
+      <input
+        matInput
+        [type]="inputType"
+        [placeholder]="placeholder"
+        [formControl]="control"
+        [(ngModel)]="value"
+      />
 
-    <mat-icon
-      *ngIf="value && type != 'password'"
-      mat-icon-button
-      matSuffix
-      aria-hidden="false"
-      aria-label="Close icon to delete input value"
-      (click)="value = ''"
-      >close</mat-icon>
+      <mat-icon
+        *ngIf="value && type !== 'password'"
+        mat-icon-button
+        matSuffix
+        aria-hidden="false"
+        aria-label="Clear input value"
+        (click)="value = ''"
+        >close</mat-icon
+      >
 
-    <mat-icon
-      *ngIf="type === 'password'"
-      mat-icon-button
-      matSuffix
-      aria-hidden="false"
-      aria-label="Toggle password visibility"
-      (click)="togglePasswordVisibility()"
-      >{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
+      <mat-icon
+        *ngIf="type === 'password'"
+        mat-icon-button
+        matSuffix
+        aria-hidden="false"
+        aria-label="Toggle password visibility"
+        (click)="togglePasswordVisibility()"
+        >{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon
+      >
 
-    <mat-error *ngIf="control.invalid && control.touched">
-      {{ getErrorMessage() }}
-    </mat-error>
+      <mat-error *ngIf="control.invalid && control.touched">
+        {{ getErrorMessage() }}
+      </mat-error>
+    </mat-form-field>
+  } @else if (mode === 'select') {
+    <mat-form-field class="w-full">
+      <mat-label>{{ label }}</mat-label>
+      <mat-select [formControl]="control">
+    <mat-option [value]="null">Ninguno</mat-option>
 
-    <mat-error class="mat-error" *ngIf="">
-      *Existente
-    </mat-error>
-  </mat-form-field>
+    @for (option of options; track $index) {
+      <mat-option [value]="option">
+        {{ option }}
+      </mat-option>
+    }
+
+  </mat-select>
+      
+      <mat-error *ngIf="control.hasError('required')">
+        * Campo obligatorio
+      </mat-error>
+    </mat-form-field>
+  }
 </div>

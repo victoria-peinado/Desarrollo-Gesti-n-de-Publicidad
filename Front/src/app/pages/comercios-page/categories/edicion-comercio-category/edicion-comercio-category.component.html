@@ -1,57 +1,187 @@
 <div id="edicion-comercio">
-  
   <div id="datos-titular">
     <app-title-and-subtitle
-    [title]="'Datos del Titular'"
-    [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
-  ></app-title-and-subtitle>
+      [title]="'Datos del Titular'"
+      [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
+    ></app-title-and-subtitle>
 
-  <form [formGroup]="titular_form">
-    <div class="fila-data">
-      <fieldset>
-        <app-input-field
-          label="CUIT Titular"
-          placeholder="Ejemplo: 25444505879"
-          type="text"
-          [control]="cuitControl"
-          [validations]="{ required: true, minlength: 11, maxlength: 11 }"
-        >
-        </app-input-field>
-      </fieldset>
-      <fieldset>
-        <app-input-field
-          label="Comercio"
-          placeholder="Ejemplo: fantasy"
-          type="text"
-          [control]="comercioControl"
-          [validations]="{ required: true }"
-        >
-        </app-input-field>
-      </fieldset>
-    </div>
+    <form [formGroup]="titular_form">
+      <div class="fila-data">
+        <fieldset>
+          <app-input-field
+            label="CUIT Titular"
+            placeholder="Ejemplo: 25444505879"
+            type="text"
+            [control]="cuitControl"
+            [validations]="{ required: true, minLength: 11, maxLength: 11, pattern: '^[0-9]*$' }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
 
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="titular_form.invalid"
-      (click)="siguiente()"
-    >
-      Siguiente
-    </button>
-  </form>
+        <button
+          mat-raised-button 
+          color="primary" 
+          [disabled]="cuitControl.invalid" 
+          (click)="buscarTitular()">
+          Check
+        </button>
+
+        @if (errorMessage) {
+          <button mat-button color="warn">
+            <mat-icon fontIcon="close"></mat-icon>
+            {{ errorMessage }}
+          </button>
+        } @else if (ownerFounded) {
+          <button mat-button color="accent">
+            <mat-icon fontIcon="check"></mat-icon>
+            Titular existente.
+          </button>
+        }
+
+        
+      </div>
+
+      <fieldset>
+        <fieldset>
+          <app-input-field
+            label="Comercio"
+            [control]="comercioControl"
+            [validations]="{ required: true }"
+            [mode]="'select'"
+            [options]="comercios"
+            [selectedOption]="comercios[0]"
+          ></app-input-field>
+        </fieldset>
+      </fieldset>
+
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="titular_form.invalid || comercioControl.disabled"
+        (click)="siguiente()"
+      >
+        Siguiente
+      </button>
+    </form>
   </div>
 
-  <div id="datos-comercio">
+  <div [hidden]="!shopFounded" id="datos-comercio">
     <app-title-and-subtitle
       [title]="'Datos del Comercio'"
-      [subtitle]="'Modifique los datos pertinentes del Comercio.'"
+      [subtitle]="'Modifique datos pertinentes del Comercio.'"
     ></app-title-and-subtitle>
+    <form [formGroup]="shop_form">
+      <div class="fila-data">
+        <fieldset>
+          <app-input-field
+            label="Nombre Fantasía"
+            placeholder="Ejemplo: Librería Normita"
+            type="text"
+            [control]="fantasyNameControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Dirección"
+            placeholder="Ejemplo: Belgrano 67"
+            type="text"
+            [control]="addressControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Tipo Facturación"
+            [control]="billingTypeControl"
+            [validations]="{ required: true }"
+            [mode]="'select'"
+            [options]="billingTypes"
+          ></app-input-field>
+        </fieldset>
+      </div>
+      <div class="fila-data">
+        <fieldset>
+          <app-input-field
+            label="Mail"
+            placeholder="Ejemplo: normita@gmail.com"
+            type="text"
+            [control]="mailControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Forma Pago Habitual"
+            [control]="usualPaymentFormControl"
+            [validations]="{ required: true }"
+            [mode]="'select'"
+            [options]="usualPaymentForms"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Tipo Comercio"
+            [control]="typeControl"
+            [validations]="{ required: true }"
+            [mode]="'select'"
+            [options]="shopTypes"
+          ></app-input-field>
+        </fieldset>
+      </div>
+    </form>
   </div>
 
-  <div id="datos-contacto">
+  <div [hidden]="!shopFounded" id="datos-contacto">
     <app-title-and-subtitle
       [title]="'Datos del Contacto'"
-      [subtitle]="'Modifique los datos pertinentes del Contacto.'"
+      [subtitle]="'Modifique datos pertinentes del Contacto.'"
     ></app-title-and-subtitle>
+    <form [formGroup]="contact_form">
+      <div class="fila-data">
+        <fieldset>
+          <app-input-field
+            label="Nombre"
+            placeholder="Ejemplo: Juan"
+            type="text"
+            [control]="nameControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Apellido"
+            placeholder="Ejemplo: Pérez"
+            type="text"
+            [control]="lastnameControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="DNI"
+            placeholder="Ejemplo: 44996266"
+            type="text"
+            [control]="dniControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+      </div>
+
+      <button
+        class="btn-guardar-cambios"
+        mat-flat-button
+        color="accent"
+        (click)="openDialog()"
+      >
+        Guardar cambios
+      </button>
+    </form>
   </div>
 </div>

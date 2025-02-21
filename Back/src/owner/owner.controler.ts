@@ -26,18 +26,17 @@ function sanitizeOwnerInput(req: Request, res: Response, next: NextFunction) {
 
 
 async function findAll(req: Request, res: Response) {
-      try {
-        const owners = await em.find(Owner, {})
-        res.status(200).json({message: 'All owners found successfully', data: owners})
-    } catch (error: any) {
-        res.status(500).json({message: error.message})
-    }
-    }
-
+  try {
+    const owners = await em.find(Owner, {}, { populate: ['shops'] }); // Agregar await
+    res.status(200).json({ message: 'All owners found successfully', data: owners });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
 async function findOne(req: Request, res: Response) {
    try {
     const id = req.params.id
-    const owner = await em.findOneOrFail(Owner, { id })
+    const owner = await em.findOneOrFail(Owner, { id }, { populate: ['shops', 'shops.contact'] })
     res.status(200).json({message: 'Owner found successfully', data: owner})
    } catch (error: any) {
      res.status(500).json({message: error.message})
@@ -87,7 +86,7 @@ async function remove(req: Request, res: Response) {
 async function getOwnerByCuit(req: Request, res: Response) {
     try {
         const cuit = req.params.cuit;
-        const owner = await em.findOne(Owner, { cuit });
+        const owner = await em.findOne(Owner, { cuit }, { populate: ['shops', 'shops.contact'] });
 
         if (!owner) {
             return res.status(404).json({ msg: "Owner not found" });

@@ -1,14 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogContent,
-  MatDialogActions,
-  MatDialogClose,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { MyDataService } from 'src/app/services/my-data.service';
 
@@ -108,10 +100,6 @@ nroOrden_form: FormGroup;
         this.cargando = false;
       },
     });
-  }
-
-  finalizar() {
-    console.log('Mensaje confirmación');
   }
 
   onFileSelected(event: Event) {

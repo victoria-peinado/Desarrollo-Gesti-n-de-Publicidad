@@ -60,7 +60,7 @@
       [subtitle]="'Cargá el archivo del nuevo Spot.'"
     ></app-title-and-subtitle>
 
-    <form [formGroup]="spot_form" (submit)="finalizar()">
+    <form [formGroup]="spot_form">
       <div class="block-data">
         <fieldset>
           <input
@@ -97,13 +97,13 @@
       </div>
 
       <button
-        class="btn-actualizar-spot"
+        class="btn-guardar-cambios"
         mat-flat-button
         color="accent"
         [disabled]="!spot_form.valid"
         (click)="openDialog()"
       >
-        Actualizar Spot
+        Guardar cambios
       </button>
     </form>
   </div>

@@ -1,18 +1,16 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
+import path from "path";
 
-// Obtener __dirname en ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Obtener el directorio raíz del proyecto
+const rootDir = process.cwd();
 
-// Definir la ruta del archivo .env
-const envPath = path.resolve(__dirname, `../../../.env.${process.env.NODE_ENV}`);
-console.log("Loading environment from:", envPath); 
+// Construir la ruta al archivo `.env`
+const envPath = path.resolve(rootDir, `.env.${process.env.NODE_ENV}`);
+console.log("Loading environment from:", envPath);
 
+// Cargar variables de entorno
 const result = dotenv.config({ path: envPath });
 
-// Verifica si hubo un error cargando el archivo .env
 if (result.error) {
   console.error("Error loading .env file:", result.error);
 } else {
