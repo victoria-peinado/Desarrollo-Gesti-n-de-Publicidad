@@ -26,14 +26,13 @@ function sanitizeOwnerInput(req: Request, res: Response, next: NextFunction) {
 
 
 async function findAll(req: Request, res: Response) {
-      try {
-        const owners = em.find(Owner, {}, { populate: ['shops'] });
-        res.status(200).json({message: 'All owners found successfully', data: owners})
-    } catch (error: any) {
-        res.status(500).json({message: error.message})
-    }
-    }
-
+  try {
+    const owners = await em.find(Owner, {}, { populate: ['shops'] }); // Agregar await
+    res.status(200).json({ message: 'All owners found successfully', data: owners });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
 async function findOne(req: Request, res: Response) {
    try {
     const id = req.params.id
