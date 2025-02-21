@@ -9,4 +9,5 @@ dist/**/*
 .history/
 *.vsix
 .env*
+.env.*
 coverage/
