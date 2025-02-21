@@ -11,8 +11,7 @@
     "clean": " rd /s /q dist",
     "start:dev": "npm run clean && npm run _start:dev",
     "start:prod": "npm run clean && npm run build && npm run _start:prod",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=development jest --runInBand --detectOpenHandles --forceExit --coverage=true",
-    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=development jest --watchAll --runInBand --detectOpenHandles --forceExit"
+    "test": "npm run clean && npm run build && cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=development jest --no-cache --logHeapUsage --runInBand --detectOpenHandles --forceExit --coverage=true ./dist/tests"
   },
   "keywords": [],
   "author": "",
@@ -35,16 +34,10 @@
     "typescript": "5.2.2"
   },
   "jest": {
-    "preset": "ts-jest",
     "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "src/shared/db/orm.ts"
-    ],
-    "testPathIgnorePatterns": [
-      "<rootDir>/dist/"
-    ]
+     "transform": {}
   },
+
   "dependencies": {
     "@mikro-orm/core": "^5.9.2",
     "@mikro-orm/mongo-highlighter": "1.0.0",
