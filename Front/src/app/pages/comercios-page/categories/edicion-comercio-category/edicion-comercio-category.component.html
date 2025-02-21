@@ -1,1 +1,57 @@
-<p>edicion-comercio-category works!</p>
+<div id="edicion-comercio">
+  
+  <div id="datos-titular">
+    <app-title-and-subtitle
+    [title]="'Datos del Titular'"
+    [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
+  ></app-title-and-subtitle>
+
+  <form [formGroup]="titular_form">
+    <div class="fila-data">
+      <fieldset>
+        <app-input-field
+          label="CUIT Titular"
+          placeholder="Ejemplo: 25444505879"
+          type="text"
+          [control]="cuitControl"
+          [validations]="{ required: true, minlength: 11, maxlength: 11 }"
+        >
+        </app-input-field>
+      </fieldset>
+      <fieldset>
+        <app-input-field
+          label="Comercio"
+          placeholder="Ejemplo: fantasy"
+          type="text"
+          [control]="comercioControl"
+          [validations]="{ required: true }"
+        >
+        </app-input-field>
+      </fieldset>
+    </div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="titular_form.invalid"
+      (click)="siguiente()"
+    >
+      Siguiente
+    </button>
+  </form>
+  </div>
+
+  <div id="datos-comercio">
+    <app-title-and-subtitle
+      [title]="'Datos del Comercio'"
+      [subtitle]="'Modifique los datos pertinentes del Comercio.'"
+    ></app-title-and-subtitle>
+  </div>
+
+  <div id="datos-contacto">
+    <app-title-and-subtitle
+      [title]="'Datos del Contacto'"
+      [subtitle]="'Modifique los datos pertinentes del Contacto.'"
+    ></app-title-and-subtitle>
+  </div>
+</div>
