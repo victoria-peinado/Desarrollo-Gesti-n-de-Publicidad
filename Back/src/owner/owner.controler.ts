@@ -36,7 +36,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
    try {
     const id = req.params.id
-    const owner = await em.findOneOrFail(Owner, { id }, { populate: ['shops'] })
+    const owner = await em.findOneOrFail(Owner, { id }, { populate: ['shops', 'shops.contact'] })
     res.status(200).json({message: 'Owner found successfully', data: owner})
    } catch (error: any) {
      res.status(500).json({message: error.message})
