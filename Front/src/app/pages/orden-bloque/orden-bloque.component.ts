@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MyDataService } from '../../services/my-data.service';
 import { take } from 'rxjs';
 import { OnInit } from '@angular/core';
+import { MyDataService } from 'src/app/services/my-data.service';
 
 @Component({
   selector: 'app-orden-bloque',

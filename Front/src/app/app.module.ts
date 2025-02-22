@@ -12,7 +12,6 @@ import { NuevoComercioComponent } from './pages/nuevo-comercio/nuevo-comercio.co
 import { BtnDegradeComponent } from './components/btn-degrade/btn-degrade.component';
 import { NuevoContratoComponent } from './pages/nuevo-contrato/nuevo-contrato.component';
 import { NuevaOrdenComponent } from './pages/nueva-orden/nueva-orden.component';
-import { OrdenFechaComponent } from './orden-fecha/orden-fecha.component';
 import { OrdenBLoqueComponent } from './pages/orden-bloque/orden-bloque.component';
 import { ActualizacionComercioComponent } from './pages/actualizacion-comercio/actualizacion-comercio.component';
 import { InicioComponent } from './pages/inicio/inicio.component';
@@ -61,6 +60,7 @@ import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { UserLoginComponent } from './pages/user-login/user-login.component';
 import { ShopListComponent } from './pages/shop-list/shop-list.component';
+import { OrdenFechaComponent } from './pages/orden-fecha/orden-fecha.component';
 
 
 @NgModule({ declarations: [
