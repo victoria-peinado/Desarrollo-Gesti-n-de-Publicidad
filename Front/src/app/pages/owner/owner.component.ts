@@ -1,8 +1,8 @@
 import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
-import { MyDataService } from '../services/my-data.service';
+import { MyDataService } from '../../services/my-data.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Owner } from '../models/owner';
+import { Owner } from '../../models/owner';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

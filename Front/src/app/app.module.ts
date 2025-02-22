@@ -4,30 +4,28 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material/material.module';
-import { MainNavComponent } from './main-nav/main-nav.component';
-import { BlockComponent } from './block/block.component';
+import { BlockComponent } from './pages/block/block.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserLoginComponent } from './user-login/user-login.component';
-import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
-import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
-import { BtnDegradeComponent } from './btn-degrade/btn-degrade.component';
-import { NuevoContratoComponent } from './nuevo-contrato/nuevo-contrato.component';
-import { NuevaOrdenComponent } from './nueva-orden/nueva-orden.component';
+import { AltaComercioComponent } from './pages/alta-comercio/alta-comercio.component';
+import { NuevoComercioComponent } from './pages/nuevo-comercio/nuevo-comercio.component';
+import { BtnDegradeComponent } from './components/btn-degrade/btn-degrade.component';
+import { NuevoContratoComponent } from './pages/nuevo-contrato/nuevo-contrato.component';
+import { NuevaOrdenComponent } from './pages/nueva-orden/nueva-orden.component';
 import { OrdenFechaComponent } from './orden-fecha/orden-fecha.component';
-import { OrdenBLoqueComponent } from './orden-bloque/orden-bloque.component';
-import { ActualizacionComercioComponent } from './actualizacion-comercio/actualizacion-comercio.component';
-import { InicioComponent } from './inicio/inicio.component';
-import { NewOwnerContactShopComponent } from './alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
+import { OrdenBLoqueComponent } from './pages/orden-bloque/orden-bloque.component';
+import { ActualizacionComercioComponent } from './pages/actualizacion-comercio/actualizacion-comercio.component';
+import { InicioComponent } from './pages/inicio/inicio.component';
+import { NewOwnerContactShopComponent } from './pages/alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
 import { ShopListComponent } from './shop-list/shop-list.component';
-import { OwnerComponent } from './owner/owner.component';
-import { ContactComponent } from './contact/contact.component';
+import { OwnerComponent } from './pages/owner/owner.component';
+import { ContactComponent } from './pages/contact/contact.component';
 import { ShopComponent } from './shop/shop.component';
-import { BlockListComponent } from './block-list/block-list.component';
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-import { EditShopComponent } from './edit-shop/edit-shop.component';
-import { FeedbackNotificationComponent } from './feedback-notification/feedback-notification.component';
-import { InputFieldComponent } from './input-field/input-field.component';
+import { BlockListComponent } from './pages/block-list/block-list.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { EditShopComponent } from './pages/edit-shop/edit-shop.component';
+import { FeedbackNotificationComponent } from './components/feedback-notification/feedback-notification.component';
+import { InputFieldComponent } from './components/input-field/input-field.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { RadioComponent } from './radio/radio.component';
 import { ComerciosPageComponent } from './pages/comercios-page/comercios-page.component';
@@ -61,13 +59,14 @@ import { EdicionContactoCategoryComponent } from './pages/contactos-page/categor
 import { BajaContactoCategoryComponent } from './pages/contactos-page/categories/baja-contacto-category/baja-contacto-category.component';
 import { ListadoBloquesCategoryComponent } from './pages/bloques-page/categories/listado-bloques-category/listado-bloques-category.component';
 import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/edicion-bloque-category/edicion-bloque-category.component';
+import { MainNavComponent } from './components/main-nav/main-nav.component';
+import { UserLoginComponent } from './pages/user-login/user-login.component';
 
 
 @NgModule({ declarations: [
         AppComponent,
         MainNavComponent,
         BlockComponent,
-        UserLoginComponent,
         AltaComercioComponent,
         NewOwnerContactShopComponent,
         NuevoComercioComponent,
@@ -119,6 +118,7 @@ import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/
         BajaContactoCategoryComponent,
         ListadoBloquesCategoryComponent,
         EdicionBloqueCategoryComponent,
+        UserLoginComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

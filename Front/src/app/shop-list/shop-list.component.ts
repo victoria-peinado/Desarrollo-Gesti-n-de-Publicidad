@@ -2,9 +2,9 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { EditShopComponent } from '../edit-shop/edit-shop.component';
+import { EditShopComponent } from '../pages/edit-shop/edit-shop.component';
 import { PageEvent } from '@angular/material/paginator/index.js';
 
 type allowedColumns = 'fantasyName' | 'address' | 'billingType' | 'mail' | 'usualPaymentForm' | 'type';

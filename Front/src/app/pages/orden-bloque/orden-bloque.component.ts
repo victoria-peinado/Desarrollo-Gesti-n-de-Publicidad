@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MyDataService } from '../services/my-data.service';
+import { MyDataService } from '../../services/my-data.service';
 import { take } from 'rxjs';
 import { OnInit } from '@angular/core';
 

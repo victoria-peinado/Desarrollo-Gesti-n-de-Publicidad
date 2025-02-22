@@ -1,9 +1,9 @@
 import { Component, OnInit,Input, EventEmitter, Output } from '@angular/core';
-import { MyDataService } from '../services/my-data.service';
+import { MyDataService } from '../../services/my-data.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Contact } from '../models/contact'; 
+import { Contact } from '../../models/contact'; 
 
 @Component({
   selector: 'app-contact',

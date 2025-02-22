@@ -1,12 +1,12 @@
 import { Component, ViewChild, ElementRef, ViewContainerRef } from '@angular/core';
-import { MyDataService } from '../services/my-data.service';
+import { MyDataService } from '../../services/my-data.service';
 import { OnInit } from '@angular/core';
 import { take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
-import { OrdenFechaComponent } from '../orden-fecha/orden-fecha.component';
-import { Block } from '../models/block'
-import { ApiResponse } from '../models/api_response.js';
+import { OrdenFechaComponent } from '../../orden-fecha/orden-fecha.component';
+import { Block } from '../../models/block'
+import { ApiResponse } from '../../models/api_response.js';
 
 @Component({
   selector: 'app-nueva-orden',

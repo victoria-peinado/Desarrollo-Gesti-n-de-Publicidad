@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Shop } from '../models/shop';
-import { MyDataService } from '../services/my-data.service';
+import { Shop } from '../../models/shop';
+import { MyDataService } from '../../services/my-data.service';
 import { ThemePalette } from '@angular/material/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 

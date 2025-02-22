@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NotificationService } from '../services/notification.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-user-login',

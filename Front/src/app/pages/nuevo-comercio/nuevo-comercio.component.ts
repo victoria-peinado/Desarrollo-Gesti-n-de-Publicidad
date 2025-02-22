@@ -5,12 +5,12 @@ import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SharedDataService } from '../services/shared-data.service';
+import { SharedDataService } from '../../services/shared-data.service';
 import { ThemePalette } from '@angular/material/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
 
 type allowedColumns = 'fantasyName' | 'address' | 'billingType' | 'mail' | 'usualPaymentForm' | 'type';
 @Component({

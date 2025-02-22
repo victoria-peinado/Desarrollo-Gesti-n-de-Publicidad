@@ -1,5 +1,5 @@
 import { Component ,ViewChild, ElementRef, ViewContainerRef} from '@angular/core';
-import{OrdenBLoqueComponent} from '../orden-bloque/orden-bloque.component'
+import{OrdenBLoqueComponent} from '../pages/orden-bloque/orden-bloque.component'
 
 @Component({
   selector: 'app-orden-fecha',

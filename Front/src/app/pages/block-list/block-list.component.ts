@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Block } from '../models/block';
-import { Price} from '../models/price';
+import { Block } from '../../models/block';
+import { Price} from '../../models/price';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { take, tap } from 'rxjs/operators';
-import { ApiResponse } from '../models/api_response.js';
+import { ApiResponse } from '../../models/api_response.js';
 import { parse } from 'date-fns';
 import {
   trigger,

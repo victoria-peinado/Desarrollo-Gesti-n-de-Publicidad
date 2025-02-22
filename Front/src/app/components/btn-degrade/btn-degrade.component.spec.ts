@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BtnDegradeComponent } from './btn-degrade.component.js';
 
-import { BtnDegradeComponent } from './btn-degrade.component';
 
 describe('BtnDegradeComponent', () => {
   let component: BtnDegradeComponent;

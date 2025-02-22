@@ -8,9 +8,9 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
-import { SharedDataService } from '../services/shared-data.service';
+import { SharedDataService } from '../../services/shared-data.service';
 
-import { Owner } from '../models/owner.js';
+import { Owner } from '../../models/owner.js';
 
 @Component({
   selector: 'app-alta-comercio',

@@ -1,12 +1,12 @@
 import { Component ,ViewChild, ElementRef } from '@angular/core';
-import { MyDataService } from '../services/my-data.service';
+import { MyDataService } from '../../services/my-data.service';
 import { OnInit } from '@angular/core';
 import { take ,tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core/index.js';
 import { Validator } from '@angular/forms';
-import { Owner } from '../models/owner.js';
-import { Shop } from '../models/shop.js';
+import { Owner } from '../../models/owner.js';
+import { Shop } from '../../models/shop.js';
 @Component({
   selector: 'app-nuevo-contrato',
   templateUrl: './nuevo-contrato.component.html',

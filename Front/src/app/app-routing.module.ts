@@ -1,18 +1,17 @@
 import { NgModule } from '@angular/core';
-import { BlockComponent } from './block/block.component';
+import { BlockComponent } from './pages/block/block.component';
 import { RouterModule, Routes } from '@angular/router';
-import { UserLoginComponent } from './user-login/user-login.component';
-import { AltaComercioComponent } from './alta-comercio/alta-comercio.component';
-import { NuevoComercioComponent } from './nuevo-comercio/nuevo-comercio.component';
-import { NuevoContratoComponent } from './nuevo-contrato/nuevo-contrato.component';
-import { NuevaOrdenComponent } from './nueva-orden/nueva-orden.component';
-import { ActualizacionComercioComponent } from './actualizacion-comercio/actualizacion-comercio.component';
-import { InicioComponent } from './inicio/inicio.component';
-import { NewOwnerContactShopComponent } from './alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
+import { AltaComercioComponent } from './pages/alta-comercio/alta-comercio.component';
+import { NuevoComercioComponent } from './pages/nuevo-comercio/nuevo-comercio.component';
+import { NuevoContratoComponent } from './pages/nuevo-contrato/nuevo-contrato.component';
+import { NuevaOrdenComponent } from './pages/nueva-orden/nueva-orden.component';
+import { ActualizacionComercioComponent } from './pages/actualizacion-comercio/actualizacion-comercio.component';
+import { InicioComponent } from './pages/inicio/inicio.component';
+import { NewOwnerContactShopComponent } from './pages/alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
 import { ShopListComponent } from './shop-list/shop-list.component';
-import { OwnerComponent } from './owner/owner.component';
-import { ContactComponent } from './contact/contact.component';
-import { BlockListComponent } from './block-list/block-list.component';
+import { OwnerComponent } from './pages/owner/owner.component';
+import { ContactComponent } from './pages/contact/contact.component';
+import { BlockListComponent } from './pages/block-list/block-list.component';
 import { ComerciosPageComponent } from './pages/comercios-page/comercios-page.component';
 import { ContactosPageComponent } from './pages/contactos-page/contactos-page.component';
 import { TitularesPageComponent } from './pages/titulares-page/titulares-page.component';
@@ -41,6 +40,7 @@ import { EdicionContactoCategoryComponent } from './pages/contactos-page/categor
 import { BajaContactoCategoryComponent } from './pages/contactos-page/categories/baja-contacto-category/baja-contacto-category.component';
 import { ListadoBloquesCategoryComponent } from './pages/bloques-page/categories/listado-bloques-category/listado-bloques-category.component';
 import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/edicion-bloque-category/edicion-bloque-category.component';
+import { UserLoginComponent } from './pages/user-login/user-login.component';
 
 
 const routes: Routes = [

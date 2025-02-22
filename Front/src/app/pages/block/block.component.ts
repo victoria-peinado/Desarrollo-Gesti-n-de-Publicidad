@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MyDataService } from '../services/my-data.service';
+import { MyDataService } from '../../services/my-data.service';
 import { take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Block } from '../models/block';
-import { ApiResponse } from '../models/api_response.js';
+import { Block } from '../../models/block';
+import { ApiResponse } from '../../models/api_response.js';
 import {
   FormBuilder,
   FormGroup,
@@ -11,7 +11,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { parse } from 'date-fns';
-import { Price } from '../models/price';
+import { Price } from '../../models/price';
 @Component({
   selector: 'app-block',
   templateUrl: './block.component.html',
