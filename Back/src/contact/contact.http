@@ -34,6 +34,14 @@ Content-Type: application/json
     "contacts": ["3402428992"]
 }
 
+### PATCH
+PATCH http://localhost:{{port}}/api/contact/654ad0d341b4fa27919f8af8
+Content-Type: application/json
+
+{
+    "dni": "12345679"
+}
+
 ### DELETE
 
 DELETE http://localhost:{{port}}/api/contact/{{id}}

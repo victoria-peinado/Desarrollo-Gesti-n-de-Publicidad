@@ -73,6 +73,15 @@ Content-Type: application/json
     "type": "PyME"
 }
 
+###patch
+PUT  http://localhost:{{port}}/api/shop/678d6ddd5477c0c3e240b167
+Content-Type: application/json 
+
+{
+  
+    "contact.dni": "123"
+}
+
 
 
 ### DELETE

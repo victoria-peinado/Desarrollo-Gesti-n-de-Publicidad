@@ -35,6 +35,7 @@ export class InputFieldComponent {
     if (this.control.hasError('pattern')) return 'Solo números';
     if (this.control.hasError('minlength')) return `Mínimo ${this.validations.minLength} caracteres`;
     if (this.control.hasError('maxlength')) return `Máximo ${this.validations.maxLength} caracteres`;
+    if (this.control.hasError('email')) return 'Formato de mail incorrecto';
     return '';
   }
 

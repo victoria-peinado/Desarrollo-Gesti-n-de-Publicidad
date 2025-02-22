@@ -168,7 +168,7 @@
             placeholder="Ejemplo: 44996266"
             type="text"
             [control]="dniControl"
-            [validations]="{ required: true }"
+            [validations]="{ required: true, minlength: 8, maxlength: 8 }"
             [mode]="'input'"
           ></app-input-field>
         </fieldset>
@@ -178,6 +178,7 @@
         class="btn-guardar-cambios"
         mat-flat-button
         color="accent"
+        [disabled]="shop_form.invalid"
         (click)="openDialog()"
       >
         Guardar cambios

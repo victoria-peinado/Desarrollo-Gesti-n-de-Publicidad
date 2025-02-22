@@ -102,4 +102,16 @@ export class MyDataService {
     return this.http.get(`${this.apiUrl}owner/${id}`);
   }
   
+
+
+
+  patchShop(id: string, shop: Partial<Shop>): Observable<any> {
+    return this.http.patch(`${this.apiUrl}shop/${id}`, shop);
+  }
+  
+
+  patchContact(contactId: string, contactData: any) {
+    return this.http.patch(`${this.apiUrl}contact/${contactId}`, contactData);
+  }
+  
 }

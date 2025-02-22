@@ -31,6 +31,7 @@ export class EdicionComercioCategoryComponent {
   lastname: string = '';
   dni: string = '';
   ownerFounded: boolean = false;
+  bussinessName: string = '';
 
   billingTypes: string[] = BILLING_TYPES;
   usualPaymentForms: string[] = USUAL_PAYMENT_FORMS;
@@ -62,8 +63,7 @@ export class EdicionComercioCategoryComponent {
     this.contact_form = new FormGroup({
       name: new FormControl('', Validators.required),
       lastname: new FormControl('', Validators.required),
-      dni: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      contactMail: new FormControl('', [Validators.required, Validators.email]),
+      dni: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
     });
 
     // Escuchar cambios en el CUIT
@@ -80,6 +80,7 @@ export class EdicionComercioCategoryComponent {
 
     this.myDataService.getOwnerByCuit(this.cuit).subscribe({
       next: (response: any) => {
+        this.bussinessName = response.data.businessName;
         this.ownerFounded = true;
         this.shops = response.data.shops;
         this.errorMessage = null;
@@ -105,8 +106,6 @@ export class EdicionComercioCategoryComponent {
 
     if (shop) {
 
-        console.log(shop)
-      
         this.fantasyName = shop.fantasyName;
         this.address = shop.address;
         this.billingType = shop.billingType;
@@ -178,37 +177,84 @@ export class EdicionComercioCategoryComponent {
   }
 
   openDialog(): void {
-    
-    const fieldsToCheck = [
+    const shopFieldsToCheck = [
       { key: 'fantasyName', control: this.fantasyNameControl, initialValue: this.fantasyName },
       { key: 'address', control: this.addressControl, initialValue: this.address },
       { key: 'billingType', control: this.billingTypeControl, initialValue: this.billingType },
       { key: 'mail', control: this.mailControl, initialValue: this.mail },
       { key: 'usualPaymentForm', control: this.usualPaymentFormControl, initialValue: this.usualPaymentForm },
       { key: 'type', control: this.typeControl, initialValue: this.type },
+    ];
+  
+    const contactFieldsToCheck = [
       { key: 'name', control: this.nameControl, initialValue: this.name },
       { key: 'lastname', control: this.lastnameControl, initialValue: this.lastname },
       { key: 'dni', control: this.dniControl, initialValue: this.dni },
     ];
 
-    const modifiedAttributes: any[] = [];
-
-    fieldsToCheck.forEach(field => {
+    const modifiedShopAttributes: any = {};
+  const modifiedContactAttributes: any = {};
+  const changesList: any[] = [];
+  
+    shopFieldsToCheck.forEach(field => {
       if (field.control.value !== field.initialValue) {
-        modifiedAttributes.push({
+        modifiedShopAttributes[field.key] = field.control.value;
+        changesList.push({
           attribute: ATTRIBUTE_MAPPING[field.key] || field.key,
           oldValue: field.initialValue,
           newValue: field.control.value,
         });
       }
     });
+
+    contactFieldsToCheck.forEach(field => {
+      if (field.control.value !== field.initialValue) {
+        modifiedContactAttributes[field.key] = field.control.value;
+        changesList.push({
+          attribute: ATTRIBUTE_MAPPING[field.key] || field.key,
+          oldValue: field.initialValue,
+          newValue: field.control.value,
+        });
+      }
+    });
+
+    if (changesList.length === 0) {
+      console.log('No hay cambios para actualizar.');
+      return;
+    }
   
-    this.dialog.open(DialogComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       data: {
-        text: 'Se detectaron los siguientes cambios en los datos:',
-        changes: modifiedAttributes,
+        text: `<p>¿Seguro que desea efectuar los siguientes cambios en el Comercio <strong>${this.fantasyName}</strong> para el Titular <strong>${this.bussinessName}</strong>?</p>`,
+        changes: changesList,
       },
     });
-  }
+
   
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.shopFounded) {
+        const shop = this.shops.find(shop => shop.fantasyName === this.fantasyName);
+        if (!shop) return;
+  
+        const shopId = shop.id;
+        const contactId = shop.contact?.id; 
+  
+        console.log(modifiedShopAttributes)
+        if (Object.keys(modifiedShopAttributes).length > 0) {
+          this.myDataService.patchShop(shopId, modifiedShopAttributes).subscribe({
+            next: () => console.log('Comercio actualizado exitosamente'),
+            error: (err) => console.error('Error al actualizar comercio:', err),
+          });
+        }
+  
+        console.log(modifiedContactAttributes)
+        if (Object.keys(modifiedContactAttributes).length > 0 && contactId) {
+          this.myDataService.patchContact(contactId, modifiedContactAttributes).subscribe({
+            next: () => console.log('Contacto actualizado exitosamente'),
+            error: (err) => console.error('Error al actualizar contacto:', err),
+          });
+        }
+      }
+    });
+  }
 }
