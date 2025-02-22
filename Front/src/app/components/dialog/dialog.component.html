@@ -3,6 +3,33 @@
   
   <mat-dialog-content [innerHTML]="data.text"></mat-dialog-content>
 
+  <mat-dialog-content>
+    <div class="cambios">
+      <table>
+        <tr>
+            <th></th>
+            <th>Antes</th>
+            <th></th>
+            <th>Ahora</th>
+        </tr>
+        <tr>
+            <td><a class="label">Nombre Fantasía</a></td>
+            <td class="atribute-name">Juguetería JOY</td>
+            <td class="icon-column"><mat-icon class="icon" fontIcon="sync_alt"></mat-icon></td>
+            <td>Juguetes de Joy</td>
+        </tr>
+        <tr>
+            <td><a class="label">Nombre Contacto</a></td>
+            <td class="atribute-name">Juan Pérez</td>
+            <td class="icon-column"><mat-icon class="icon" fontIcon="sync_alt"></mat-icon></td>
+            <td>Alicia Palacios</td>
+        </tr>
+    </table>
+
+    </div>
+    
+  </mat-dialog-content>
+
   <mat-dialog-actions>
     <button mat-button (click)="onNoClick()">No Gracias</button>
     <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
