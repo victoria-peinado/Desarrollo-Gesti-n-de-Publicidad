@@ -5,6 +5,7 @@ import { Shop } from 'src/app/models/shop';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping';
 
 @Component({
   selector: 'app-edicion-comercio-category',
@@ -177,15 +178,37 @@ export class EdicionComercioCategoryComponent {
   }
 
   openDialog(): void {
-      const dialogRef = this.dialog.open(DialogComponent, {
-        data: {
-          text: `<p>¿Seguro que desea actualizar el Spot de la Orden?</p>`,
-        },
-      });
+    
+    const fieldsToCheck = [
+      { key: 'fantasyName', control: this.fantasyNameControl, initialValue: this.fantasyName },
+      { key: 'address', control: this.addressControl, initialValue: this.address },
+      { key: 'billingType', control: this.billingTypeControl, initialValue: this.billingType },
+      { key: 'mail', control: this.mailControl, initialValue: this.mail },
+      { key: 'usualPaymentForm', control: this.usualPaymentFormControl, initialValue: this.usualPaymentForm },
+      { key: 'type', control: this.typeControl, initialValue: this.type },
+      { key: 'name', control: this.nameControl, initialValue: this.name },
+      { key: 'lastname', control: this.lastnameControl, initialValue: this.lastname },
+      { key: 'dni', control: this.dniControl, initialValue: this.dni },
+    ];
+
+    const modifiedAttributes: any[] = [];
+
+    fieldsToCheck.forEach(field => {
+      if (field.control.value !== field.initialValue) {
+        modifiedAttributes.push({
+          attribute: ATTRIBUTE_MAPPING[field.key] || field.key,
+          oldValue: field.initialValue,
+          newValue: field.control.value,
+        });
+      }
+    });
   
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log('The dialog was closed');
-      });
-    }
+    this.dialog.open(DialogComponent, {
+      data: {
+        text: 'Se detectaron los siguientes cambios en los datos:',
+        changes: modifiedAttributes,
+      },
+    });
+  }
   
 }
