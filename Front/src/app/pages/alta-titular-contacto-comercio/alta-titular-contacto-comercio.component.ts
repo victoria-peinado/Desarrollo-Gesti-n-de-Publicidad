@@ -2,9 +2,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { Shop } from 'src/app/models/shop';
 import { MatStepper } from '@angular/material/stepper';
-import { Owner } from '../../models/owner';
-import { Contact } from '../../models/contact';
-
+import { Owner } from 'src/app/models/owner.js';
+import { Contact } from 'src/app/models/contact.js';
 @Component({
   selector: 'app-alta-titular-contacto-comercio',
   templateUrl: './alta-titular-contacto-comercio.component.html',

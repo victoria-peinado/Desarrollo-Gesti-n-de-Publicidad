@@ -3,9 +3,9 @@ import {  Component,  ViewChild,  ElementRef,  OnInit,Input, Output, EventEmitte
 import { MyDataService } from 'src/app/services/my-data.service';
 import { FormBuilder, FormGroup, Validators , AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SharedDataService } from '../services/shared-data.service';
+import { SharedDataService } from '../../services/shared-data.service';
 import { ThemePalette } from '@angular/material/core';
-import { Shop } from '../models/shop.js';
+import { Shop } from '../../models/shop.js';
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',

@@ -17,10 +17,9 @@ import { OrdenBLoqueComponent } from './pages/orden-bloque/orden-bloque.componen
 import { ActualizacionComercioComponent } from './pages/actualizacion-comercio/actualizacion-comercio.component';
 import { InicioComponent } from './pages/inicio/inicio.component';
 import { NewOwnerContactShopComponent } from './pages/alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
-import { ShopListComponent } from './shop-list/shop-list.component';
 import { OwnerComponent } from './pages/owner/owner.component';
 import { ContactComponent } from './pages/contact/contact.component';
-import { ShopComponent } from './shop/shop.component';
+import { ShopComponent } from './pages/shop/shop.component';
 import { BlockListComponent } from './pages/block-list/block-list.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { EditShopComponent } from './pages/edit-shop/edit-shop.component';
@@ -61,6 +60,7 @@ import { ListadoBloquesCategoryComponent } from './pages/bloques-page/categories
 import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/edicion-bloque-category/edicion-bloque-category.component';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { UserLoginComponent } from './pages/user-login/user-login.component';
+import { ShopListComponent } from './pages/shop-list/shop-list.component';
 
 
 @NgModule({ declarations: [

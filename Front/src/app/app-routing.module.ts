@@ -8,7 +8,6 @@ import { NuevaOrdenComponent } from './pages/nueva-orden/nueva-orden.component';
 import { ActualizacionComercioComponent } from './pages/actualizacion-comercio/actualizacion-comercio.component';
 import { InicioComponent } from './pages/inicio/inicio.component';
 import { NewOwnerContactShopComponent } from './pages/alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
-import { ShopListComponent } from './shop-list/shop-list.component';
 import { OwnerComponent } from './pages/owner/owner.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { BlockListComponent } from './pages/block-list/block-list.component';
@@ -41,6 +40,7 @@ import { BajaContactoCategoryComponent } from './pages/contactos-page/categories
 import { ListadoBloquesCategoryComponent } from './pages/bloques-page/categories/listado-bloques-category/listado-bloques-category.component';
 import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/edicion-bloque-category/edicion-bloque-category.component';
 import { UserLoginComponent } from './pages/user-login/user-login.component';
+import { ShopListComponent } from './pages/shop-list/shop-list.component';
 
 
 const routes: Routes = [
