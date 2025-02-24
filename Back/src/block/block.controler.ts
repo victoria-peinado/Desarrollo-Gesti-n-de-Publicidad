@@ -96,6 +96,35 @@ async function removeAll(req: Request, res: Response) {
   
 }
 
+//FUNCIONES PARA VERIFICAR EXISTENCIA DE UNA LISTA DE BLOQUES
+
+async function checkAll(list_numBlocks: string[]) {
+  const allBlocks = await em.find(Block, {}, { fields: ['numBlock'] })
+  let allNumBlocks: string[] = []
+  allBlocks.forEach(b => {
+    allNumBlocks.push(b.numBlock)
+  });
+  const contieneTodos = list_numBlocks.every(bNum => allNumBlocks.includes(bNum));
+  //const existentes = list.filter(b => numBlocks.includes(b));
+  return contieneTodos
+}
+
+async function numsToIds(structure: string[][]) {
+  const allBlocks = await em.find(Block, {}, { fields: ['numBlock'] })
+  let idStructure: string[][] = []
+  structure.forEach((dayArray) => {
+    let daysIds: string[] = []
+    dayArray.forEach((numBlock) => {
+      const actualBlock = allBlocks.find(block => block.numBlock === numBlock)
+      if (actualBlock?.id !== undefined) {
+        daysIds.push(actualBlock.id)
+      } else { console.log('El bloque: ', actualBlock, 'tiene propiedades indefinidas.') }
+    })
+    idStructure.push(daysIds)
+  })
+  return idStructure
+}
+
 //FUNCIONES PARA CREAR AUTOMATICAMENTE TODOS LOS BLOQUES
 
 function formatoHora(hora: Date): string {
@@ -126,4 +155,4 @@ async  function addAll(req: Request, res: Response) {
 //FIN DE FUNCIONES PARA CREAR TODOS LOS BLOQUES
 
 
-export {sanitizeBlockInput,  findAll, findOne, add, update, remove, removeAll, addAll, isNumBlockUnique}
+export {sanitizeBlockInput,  findAll, findOne, add, update, remove, removeAll, addAll, isNumBlockUnique, numsToIds, checkAll}

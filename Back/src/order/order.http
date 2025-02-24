@@ -4,9 +4,19 @@
 # @name findAll
 GET http://localhost:{{port}}/api/order
  
+
+
+### findALL populado
+# @name findAllPopulated
+GET http://localhost:{{port}}/api/order/populate
+
+
+
 ## ID
 @id = {{createorder.response.body.data.id}}   
 @idfirst ={{findAll.response.body.data[0].id}}
+
+
  
 ### GET ONE
 GET http://localhost:{{port}}/api/order/{{idfirst}}
@@ -18,13 +28,20 @@ Content-Type: application/json
 
 {
         
-        "nameStrategy": "Ofertas Noviembre",
-        "obs": "quiere estar al final de la tanda",
+        "nameStrategy": "En el sistema real",
+        "obs": "Sería la cuarta del dia",
         "showName": "Siempre Al Dia",
-        "month": "11-2023",
-        "contract": "654aefd5c3991db2b0d46152",
-        "spot": "654e3fbc97ea9f854e9fa08b"
-
+        "contract": "67b905fb4bd0c3f4c7685797",
+        "spot": "654e3fbc97ea9f854e9fa08b",
+        "regular": true,
+        "regStructure": {
+                "monday": ["1", "2", "3", "4"],
+                "tuesday": ["5", "6", "7", "8"],
+                "wednesday": ["9", "10", "11", "12"],
+                "thursday": ["13", "14", "15", "16"],
+                "friday": ["17", "18", "19", "20"],
+                "saturday": ["21", "22", "23", "24"],
+                "sunday": ["25", "26", "27", "28"]}
 }
 
 ### PUT Modifica todo el objeto -idempotente-

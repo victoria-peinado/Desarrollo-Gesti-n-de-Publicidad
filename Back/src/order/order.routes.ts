@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, findOne, add, update, remove,sanitizeOrderInput,  } from "./order.controler.js";
+import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations,  } from "./order.controler.js";
 import { validateWithSchema , validateObjectId, validateCuit,validateIdExistence} from '../shared/db/middleware.js'
 import { OrderSchema, PatchOrderSchema, PutOrderSchema} from './order.entity.js'
 import { orm } from '../shared/db/orm.js'; // for the unique field middleware
@@ -13,6 +13,7 @@ const validIdContrac=validateIdExistence(em.getRepository(Contract), "contract")
 //const validIdBlock=validateIdExistence(em.getRepository(Block), "block");
 export const orderRouter = Router()
 
+orderRouter.get('/populate', findWithRelations);
 orderRouter.get('/', findAll);
 orderRouter.get('/:id', validateObjectId('id'), findOne); // Validate ID for finding an order by ID
 orderRouter.post('/', validateWithSchema(OrderSchema),validIdSpot, validIdContrac, sanitizeOrderInput, add); // Validate order schema and sanitize input before adding

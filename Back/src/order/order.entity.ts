@@ -8,64 +8,59 @@ import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 
 @Entity()
 export class Order extends BaseEntity {
-    //deberiamos fletar numOrden pues es id.
-    @Property({nullable:true})
-    numOrder?: string
+  //deberiamos fletar numOrden pues es id.
+  @Property({ nullable: true })
+  numOrder?: string
 
-    //regDate se genera al crear el objeto. 
-    @Property({type: DateTimeType})
-    regDate?= new Date() 
+  //regDate se genera al crear el objeto. 
+  @Property({ type: DateTimeType })
+  regDate? = new Date()
 
-    @Property({nullable:true})
-    totalAds?: number //calculado
+  @Property({ nullable: true })
+  totalAds?: number //calculado
 
-    @Property({nullable:true})
-    daysAmount?: number // calculado
+  @Property({ nullable: true })
+  daysAmount?: number // calculado
 
-     @Property({nullable:true})
-     nameStrategy?: string
+  @Property({ nullable: true })
+  nameStrategy?: string
 
-     @Property({nullable:true})
-     totalCost?: number //calculado
+  @Property({ nullable: true })
+  totalCost?: number //calculado
 
-     @Property({nullable:true})
-     dailyCost?: number // calculado
+  @Property({ nullable: true })
+  dailyCost?: number // calculado
 
-     @Property({nullable:true})
-     obs?: string
+  @Property({ nullable: true })
+  obs?: string
 
-     @Property({nullable:true})
-     showName?: string 
+  @Property({ nullable: true })
+  showName?: string
 
-     @Property({nullable:false})
-     liq: boolean = false
+  @Property({ nullable: false })
+  liq: boolean = false
 
-     @Property({nullable:false}) //Ver si puede ser calculado o no. Podria ser en funcion de la fecha de la anterio.
-     month?: string // deberia ser MM-AAAA
+  @Property({ nullable: false }) //Ver si puede ser calculado o no. Podria ser en funcion de la fecha de la anterio.
+  month?: string // deberia ser MM-AAAA
 
-     @Property({nullable: false})
-     regular: boolean = true
+  @Property({ nullable: false })
+  regular: boolean = true
 
-     @Property({nullable: true})
-     regStructure?: BlocksRegularType
+  @Property({ nullable: true })
+  regStructure?: BlocksRegularType
 
-     @Property({nullable: true})
-     cancelDate?: Date
+  @Property({ nullable: true })
+  cancelDate?: Date
 
-     @ManyToOne( ()=> Contract)
-     contract!: Rel<Contract>
-     
-     @ManyToOne( () => Spot, { nullable: true })
-     spot?: Rel<Spot> //lo pongo como cero por si no esta al momento de crearla
+  @ManyToOne(() => Contract)
+  contract!: Rel<Contract>
 
-    //  @OneToMany(()=> DayOrderBlock, dayordenblock => dayordenblock.id)
-    //  days_orders_blocks? = new Collection<DayOrderBlock>(this);
+  @ManyToOne(() => Spot, { nullable: true })
+  spot?: Rel<Spot> //lo pongo como cero por si no esta al momento de crearla
 
-     //ManyToMany Deberiamos definir un nuevo objeto DIA-ORDEN-BLOQUE day_order_block{id_order, id_block, day} 
+  @OneToMany(() => DayOrderBlock, dayordenblock => dayordenblock.order)
+  days_orders_blocks? = new Collection<DayOrderBlock>(this);
 
-     //DEBERIAMOS TENER DOS NUEVOS ATRIBUTOS - BOOL QUE SI ES REGULAR - ARRAY DE LOS REGULARES. LISTO
-
-     //AGREGAR CAMPO FECHA CANCELACION LISTO
 
 }
 export const OrderSchema = z.object({
@@ -87,6 +82,6 @@ export const OrderSchema = z.object({
   contract: ObjectIdSchema,
   spot: ObjectIdSchema.optional(),
 });
-export const PutOrderSchema = OrderSchema.omit({contract:true}); // Partial schema for updates
-export const PatchOrderSchema = OrderSchema.omit({contract:true}).partial(); // Partial schema for updates
+export const PutOrderSchema = OrderSchema.omit({ contract: true }); // Partial schema for updates
+export const PatchOrderSchema = OrderSchema.omit({ contract: true }).partial(); // Partial schema for updates
 
