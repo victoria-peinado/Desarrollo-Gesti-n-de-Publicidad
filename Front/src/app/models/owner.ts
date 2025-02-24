@@ -3,7 +3,7 @@ export class Owner {
     cuit: string;
     businessName: string;
     fiscalCondition: string;
-    shops: string[];
+    shops?: string[];
 
     constructor( cuit: string, businessName: string, fiscalCondition: string, shops: string[]) {
         this.cuit = cuit;

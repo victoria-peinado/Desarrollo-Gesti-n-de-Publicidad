@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormArray, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-input-field',
@@ -16,6 +16,7 @@ export class InputFieldComponent {
   @Input() validations: any = {}; 
   @Input() mode: 'input' | 'select' = 'input';
   @Input() options: string[] = [];
+  @Input() hintLabel: string = '';
 
   hidePassword: boolean = true;
   value: string = '';
@@ -24,6 +25,10 @@ export class InputFieldComponent {
 
   get inputType(): string {
     return this.type === 'password' && this.hidePassword ? 'password' : 'text';
+  }
+
+  get maxlength(): number | null {
+    return this.validations.maxLength ? this.validations.maxLength : null;
   }
 
   togglePasswordVisibility(): void {

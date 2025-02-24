@@ -19,7 +19,10 @@ export class DialogComponent {
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { text: string, changes: any[] },
-  ) {}
+  ) {
+    
+    this.data.changes = this.data.changes || [];
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

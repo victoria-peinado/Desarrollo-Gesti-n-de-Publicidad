@@ -6,6 +6,7 @@ GET http://localhost:{{port}}/api/contact
 ## ID
 @id = {{createContact.response.body.data.id}}
 @idFirst = {{findAll.response.body.data[0].id}}
+@dniFirst = {{findAll.response.body.data[0].dni}}
  
 ### GET ONE
 GET http://localhost:{{port}}/api/contact/{{idFirst}}
@@ -16,10 +17,10 @@ POST http://localhost:{{port}}/api/contact
 Content-Type: application/json
 
 {
-    "dni": "5252145",
-    "name": "Vicky",
-    "lastname": "Carpinetti",
-    "contacts": ["34122838f@g.com"]
+    "dni": "44393593",
+    "name": "Belén",
+    "lastname": "Paez",
+    "contacts": ["3402583942", "lautarobrancatti@gmail.com"]
 
 }
 
@@ -45,3 +46,8 @@ Content-Type: application/json
 ### DELETE
 
 DELETE http://localhost:{{port}}/api/contact/{{id}}
+
+
+### get contact by dni
+GET http://localhost:{{port}}/api/contact/dni/44684239
+Content-Type: application/json

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BILLING_TYPES, SHOP_TYPES, USUAL_PAYMENT_FORMS } from 'src/app/constants/constants';
 import { Shop } from 'src/app/models/shop';
 import { MatDialog } from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping';
@@ -13,7 +14,7 @@ import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping';
   styleUrl: './edicion-comercio-category.component.scss',
 })
 export class EdicionComercioCategoryComponent {
-  titular_form: FormGroup;
+  owner_form: FormGroup;
   shop_form: FormGroup;
   contact_form: FormGroup;
   shops: any[] = [];
@@ -37,8 +38,8 @@ export class EdicionComercioCategoryComponent {
   usualPaymentForms: string[] = USUAL_PAYMENT_FORMS;
   shopTypes: string[] = SHOP_TYPES;
   
-  constructor(public dialog: MatDialog, private myDataService: MyDataService) {
-    this.titular_form = new FormGroup({
+  constructor(public dialog: MatDialog, private _snackBar: MatSnackBar, private myDataService: MyDataService) {
+    this.owner_form = new FormGroup({
       cuit: new FormControl('', [
         Validators.required,
         Validators.maxLength(11),
@@ -71,7 +72,7 @@ export class EdicionComercioCategoryComponent {
   }
 
 
-  buscarTitular() {
+  findOwner() {
 
 
     this.cuit = this.cuitControl.value.trim();
@@ -92,7 +93,6 @@ export class EdicionComercioCategoryComponent {
       error: () => {
         this.ownerFounded = false;
         this.shops = [];
-        this.comercioControl.setValue('');
         this.comercioControl.disable();
         this.errorMessage = 'Titular inexistente.';
       },
@@ -169,11 +169,11 @@ export class EdicionComercioCategoryComponent {
   }
 
   get cuitControl(): FormControl {
-    return this.titular_form.get('cuit') as FormControl;
+    return this.owner_form.get('cuit') as FormControl;
   }
 
   get comercioControl(): FormControl {
-    return this.titular_form.get('comercio') as FormControl;
+    return this.owner_form.get('comercio') as FormControl;
   }
 
   openDialog(): void {
@@ -238,23 +238,29 @@ export class EdicionComercioCategoryComponent {
   
         const shopId = shop.id;
         const contactId = shop.contact?.id; 
-  
-        console.log(modifiedShopAttributes)
+
         if (Object.keys(modifiedShopAttributes).length > 0) {
           this.myDataService.patchShop(shopId, modifiedShopAttributes).subscribe({
             next: () => console.log('Comercio actualizado exitosamente'),
             error: (err) => console.error('Error al actualizar comercio:', err),
           });
         }
-  
-        console.log(modifiedContactAttributes)
+
         if (Object.keys(modifiedContactAttributes).length > 0 && contactId) {
           this.myDataService.patchContact(contactId, modifiedContactAttributes).subscribe({
             next: () => console.log('Contacto actualizado exitosamente'),
             error: (err) => console.error('Error al actualizar contacto:', err),
           });
         }
+
+        this.openSnackBar("Comercio actualizado exitosamente", "OK");
+
       }
     });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,});
   }
 }

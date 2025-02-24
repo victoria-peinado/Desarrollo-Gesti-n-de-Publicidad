@@ -1,0 +1,31 @@
+.fila-data {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2rem;
+    padding-bottom: 15px;
+}
+
+.btn-guardar-cambios {
+    margin-bottom: 5rem;
+
+}
+
+.btn-tel {
+    scale: 1;
+    transition: all 0.3s ease;
+}
+
+.tel {
+    height: 20px;
+    padding: 1px 2px;
+    box-sizing: border-box;
+    background-color: #D7E3FF;
+    color: #005CBB;
+    border-radius: 100px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+}

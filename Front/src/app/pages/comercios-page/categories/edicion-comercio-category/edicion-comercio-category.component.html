@@ -5,13 +5,14 @@
       [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
     ></app-title-and-subtitle>
 
-    <form [formGroup]="titular_form">
+    <form [formGroup]="owner_form">
       <div class="fila-data">
         <fieldset>
           <app-input-field
             label="CUIT Titular"
             placeholder="Ejemplo: 25444505879"
             type="text"
+            [hintLabel]="'11 dígitos'"
             [control]="cuitControl"
             [validations]="{ required: true, minLength: 11, maxLength: 11, pattern: '^[0-9]*$' }"
             [mode]="'input'"
@@ -22,7 +23,7 @@
           mat-raised-button 
           color="primary" 
           [disabled]="cuitControl.invalid" 
-          (click)="buscarTitular()">
+          (click)="findOwner()">
           Check
         </button>
 
@@ -57,7 +58,7 @@
       <button
         mat-raised-button
         color="primary"
-        [disabled]="titular_form.invalid || comercioControl.disabled"
+        [disabled]="owner_form.invalid || comercioControl.disabled"
         (click)="siguiente()"
       >
         Siguiente
@@ -87,6 +88,7 @@
             label="Dirección"
             placeholder="Ejemplo: Belgrano 67"
             type="text"
+            [hintLabel]="'Incluya calle y altura'"
             [control]="addressControl"
             [validations]="{ required: true }"
             [mode]="'input'"

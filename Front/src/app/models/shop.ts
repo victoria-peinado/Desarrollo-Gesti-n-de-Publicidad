@@ -1,6 +1,6 @@
 export class Shop {
     id?: string;
-    regDate: Date;
+    regDate?: Date;
     fantasyName: string;
     address: string;
     billingType: string;
@@ -9,7 +9,7 @@ export class Shop {
     type: string;
     owner: string;
     contact: string;
-    contracts: string[];
+    contracts?: string[];
 
     constructor(regDate: Date, fantasyName: string, address: string, billingType: string, mail: string, usualPaymentForm: string, type: string, owner: string, contact: string, contracts: string[]) {
         this.regDate = regDate;
