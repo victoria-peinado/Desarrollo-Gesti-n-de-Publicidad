@@ -17,6 +17,7 @@ orderRouter.get('/populate', findWithRelations);
 orderRouter.get('/', findAll);
 orderRouter.get('/:id', validateObjectId('id'), findOne); // Validate ID for finding an order by ID
 orderRouter.post('/', validateWithSchema(OrderSchema),validIdSpot, validIdContrac, sanitizeOrderInput, add); // Validate order schema and sanitize input before adding
+//orderRouter.post('/', sanitizeOrderInput, add); // Validate order schema and sanitize input before adding
 orderRouter.put('/:id',validateWithSchema(PutOrderSchema), validateObjectId('id'),  validIdSpot, sanitizeOrderInput, update); // Validate ID and order schema before updating
 orderRouter.patch('/:id', validateWithSchema(PatchOrderSchema),validateObjectId('id'), validIdSpot,  sanitizeOrderInput, update); // Validate ID and partial order schema before partial update
 orderRouter.delete('/:id', validateObjectId('id'), remove); // Validate ID before deleting an order

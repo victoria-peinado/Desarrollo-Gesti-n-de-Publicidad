@@ -51,9 +51,14 @@ const BlocksRegularSchema = z.object({
 
 const TupleBlocksSchema = z.tuple([z.date(), z.array(NumBlockSchema)]);
 
+const TupleBlocksSchemaReq = z.tuple([z.string(), z.array(NumBlockSchema)]);
+
+
 type BlocksRegularType = z.infer<typeof BlocksRegularSchema>
 
 type TupleBlocksType = z.infer<typeof TupleBlocksSchema>
 
+type TupleBlocksReqType = z.infer<typeof TupleBlocksSchemaReq>
 
-export { ObjectIdSchema,  CuitSchema, BlocksRegularSchema, TupleBlocksSchema, NumBlockSchema, BlocksRegularType, TupleBlocksType};
+
+export { ObjectIdSchema, CuitSchema, BlocksRegularSchema, TupleBlocksSchema, NumBlockSchema, BlocksRegularType, TupleBlocksType, TupleBlocksReqType, TupleBlocksSchemaReq };

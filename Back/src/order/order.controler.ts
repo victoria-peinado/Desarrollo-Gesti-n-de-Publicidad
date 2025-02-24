@@ -8,7 +8,7 @@ import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays } from '
 import { rewriteDaysArray } from "../shared/datesUtilities.js";
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 import { Block } from "../block/block.entity.js";
-import { checkAll, numsToIds } from "../block/block.controler.js";
+import { checkAll, numsToIds, numsToIds2 } from "../block/block.controler.js";
 
 
 const em = orm.em
@@ -68,7 +68,7 @@ async function add(req: Request, res: Response) {
         // Verificamos contrato.
         const id = req.body.sanitizeInput.contract
         const contract = await em.findOneOrFail(Contract, { id })
-        console.log('Contrato encontrado : ', contract)
+        //console.log('Contrato encontrado : ', contract)
         let dateFrom = contract.dateFrom
 
         // Verificamos fecha inicio Orden.
@@ -84,8 +84,7 @@ async function add(req: Request, res: Response) {
 
         if (order?._id === undefined) {
             throw new Error('Error al crear la orden. No tiene id');
-        }
-        if (order._id != undefined) { order.id = order._id.toString() }
+        } else { order.id = order._id.toString() }
 
 
         let tuples: TupleBlocksType[] = []
@@ -94,7 +93,7 @@ async function add(req: Request, res: Response) {
             const regStructure: BlocksRegularType = req.body.sanitizeInput.regStructure
             tuples = await createTuples2(regStructure, dateFrom)
         } else {
-            tuples = req.body.sanitizeInput.notRegStructure
+            tuples = await createNotRegularTuples(req.body.sanitizeInput.notRegStructure, dateFrom)
         }
 
         //Calcular totalAds - daysAmount - month
@@ -187,7 +186,7 @@ async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date) {
     let tuples: TupleBlocksType[] = []
 
     const structure = rewriteDaysArray(regStructure)
-    console.log('Llegue re lejos, ya rescribió el arreglo: ', structure)
+    //console.log('Llegue re lejos, ya rescribió el arreglo: ', structure)
     //verificamos los bloques.
 
     const nums = new Set<string>()
@@ -216,6 +215,57 @@ async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date) {
     return tuples
 
     // tuples = [Date, [id_block]]
+}
+
+async function createNotRegularTuples(notRegularStructure: [string, string[]][], dateFrom: Date) { //lista(date-string, numBlockList[])
+    let tuples: TupleBlocksType[] = []
+
+    const nums = new Set<string>()
+
+    //Construimos listas de numeros de bloques pasados.
+    notRegularStructure.forEach(tup => {
+        tup[1].forEach(block_num => { nums.add(block_num) });
+    });
+
+    console.log('Esta es la lista de block nums', nums)
+
+    //verificamos que todos los numeros pasados sean validos.
+    const numsCorrectos = await checkAll([...nums])
+
+    console.log('Todos son correctos o no: ', numsCorrectos)
+    if (numsCorrectos) {
+        let numBlocksList: string[][] = []
+        //tipamos las tuplas con [Date,[ids]]
+
+        const largo: number = notRegularStructure.length
+        //creo una lista asociada por indice con la lista de nros.
+        for (let index = 0; index < largo; index++) {
+            numBlocksList[index] = notRegularStructure[index][1];
+        }
+        // ahora tengo una lista con los ids en los mismos indices que los blocksNums
+        const idsStructure: string[][] = await numsToIds2(numBlocksList)
+
+        //construimos las tuplas [date, idsArray][]
+        for (let index = 0; index < largo; index++) {
+            //verificamos de crear solo tuplas mayores a mañana
+            const dia = new Date(notRegularStructure[index][0])
+
+            if (compareAsc(dia, dateFrom) == -1) { // si = -1 dia esta antes que dateFrom por ende ya paso
+                console.log('Los bloques asociados a la fecha', dia, 'son descartados por ser posteriores a hoy.')
+            } else { //si la fecha es superior a mañana, se guardan como corresponde.
+                //tuples[index] = [dia, idsStructure[index]];
+                tuples.push([dia, idsStructure[index]])
+            }
+        }
+
+
+    } else {
+        console.log("Alguno de los bloques enviados no existe.")
+        throw new Error('Los bloques enviados no existen');
+    }
+
+    console.log('Las tuplas son: ', tuples)
+    return tuples //devuelve el arreglo vacio si no son correctos. 
 }
 
 
@@ -254,5 +304,4 @@ export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRela
 // bloques[lunes] = [1,2,4,5]
 // en este caso regular = true, tengo que construir las ternarias del mes.
 
-// Bloque_NO_regular[(id, 1/1/25, [1,2,3,5]), (id, 2/1/25, [1,2,3,5]),.... ]
-// Nota mental: el id es mio, esto mismo lo registro en el objeto ternaria. Si o si, despues
+// Bloque_NO_regular[(2025-1-4, ["1","2","3","5"]), (YYYY/M/D, [numBlock,..,..,..]),.... ]

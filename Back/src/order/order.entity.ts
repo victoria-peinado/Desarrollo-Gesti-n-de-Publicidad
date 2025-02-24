@@ -2,7 +2,7 @@ import { DateTimeType, Entity, ManyToOne, Rel, Property, OneToMany, Collection }
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Contract } from "../contract/contract.entity.js";
 import { Spot } from "../spot/spot.entity.js";
-import { ObjectIdSchema, BlocksRegularSchema, TupleBlocksSchema, BlocksRegularType } from '../shared/db/schemas.js';
+import { ObjectIdSchema, BlocksRegularSchema, TupleBlocksSchemaReq, BlocksRegularType } from '../shared/db/schemas.js';
 import { object, z } from 'zod';
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 
@@ -76,12 +76,15 @@ export const OrderSchema = z.object({
   liq: z.boolean().default(false),
   month: z.string().regex(/^\d{2}-\d{4}$/, { message: 'month debe tener el formato MM-AAAA' }).optional(),
   regular: z.boolean().default(true),
-  regStructure: BlocksRegularSchema,
+  regStructure: BlocksRegularSchema.optional(),
   cancelDate: z.date().optional(),
-  //notRegStructure: TupleBlocksSchema, //ROMPE TODO O VA?
+  notRegStructure: z.array(TupleBlocksSchemaReq).optional(), //ROMPE TODO O VA?
   contract: ObjectIdSchema,
   spot: ObjectIdSchema.optional(),
 });
+
+
+
 export const PutOrderSchema = OrderSchema.omit({ contract: true }); // Partial schema for updates
 export const PatchOrderSchema = OrderSchema.omit({ contract: true }).partial(); // Partial schema for updates
 

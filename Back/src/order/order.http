@@ -44,6 +44,22 @@ Content-Type: application/json
                 "sunday": ["25", "26", "27", "28"]}
 }
 
+
+### POST NO REGULAR
+# @name createorder
+POST http://localhost:{{port}}/api/order
+Content-Type: application/json
+
+{
+        "nameStrategy": "LA PRIMERA NO REGULAR",
+        "obs": "Señor, en vos confio",
+        "showName": "Siempre Al Dia",
+        "contract": "67b905fb4bd0c3f4c7685797",
+        "spot": "654e3fbc97ea9f854e9fa08b",
+        "regular": false,
+        "notRegStructure": [["2025-2-25",["1", "2", "3", "4"]],["2025-2-26", ["5", "6", "7", "8"]],["2025-2-27",  ["9", "10", "11", "12"]]]
+}
+
 ### PUT Modifica todo el objeto -idempotente-
 PUT http://localhost:{{port}}/api/order/{{id}}
 Content-Type: application/json

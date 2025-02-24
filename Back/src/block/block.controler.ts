@@ -33,7 +33,7 @@ const isNumBlockUnique = async (numBlock: string) => {
 
 async function findAll(req: Request, res: Response) {
   try {
-    const blocks = await em.find(Block, {},{populate:['prices']});
+    const blocks = await em.find(Block, {}, { populate: ['prices'] });
     res.status(200).json({ message: 'Find all Blocks', data: blocks });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -89,11 +89,11 @@ async function removeAll(req: Request, res: Response) {
     em.remove(blocks)
     await em.flush()
 
-    res.status(200).json({message: 'All blocks removed', data: blocks})
-  }catch (error: any) {
-        res.status(500).json({message: error.message})
-    }
-  
+    res.status(200).json({ message: 'All blocks removed', data: blocks })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+
 }
 
 //FUNCIONES PARA VERIFICAR EXISTENCIA DE UNA LISTA DE BLOQUES
@@ -125,6 +125,33 @@ async function numsToIds(structure: string[][]) {
   return idStructure
 }
 
+
+//el manejo con for es mejor por si falla alguna busqueda no se pierda la relacion con el indice
+async function numsToIds2(structure: string[][]) {
+  const allBlocks = await em.find(Block, {}, { fields: ['numBlock'] })
+  let idStructure: string[][] = []
+  const strucuteLength = structure.length
+  for (let i = 0; i < strucuteLength; i++) {
+    let daysIds: string[] = []
+    let dayArray = structure[i]
+    const dayArrayLength = dayArray.length
+    for (let x = 0; x < dayArrayLength; x++) {
+      const actualBlock = allBlocks.find(block => block.numBlock === dayArray[x])
+      if (actualBlock?.id !== undefined) {
+        daysIds[x] = actualBlock.id
+      } else { console.log('El bloque: ', actualBlock, 'tiene propiedades indefinidas.') }
+    }
+    idStructure[i] = daysIds
+  }
+  return idStructure
+}
+
+
+
+
+
+
+
 //FUNCIONES PARA CREAR AUTOMATICAMENTE TODOS LOS BLOQUES
 
 function formatoHora(hora: Date): string {
@@ -134,25 +161,25 @@ function formatoHora(hora: Date): string {
   return `${horas}:${minutos}:${segundos}`;
 }
 
-async  function addAll(req: Request, res: Response) {
-     try {
-        let hora = new Date('2023-01-01T00:00:00')
-        let blocks: Block[] = [];
-        for(let x=0; x<=48 ;x=x+1){
-          req.body.numBlock = x.toString();
-          req.body.startTime = formatoHora(hora)
-          hora = new Date(hora.getTime() + 30 * 60 * 1000)
-          let block = em.create(Block, req.body)
-          blocks.push(block)
-    } 
-    await em.flush()
-    res.status(200).json({message: 'All blocks created sucessfully', data: blocks})
-  } catch (error: any) {
-        res.status(500).json({message: error.message})
+async function addAll(req: Request, res: Response) {
+  try {
+    let hora = new Date('2023-01-01T00:00:00')
+    let blocks: Block[] = [];
+    for (let x = 0; x <= 48; x = x + 1) {
+      req.body.numBlock = x.toString();
+      req.body.startTime = formatoHora(hora)
+      hora = new Date(hora.getTime() + 30 * 60 * 1000)
+      let block = em.create(Block, req.body)
+      blocks.push(block)
     }
+    await em.flush()
+    res.status(200).json({ message: 'All blocks created sucessfully', data: blocks })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 //FIN DE FUNCIONES PARA CREAR TODOS LOS BLOQUES
 
 
-export {sanitizeBlockInput,  findAll, findOne, add, update, remove, removeAll, addAll, isNumBlockUnique, numsToIds, checkAll}
+export { sanitizeBlockInput, findAll, findOne, add, update, remove, removeAll, addAll, isNumBlockUnique, numsToIds, checkAll, numsToIds2 }
