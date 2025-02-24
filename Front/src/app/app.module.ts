@@ -14,7 +14,6 @@ import { NuevoContratoComponent } from './pages/nuevo-contrato/nuevo-contrato.co
 import { NuevaOrdenComponent } from './pages/nueva-orden/nueva-orden.component';
 import { OrdenBLoqueComponent } from './pages/orden-bloque/orden-bloque.component';
 import { ActualizacionComercioComponent } from './pages/actualizacion-comercio/actualizacion-comercio.component';
-import { InicioComponent } from './pages/inicio/inicio.component';
 import { NewOwnerContactShopComponent } from './pages/alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
 import { OwnerComponent } from './pages/owner/owner.component';
 import { ContactComponent } from './pages/contact/contact.component';
@@ -61,6 +60,7 @@ import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { UserLoginComponent } from './pages/user-login/user-login.component';
 import { ShopListComponent } from './pages/shop-list/shop-list.component';
 import { OrdenFechaComponent } from './pages/orden-fecha/orden-fecha.component';
+import { InicioPageComponent } from './pages/inicio-page/inicio-page.component';
 
 
 @NgModule({ declarations: [
@@ -76,7 +76,6 @@ import { OrdenFechaComponent } from './pages/orden-fecha/orden-fecha.component';
         OrdenFechaComponent,
         OrdenBLoqueComponent,
         ActualizacionComercioComponent,
-        InicioComponent,
         ShopListComponent,
         OwnerComponent,
         ContactComponent,
@@ -118,7 +117,8 @@ import { OrdenFechaComponent } from './pages/orden-fecha/orden-fecha.component';
         BajaContactoCategoryComponent,
         ListadoBloquesCategoryComponent,
         EdicionBloqueCategoryComponent,
-        UserLoginComponent
+        UserLoginComponent,
+        InicioPageComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

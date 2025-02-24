@@ -6,7 +6,6 @@ import { NuevoComercioComponent } from './pages/nuevo-comercio/nuevo-comercio.co
 import { NuevoContratoComponent } from './pages/nuevo-contrato/nuevo-contrato.component';
 import { NuevaOrdenComponent } from './pages/nueva-orden/nueva-orden.component';
 import { ActualizacionComercioComponent } from './pages/actualizacion-comercio/actualizacion-comercio.component';
-import { InicioComponent } from './pages/inicio/inicio.component';
 import { NewOwnerContactShopComponent } from './pages/alta-titular-contacto-comercio/alta-titular-contacto-comercio.component';
 import { OwnerComponent } from './pages/owner/owner.component';
 import { ContactComponent } from './pages/contact/contact.component';
@@ -41,11 +40,12 @@ import { ListadoBloquesCategoryComponent } from './pages/bloques-page/categories
 import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/edicion-bloque-category/edicion-bloque-category.component';
 import { UserLoginComponent } from './pages/user-login/user-login.component';
 import { ShopListComponent } from './pages/shop-list/shop-list.component';
+import { InicioPageComponent } from './pages/inicio-page/inicio-page.component';
 
 
 const routes: Routes = [
-  { path:'', component: InicioComponent },
-  { path:'inicio', component: InicioComponent  },
+  { path:'', component: InicioPageComponent },
+  { path:'inicio', component: InicioPageComponent  },
   { path:'login', component: UserLoginComponent  },
   // pages
   { path: 'asuncion', component: AsuncionPageComponent },
@@ -85,7 +85,7 @@ const routes: Routes = [
   { path:'actualizacionComercio', component: ActualizacionComercioComponent },
   // contracit ruting
   { path:'altaContratacion', component: NuevoContratoComponent },
-  { path:'actualizacionContratacion', component: InicioComponent },
+  { path:'actualizacionContratacion', component: InicioPageComponent },
   //blocks and history ruting
   { path:'actualizacionBLoque', component: BlockComponent },
   {path:'bolockList', component: BlockListComponent},
@@ -99,15 +99,15 @@ const routes: Routes = [
   { path: 'deleteContact', component: ContactComponent, data: { crud: 'delete' } },
 
 
-  { path:'altaPublicista', component: InicioComponent },
-  { path:'liquidacionPublicistas', component: InicioComponent },
-  { path:'listadoLiquidaciones', component: InicioComponent },
-  { path:'registroPagoPub', component: InicioComponent },
-  { path:'actualizacionPublicista', component: InicioComponent },
-  { path:'registroPago', component: InicioComponent },
-  { path:'informeFaltaPago', component: InicioComponent },
+  { path:'altaPublicista', component: InicioPageComponent },
+  { path:'liquidacionPublicistas', component: InicioPageComponent },
+  { path:'listadoLiquidaciones', component: InicioPageComponent },
+  { path:'registroPagoPub', component: InicioPageComponent },
+  { path:'actualizacionPublicista', component: InicioPageComponent },
+  { path:'registroPago', component: InicioPageComponent },
+  { path:'informeFaltaPago', component: InicioPageComponent },
   { path:'emisionOrdenes', component: NuevaOrdenComponent },
-  { path:'listadoPublicitario', component: InicioComponent },
+  { path:'listadoPublicitario', component: InicioPageComponent },
 
   { path: '**', redirectTo: '', pathMatch: 'full'} // cuando el usuario pone una ruta inexistente redirige a http://localhost:4200
 
