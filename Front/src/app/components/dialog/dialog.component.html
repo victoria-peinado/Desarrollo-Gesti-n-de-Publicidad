@@ -1,0 +1,31 @@
+<div class="dialog">
+  <h2 mat-dialog-title>Confirmación</h2>
+  
+  <mat-dialog-content [innerHTML]="data.text"></mat-dialog-content>
+
+  <mat-dialog-content *ngIf="data.changes.length > 0">
+    <div class="cambios">
+      <table>
+        <tr>
+          <th></th>
+          <th>Antes</th>
+          <th></th>
+          <th>Ahora</th>
+        </tr>
+        <tr *ngFor="let change of data.changes">
+          <td><a class="label">{{ change.attribute }}</a></td>
+          <td class="atribute-name">{{ change.oldValue }}</td>
+          <td class="icon-column">
+            <mat-icon class="icon" fontIcon="sync_alt"></mat-icon>
+          </td>
+          <td>{{ change.newValue }}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">No Gracias</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
+  </mat-dialog-actions>
+</div>

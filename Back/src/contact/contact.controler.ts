@@ -90,4 +90,19 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-export {sanitizeContactInput, findAll, findOne, add, update, remove}
+async function getContactByDni(req: Request, res: Response) {
+    try {
+        const dni = req.params.dni;
+        const contact = await em.findOneOrFail(Contact, { dni });
+
+        if (!contact) {
+            return res.status(404).json({ msg: "Contact not found" });
+        }
+        res.status(200).json({message: 'Contact found successfully', data: contact})
+
+    } catch (error: any) {
+        res.status(500).json({message: error.message})
+    }
+};
+
+export {sanitizeContactInput, findAll, findOne, add, update, remove, getContactByDni}

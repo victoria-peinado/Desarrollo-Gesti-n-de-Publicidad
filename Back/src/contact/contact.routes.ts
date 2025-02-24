@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { findAll, findOne, add, update, remove, sanitizeContactInput  } from "./contact.controler.js";
-import { validateWithSchema , validateObjectId,validateUniqueField} from '../shared/db/middleware.js'
+import { findAll, findOne, add, update, remove, sanitizeContactInput, getContactByDni  } from "./contact.controler.js";
+import { validateWithSchema , validateObjectId, validateDni,validateUniqueField} from '../shared/db/middleware.js'
 import { ContactSchema, ParcialContactSchema } from "./contact.entity.js";
 import { orm } from '../shared/db/orm.js'; // for the unique field middleware
 import { Contact } from "./contact.entity.js";
@@ -17,5 +17,6 @@ contactRouter.post('/',validateWithSchema(ContactSchema),unique ,sanitizeContact
 contactRouter.put('/:id',validateObjectId('id'),validateWithSchema(ContactSchema) ,unique, sanitizeContactInput, update)
 contactRouter.patch('/:id',validateObjectId('id'),validateWithSchema(ParcialContactSchema) ,unique, sanitizeContactInput, update)
 contactRouter.delete('/:id',validateObjectId('id'), remove)
+contactRouter.get('/dni/:dni', validateDni('dni'), getContactByDni);
 
 

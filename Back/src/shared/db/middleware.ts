@@ -1,7 +1,7 @@
 
 import { Request, Response, NextFunction } from 'express'
 import { z, ZodError } from 'zod';
-import { ObjectIdSchema ,CuitSchema} from './schemas.js';
+import { ObjectIdSchema ,CuitSchema, DniSchema} from './schemas.js';
 import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 
 
@@ -47,6 +47,18 @@ const validateCuit = (param: string) => {
       next();
     } catch (error) {
       return res.status(400).json({ message: 'Formato de CUIT inválido' });
+    }
+  };
+};
+
+const validateDni = (param: string) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const dni = req.params[param];
+    try {
+      DniSchema.parse(dni);
+      next();
+    } catch (error) {
+      return res.status(400).json({ message: 'Formato de DNI inválido' });
     }
   };
 };
@@ -114,4 +126,4 @@ function validateIdExistence<T extends object>(
     }
   };
 }
-export { validateWithSchema, validateObjectId,  validateCuit ,validateUniqueField,validateIdExistence};  
+export { validateWithSchema, validateObjectId,  validateCuit , validateDni, validateUniqueField,validateIdExistence};  

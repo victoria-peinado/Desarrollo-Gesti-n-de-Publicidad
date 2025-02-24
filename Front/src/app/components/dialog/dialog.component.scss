@@ -1,0 +1,45 @@
+.cambios {
+    padding: 5px 0px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.dialog {
+    width: 560px;
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 2px 12px;
+    text-align: left;
+}
+
+.icon-column {
+    text-align: center;
+    padding: 2px 3px;
+}
+th {
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+.label {
+    color: #005CBB;
+    text-decoration: none;
+}
+.icon {
+    color: gray;
+    font-size: 20px;
+    margin-top: 8px;
+}
+
+
+.atribute-name {
+    font-weight: lighter;
+}

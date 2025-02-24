@@ -31,6 +31,12 @@ const CuitSchema = z
     return mod11 === 11 ? cuit[10] === '0' : mod11 === 10 ? false : cuit[10] === mod11.toString();
   }, 'CUIT inválido');
 
+
+  const DniSchema = z
+  .string()
+  .length(8, 'El DNI debe tener exactamente 8 dígitos')
+  .refine((dni) => /^\d+$/.test(dni), 'DNI inválido');
+
   const NumBlockSchema = z
     .string()
     .min(1, "numBlock is required")
@@ -39,4 +45,14 @@ const CuitSchema = z
 
 
 
-export { ObjectIdSchema, CuitSchema, NumBlockSchema };
+
+
+const TupleBlocksSchema = z.tuple([z.date(), z.array(NumBlockSchema)]);
+
+type BlocksRegularType = z.infer<typeof BlocksRegularSchema>
+
+type TupleBlocksType = z.infer<typeof TupleBlocksSchema>
+
+
+export { ObjectIdSchema,  CuitSchema, DniSchema, BlocksRegularSchema, TupleBlocksSchema, NumBlockSchema, BlocksRegularType, TupleBlocksType};
+

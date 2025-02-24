@@ -86,7 +86,7 @@ async function remove(req: Request, res: Response) {
 async function getOwnerByCuit(req: Request, res: Response) {
     try {
         const cuit = req.params.cuit;
-        const owner = await em.findOne(Owner, { cuit }, { populate: ['shops'] });
+        const owner = await em.findOne(Owner, { cuit });
 
         if (!owner) {
             return res.status(404).json({ msg: "Owner not found" });

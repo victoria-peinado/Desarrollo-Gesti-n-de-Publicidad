@@ -36,14 +36,14 @@ POST http://localhost:{{port}}/api/shop
 Content-Type: application/json
 
 {
-    "fantasyName": "Librería Normita 8",
-    "address": "Belgrano 67",
+    "fantasyName": "Indumentaria Styles",
+    "address": "Sarmiento 439",
     "billingType": "Responsable Inscripto",
-    "mail": "normita@gmail.com",
-    "usualPaymentForm": "Efectivo",
-    "type": "Otro",
-    "contact":"{{idContact}}",
-    "owner": "{{idOwner}}"   
+    "mail": "indumentariast@gmail.com",
+    "usualPaymentForm": "Tarjeta de Crédito",
+    "type": "Minorista",
+    "contact":"654ad0d341b4fa27919f8af8",
+    "owner": "65c08f54ad3fb943fc5cb296"   
 }
 
 ### PUT
@@ -71,6 +71,15 @@ Content-Type: application/json
     "mail": "djjb@gmail.com",
     "usualPaymentForm": "Efectivo",
     "type": "PyME"
+}
+
+###patch
+PUT  http://localhost:{{port}}/api/shop/678d6ddd5477c0c3e240b167
+Content-Type: application/json 
+
+{
+  
+    "contact.dni": "123"
 }
 
 

@@ -90,4 +90,28 @@ export class MyDataService {
   }
 
 
+  getOrderById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}order/${id}`);
+  }
+
+  getContractById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}contract/${id}`);
+  }
+
+  getOwnerById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}owner/${id}`);
+  }
+  
+
+
+
+  patchShop(id: string, shop: Partial<Shop>): Observable<any> {
+    return this.http.patch(`${this.apiUrl}shop/${id}`, shop);
+  }
+  
+
+  patchContact(contactId: string, contactData: any) {
+    return this.http.patch(`${this.apiUrl}contact/${contactId}`, contactData);
+  }
+  
 }

@@ -4,7 +4,7 @@ export class Contact {
     name: string;
     lastname: string;
     contacts: string[];
-    shops: string[];
+    shops?: string[];
 
     constructor(dni: string, name: string, lastname: string, contacts: string[], shops: string[]) {
         this.dni = dni;
