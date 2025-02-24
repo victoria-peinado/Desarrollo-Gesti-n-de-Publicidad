@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";;
 import { orm } from "../shared/db/orm.js";
 import { Order } from "./order.entity.js";
-import { BlocksRegularSchema, BlocksRegularType, TupleBlocksType } from "../shared/db/schemas.js";
-import { Contact } from "../contact/contact.entity.js";
+import { BlocksRegularType, TupleBlocksType } from "./order.entity.js";
 import { Contract } from "../contract/contract.entity.js";
-import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays } from 'date-fns';
+import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays, differenceInCalendarDays } from 'date-fns';
 import { rewriteDaysArray } from "../shared/datesUtilities.js";
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 import { Block } from "../block/block.entity.js";
@@ -68,12 +67,12 @@ async function add(req: Request, res: Response) {
         // Verificamos contrato.
         const id = req.body.sanitizeInput.contract
         const contract = await em.findOneOrFail(Contract, { id })
-        //console.log('Contrato encontrado : ', contract)
         let dateFrom = contract.dateFrom
 
         // Verificamos fecha inicio Orden.
         if (compareAsc(dateFrom, new Date()) == -1) { // si = -1 desde esta antes que hoy por ende ya paso
             dateFrom = addDays(new Date(), 1) // asignamos como inicio la fecha de mañana. 
+            dateFrom.setHours(0, 0, 0, 0)
             console.log('Asignamos la fecha de mañana: ', dateFrom)
         }
 
@@ -100,7 +99,7 @@ async function add(req: Request, res: Response) {
         let totalAds = 0
         tuples.forEach(t => { totalAds = totalAds + t[1].length });
         order.totalAds = totalAds
-        order.daysAmount = tuples.length
+        order.daysAmount = daysAmount(tuples)
 
         //calcular parametros
         const allBlocks = await em.find(Block, {}, { populate: ['prices', 'prices.value'] })
@@ -120,17 +119,14 @@ async function add(req: Request, res: Response) {
                 const actualBlock = allBlocks.find(blo => blo.id === b_id);
                 if (actualBlock !== undefined) {
                     // Cargamos los precios asociados
-                    //const prices_blockFounded = await actualBlock.prices.loadItems();
                     const prices_blockFounded = actualBlock.prices
                     let priceToAdd: number;
 
                     if (prices_blockFounded.length > 1) {
                         // Tomamos el último elemento usando el índice correcto
                         priceToAdd = prices_blockFounded[prices_blockFounded.length - 1].value;
-                        //console.log('Precios del bloque: ', actualBlock.numBlock, 'es: $', priceToAdd);
                     } else {
                         priceToAdd = prices_blockFounded[0].value;
-                        //console.log('El precio de la posicion 0 es: ', priceToAdd);
                     }
 
                     totalCost += priceToAdd;
@@ -141,11 +137,8 @@ async function add(req: Request, res: Response) {
         order.totalCost = totalCost;
         em.persist(order)
         await em.flush()
-        em.fork()
-        const newOrder = await em.findOneOrFail(Order, order, { populate: ['days_orders_blocks'] })
-        console.log('LA NUEVA ORDEN ES: ', newOrder)
 
-        res.status(201).json({ message: 'Order created succesfully', data: newOrder })
+        res.status(201).json({ message: 'Order created succesfully', data: order })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -186,7 +179,6 @@ async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date) {
     let tuples: TupleBlocksType[] = []
 
     const structure = rewriteDaysArray(regStructure)
-    //console.log('Llegue re lejos, ya rescribió el arreglo: ', structure)
     //verificamos los bloques.
 
     const nums = new Set<string>()
@@ -197,7 +189,7 @@ async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date) {
     });
 
     const numsCorrectos = await checkAll([...nums])
-    const idsStructure: string[][] = await numsToIds(structure)
+    const idsStructure: string[][] = await numsToIds2(structure)
 
     if (numsCorrectos) { //si todos los bloques son correctos funciona.... 
 
@@ -209,9 +201,10 @@ async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date) {
                 tuples.push([day, idsStructure[dayNum]])
             }
         });
-    } else { console.log("Alguno de los bloques enviados no existe.") }
-
-
+    } else {
+        console.log("Alguno de los bloques enviados no existe.")
+        throw new Error('Los bloques enviados no existen');
+    }
     return tuples
 
     // tuples = [Date, [id_block]]
@@ -227,12 +220,10 @@ async function createNotRegularTuples(notRegularStructure: [string, string[]][],
         tup[1].forEach(block_num => { nums.add(block_num) });
     });
 
-    console.log('Esta es la lista de block nums', nums)
 
     //verificamos que todos los numeros pasados sean validos.
     const numsCorrectos = await checkAll([...nums])
 
-    console.log('Todos son correctos o no: ', numsCorrectos)
     if (numsCorrectos) {
         let numBlocksList: string[][] = []
         //tipamos las tuplas con [Date,[ids]]
@@ -250,11 +241,22 @@ async function createNotRegularTuples(notRegularStructure: [string, string[]][],
             //verificamos de crear solo tuplas mayores a mañana
             const dia = new Date(notRegularStructure[index][0])
 
-            if (compareAsc(dia, dateFrom) == -1) { // si = -1 dia esta antes que dateFrom por ende ya paso
-                console.log('Los bloques asociados a la fecha', dia, 'son descartados por ser posteriores a hoy.')
+            //dateFrom ya es la de mañana chequeada o la futura del contrato.
+            // compareAsc(dateLeft, dateRight) retorna:
+            //     -1 si dateLeft es menor que dateRight.
+            //     0 si ambas fechas son iguales.
+            //     1 si dateLeft es mayor que dateRight.
+
+            if (compareAsc(dia, dateFrom) >= 0) { // si = 0 dia es igual o mayor a dateFrom
+
+                //verificamos el el mes de dia sea el mismo que dateFrom. 
+                if (dia.getMonth() == dateFrom.getMonth()) {
+                    tuples.push([dia, idsStructure[index]])
+                }
+                else { console.log('El dia ', dia, 'fue descartado por no pertenecer al mismo mes: ', dateFrom.getMonth()) }
+
             } else { //si la fecha es superior a mañana, se guardan como corresponde.
-                //tuples[index] = [dia, idsStructure[index]];
-                tuples.push([dia, idsStructure[index]])
+                console.log('Los bloques asociados a la fecha', dia, 'son descartados por ser posteriores a hoy.')
             }
         }
 
@@ -263,8 +265,7 @@ async function createNotRegularTuples(notRegularStructure: [string, string[]][],
         console.log("Alguno de los bloques enviados no existe.")
         throw new Error('Los bloques enviados no existen');
     }
-
-    console.log('Las tuplas son: ', tuples)
+    //console.log('Las tuplas son: ',tuples)
     return tuples //devuelve el arreglo vacio si no son correctos. 
 }
 
@@ -275,7 +276,8 @@ function createDOB(o: string | undefined, b: string | undefined, d: Date) {
         const newTern = em.create(DayOrderBlock, { day: d, block: b, order: o, })
         return newTern
     } else {
-        console.log('No existe el metodo')
+        //console.log('No existe el metodo')
+        throw new Error('Alguna de las ID son Undefined');
         const newTern = new DayOrderBlock()
         return newTern
     }
@@ -293,7 +295,13 @@ async function findWithRelations(req: Request, res: Response) {
     }
 }
 
-
+function daysAmount(tuples: [Date, string[]][]){
+    const dates = tuples.map(([date]) => date);
+    const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
+    const maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
+    const diff = differenceInCalendarDays(maxDate, minDate)
+    return diff
+}
 
 
 export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations }

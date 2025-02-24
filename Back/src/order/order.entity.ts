@@ -2,7 +2,7 @@ import { DateTimeType, Entity, ManyToOne, Rel, Property, OneToMany, Collection }
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Contract } from "../contract/contract.entity.js";
 import { Spot } from "../spot/spot.entity.js";
-import { ObjectIdSchema, BlocksRegularSchema, TupleBlocksSchemaReq, BlocksRegularType } from '../shared/db/schemas.js';
+import { ObjectIdSchema, NumBlockSchema } from '../shared/db/schemas.js';
 import { object, z } from 'zod';
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 
@@ -63,6 +63,31 @@ export class Order extends BaseEntity {
 
 
 }
+
+const BlocksRegularSchema = z.object({
+  monday: z.array(NumBlockSchema),
+  tuesday: z.array(NumBlockSchema),
+  wednesday: z.array(NumBlockSchema),
+  thursday: z.array(NumBlockSchema),
+  friday: z.array(NumBlockSchema),
+  saturday: z.array(NumBlockSchema),
+  sunday: z.array(NumBlockSchema),
+});
+
+
+const TupleBlocksSchema = z.tuple([z.date(), z.array(NumBlockSchema)]);
+
+const TupleBlocksSchemaReq = z.tuple([z.string(), z.array(NumBlockSchema)]);
+
+
+type BlocksRegularType = z.infer<typeof BlocksRegularSchema>
+
+type TupleBlocksType = z.infer<typeof TupleBlocksSchema>
+
+type TupleBlocksReqType = z.infer<typeof TupleBlocksSchemaReq>
+
+
+
 export const OrderSchema = z.object({
   numOrder: z.string().min(1, { message: 'numOrder no puede estar vacío' }).optional(),
   regDate: z.date().default(() => new Date()),
@@ -84,6 +109,9 @@ export const OrderSchema = z.object({
 });
 
 
+
+
+export { BlocksRegularSchema, TupleBlocksSchema, BlocksRegularType, TupleBlocksType, TupleBlocksReqType, TupleBlocksSchemaReq }
 
 export const PutOrderSchema = OrderSchema.omit({ contract: true }); // Partial schema for updates
 export const PatchOrderSchema = OrderSchema.omit({ contract: true }).partial(); // Partial schema for updates

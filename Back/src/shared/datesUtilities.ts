@@ -1,4 +1,5 @@
-import { BlocksRegularType } from "./db/schemas.js"
+import { BlocksRegularType } from "../order/order.entity.js"
+
 
 export function getMonthString(month: Number){
     switch (month){
