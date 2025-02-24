@@ -25,3 +25,12 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+nvm use 18.20.4
+Now using node v18.20.4 (64-bit)
+Desarrollo-Gesti-n-de-Publicidad> npm -v
+10.7.0
+Desarrollo-Gesti-n-de-Publicidad> cd .\Front\
+Desarrollo-Gesti-n-de-Publicidad\Front> npx ng serve
+
+
