@@ -13,7 +13,7 @@ const unique = validateUniqueField(em.getRepository(User), 'username');
   authRouter.get('/', findAll);
   authRouter.get("/:id", validateObjectId("id"), findOne);
   authRouter.post( "/register", validateWithSchema(UserSchema), sanitizeAuthInput, unique, add);
-  authRouter.post( "/login", validateWithSchema(LoginSchema), unique, login);
+  authRouter.post( "/login", validateWithSchema(LoginSchema), login);
   authRouter.post('/logout', verifyToken, authorizeUserRoles('admin', 'user'), logout);//is only for testing
   authRouter.put("/:id",validateObjectId("id"), validateWithSchema(UserSchema), sanitizeAuthInput, unique, update);
   authRouter.patch("/:id",validateObjectId("id"), validateWithSchema(PartialUserSchema), sanitizeAuthInput, unique, update);

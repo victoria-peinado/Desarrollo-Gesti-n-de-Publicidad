@@ -54,10 +54,6 @@ app.use((_, res) => {
   res.status(404).json({ messege: "Resourse not found" })
 })
 
-// LISTEN SERVIDOR
 
-app.listen(env.PORT, () => {
-  console.log("Server running in http:\\localhost:" + env.PORT)
-})
 export { app }
 
