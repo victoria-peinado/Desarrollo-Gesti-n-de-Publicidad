@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";;
 import { orm } from "../shared/db/orm.js";
 import { Order } from "./order.entity.js";
-import { BlocksRegularType, TupleBlocksType } from "./order.entity.js";
+import { BlocksRegularType, TupleBlocksType, BlocksNotRegularType } from "./order.entity.js";
 import { Contract } from "../contract/contract.entity.js";
-import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays, differenceInCalendarDays } from 'date-fns';
+import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays, differenceInCalendarDays, parse, startOfMonth, addMonths } from 'date-fns';
 import { rewriteDaysArray } from "../shared/datesUtilities.js";
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 import { Block } from "../block/block.entity.js";
-import { checkAll, numsToIds, numsToIds2 } from "../block/block.controler.js";
+import { checkAll, numsToIds2 } from "../block/block.controler.js";
 
 
 const em = orm.em
@@ -68,73 +68,20 @@ async function add(req: Request, res: Response) {
         const id = req.body.sanitizeInput.contract
         const contract = await em.findOneOrFail(Contract, { id })
         let dateFrom = contract.dateFrom
-
-        // Verificamos fecha inicio Orden.
-        if (compareAsc(dateFrom, new Date()) == -1) { // si = -1 desde esta antes que hoy por ende ya paso
-            dateFrom = addDays(new Date(), 1) // asignamos como inicio la fecha de mañana. 
-            dateFrom.setHours(0, 0, 0, 0)
-            console.log('Asignamos la fecha de mañana: ', dateFrom)
-        }
+        let dateTo = contract.dateTo
 
         const order = em.create(Order, req.body.sanitizeInput);
-        order.month = format(dateFrom, 'MM-yyyy')
-        order.totalCost = 0
         await em.flush();
 
-        if (order?._id === undefined) {
-            throw new Error('Error al crear la orden. No tiene id');
-        } else { order.id = order._id.toString() }
+        //order = await asingAtributes(order, dateFrom, req, res)
+
+        const regular: boolean = req.body.sanitizeInput.regular
+        const regStructure: BlocksRegularType = req.body.sanitizeInput.regStructure
+        const notRegStructure: BlocksNotRegularType = req.body.sanitizeInput.notRegStructure
 
 
-        let tuples: TupleBlocksType[] = []
+        await asingAtributes(order, dateFrom, regular, regStructure, notRegStructure, dateTo)
 
-        if (req.body.sanitizeInput.regular) {
-            const regStructure: BlocksRegularType = req.body.sanitizeInput.regStructure
-            tuples = await createTuples2(regStructure, dateFrom)
-        } else {
-            tuples = await createNotRegularTuples(req.body.sanitizeInput.notRegStructure, dateFrom)
-        }
-
-        //Calcular totalAds - daysAmount - month
-        let totalAds = 0
-        tuples.forEach(t => { totalAds = totalAds + t[1].length });
-        order.totalAds = totalAds
-        order.daysAmount = daysAmount(tuples)
-
-        //calcular parametros
-        const allBlocks = await em.find(Block, {}, { populate: ['prices', 'prices.value'] })
-        let ternarias: Array<DayOrderBlock> = []
-
-        let totalCost = 0;
-        const dobs: DayOrderBlock[] = []
-
-        // Iteramos sobre cada tupla
-        for (const tup of tuples) {  // tup[0] es la fecha, tup[1] es la lista de id_bloques
-            // Iteramos sobre cada id de bloque de forma secuencial
-            for (const b_id of tup[1]) {
-                const dob = createDOB(order.id, b_id, tup[0]);
-                dobs.push(dob)
-
-
-                const actualBlock = allBlocks.find(blo => blo.id === b_id);
-                if (actualBlock !== undefined) {
-                    // Cargamos los precios asociados
-                    const prices_blockFounded = actualBlock.prices
-                    let priceToAdd: number;
-
-                    if (prices_blockFounded.length > 1) {
-                        // Tomamos el último elemento usando el índice correcto
-                        priceToAdd = prices_blockFounded[prices_blockFounded.length - 1].value;
-                    } else {
-                        priceToAdd = prices_blockFounded[0].value;
-                    }
-
-                    totalCost += priceToAdd;
-                }
-            }
-        }
-        order.days_orders_blocks?.add(dobs);
-        order.totalCost = totalCost;
         em.persist(order)
         await em.flush()
 
@@ -142,6 +89,78 @@ async function add(req: Request, res: Response) {
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
+}
+
+
+async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, regStructure: BlocksRegularType, notRegStructure: BlocksNotRegularType | undefined, dateTo: Date | undefined) {
+    // Verificamos fecha inicio Orden.
+    if (compareAsc(dateFrom, new Date()) == -1) { // si = -1 desde esta antes que hoy por ende ya paso
+        dateFrom = addDays(new Date(), 1) // asignamos como inicio la fecha de mañana. 
+        dateFrom.setHours(0, 0, 0, 0)
+        console.log('Asignamos la fecha de mañana: ', dateFrom)
+    }
+
+    order.month = format(dateFrom, 'MM-yyyy')
+    order.totalCost = 0
+
+
+    if (order?._id === undefined) {
+        throw new Error('Error al crear la orden. No tiene id');
+    } else { order.id = order._id.toString() }
+
+
+    let tuples: TupleBlocksType[] = []
+
+    if (regular) {
+        tuples = await createTuples2(regStructure, dateFrom, dateTo)
+    } else {
+        if (notRegStructure != undefined) {
+            tuples = await createNotRegularTuples(notRegStructure, dateFrom, dateTo)
+        }
+    }
+
+    //Calcular totalAds - daysAmount - month
+    let totalAds = 0
+    tuples.forEach(t => { totalAds = totalAds + t[1].length });
+    order.totalAds = totalAds
+    order.daysAmount = daysAmount(tuples)
+
+    //calcular parametros
+    const allBlocks = await em.find(Block, {}, { populate: ['prices', 'prices.value'] })
+    let ternarias: Array<DayOrderBlock> = []
+
+    let totalCost = 0;
+    const dobs: DayOrderBlock[] = []
+
+    // Iteramos sobre cada tupla
+    for (const tup of tuples) {  // tup[0] es la fecha, tup[1] es la lista de id_bloques
+        // Iteramos sobre cada id de bloque de forma secuencial
+        for (const b_id of tup[1]) {
+            const dob = createDOB(order.id, b_id, tup[0]);
+            dobs.push(dob)
+
+
+            const actualBlock = allBlocks.find(blo => blo.id === b_id);
+            if (actualBlock !== undefined) {
+                // Cargamos los precios asociados
+                const prices_blockFounded = actualBlock.prices
+                let priceToAdd: number;
+
+                if (prices_blockFounded.length > 1) {
+                    // Tomamos el último elemento usando el índice correcto
+                    priceToAdd = prices_blockFounded[prices_blockFounded.length - 1].value;
+                } else {
+                    priceToAdd = prices_blockFounded[0].value;
+                }
+
+                totalCost += priceToAdd;
+            }
+        }
+    }
+    order.days_orders_blocks?.add(dobs);
+    order.totalCost = totalCost;
+
+    return order
 }
 
 
@@ -172,7 +191,8 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date) {
+//crea las tuplas desde la dateFrom o mañana, y hasta dateTo (inclusive) o el final del mes.
+async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date, dateTo: Date | undefined) {
     // reg = [monday:['1','2', '3'], tues:[id_block], wend:[],....]
     // structure = [[nroBloque, nroBloque],[],[]] 0->sunday , 1 -> monday ...
 
@@ -193,8 +213,9 @@ async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date) {
 
     if (numsCorrectos) { //si todos los bloques son correctos funciona.... 
 
-        const lastDay = lastDayOfMonth(dateFrom)
-        const daysOfMonth = eachDayOfInterval({ start: dateFrom, end: lastDay })
+        const lastDay: Date = dateToCalculate(dateFrom, dateTo)
+
+        const daysOfMonth = eachDayOfInterval({ start: dateFrom, end: lastDay }) //ambos inclusives
         daysOfMonth.forEach(day => {
             const dayNum = day.getDay()
             if (structure[dayNum].length > 0) {
@@ -210,7 +231,8 @@ async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date) {
     // tuples = [Date, [id_block]]
 }
 
-async function createNotRegularTuples(notRegularStructure: [string, string[]][], dateFrom: Date) { //lista(date-string, numBlockList[])
+//crea las tuplas desde la dateFrom o mañana, y hasta dateTo (inclusive) o el final del mes.
+async function createNotRegularTuples(notRegularStructure: BlocksNotRegularType, dateFrom: Date, dateTo: Date | undefined) { //lista(date-string, numBlockList[])
     let tuples: TupleBlocksType[] = []
 
     const nums = new Set<string>()
@@ -249,14 +271,17 @@ async function createNotRegularTuples(notRegularStructure: [string, string[]][],
 
             if (compareAsc(dia, dateFrom) >= 0) { // si = 0 dia es igual o mayor a dateFrom
 
-                //verificamos el el mes de dia sea el mismo que dateFrom. 
-                if (dia.getMonth() == dateFrom.getMonth()) {
+                //verificamos que la fecha no supere el hasta de la contratación o el ultimo día del mes.
+                const lastDay: Date = dateToCalculate(dateFrom, dateTo)
+                // si dia es igual o menor que lastDay (ultimo del mes o ultimo contratación)
+                if (compareAsc(dia, lastDay) <= 0) {
+
                     tuples.push([dia, idsStructure[index]])
-                }
-                else { console.log('El dia ', dia, 'fue descartado por no pertenecer al mismo mes: ', dateFrom.getMonth()) }
+
+                } else { console.log('El dia ', dia, 'fue descartado por estar fuera de la contratacion o del mes de la orden.') }
 
             } else { //si la fecha es superior a mañana, se guardan como corresponde.
-                console.log('Los bloques asociados a la fecha', dia, 'son descartados por ser posteriores a hoy.')
+                console.log('Los bloques asociados a la fecha', dia, 'son descartados por ser anteriores a hoy.')
             }
         }
 
@@ -295,7 +320,7 @@ async function findWithRelations(req: Request, res: Response) {
     }
 }
 
-function daysAmount(tuples: [Date, string[]][]){
+function daysAmount(tuples: [Date, string[]][]) {
     const dates = tuples.map(([date]) => date);
     const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
     const maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
@@ -303,8 +328,115 @@ function daysAmount(tuples: [Date, string[]][]){
     return diff
 }
 
+function dateToCalculate(dateFrom: Date, dateTo: Date | undefined) {
+    let lastDay: Date
+    //verificar dateTo
+    if (dateTo != undefined) {
+        if (dateTo.getMonth() == dateFrom.getMonth()) {
+            // si este mes termina la contratación de esta orden
+            lastDay = dateTo
+        } else {
+            // si no esta indefinido pero no es en este mes, el mes es entero
+            lastDay = lastDayOfMonth(dateFrom)
+        }
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations }
+    } else {
+        // la fecha hasta esta indefinida, quiere decir que este mes va entero
+        lastDay = lastDayOfMonth(dateFrom)
+    }
+    return lastDay
+}
+
+
+async function renovateRegularOrders(actualMonth: string) {
+    try {
+        //podriamos pasar el mes anterior como parametro.
+        const actualMonth = format((new Date()), 'MM-yyyy')
+        const date = parse(actualMonth, "MM-yyyy", new Date());
+        const firstDayNextMonth = startOfMonth(addMonths(date, 1));
+        const ordersCreated: Order[] = []
+        //Buscamos ordenes que no tengan fecha cancelación y sean regulares.
+        const orders = await em.find(Order, { month: actualMonth, cancelDate: undefined, regular: true }, { populate: ['contract.dateTo'] })
+
+        for (let index = 0; index < orders.length; index++) {
+            const actualOrder = orders[index];
+            let validOrder: boolean = false
+            //vemos que la dateTo no exista o este dentro de este mes, o este mas adelantes que este mes.
+            if (actualOrder.contract.dateTo === undefined) {
+                //creamos normal.
+                validOrder = true
+            } else {
+                // si dateTo es antes que primerDia = -1 o si son iguales = 0.
+                if (compareAsc(actualOrder.contract.dateTo, firstDayNextMonth) >= 0) {
+                    //se crea todo el mes o hasta dateTo (segun corresponda).
+                    validOrder = true
+                }
+            }
+
+            // si las fechas son validas creamos la orden, sino la ignoramos. 
+            if (validOrder) {
+                const body = dataConstructor(actualOrder)
+                const newOrder = em.create(Order, body)
+                await em.flush();
+
+                //order = await asingAtributes(order, dateFrom, req, res)
+
+                if (newOrder.regStructure != undefined) {
+                    await asingAtributes(newOrder, firstDayNextMonth, newOrder.regular, newOrder.regStructure, undefined, newOrder.contract.dateTo)
+                } else {
+                    throw new Error('Estructura regular sin definir');
+                }
+
+                em.persist(newOrder)
+                ordersCreated.push(newOrder)
+
+            }
+        }
+        await em.flush()
+        console.log('Ordenes creadas con exito: ', ordersCreated)
+        return ordersCreated
+
+    } catch (error) { console.log('ALGO SE ROMPIO AL RENOVAR LAS ORDENES ', error) }
+}
+
+
+function dataConstructor(order: Order) {
+    const data = {
+        numOrder: undefined,
+        regDate: new Date(),
+        totalAds: undefined,
+        daysAmount: undefined,
+        nameStrategy: order.nameStrategy,
+        totalCost: undefined,
+        dailyCost: undefined,
+        obs: order.obs,
+        showName: order.showName,
+        liq: false,
+        month: undefined,
+        regular: true,
+        regStructure: order.regStructure,
+        cancelDate: undefined,
+        notRegStructure: undefined,
+        contract: order.contract,
+        spot: order.spot
+    }
+    return data
+}
+
+async function testRenovarOrdenes(req: Request, res: Response) {
+    try {
+        const actualMonth = format((new Date()), 'MM-yyyy')
+        const date = parse(actualMonth, "MM-yyyy", new Date());
+        const firstDayNextMonth = startOfMonth(addMonths(date, 1));
+        const nextMonthString = format(firstDayNextMonth, 'MM-yyyy')
+        const ordersCreated = await renovateRegularOrders(nextMonthString)
+        console.log('Ordenes creadas con exito: ', ordersCreated)
+        res.status(200).json({ message: 'Ordenes creadas con exito', data: ordersCreated })
+
+    } catch (error: any) { res.status(500).json({ message: error.message })}
+}
+
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]

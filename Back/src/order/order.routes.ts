@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations,  } from "./order.controler.js";
+import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations, testRenovarOrdenes,  } from "./order.controler.js";
 import { validateWithSchema , validateObjectId, validateCuit,validateIdExistence} from '../shared/db/middleware.js'
 import { OrderSchema, PatchOrderSchema, PutOrderSchema} from './order.entity.js'
 import { orm } from '../shared/db/orm.js'; // for the unique field middleware
@@ -16,6 +16,7 @@ export const orderRouter = Router()
 orderRouter.get('/populate', findWithRelations);
 orderRouter.get('/', findAll);
 orderRouter.get('/:id', validateObjectId('id'), findOne); // Validate ID for finding an order by ID
+orderRouter.post('/renovateOrders', testRenovarOrdenes)
 orderRouter.post('/', validateWithSchema(OrderSchema),validIdSpot, validIdContrac, sanitizeOrderInput, add); // Validate order schema and sanitize input before adding
 //orderRouter.post('/', sanitizeOrderInput, add); // Validate order schema and sanitize input before adding
 orderRouter.put('/:id',validateWithSchema(PutOrderSchema), validateObjectId('id'),  validIdSpot, sanitizeOrderInput, update); // Validate ID and order schema before updating

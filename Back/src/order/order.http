@@ -28,7 +28,7 @@ Content-Type: application/json
 
 {
         
-        "nameStrategy": "Todo parece estar bien - Regular",
+        "nameStrategy": "Con procedure",
         "obs": "Que generoso Dios, gracias!",
         "showName": "Siempre Al Dia",
         "contract": "67b905fb4bd0c3f4c7685797",
@@ -51,7 +51,7 @@ POST http://localhost:{{port}}/api/order
 Content-Type: application/json
 
 {
-        "nameStrategy": "Parece que todo funciona bien - NO REGULAR",
+        "nameStrategy": "Con procedure - NO REGULAR",
         "obs": "Señor, en vos confio",
         "showName": "Siempre Al Dia",
         "contract": "67b905fb4bd0c3f4c7685797",
@@ -59,6 +59,13 @@ Content-Type: application/json
         "regular": false,
         "notRegStructure": [["2025-2-25",["1", "2", "3", "4"]],["2025-2-26", ["5", "6", "7", "8"]],["2025-2-27",  ["9", "10", "11", "12"]], ["2025-2-28",  ["9", "10", "11", "12"]], ["2025-2-29",  ["9", "10", "11", "12"]], ["2025-2-27",  ["20", "19", "16", "12"]]]
 }
+
+
+### POST RENOVATE ORDERS
+# @name renovarOrdenes
+POST http://localhost:{{port}}/api/order/renovateOrders
+
+
 
 ### PUT Modifica todo el objeto -idempotente-
 PUT http://localhost:{{port}}/api/order/{{id}}

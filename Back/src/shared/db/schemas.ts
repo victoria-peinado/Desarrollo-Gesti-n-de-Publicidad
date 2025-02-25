@@ -1,5 +1,6 @@
 
 import { z } from 'zod';
+import { BlocksRegularSchema } from '../../order/order.entity.js';
 // ObjectId Validation for MongoDB IDs
 const ObjectIdSchema = z
   .string()
@@ -47,12 +48,8 @@ const CuitSchema = z
 
 
 
-const TupleBlocksSchema = z.tuple([z.date(), z.array(NumBlockSchema)]);
-
-type BlocksRegularType = z.infer<typeof BlocksRegularSchema>
-
-type TupleBlocksType = z.infer<typeof TupleBlocksSchema>
 
 
-export { ObjectIdSchema,  CuitSchema, DniSchema, BlocksRegularSchema, TupleBlocksSchema, NumBlockSchema, BlocksRegularType, TupleBlocksType};
+
+export { ObjectIdSchema,  CuitSchema, DniSchema, BlocksRegularSchema, NumBlockSchema  };
 
