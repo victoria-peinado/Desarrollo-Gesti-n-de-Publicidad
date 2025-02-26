@@ -83,27 +83,27 @@ Content-Type: application/json
 
 
 ### PATCH cancelar Orden
-@id_cancel = 67bd36a386f3a452435c7ccd
+@id_cancel = 67bf50f57b840cd254823a55
 PATCH http://localhost:{{port}}/api/order/cancelOrder/{{id_cancel}}
 Content-Type: application/json
 
 {
         //"id": "...."  , si la paso en la ruta no hace falta aca...
-        "cancelDate": "2025-3-1"  ,
+        "cancelDate": "2025-2-26"  ,
         "obs":     "Se cancelo porque se borra todo el mes nro 3...."
 }
 
 
 
 ### PATCH pagar una orden 
-@id_pay = 67bcda3870945653e0526343
+@id_pay = 67b933b14c4699fba61c5bf6
 PATCH http://localhost:{{port}}/api/order/registerPayment/{{id_pay}}
 Content-Type: application/json
 
 {
         "paymentDate":"2025-2-26",
         "paymentForm":"Efectivo",
-        "paymentObs":"Vino con mala onda a pagar"
+        "paymentObs":"Seguimos con problemas de horas"
 }
 
 

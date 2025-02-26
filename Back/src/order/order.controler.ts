@@ -132,7 +132,6 @@ async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, re
     //calcular parametros
     const allBlocks = await em.find(Block, {}, { populate: ['prices', 'prices.value'] })
     let totalCost = 0;
-    let precioPrueba = 0
     const dobs: DayOrderBlock[] = []
 
     // Iteramos sobre cada tupla
@@ -143,7 +142,7 @@ async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, re
     for (const tup of tuples) {  // tup[0] es la fecha, tup[1] es la lista de id_bloques
         // Iteramos sobre cada id de bloque de forma secuencial
         for (const b_id of tup[1]) {
-            const dob = createDOB(order.id, b_id, tup[0]);
+            const dob = createDOB(order.id, b_id, tup[0].toISOString());
             dobs.push(dob)
 
             //
@@ -334,7 +333,7 @@ async function createNotRegularTuples(notRegularStructure: BlocksNotRegularType,
 }
 
 
-function createDOB(o: string | undefined, b: string | undefined, d: Date) {
+function createDOB(o: string | undefined, b: string | undefined, d: Date | string) {
     //la orden ya existe. 
     if (b !== undefined && o !== undefined) {
         const newTern = em.create(DayOrderBlock, { day: d, block: b, order: o, })
