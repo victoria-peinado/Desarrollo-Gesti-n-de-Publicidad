@@ -596,7 +596,14 @@ async function cancelOrder(req: Request, res: Response) {
                 }
 
 
+                if (order.totalCost === 0){
+                    //si el costo es cero la registramos como paga. 
+                    order.paymentDate = new Date()
+                    order.paymentForm = "Efectivo"
+                    order.liq = true
+                }
                 em.persist(order)
+
 
                 const data = {
                     cancelDate: cancelDate,

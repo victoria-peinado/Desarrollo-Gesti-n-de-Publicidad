@@ -83,14 +83,15 @@ Content-Type: application/json
 
 
 ### PATCH cancelar Orden
-@id_cancel = 67bf50f57b840cd254823a55
+@id_cancel = 67bf76c35247889a06e58edc
+
 PATCH http://localhost:{{port}}/api/order/cancelOrder/{{id_cancel}}
 Content-Type: application/json
 
 {
         //"id": "...."  , si la paso en la ruta no hace falta aca...
         "cancelDate": "2025-2-26"  ,
-        "obs":     "Se cancelo porque se borra todo el mes nro 3...."
+        "obs":     " Tendria que quedar paga"
 }
 
 
