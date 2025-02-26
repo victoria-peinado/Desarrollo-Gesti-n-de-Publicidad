@@ -82,9 +82,9 @@ Content-Type: application/json
 }
 
 
-### PUT cancelar Orden
+### PATCH cancelar Orden
 @id_cancel = 67bd36a386f3a452435c7ccd
-PUT http://localhost:{{port}}/api/order/cancelOrder/{{id_cancel}}
+PATCH http://localhost:{{port}}/api/order/cancelOrder/{{id_cancel}}
 Content-Type: application/json
 
 {
@@ -92,6 +92,20 @@ Content-Type: application/json
         "cancelDate": "2025-3-1"  ,
         "obs":     "Se cancelo porque se borra todo el mes nro 3...."
 }
+
+
+
+### PATCH pagar una orden 
+@id_pay = 67bcda3870945653e0526343
+PATCH http://localhost:{{port}}/api/order/registerPayment/{{id_pay}}
+Content-Type: application/json
+
+{
+        "paymentDate":"2025-2-26",
+        "paymentForm":"Efectivo",
+        "paymentObs":"Vino con mala onda a pagar"
+}
+
 
 ### PATCH Modifica parte del objeto -no idempotente-
 PATCH http://localhost:{{port}}/api/order/{{id}}

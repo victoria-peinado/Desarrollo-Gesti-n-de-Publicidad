@@ -6,6 +6,7 @@ import { ObjectIdSchema, NumBlockSchema } from '../shared/db/schemas.js';
 import { object, string, z } from 'zod';
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 import { format } from "date-fns";
+import { PaymentMethod } from "../shop/shop.entity.js";
 
 @Entity()
 export class Order extends BaseEntity {
@@ -42,7 +43,7 @@ export class Order extends BaseEntity {
   liq: boolean = false
 
   @Property({ nullable: false }) //Ver si puede ser calculado o no. Podria ser en funcion de la fecha de la anterio.
-  month?: string = format(this.regDate,'MM-yyyy') // deberia ser MM-AAAA
+  month?: string = format(this.regDate, 'MM-yyyy') // deberia ser MM-AAAA
   //por el momento lo dejo así para no cambiar la creación. De todas maneras siempre se reasigna el valor. Sino debería ponerlo como nulable.
 
   @Property({ nullable: false })
@@ -53,6 +54,15 @@ export class Order extends BaseEntity {
 
   @Property({ nullable: true })
   cancelDate?: Date
+
+  @Property({ nullable: true })
+  paymentDate?: Date
+
+  @Property({ nullable: true })
+  paymentForm?: string
+
+  @Property({ nullable: true })
+  paymentObs?: string
 
   @ManyToOne(() => Contract)
   contract!: Rel<Contract>
@@ -91,7 +101,7 @@ type TupleBlocksType = z.infer<typeof TupleBlocksSchema>
 
 type TupleBlocksReqType = z.infer<typeof TupleBlocksSchemaReq>
 
-
+const DateOrStringSchema = z.date().or(z.string().regex(/^\d{4}-\d{1,2}-\d{1,2}$/, 'Formato de fecha inválido (yyyy-m-d o yyyy-mm-dd)')) //default(()=> new Date()), //podriamos poner la fecha de hoy como default. 
 
 export const OrderSchema = z.object({
   numOrder: z.string().min(1, { message: 'numOrder no puede estar vacío' }).optional(),
@@ -107,7 +117,10 @@ export const OrderSchema = z.object({
   month: z.string().regex(/^\d{2}-\d{4}$/, { message: 'month debe tener el formato MM-AAAA' }).optional(),
   regular: z.boolean().default(true),
   regStructure: BlocksRegularSchema.optional(),
-  cancelDate: z.date().optional(),
+  cancelDate: DateOrStringSchema,
+  paymentDate: DateOrStringSchema,
+  paymentForm: z.nativeEnum(PaymentMethod).optional(),
+  paymentObs: z.string().min(1, { message: 'paymentsObs no puede estar vacío' }).optional(),
   notRegStructure: BlocksNotRegularSchema.optional(), //ROMPE TODO O VA?
   contract: ObjectIdSchema,
   spot: ObjectIdSchema.optional(),
@@ -117,6 +130,14 @@ export const CancelOrderSchema = z.object({
   id: ObjectIdSchema.optional(),
   cancelDate: z.date({ required_error: 'La fecha de cancelación es obligatoria' }).or(z.string().regex(/^\d{4}-\d{1,2}-\d{1,2}$/, 'Formato de fecha inválido (yyyy-m-d o yyyy-mm-dd)')), //default(()=> new Date()), //podriamos poner la fecha de hoy como default. 
   obs: z.string().min(1, { message: 'obs no puede estar vacío' }).optional(),
+})
+
+export const PaymentOrderSchema = z.object({
+  id: ObjectIdSchema.optional(),
+  paymentDate: DateOrStringSchema,
+  paymentForm: z.nativeEnum(PaymentMethod),
+  paymentObs: z.string().min(1, { message: 'paymentsObs no puede estar vacío' }).optional(),
+
 })
 
 

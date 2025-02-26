@@ -48,7 +48,7 @@ export class Shop extends BaseEntity{
     
 }
 
-enum PaymentMethod {
+export enum PaymentMethod {
   Efectivo = "Efectivo",
   TarjetaDeCredito = "Tarjeta de Crédito",
   TarjetaDeDebito = "Tarjeta de Débito",

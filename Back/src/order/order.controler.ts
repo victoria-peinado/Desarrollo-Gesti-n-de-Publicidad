@@ -8,6 +8,7 @@ import { rewriteDaysArray } from "../shared/datesUtilities.js";
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 import { Block } from "../block/block.entity.js";
 import { checkAll, numsToIds2 } from "../block/block.controler.js";
+import { PaymentMethod } from "../shop/shop.entity.js";
 
 
 const em = orm.em
@@ -28,6 +29,9 @@ function sanitizeOrderInput(req: Request, res: Response, next: NextFunction) {
         regular: req.body.regular,
         regStructure: req.body.regStructure,
         cancelDate: req.body.cancelDate,
+        paymentDate: req.body.paymentDate,
+        paymentForm: req.body.paymentForm,
+        paymentObs: req.body.paymentObs,
         notRegStructure: req.body.notRegStructure,
         contract: req.body.contract,
         spot: req.body.spot
@@ -55,7 +59,7 @@ async function findOne(req: Request, res: Response) {
     try {
         const id = req.params.id
         const order = await em.findOneOrFail(Order, { id })
-        res.status(200).json({ message: 'Order founded sucsesfully', data: order })
+        res.status(200).json({ message: 'Order founded successfully', data: order })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
     }
@@ -338,8 +342,7 @@ function createDOB(o: string | undefined, b: string | undefined, d: Date) {
     } else {
         //console.log('No existe el metodo')
         throw new Error('Alguna de las ID son Undefined');
-        const newTern = new DayOrderBlock()
-        return newTern
+
     }
 }
 
@@ -483,6 +486,14 @@ function daysAmountFromDOB(lista: DayOrderBlock[]): number {
     return dias.size;
 }
 
+//recibe un string o una fecha y devuelve la fecha con horas 00:00:00
+function checkStringToDate(date: string|Date): Date{
+    if (typeof (date) == "string") {
+        date = parse(date, 'yyyy-MM-dd', new Date())
+        date.setHours(0, 0, 0, 0);
+    }
+    return date
+}
 
 async function cancelOrder(req: Request, res: Response) {
     try {
@@ -492,10 +503,9 @@ async function cancelOrder(req: Request, res: Response) {
         const remover: DayOrderBlock[] = []
         if (order.cancelDate === undefined) {
             let cancelDate: string | Date = req.body.sanitizeInput.cancelDate
-            if ( typeof(cancelDate) == "string"){
-                cancelDate = parse(cancelDate, 'yyyy-MM-dd', new Date())
-                cancelDate.setHours(0, 0, 0, 0);
-            }
+            
+            cancelDate = checkStringToDate(cancelDate) 
+
             //RN: Solo se puede cancelar a partir de mañana.
             if (compareAsc(cancelDate, new Date()) <= 0) {
                 //si la fecha de cancelación es hoy o anterior a hoy.
@@ -516,7 +526,7 @@ async function cancelOrder(req: Request, res: Response) {
                 //popular y borrar todos los objetos DayOrderBlock que esten entre ese dia y el ultimo del mes. 
                 const ids_validas: string[] = [] //no se le asigna un tipo de dato....
                 ternarias.forEach(tern => {
-          
+
                     //si es mayor a la fecha de cancelación se elimina ese objeto.
                     if (compareAsc(tern.day, cancelDate) >= 0) {
                         remover.push(tern)
@@ -553,7 +563,7 @@ async function cancelOrder(req: Request, res: Response) {
                 }
 
                 await em.flush()
-                res.status(200).json({ message: 'Order canceled sucsesfully', data: data })
+                res.status(200).json({ message: 'Order canceled successfully', data: data })
 
 
             } else { throw new Error('El mes de la orden no es el mismo que el de la fecha de cancelación.') }
@@ -568,7 +578,34 @@ async function cancelOrder(req: Request, res: Response) {
 }
 
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder }
+async function registerPayment(req: Request, res: Response) {
+    try {
+        let paymentDate: Date = checkStringToDate(req.body.sanitizeInput.paymentDate)
+        let paymentForm: PaymentMethod = req.body.sanitizeInput.paymentForm
+        let paymentObs: string = req.body.sanitizeInput.paymentObs
+        const id = req.params.id
+        
+        const order = await em.findOneOrFail(Order, { id })
+
+        order.paymentDate = paymentDate
+        order.paymentForm = paymentForm
+        order.paymentObs = paymentObs
+        order.liq = true
+
+        em.persist(order)
+
+        await em.flush()
+
+        res.status(200).json({ message: 'Order paid successfully', data: order })        
+        
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+
+    }
+
+}
+
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]
