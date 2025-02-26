@@ -11,7 +11,7 @@
     "clean": " rd /s /q dist",
     "start:dev": "npm run clean && npm run _start:dev",
     "start:prod": "npm run clean && npm run build && npm run _start:prod",
-    "test": "npm run clean && npm run build && cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=development jest --no-cache --logHeapUsage --runInBand --detectOpenHandles --forceExit --coverage=true ./dist/tests"
+    "test": "npm run clean && npm run build && cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test jest --no-cache --logHeapUsage --runInBand --detectOpenHandles --forceExit --coverage=true ./dist/tests"
   },
   "keywords": [],
   "author": "",

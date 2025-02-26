@@ -6,7 +6,7 @@ const rootDir = process.cwd();
 
 // Construir la ruta al archivo `.env`
 const envPath = path.resolve(rootDir, `.env.${process.env.NODE_ENV}`);
-console.log("Loading environment from:", envPath);
+
 
 // Cargar variables de entorno
 const result = dotenv.config({ path: envPath });
@@ -24,5 +24,3 @@ export const env = {
   CONNECTION_STRING: process.env.CONNECTION_STRING,
   JWT_SECRET: process.env.JWT_SECRET
 };
-
-console.log("Loaded ENV variables:", env); 

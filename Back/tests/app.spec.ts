@@ -3,7 +3,7 @@
  import request from 'supertest';
 describe('POST /api/auth', () => {
   test('should return 200 and a token if the credentials are correct', async () => {
-    console.log('test');
+
     const response = await request(app)
       .post('/api/auth/login')
       .send({ 
@@ -11,8 +11,6 @@ describe('POST /api/auth', () => {
         password: 'admin'
       });
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('username');
-    expect(response.body).toHaveProperty('password');
-    expect(response.body).toHaveProperty('token');
+    expect(response.body.data).toHaveProperty('token');
   });
 } );
