@@ -3,12 +3,13 @@ import { orm } from "../shared/db/orm.js";
 import { Order } from "./order.entity.js";
 import { BlocksRegularType, TupleBlocksType, BlocksNotRegularType } from "./order.entity.js";
 import { Contract } from "../contract/contract.entity.js";
-import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays, differenceInCalendarDays, parse, startOfMonth, addMonths } from 'date-fns';
+import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays, differenceInCalendarDays, parse, startOfMonth, addMonths, isBefore, compareDesc } from 'date-fns';
 import { rewriteDaysArray } from "../shared/datesUtilities.js";
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 import { Block } from "../block/block.entity.js";
 import { checkAll, numsToIds2 } from "../block/block.controler.js";
 import { PaymentMethod } from "../shop/shop.entity.js";
+import { Spot } from "../spot/spot.entity.js";
 
 
 const em = orm.em
@@ -85,6 +86,17 @@ async function add(req: Request, res: Response) {
 
 
         await asingAtributes(order, dateFrom, regular, regStructure, notRegStructure, dateTo)
+
+        //verificamos  que tenga una relacion 
+        if (order.days_orders_blocks === undefined) {
+            throw new Error('Ocurrio un error inesperado. No se crearon las relaciones correctamente')
+        } else {
+            if (order.days_orders_blocks.length < 1) {
+                em.remove(order)
+                await em.flush()
+                throw new Error('No puede crearse una orden sin relaciones Bloque-Orden-Dia')
+            }
+        }
 
         em.persist(order)
         await em.flush()
@@ -214,6 +226,36 @@ async function update(req: Request, res: Response) {
     }
 }
 
+async function updateSpot(req: Request, res: Response) {
+    try {
+        const idOrder = req.params.id
+        const idSpot = req.body.sanitizeInput.spot
+
+        const order = await em.findOneOrFail(Order, { id: idOrder }, { populate: ['contract', 'contract.dateTo'] })
+
+        console.log('La orden que trajo es: ', order)
+        const spot = await em.findOneOrFail(Spot, { id: idSpot })
+
+        //verificamos que la orden sea o no regular
+
+        const actualMonth = format(new Date(), 'MM-yyyy')
+        if (order.month !== undefined) { //DUDA: como solucionamos esto????'''
+            if (isBeforeMonth(order.month, actualMonth) >= 0) {
+                //Hacer lo que dice en el git.
+                order.spot = spot
+                //spot.orders.add(em.getReference(Order, order._id)) //aca no sería nunca undefinded
+            }
+            else {
+                throw new Error('No puede actualizar el spot de una orden anterior a la del mes en curso.')
+            }
+        }
+
+        await em.flush()
+        res.status(200).json({ message: 'Spot modificated succesfully', data: order })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
 
 async function remove(req: Request, res: Response) {
     try {
@@ -358,11 +400,12 @@ async function findWithRelations(req: Request, res: Response) {
 }
 
 function daysAmount(tuples: [Date, string[]][]) {
-    const dates = tuples.map(([date]) => date);
-    const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
-    const maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
-    const diff = differenceInCalendarDays(maxDate, minDate)
-    return diff
+    const diasUnicos = new Set<string>();
+    for (const [fecha, _] of tuples) {
+        const fechaString = format(fecha, 'yyyy-MM-dd');
+        diasUnicos.add(fechaString);
+    }
+    return diasUnicos.size;
 }
 
 function dateToCalculate(dateFrom: Date, dateTo: Date | undefined) {
@@ -486,7 +529,7 @@ function daysAmountFromDOB(lista: DayOrderBlock[]): number {
 }
 
 //recibe un string o una fecha y devuelve la fecha con horas 00:00:00
-function checkStringToDate(date: string|Date): Date{
+function checkStringToDate(date: string | Date): Date {
     if (typeof (date) == "string") {
         date = parse(date, 'yyyy-MM-dd', new Date())
         date.setHours(0, 0, 0, 0);
@@ -502,8 +545,8 @@ async function cancelOrder(req: Request, res: Response) {
         const remover: DayOrderBlock[] = []
         if (order.cancelDate === undefined) {
             let cancelDate: string | Date = req.body.sanitizeInput.cancelDate
-            
-            cancelDate = checkStringToDate(cancelDate) 
+
+            cancelDate = checkStringToDate(cancelDate)
 
             //RN: Solo se puede cancelar a partir de mañana.
             if (compareAsc(cancelDate, new Date()) <= 0) {
@@ -583,7 +626,7 @@ async function registerPayment(req: Request, res: Response) {
         let paymentForm: PaymentMethod = req.body.sanitizeInput.paymentForm
         let paymentObs: string = req.body.sanitizeInput.paymentObs
         const id = req.params.id
-        
+
         const order = await em.findOneOrFail(Order, { id })
 
         order.paymentDate = paymentDate
@@ -595,8 +638,8 @@ async function registerPayment(req: Request, res: Response) {
 
         await em.flush()
 
-        res.status(200).json({ message: 'Order paid successfully', data: order })        
-        
+        res.status(200).json({ message: 'Order paid successfully', data: order })
+
     } catch (error: any) {
         res.status(500).json({ message: error.message })
 
@@ -604,7 +647,17 @@ async function registerPayment(req: Request, res: Response) {
 
 }
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment }
+//return -1 si mes1 es posterior a mes2, 0 si son el mismo o 1 si mes2 es anterior a mes 1.
+function isBeforeMonth(mes1: string, mes2: string): number {
+    // Parsea las cadenas de mes a objetos Date
+    const fecha1 = parse(mes1, 'MM-yyyy', new Date());
+    const fecha2 = parse(mes2, 'MM-yyyy', new Date());
+
+    // Compara las fechas y devuelve true si mes1 es anterior a mes2
+    return compareAsc(fecha1, fecha2);
+}
+
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]

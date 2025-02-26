@@ -16,7 +16,7 @@ POST http://localhost:{{port}}/api/spot
 Content-Type: application/json
 
 {
-    "name": "borarr",
+    "name": "De prueba",
     "long": 1
 
 }

@@ -56,7 +56,7 @@ export class Order extends BaseEntity {
   cancelDate?: Date
 
   @Property({ nullable: true })
-  paymentDate?: Date
+  paymentDate?: Date 
 
   @Property({ nullable: true })
   paymentForm?: string
@@ -117,8 +117,8 @@ export const OrderSchema = z.object({
   month: z.string().regex(/^\d{2}-\d{4}$/, { message: 'month debe tener el formato MM-AAAA' }).optional(),
   regular: z.boolean().default(true),
   regStructure: BlocksRegularSchema.optional(),
-  cancelDate: DateOrStringSchema,
-  paymentDate: DateOrStringSchema,
+  cancelDate: DateOrStringSchema.optional(),
+  paymentDate: DateOrStringSchema.optional(),
   paymentForm: z.nativeEnum(PaymentMethod).optional(),
   paymentObs: z.string().min(1, { message: 'paymentsObs no puede estar vacío' }).optional(),
   notRegStructure: BlocksNotRegularSchema.optional(), //ROMPE TODO O VA?
@@ -138,6 +138,10 @@ export const PaymentOrderSchema = z.object({
   paymentForm: z.nativeEnum(PaymentMethod),
   paymentObs: z.string().min(1, { message: 'paymentsObs no puede estar vacío' }).optional(),
 
+})
+
+export const UpdSpotOrderSchema = z.object({
+  spot: ObjectIdSchema
 })
 
 
