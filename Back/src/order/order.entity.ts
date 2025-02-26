@@ -113,7 +113,11 @@ export const OrderSchema = z.object({
   spot: ObjectIdSchema.optional(),
 });
 
-
+export const CancelOrderSchema = z.object({
+  id: ObjectIdSchema.optional(),
+  cancelDate: z.date({ required_error: 'La fecha de cancelación es obligatoria' }).or(z.string().regex(/^\d{4}-\d{1,2}-\d{1,2}$/, 'Formato de fecha inválido (yyyy-m-d o yyyy-mm-dd)')), //default(()=> new Date()), //podriamos poner la fecha de hoy como default. 
+  obs: z.string().min(1, { message: 'obs no puede estar vacío' }).optional(),
+})
 
 
 export { BlocksRegularSchema, TupleBlocksSchema, BlocksRegularType, TupleBlocksType, TupleBlocksReqType, TupleBlocksSchemaReq, BlocksNotRegularType }

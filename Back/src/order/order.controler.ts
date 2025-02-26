@@ -127,19 +127,25 @@ async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, re
 
     //calcular parametros
     const allBlocks = await em.find(Block, {}, { populate: ['prices', 'prices.value'] })
-    let ternarias: Array<DayOrderBlock> = []
-
     let totalCost = 0;
+    let precioPrueba = 0
     const dobs: DayOrderBlock[] = []
 
     // Iteramos sobre cada tupla
+
+    //ids
+    const ids: string[] = []
+
     for (const tup of tuples) {  // tup[0] es la fecha, tup[1] es la lista de id_bloques
         // Iteramos sobre cada id de bloque de forma secuencial
         for (const b_id of tup[1]) {
             const dob = createDOB(order.id, b_id, tup[0]);
             dobs.push(dob)
 
-
+            //
+            ids.push(b_id)
+            //
+            /*
             const actualBlock = allBlocks.find(blo => blo.id === b_id);
             if (actualBlock !== undefined) {
                 // Cargamos los precios asociados
@@ -155,12 +161,41 @@ async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, re
 
                 totalCost += priceToAdd;
             }
+            */
         }
     }
+
+    //
+    totalCost = totalCostCalculete(ids, allBlocks)
+    //
     order.days_orders_blocks?.add(dobs);
     order.totalCost = totalCost;
 
     return order
+}
+
+//calcula el costo de una orden desde una lista de ids, y de todos los bloques
+function totalCostCalculete(ids: string[], allBlocks: Block[]) {
+
+    let totalCost: number = 0
+    for (const b_id of ids) {
+        const actualBlock = allBlocks.find(blo => blo.id == b_id);
+        if (actualBlock !== undefined) {
+            // Cargamos los precios asociados
+            const prices_blockFounded = actualBlock.prices
+            let priceToAdd: number;
+
+            if (prices_blockFounded.length > 1) {
+                // Tomamos el último elemento usando el índice correcto
+                priceToAdd = prices_blockFounded[prices_blockFounded.length - 1].value;
+            } else {
+                priceToAdd = prices_blockFounded[0].value;
+            }
+
+            totalCost += priceToAdd;
+        }
+    }
+    return totalCost
 }
 
 
@@ -355,8 +390,8 @@ async function renovateRegularOrders(actualMonth: string) {
         const date = parse(actualMonth, "MM-yyyy", new Date());
         const firstDayNextMonth = startOfMonth(addMonths(date, 1));
         const ordersCreated: Order[] = []
-        //Buscamos ordenes que no tengan fecha cancelación y sean regulares.
-        const orders = await em.find(Order, { month: actualMonth, cancelDate: undefined, regular: true }, { populate: ['contract.dateTo'] })
+        //Buscamos ordenes que ----no tengan fecha cancelación (pueden estar canceladas pero tener contratacion activa, por eso las dejamos. RN: Para eliminar la renovacion de una orden regular debe finalizarse la contratación.)----- y sean regulares.
+        const orders = await em.find(Order, { month: actualMonth, regular: true }, { populate: ['contract.dateTo'] })
 
         for (let index = 0; index < orders.length; index++) {
             const actualOrder = orders[index];
@@ -433,10 +468,107 @@ async function testRenovarOrdenes(req: Request, res: Response) {
         console.log('Ordenes creadas con exito: ', ordersCreated)
         res.status(200).json({ message: 'Ordenes creadas con exito', data: ordersCreated })
 
-    } catch (error: any) { res.status(500).json({ message: error.message })}
+    } catch (error: any) { res.status(500).json({ message: error.message }) }
 }
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes }
+function daysAmountFromDOB(lista: DayOrderBlock[]): number {
+    const dias = new Set<string>();
+    //usamos string para evitar algun problema con la hora (que no deberia existir)
+
+    for (const dob of lista) {
+        const fecha = dob.day;
+        const diaString = format(fecha, 'yyyy-MM-dd');
+        dias.add(diaString);
+    }
+    return dias.size;
+}
+
+
+async function cancelOrder(req: Request, res: Response) {
+    try {
+        //definir si lo ponemos en los parametros o en el body.sanitizeInput.
+        const id = req.params.id
+        const order = await em.findOneOrFail(Order, { id })
+        const remover: DayOrderBlock[] = []
+        if (order.cancelDate === undefined) {
+            let cancelDate: string | Date = req.body.sanitizeInput.cancelDate
+            if ( typeof(cancelDate) == "string"){
+                cancelDate = parse(cancelDate, 'yyyy-MM-dd', new Date())
+                cancelDate.setHours(0, 0, 0, 0);
+            }
+            //RN: Solo se puede cancelar a partir de mañana.
+            if (compareAsc(cancelDate, new Date()) <= 0) {
+                //si la fecha de cancelación es hoy o anterior a hoy.
+                const hoy = new Date();
+                cancelDate = new Date(hoy);
+                cancelDate.setDate(hoy.getDate() + 1)
+                cancelDate.setHours(0, 0, 0, 0)
+            }
+
+            const cancelMonth = format(cancelDate, 'MM-yyyy')
+
+            if (order.month === cancelMonth) {
+                order.cancelDate = cancelDate
+                if (order.obs === undefined) { order.obs = '' }
+                order.obs = order.obs + '\n \n Info de Cancelación: \n' + req.body.sanitizeInput.obs
+                let ternarias = await order.days_orders_blocks?.loadItems()
+                if (ternarias === undefined) { ternarias = [] } //para que no se queje.
+                //popular y borrar todos los objetos DayOrderBlock que esten entre ese dia y el ultimo del mes. 
+                const ids_validas: string[] = [] //no se le asigna un tipo de dato....
+                ternarias.forEach(tern => {
+          
+                    //si es mayor a la fecha de cancelación se elimina ese objeto.
+                    if (compareAsc(tern.day, cancelDate) >= 0) {
+                        remover.push(tern)
+                    } else {
+                        //si el objeto se queda en la orden guardamos el id.
+                        if (tern.block._id != undefined) {
+                            ids_validas.push(tern.block._id.toString())
+                        }
+                    }
+                });
+
+                //recalcular los atributos......
+
+                const allBlocks = await em.find(Block, {}, { populate: ['prices', 'prices.value'] })
+                let totalCost = 0;
+
+                totalCost = totalCostCalculete(ids_validas, allBlocks)
+                order.totalCost = totalCost
+
+                em.remove(remover)
+                order.days_orders_blocks?.remove(remover)
+                order.totalAds = order.days_orders_blocks?.length
+                if (order.days_orders_blocks != undefined) {
+                    order.daysAmount = daysAmountFromDOB(order.days_orders_blocks.getItems())
+                }
+
+
+                em.persist(order)
+
+                const data = {
+                    cancelDate: cancelDate,
+                    cancelOrder: order,
+                    removedRelations: remover,
+                }
+
+                await em.flush()
+                res.status(200).json({ message: 'Order canceled sucsesfully', data: data })
+
+
+            } else { throw new Error('El mes de la orden no es el mismo que el de la fecha de cancelación.') }
+        }
+        else {
+            throw new Error('La orden ya ha sido cancelada')
+        }
+
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]

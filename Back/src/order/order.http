@@ -28,8 +28,8 @@ Content-Type: application/json
 
 {
         
-        "nameStrategy": "Con procedure",
-        "obs": "Que generoso Dios, gracias!",
+        "nameStrategy": "Te vamos a borrar",
+        "obs": "Deberia ser 27 y 28 /2  con precio de 800",
         "showName": "Siempre Al Dia",
         "contract": "67b905fb4bd0c3f4c7685797",
         "spot": "654e3fbc97ea9f854e9fa08b",
@@ -79,6 +79,18 @@ Content-Type: application/json
         "contract": "654aefd5c3991db6152",
         "spot": "654e3fbc97ea9f854e9fa08b"
 
+}
+
+
+### PUT cancelar Orden
+@id_cancel = 67bd36a386f3a452435c7ccd
+PUT http://localhost:{{port}}/api/order/cancelOrder/{{id_cancel}}
+Content-Type: application/json
+
+{
+        //"id": "...."  , si la paso en la ruta no hace falta aca...
+        "cancelDate": "2025-3-1"  ,
+        "obs":     "Se cancelo porque se borra todo el mes nro 3...."
 }
 
 ### PATCH Modifica parte del objeto -no idempotente-
