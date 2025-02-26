@@ -45,7 +45,7 @@ const login= async (req: Request, res: Response) => {
         {expiresIn: '1h'})
       res.status(200).json({message: 'User logged in successfully', data: {  token: token }});
     }else{
-      res.status(401).json({message: 'Invalid credentials', data:{valid: valid, secret: secret}});
+      res.status(401).json({message: 'Invalid credentials', data:{valid: valid}});
     }
   } catch (error: any) {
     res.status(500).json({message: error.message})

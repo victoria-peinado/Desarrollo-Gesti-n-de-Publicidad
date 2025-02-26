@@ -2,8 +2,6 @@ import { MikroORM } from "@mikro-orm/core";
 import { MongoHighlighter } from "@mikro-orm/mongo-highlighter";
 import { env} from '../../config_env/config.js';
 
-console.log(env.DATABASE_NAME);
-console.log(env);
 
 //env variables
 const databaseName = env.DATABASE_NAME;
@@ -17,7 +15,7 @@ export const orm = await MikroORM.init({
     type: 'mongo',
     clientUrl: databaseUrl,
     highlighter: new MongoHighlighter(),
-    debug: true,
+    debug: process.env.NODE_ENV !== 'test', // Activa logs solo si no es test
 })
 
 export const syncShema =async () => {//no se usa en mango

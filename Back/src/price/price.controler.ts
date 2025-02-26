@@ -88,7 +88,6 @@ async function addAllPrices (req: Request, res: Response){
             req.body.sanitizeInput.block = blocks.id
             const price = em.create(Price, req.body.sanitizeInput)  
             prices.push(price)
-           // console.log(blocks)
         }) 
         em.flush()
     res.status(200).json({message: 'All blocks whit a new price assigned', data: prices})

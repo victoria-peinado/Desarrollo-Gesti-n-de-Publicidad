@@ -14,7 +14,6 @@ const validateWithSchema = (schema: z.ZodSchema) => {
       next(); // Proceed to the next middleware
     } catch (error) {
       if (error instanceof ZodError) {
-        console.log(error.errors);
         // Unify the path and message into a single string
         const errorMessages = error.errors.map((err) => `${err.path.join(".")}: ${err.message}`);
         return res.status(400).json({ errors: errorMessages });
