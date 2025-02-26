@@ -6,8 +6,8 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
-    "_start:dev": "cross-env NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/src/app.js\"",
-    "_start:prod": "cross-env NODE_ENV=production node ./dist/src/app.js",
+    "_start:dev": "cross-env NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/src/server.js\"",
+    "_start:prod": "cross-env NODE_ENV=production node ./dist/src/server.js",
     "clean": " rd /s /q dist",
     "start:dev": "npm run clean && npm run _start:dev",
     "start:prod": "npm run clean && npm run build && npm run _start:prod",
