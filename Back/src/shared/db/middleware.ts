@@ -125,4 +125,4 @@ function validateIdExistence<T extends object>(
     }
   };
 }
-export { validateWithSchema, validateObjectId,  validateCuit , validateDni, validateUniqueField,validateIdExistence};  
+export { validateWithSchema, validateObjectId,  validateCuit , validateDni};  
