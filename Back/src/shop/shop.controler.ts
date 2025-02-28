@@ -145,4 +145,55 @@ async function getShopsByCuit(req: Request, res: Response) {
 };
 
 
+// async function validateIdsAndUniques<T extends object>(
+//     em: EntityManager, 
+//     sanitizeInput: Partial<T>
+// ): Promise<{ valid: boolean; messages: string[] }> {
+//     // Definir repositorios para validación de IDs
+//     const repositoryMap = {
+//         owner: em.getRepository(Owner),
+//         contact: em.getRepository(Contact),
+//     };
+
+//     // Definir repositorios para validación de unicidad
+//     const uniqueFieldsMap = {
+//         email: em.getRepository(Contact),
+//         phoneNumber: em.getRepository(Contact),
+//     };
+
+//     // Ejecutar validaciones
+//     const idValidation = await validateIdsExistence(repositoryMap, sanitizeInput);
+//     const uniqueValidation = await validateUniqueFields(uniqueFieldsMap, sanitizeInput);
+
+//     // Combinar errores
+//     const allErrors = [...idValidation.messages, ...uniqueValidation.messages];
+
+//     return {
+//         valid: allErrors.length === 0,
+//         messages: allErrors
+//     };
+// }
+// async function update(req: Request, res: Response) {
+//     try {
+//         const id = req.params.id;
+//         const sanitizeInput = req.body.sanitizeInput; // Se asume que ya está sanitizado
+
+//         // Llamar a la validación general
+//         const validation = await validateIdsAndUniques(em, sanitizeInput);
+
+//         if (!validation.valid) {
+//             return res.status(400).json({ messages: validation.messages });
+//         }
+
+//         // Proceder con la actualización
+//         const shopToUpdate = await em.findOneOrFail(Shop, { id });
+//         em.assign(shopToUpdate, sanitizeInput);
+//         await em.flush();
+
+//         res.status(200).json({ message: 'Shop modified successfully', data: shopToUpdate });
+//     } catch (error: any) {
+//         res.status(500).json({ message: error.message });
+//     }
+// }
+
 export {sanitizeShopInput, findAll, findOne, add, update, remove, getShopsByOwnerId, getShopsByCuitAndFantasyName, getShopsByCuit}
