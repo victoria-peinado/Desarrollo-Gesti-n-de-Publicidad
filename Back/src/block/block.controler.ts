@@ -3,10 +3,46 @@ import { Request, Response, NextFunction } from 'express'
 import { Block } from './block.entity.js'
 import { orm } from '../shared/db/orm.js'
 import { Price } from '../price/price.entity.js'
+import { EntityRepository, FilterQuery } from '@mikro-orm/core';
+import { validateUniqueFields } from '../shared/db/validations.js';	
+
 
 
 const em = orm.em
 em.getRepository(Block)
+
+async function validateIdsAndUniques<T extends object>(
+    sanitizeInput: Partial<T>
+): Promise<{ valid: boolean; messages: string[] }> {
+    // Usar el EntityManager definido anteriormente
+
+    const uniqueFieldsMap = {
+        nroBlock: em.getRepository(Block) as unknown as EntityRepository<T>,
+    };
+
+    
+     const uniqueValidation = await validateUniqueFields(uniqueFieldsMap as Record<keyof T, EntityRepository<T>>, sanitizeInput);
+
+    const allErrors = [ ...uniqueValidation.messages];
+
+    return {
+        valid: allErrors.length === 0,
+        messages: allErrors
+    };
+}
+async function validateRequestInput(res: Response, sanitizeInput: any): Promise<boolean> {
+    try {
+        const validation = await validateIdsAndUniques(sanitizeInput);
+        if (!validation.valid) {
+            res.status(400).json({ messages: validation.messages });
+            return false;
+        }
+        return true;
+    } catch (validationError: any) {
+        res.status(500).json({ message: 'Validation failed', error: validationError.message });
+        return false;
+    }
+}
 
 function sanitizeBlockInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizeInput = {
@@ -52,23 +88,43 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const block = em.create(Block, req.body.sanitizeInput);
-    await em.flush();
-    res.status(201).json({ message: 'Block created successfully', data: block });
+    const sanitizeInput = req.body.sanitizeInput;
+
+    if (!(await validateRequestInput(res, sanitizeInput))) {
+      return;
+    }
+
+    try {
+      const block = em.create(Block, sanitizeInput);
+      await em.flush();
+      res.status(201).json({ message: 'Block created successfully', data: block });
+    } catch (creationError: any) {
+      res.status(500).json({ message: 'Block creation failed', error: creationError.message });
+    }
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Unexpected error', error: error.message });
   }
 }
 
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const block = em.getReference(Block, id);
-    em.assign(block, req.body.sanitizeInput);
-    await em.flush();
-    res.status(200).json({ message: 'Block modified successfully', data: block });
+    const sanitizeInput = req.body.sanitizeInput;
+
+    if (!(await validateRequestInput(res, sanitizeInput))) {
+      return;
+    }
+
+    try {
+      const block = em.getReference(Block, id);
+      em.assign(block, sanitizeInput);
+      await em.flush();
+      res.status(200).json({ message: 'Block modified successfully', data: block });
+    } catch (updateError: any) {
+      res.status(500).json({ message: 'Block update failed', error: updateError.message });
+    }
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Unexpected error', error: error.message });
   }
 }
 

@@ -3,7 +3,9 @@ import { orm } from "../shared/db/orm.js";
 import { Shop } from "./shop.entity.js";
 import { Owner } from "../owner/owner.entity.js";
 import { Contract } from "../contract/contract.entity.js";
-
+import { validateIdsExistence, validateUniqueFields } from "../shared/db/validations.js";
+import { EntityRepository } from "@mikro-orm/core";
+import { Contact } from "../contact/contact.entity.js";
 
 const em = orm.em //entityManager
 em.getRepository(Shop)
@@ -32,6 +34,46 @@ function sanitizeShopInput(req: Request, res: Response, next: NextFunction) {
     next()
 }
 
+async function validateIdsAndUniques<T extends object>(
+    sanitizeInput: Partial<T>
+): Promise<{ valid: boolean; messages: string[] }> {
+    // Usar el EntityManager definido anteriormente
+
+    const repositoryMap = {
+        owner: em.getRepository(Owner),
+        contact: em.getRepository(Contact),
+    };
+
+
+    // Ejecutar validaciones
+    const idValidation = await validateIdsExistence(
+        repositoryMap as Record<keyof T, EntityRepository<T>>, 
+        sanitizeInput);
+
+
+    // Combinar errores
+    const allErrors = [...idValidation.messages];
+
+
+    return {
+        valid: allErrors.length === 0,
+        messages: allErrors
+    };
+}
+async function validateRequestInput(res: Response, sanitizeInput: any): Promise<boolean> {
+    try {
+        const validation = await validateIdsAndUniques(sanitizeInput);
+        if (!validation.valid) {
+            res.status(400).json({ messages: validation.messages });
+            return false;
+        }
+        return true;
+    } catch (validationError: any) {
+        res.status(500).json({ message: 'Validation failed', error: validationError.message });
+        return false;
+    }
+}
+
 // CRUD functions
 async function findAll(req: Request, res: Response) {
     try {
@@ -54,26 +96,46 @@ async function findOne(req: Request, res: Response) {
     
 }
 
-async  function add(req: Request, res: Response) {
-    try {
-        const shop = em.create(Shop, req.body.sanitizeInput) //tengo un problema con el sanitazed input
-        await em.flush() //seria como el save. Persiste. 
-        res.status(200).json({message: 'Shop created successfully', data: shop})
-    } catch (error: any) {
-        res.status(500).json({message: error.message})
+async function add(req: Request, res: Response) {
+  try {
+    const sanitizeInput = req.body.sanitizeInput;
+
+    if (!(await validateRequestInput(res, sanitizeInput))) {
+      return;
     }
+
+    try {
+      const shop = em.create(Shop, sanitizeInput);
+      await em.flush();
+      res.status(201).json({ message: 'Shop created successfully', data: shop });
+    } catch (creationError: any) {
+      res.status(500).json({ message: 'Shop creation failed', error: creationError.message });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: 'Unexpected error', error: error.message });
+  }
 }
 
 async function update(req: Request, res: Response) {
-    try {
-        const id = req.params.id
-        const shopToUpdate = await em.findOneOrFail(Shop, {id})
-        em.assign(shopToUpdate, req.body.sanitizeInput) //deberia estar sanitizada
-        await em.flush()
-        res.status(200).json({message: 'Shop modified successfully', data: shopToUpdate})
-    } catch (error: any) {
-        res.status(500).json({message: error.message})
+  try {
+    const id = req.params.id;
+    const sanitizeInput = req.body.sanitizeInput;
+
+    if (!(await validateRequestInput(res, sanitizeInput))) {
+      return;
     }
+
+    try {
+      const shopToUpdate = await em.findOneOrFail(Shop, { id });
+      em.assign(shopToUpdate, sanitizeInput);
+      await em.flush();
+      res.status(200).json({ message: 'Shop modified successfully', data: shopToUpdate });
+    } catch (updateError: any) {
+      res.status(500).json({ message: 'Shop update failed', error: updateError.message });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: 'Unexpected error', error: error.message });
+  }
 }
 
 async function remove(req: Request, res: Response) {
