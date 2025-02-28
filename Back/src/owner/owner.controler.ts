@@ -5,7 +5,8 @@ import { NextFunction, Request, Response } from "express";;
 import { orm } from "../shared/db/orm.js";
 import { Owner } from "./owner.entity.js";
 import { Shop } from "../shop/shop.entity.js";
-
+import { validateIdsExistence, validateUniqueFields } from "../shared/db/validations.js";
+import { EntityRepository } from "@mikro-orm/core";
 const em = orm.em
 em.getRepository(Owner)
 
@@ -24,6 +25,43 @@ function sanitizeOwnerInput(req: Request, res: Response, next: NextFunction) {
     next()
 }
 
+async function validateIdsAndUniques<T extends object>(
+    sanitizeInput: Partial<T>
+): Promise<{ valid: boolean; messages: string[] }> {
+    // Usar el EntityManager definido anteriormente
+
+    // Definir repositorios para validación de unicidad
+    const uniqueFieldsMap = {
+        cuit: em.getRepository(Owner),
+    };
+
+    // Ejecutar validaciones
+    const uniqueValidation = await validateUniqueFields(
+        uniqueFieldsMap as Record<keyof T, EntityRepository<T>>, 
+        sanitizeInput);
+
+    // Combinar errores
+    const allErrors = [...uniqueValidation.messages];
+
+
+    return {
+        valid: allErrors.length === 0,
+        messages: allErrors
+    };
+}
+async function validateRequestInput(res: Response, sanitizeInput: any): Promise<boolean> {
+    try {
+        const validation = await validateIdsAndUniques(sanitizeInput);
+        if (!validation.valid) {
+            res.status(400).json({ messages: validation.messages });
+            return false;
+        }
+        return true;
+    } catch (validationError: any) {
+        res.status(500).json({ message: 'Validation failed', error: validationError.message });
+        return false;
+    }
+}
 
 async function findAll(req: Request, res: Response) {
   try {
@@ -44,28 +82,48 @@ async function findOne(req: Request, res: Response) {
 }
 
 
-async  function add(req: Request, res: Response) {
-    try{
-        const owner = em.create(Owner, req.body.sanitizeInput)
-        await em.flush()
-        res.status(201).json({message: 'Owner created successfully', data: owner})
-    } catch(error: any) {
-        res.status(500).json({message: error.message})
+async function add(req: Request, res: Response) {
+  try {
+    const sanitizeInput = req.body.sanitizeInput;
+
+    if (!(await validateRequestInput(res, sanitizeInput))) {
+      return;
     }
+
+    try {
+      const owner = em.create(Owner, sanitizeInput);
+      await em.flush();
+      res.status(201).json({ message: 'Owner created successfully', data: owner });
+    } catch (creationError: any) {
+      res.status(500).json({ message: 'Owner creation failed', error: creationError.message });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: 'Unexpected error', error: error.message });
+  }
 }
 
+async function update(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    const sanitizeInput = req.body.sanitizeInput;
 
-async function update(req: Request, res: Response)  {
-   try {
-    const id = req.params.id
-    const owner = em.getReference(Owner, id)
-    em.assign(owner, req.body.sanitizeInput)
-    await em.flush()
-    res.status(200).json({message: 'Owner modified successfully', data: owner})
-   } catch (error: any) {
-    res.status(500).json({message: error.message})
-   }
+    if (!(await validateRequestInput(res, sanitizeInput))) {
+      return;
+    }
+
+    try {
+      const owner = em.getReference(Owner, id);
+      em.assign(owner, sanitizeInput);
+      await em.flush();
+      res.status(200).json({ message: 'Owner modified successfully', data: owner });
+    } catch (updateError: any) {
+      res.status(500).json({ message: 'Owner update failed', error: updateError.message });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: 'Unexpected error', error: error.message });
+  }
 }
+
 
 
 async function remove(req: Request, res: Response) {

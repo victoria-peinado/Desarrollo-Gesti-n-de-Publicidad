@@ -1,9 +1,44 @@
 import { NextFunction, Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
 import { Contract } from "./contract.entity.js";
+import { EntityRepository } from "@mikro-orm/core";	
+import { Shop } from "../shop/shop.entity.js";
+import { validateUniqueFields,validateIdsExistence } from "../shared/db/validations.js";
 
 const em = orm.em //entityManager
 em.getRepository(Contract)
+async function validateIdsAndUniques<T extends object>(
+    sanitizeInput: Partial<T>
+): Promise<{ valid: boolean; messages: string[] }> {
+    // Usar el EntityManager definido anteriormente
+
+    const uniqueFieldsMap = {
+        shop: em.getRepository(Shop) as unknown as EntityRepository<T>,
+    };
+
+    
+     const idValidation = await validateIdsExistence(uniqueFieldsMap as Record<keyof T, EntityRepository<T>>, sanitizeInput);
+
+    const allErrors = [...idValidation.messages];
+
+    return {
+        valid: allErrors.length === 0,
+        messages: allErrors
+    };
+}
+async function validateRequestInput(res: Response, sanitizeInput: any): Promise<boolean> {
+    try {
+        const validation = await validateIdsAndUniques(sanitizeInput);
+        if (!validation.valid) {
+            res.status(400).json({ messages: validation.messages });
+            return false;
+        }
+        return true;
+    } catch (validationError: any) {
+        res.status(500).json({ message: 'Validation failed', error: validationError.message });
+        return false;
+    }
+}
 
 
 
@@ -46,31 +81,47 @@ async function findOne(req: Request, res: Response) {
     
 }
 
+async function add(req: Request, res: Response) {
+  try {
+    const sanitizeInput = req.body.sanitizeInput;
 
-async  function add(req: Request, res: Response) {
-     try {
-        //Preguntar como hacer las validaciones. Supongo que con funciones externas.
-        const contract = em.create(Contract, req.body.sanitizeInput) //DEBERIA VALIDAR QUE EXISTA EL COMERCIO
-        await em.flush() 
-        res.status(200).json({message: 'Contract created sucesfully', data: contract})
-    } catch (error: any) {
-        res.status(500).json({message: error.message})
+    if (!(await validateRequestInput(res, sanitizeInput))) {
+      return;
     }
-}
 
-
-async function update(req: Request, res: Response)  {
     try {
-        const id = req.params.id
-        const contractToUpdate = await em.findOneOrFail(Contract, {id})
-        em.assign(contractToUpdate, req.body.sanitizeInput) //deberia estar sanitizada
-        await em.flush()
-        res.status(200).json({message: 'Contract updeted sucesfully', data: contractToUpdate})
-    } catch (error: any) {
-        res.status(500).json({message: error.message})
+      const contract = em.create(Contract, sanitizeInput);
+      await em.flush();
+      res.status(201).json({ message: 'Contract created successfully', data: contract });
+    } catch (creationError: any) {
+      res.status(500).json({ message: 'Contract creation failed', error: creationError.message });
     }
+  } catch (error: any) {
+    res.status(500).json({ message: 'Unexpected error', error: error.message });
+  }
 }
 
+async function update(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    const sanitizeInput = req.body.sanitizeInput;
+
+    if (!(await validateRequestInput(res, sanitizeInput))) {
+      return;
+    }
+
+    try {
+      const contractToUpdate = await em.findOneOrFail(Contract, { id });
+      em.assign(contractToUpdate, sanitizeInput);
+      await em.flush();
+      res.status(200).json({ message: 'Contract updated successfully', data: contractToUpdate });
+    } catch (updateError: any) {
+      res.status(500).json({ message: 'Contract update failed', error: updateError.message });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: 'Unexpected error', error: error.message });
+  }
+}
 
 async function remove(req: Request, res: Response) {
     try {

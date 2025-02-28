@@ -16,8 +16,8 @@ POST http://localhost:{{port}}/api/auth/register
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "password": "admin",
+    "username": "admine",
+    "password": "admine",
     "role": "admin"
 }
 

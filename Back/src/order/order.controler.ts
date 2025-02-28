@@ -10,7 +10,8 @@ import { Block } from "../block/block.entity.js";
 import { checkAll, numsToIds2 } from "../block/block.controler.js";
 import { PaymentMethod } from "../shop/shop.entity.js";
 import { Spot } from "../spot/spot.entity.js";
-
+import { validateIdsExistence, validateUniqueFields } from "../shared/db/validations.js";
+import { EntityRepository } from "@mikro-orm/core";
 
 const em = orm.em
 em.getRepository(Order)
@@ -45,6 +46,45 @@ function sanitizeOrderInput(req: Request, res: Response, next: NextFunction) {
 
     next()
 }
+async function validateIdsAndUniques<T extends object>(
+    sanitizeInput: Partial<T>
+): Promise<{ valid: boolean; messages: string[] }> {
+    // Usar el EntityManager definido anteriormente
+
+    const repositoryMap = {
+        spot: em.getRepository(Spot),
+        contract: em.getRepository(Contract),
+    };
+
+
+
+    // Ejecutar validaciones
+    const idValidation = await validateIdsExistence(
+        repositoryMap as Record<keyof T, EntityRepository<T>>, 
+        sanitizeInput);
+
+
+    // Combinar errores
+    const allErrors = [...idValidation.messages];
+
+    return {
+        valid: allErrors.length === 0,
+        messages: allErrors
+    };
+}
+async function validateRequestInput(res: Response, sanitizeInput: any): Promise<boolean> {
+    try {
+        const validation = await validateIdsAndUniques(sanitizeInput);
+        if (!validation.valid) {
+            res.status(400).json({ messages: validation.messages });
+            return false;
+        }
+        return true;
+    } catch (validationError: any) {
+        res.status(500).json({ message: 'Validation failed', error: validationError.message });
+        return false;
+    }
+}
 
 
 async function findAll(req: Request, res: Response) {
@@ -66,62 +106,58 @@ async function findOne(req: Request, res: Response) {
     }
 }
 
-// este metodo solo se llama para crear una nueva orden.
 async function add(req: Request, res: Response) {
-    let orderCreated: boolean = false
-    let orderInProcess: Order | undefined = undefined
+    let orderCreated: boolean = false;
+    let orderInProcess: Order | undefined = undefined;
+
     try {
+        const sanitizeInput = req.body.sanitizeInput;
+
+        if (!(await validateRequestInput(res, sanitizeInput))) {
+            return;
+        }
+
         // Verificamos contrato.
-        const id = req.body.sanitizeInput.contract
-        const contract = await em.findOneOrFail(Contract, { id })
-        let dateFrom = contract.dateFrom
-        let dateTo = contract.dateTo
+        const id = sanitizeInput.contract;
+        const contract = await em.findOneOrFail(Contract, { id });
+        let dateFrom = contract.dateFrom;
+        let dateTo = contract.dateTo;
 
-        const order = em.create(Order, req.body.sanitizeInput);
+        const order = em.create(Order, sanitizeInput);
         await em.flush();
-        orderCreated = true
-        orderInProcess = order
+        orderCreated = true;
+        orderInProcess = order;
 
-        //order = await asingAtributes(order, dateFrom, req, res)
+        const regular: boolean = sanitizeInput.regular;
+        const regStructure: BlocksRegularType = sanitizeInput.regStructure;
+        const notRegStructure: BlocksNotRegularType = sanitizeInput.notRegStructure;
 
-        const regular: boolean = req.body.sanitizeInput.regular
-        const regStructure: BlocksRegularType = req.body.sanitizeInput.regStructure
-        const notRegStructure: BlocksNotRegularType = req.body.sanitizeInput.notRegStructure
+        await asingAtributes(order, dateFrom, regular, regStructure, notRegStructure, dateTo);
 
-
-        await asingAtributes(order, dateFrom, regular, regStructure, notRegStructure, dateTo)
-
-        //verificamos  que tenga una relacion 
-        if (order.days_orders_blocks === undefined) {
-            throw new Error('Ocurrio un error inesperado. No se crearon las relaciones correctamente')
-        } else {
-            if (order.days_orders_blocks.length < 1) {
-                let msj = ''
-                if (!regular && notRegStructure === undefined) {
-                    msj = '. No puede crear ordenes no regulares sin estructura definida.'
-                }
-                em.remove(order)
-                await em.flush()
-                orderInProcess===undefined
-                throw new Error('No puede crearse una orden sin relaciones Bloque-Orden-Dia' + msj)
+        // Verificamos que tenga una relación válida
+        if (!order.days_orders_blocks || order.days_orders_blocks.length < 1) {
+            let msj = '';
+            if (!regular && !notRegStructure) {
+                msj = '. No puede crear órdenes no regulares sin estructura definida.';
             }
+            em.remove(order);
+            await em.flush();
+            orderInProcess = undefined;
+            throw new Error('No puede crearse una orden sin relaciones Bloque-Orden-Día' + msj);
         }
 
-        em.persist(order)
-        await em.flush()
+        em.persist(order);
+        await em.flush();
 
-        res.status(201).json({ message: 'Order created succesfully', data: order })
+        res.status(201).json({ message: 'Order created successfully', data: order });
     } catch (error: any) {
-        if (orderCreated) {
-            if (orderInProcess !== undefined) { // por las dudas que borre otra vez lo que haya creado.
-                em.remove(orderInProcess)
-                await em.flush()
-            }
+        if (orderCreated && orderInProcess) {
+            em.remove(orderInProcess);
+            await em.flush();
         }
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
 }
-
 
 async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, regStructure: BlocksRegularType, notRegStructure: BlocksNotRegularType | undefined, dateTo: Date | undefined) {
     // Verificamos fecha inicio Orden.
@@ -217,15 +253,25 @@ function totalCostCalculete(ids: string[], allBlocks: Block[]) {
 
 
 async function update(req: Request, res: Response) {
-    try {
-        const id = req.params.id
-        const order = em.getReference(Order, id)
-        em.assign(order, req.body.sanitizeInput)
-        await em.flush()
-        res.status(200).json({ message: 'Order modificated succesfully', data: order })
-    } catch (error: any) {
-        res.status(500).json({ message: error.message })
+  try {
+    const id = req.params.id;
+    const sanitizeInput = req.body.sanitizeInput;
+
+    if (!(await validateRequestInput(res, sanitizeInput))) {
+      return;
     }
+
+    try {
+      const order = em.getReference(Order, id);
+      em.assign(order, sanitizeInput);
+      await em.flush();
+      res.status(200).json({ message: 'Order modified successfully', data: order });
+    } catch (updateError: any) {
+      res.status(500).json({ message: 'Order update failed', error: updateError.message });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: 'Unexpected error', error: error.message });
+  }
 }
 
 async function updateSpot(req: Request, res: Response) {
