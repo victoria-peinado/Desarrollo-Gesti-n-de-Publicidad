@@ -68,6 +68,8 @@ async function findOne(req: Request, res: Response) {
 
 // este metodo solo se llama para crear una nueva orden.
 async function add(req: Request, res: Response) {
+    let orderCreated: boolean = false
+    let orderInProcess: Order | undefined = undefined
     try {
         // Verificamos contrato.
         const id = req.body.sanitizeInput.contract
@@ -77,6 +79,8 @@ async function add(req: Request, res: Response) {
 
         const order = em.create(Order, req.body.sanitizeInput);
         await em.flush();
+        orderCreated = true
+        orderInProcess = order
 
         //order = await asingAtributes(order, dateFrom, req, res)
 
@@ -92,9 +96,14 @@ async function add(req: Request, res: Response) {
             throw new Error('Ocurrio un error inesperado. No se crearon las relaciones correctamente')
         } else {
             if (order.days_orders_blocks.length < 1) {
+                let msj = ''
+                if (!regular && notRegStructure === undefined) {
+                    msj = '. No puede crear ordenes no regulares sin estructura definida.'
+                }
                 em.remove(order)
                 await em.flush()
-                throw new Error('No puede crearse una orden sin relaciones Bloque-Orden-Dia')
+                orderInProcess===undefined
+                throw new Error('No puede crearse una orden sin relaciones Bloque-Orden-Dia' + msj)
             }
         }
 
@@ -103,6 +112,12 @@ async function add(req: Request, res: Response) {
 
         res.status(201).json({ message: 'Order created succesfully', data: order })
     } catch (error: any) {
+        if (orderCreated) {
+            if (orderInProcess !== undefined) { // por las dudas que borre otra vez lo que haya creado.
+                em.remove(orderInProcess)
+                await em.flush()
+            }
+        }
         res.status(500).json({ message: error.message })
     }
 }
@@ -121,11 +136,12 @@ async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, re
 
 
     if (order?._id === undefined) {
-        throw new Error('Error al crear la orden. No tiene id');
+        throw new Error('Error inesperado al crear la orden. No tiene id');
     } else { order.id = order._id.toString() }
 
 
     let tuples: TupleBlocksType[] = []
+
 
     if (regular) {
         tuples = await createTuples2(regStructure, dateFrom, dateTo)
@@ -160,23 +176,7 @@ async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, re
             //
             ids.push(b_id)
             //
-            /*
-            const actualBlock = allBlocks.find(blo => blo.id === b_id);
-            if (actualBlock !== undefined) {
-                // Cargamos los precios asociados
-                const prices_blockFounded = actualBlock.prices
-                let priceToAdd: number;
 
-                if (prices_blockFounded.length > 1) {
-                    // Tomamos el último elemento usando el índice correcto
-                    priceToAdd = prices_blockFounded[prices_blockFounded.length - 1].value;
-                } else {
-                    priceToAdd = prices_blockFounded[0].value;
-                }
-
-                totalCost += priceToAdd;
-            }
-            */
         }
     }
 
@@ -208,6 +208,8 @@ function totalCostCalculete(ids: string[], allBlocks: Block[]) {
             }
 
             totalCost += priceToAdd;
+        } else {
+            throw new Error('Error inesperado. Se esta intentando agregar un bloque con id inexistente.');
         }
     }
     return totalCost
@@ -262,10 +264,10 @@ async function remove(req: Request, res: Response) {
         return res.status(403).json({ message: 'This operation is not allowed' });
 
 
-        // const id = req.params.id;
-        // const order = em.getReference(Order, id);
-        // await em.removeAndFlush(order);
-        // res.status(200).json({ message: 'Order deleted successfully', data: order });
+         //const id = req.params.id;
+         //const order = em.getReference(Order, id);
+         //await em.removeAndFlush(order);
+         //res.status(200).json({ message: 'Order deleted successfully', data: order });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
@@ -428,7 +430,7 @@ function dateToCalculate(dateFrom: Date, dateTo: Date | undefined) {
 }
 
 
-async function renovateRegularOrders(actualMonth: string) {
+async function renovateRegularOrders(actualMonth: string): Promise<[boolean, Order|any]> {
     try {
         //podriamos pasar el mes anterior como parametro.
         const actualMonth = format((new Date()), 'MM-yyyy')
@@ -456,27 +458,28 @@ async function renovateRegularOrders(actualMonth: string) {
             // si las fechas son validas creamos la orden, sino la ignoramos. 
             if (validOrder) {
                 const body = dataConstructor(actualOrder)
-                const newOrder = em.create(Order, body)
-                await em.flush();
+                if (body.regStructure != undefined) {
+                    const newOrder = em.create(Order, body)
+                    await em.flush();
 
-                //order = await asingAtributes(order, dateFrom, req, res)
+                    await asingAtributes(newOrder, firstDayNextMonth, newOrder.regular, body.regStructure, undefined, newOrder.contract.dateTo)
+                    em.persist(newOrder)
+                    ordersCreated.push(newOrder)
 
-                if (newOrder.regStructure != undefined) {
-                    await asingAtributes(newOrder, firstDayNextMonth, newOrder.regular, newOrder.regStructure, undefined, newOrder.contract.dateTo)
+                    await em.flush()
+                    console.log('Ordenes creadas con exito: ', ordersCreated)
                 } else {
-                    throw new Error('Estructura regular sin definir');
+                    throw new Error('Error inesperado. Estructura regular sin definir');
                 }
-
-                em.persist(newOrder)
-                ordersCreated.push(newOrder)
 
             }
         }
-        await em.flush()
-        console.log('Ordenes creadas con exito: ', ordersCreated)
-        return ordersCreated
+        return [true, ordersCreated]
 
-    } catch (error) { console.log('ALGO SE ROMPIO AL RENOVAR LAS ORDENES ', error) }
+    } catch (error: any) {
+        console.log('ALGO SE ROMPIO AL RENOVAR LAS ORDENES ', error)
+        return [false, error]
+    }
 }
 
 
@@ -492,7 +495,7 @@ function dataConstructor(order: Order) {
         obs: order.obs,
         showName: order.showName,
         liq: false,
-        month: undefined,
+        month: format(new Date(), 'MM-yyyy'),
         regular: true,
         regStructure: order.regStructure,
         cancelDate: undefined,
@@ -510,8 +513,11 @@ async function testRenovarOrdenes(req: Request, res: Response) {
         const firstDayNextMonth = startOfMonth(addMonths(date, 1));
         const nextMonthString = format(firstDayNextMonth, 'MM-yyyy')
         const ordersCreated = await renovateRegularOrders(nextMonthString)
-        console.log('Ordenes creadas con exito: ', ordersCreated)
-        res.status(200).json({ message: 'Ordenes creadas con exito', data: ordersCreated })
+        if (ordersCreated[0]===false){
+            throw new Error('Ocurrio un error inesperado al crear las ordenes' + ordersCreated[1])
+        }
+        console.log('Ordenes creadas con exito: ', ordersCreated[1])
+        res.status(200).json({ message: 'Ordenes creadas con exito', data: ordersCreated[1]})
 
     } catch (error: any) { res.status(500).json({ message: error.message }) }
 }
@@ -563,8 +569,7 @@ async function cancelOrder(req: Request, res: Response) {
                 order.cancelDate = cancelDate
                 if (order.obs === undefined) { order.obs = '' }
                 order.obs = order.obs + '\n \n Info de Cancelación: \n' + req.body.sanitizeInput.obs
-                let ternarias = await order.days_orders_blocks?.loadItems()
-                if (ternarias === undefined) { ternarias = [] } //para que no se queje.
+                let ternarias = await order.days_orders_blocks.loadItems()
                 //popular y borrar todos los objetos DayOrderBlock que esten entre ese dia y el ultimo del mes. 
                 const ids_validas: string[] = [] //no se le asigna un tipo de dato....
                 ternarias.forEach(tern => {
@@ -596,12 +601,13 @@ async function cancelOrder(req: Request, res: Response) {
                 }
 
 
-                if (order.totalCost === 0){
+                if (order.totalCost === 0) {
                     //si el costo es cero la registramos como paga. 
                     order.paymentDate = new Date()
                     order.paymentForm = "Efectivo"
                     order.liq = true
                 }
+
                 em.persist(order)
 
 
@@ -636,6 +642,8 @@ async function registerPayment(req: Request, res: Response) {
 
         const order = await em.findOneOrFail(Order, { id })
 
+        if(order.paymentDate != undefined && order.liq === true){ //deberia ser valido considerar cualquiera de las dos.
+
         order.paymentDate = paymentDate
         order.paymentForm = paymentForm
         order.paymentObs = paymentObs
@@ -646,6 +654,10 @@ async function registerPayment(req: Request, res: Response) {
         await em.flush()
 
         res.status(200).json({ message: 'Order paid successfully', data: order })
+        }
+        else {
+            throw new Error('La orden ya esta registrada como abonada. ' + order)
+        }
 
     } catch (error: any) {
         res.status(500).json({ message: error.message })
