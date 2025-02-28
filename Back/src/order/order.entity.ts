@@ -1,4 +1,4 @@
-import { DateTimeType, Entity, ManyToOne, Rel, Property, OneToMany, Collection } from "@mikro-orm/core";
+import { DateTimeType, Entity, ManyToOne, Rel, Property, OneToMany, Collection, Cascade } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Contract } from "../contract/contract.entity.js";
 import { Spot } from "../spot/spot.entity.js";
@@ -11,8 +11,8 @@ import { PaymentMethod } from "../shop/shop.entity.js";
 @Entity()
 export class Order extends BaseEntity {
   //deberiamos fletar numOrden pues es id.
-  @Property({ nullable: true })
-  numOrder?: string
+  //@Property({ nullable: true })
+  //numOrder?: string
 
   //regDate se genera al crear el objeto. 
   @Property({ type: DateTimeType })
@@ -43,7 +43,7 @@ export class Order extends BaseEntity {
   liq: boolean = false
 
   @Property({ nullable: false }) //Ver si puede ser calculado o no. Podria ser en funcion de la fecha de la anterio.
-  month?: string = format(this.regDate, 'MM-yyyy') // deberia ser MM-AAAA
+  month: string = format(this.regDate, 'MM-yyyy') // deberia ser MM-AAAA
   //por el momento lo dejo así para no cambiar la creación. De todas maneras siempre se reasigna el valor. Sino debería ponerlo como nulable.
 
   @Property({ nullable: false })
@@ -64,14 +64,14 @@ export class Order extends BaseEntity {
   @Property({ nullable: true })
   paymentObs?: string
 
-  @ManyToOne(() => Contract)
-  contract!: Rel<Contract>
+  @ManyToOne(() => Contract, {nullable: false})
+  contract!: Rel<Contract> //deberia estar al momento de crearla de forma obligatoria.
 
   @ManyToOne(() => Spot, { nullable: true })
   spot?: Rel<Spot> //lo pongo como cero por si no esta al momento de crearla
 
-  @OneToMany(() => DayOrderBlock, dayordenblock => dayordenblock.order)
-  days_orders_blocks? = new Collection<DayOrderBlock>(this);
+  @OneToMany(() => DayOrderBlock, dayordenblock => dayordenblock.order, {mappedBy: 'order' , cascade: [Cascade.REMOVE]})
+  days_orders_blocks = new Collection<DayOrderBlock>(this);
 
 
 }
