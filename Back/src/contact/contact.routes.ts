@@ -15,7 +15,7 @@ contactRouter.get('/', findAll)
 contactRouter.get('/:id',validateObjectId('id'), findOne)
 contactRouter.post('/',validateWithSchema(ContactSchema),unique ,sanitizeContactInput, add)
 contactRouter.put('/:id',validateObjectId('id'),validateWithSchema(ContactSchema) ,unique, sanitizeContactInput, update)
-contactRouter.patch('/:id',validateObjectId('id'),validateWithSchema(ParcialContactSchema) ,unique, sanitizeContactInput, update)
+contactRouter.patch('/:id',validateObjectId('id'),validateWithSchema(ParcialContactSchema), sanitizeContactInput, update)
 contactRouter.delete('/:id',validateObjectId('id'), remove)
 contactRouter.get('/dni/:dni', validateDni('dni'), getContactByDni);
 
