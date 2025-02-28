@@ -1,3 +1,4 @@
+import { format } from "date-fns"
 import { BlocksRegularType } from "../order/order.entity.js"
 
 
@@ -44,4 +45,10 @@ export function rewriteDaysArray(regStructure: BlocksRegularType): string[][]{
     daysArray[6] = regStructure['saturday']
 
     return daysArray
+}
+
+export function getNextMonthString(): string {
+    const hoy = new Date()
+    const manana = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 1);
+    return format(manana, 'MM-yyyy')
 }

@@ -4,7 +4,7 @@ import { Order } from "./order.entity.js";
 import { BlocksRegularType, TupleBlocksType, BlocksNotRegularType } from "./order.entity.js";
 import { Contract } from "../contract/contract.entity.js";
 import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays, differenceInCalendarDays, parse, startOfMonth, addMonths, isBefore, compareDesc } from 'date-fns';
-import { rewriteDaysArray } from "../shared/datesUtilities.js";
+import { getNextMonthString, rewriteDaysArray } from "../shared/datesUtilities.js";
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 import { Block } from "../block/block.entity.js";
 import { checkAll, numsToIds2 } from "../block/block.controler.js";
@@ -433,7 +433,7 @@ function dateToCalculate(dateFrom: Date, dateTo: Date | undefined) {
 async function renovateRegularOrders(actualMonth: string): Promise<[boolean, Order|any]> {
     try {
         //podriamos pasar el mes anterior como parametro.
-        const actualMonth = format((new Date()), 'MM-yyyy')
+        //const actualMonth = format((new Date()), 'MM-yyyy')
         const date = parse(actualMonth, "MM-yyyy", new Date());
         const firstDayNextMonth = startOfMonth(addMonths(date, 1));
         const ordersCreated: Order[] = []
@@ -467,7 +467,7 @@ async function renovateRegularOrders(actualMonth: string): Promise<[boolean, Ord
                     ordersCreated.push(newOrder)
 
                     await em.flush()
-                    console.log('Ordenes creadas con exito: ', ordersCreated)
+                    //console.log('Ordenes creadas con exito: ', ordersCreated)
                 } else {
                     throw new Error('Error inesperado. Estructura regular sin definir');
                 }
@@ -495,7 +495,7 @@ function dataConstructor(order: Order) {
         obs: order.obs,
         showName: order.showName,
         liq: false,
-        month: format(new Date(), 'MM-yyyy'),
+        month: getNextMonthString(),
         regular: true,
         regStructure: order.regStructure,
         cancelDate: undefined,
