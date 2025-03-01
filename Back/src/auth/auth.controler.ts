@@ -108,7 +108,7 @@ async function findOne(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
-const logout = async (req: Request, res: Response) => {
+const logout =  (req: Request, res: Response) => {
     try {
     const authHeader = req.headers.authorization || req.headers.Authorization;
 

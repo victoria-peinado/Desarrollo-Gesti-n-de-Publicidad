@@ -38,7 +38,7 @@ async function verifyToken(req: Request, res: Response, next: NextFunction) {
     }
 
     if (isBlacklisted(token)) { // Verifica si el token está en la blacklist
-      return res.status(403).json({ message: "Token is blacklisted" });
+      return res.status(401).json({ message: "Token is blacklisted" });
     }
 
     try {
@@ -46,7 +46,7 @@ async function verifyToken(req: Request, res: Response, next: NextFunction) {
       Object.assign(req, { user: decodedUser });
       next(); // Continúa con la siguiente función
     } catch (err) {
-      return res.status(403).json({ message: "Invalid token" });
+      return res.status(401).json({ message: "Invalid token" });
     }
   } else {
     return res.status(401).json({ message: "Authorization header missing or incorrect format" });

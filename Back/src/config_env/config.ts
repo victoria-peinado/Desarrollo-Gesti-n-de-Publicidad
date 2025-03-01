@@ -11,11 +11,7 @@ const envPath = path.resolve(rootDir, `.env.${process.env.NODE_ENV}`);
 // Cargar variables de entorno
 const result = dotenv.config({ path: envPath });
 
-if (result.error) {
-  console.error("Error loading .env file:", result.error);
-} else {
-  console.log("Environment variables loaded successfully");
-}
+
 
 export const env = {
   PORT: process.env.PORT,

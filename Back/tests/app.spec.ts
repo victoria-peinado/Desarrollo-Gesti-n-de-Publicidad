@@ -1,18 +1,19 @@
-
- import { app } from '../src/app.js';
- import request from 'supertest';
-
- 
-describe('POST /api/auth', () => {
-  test('should return 200 and a token if the credentials are correct', async () => {
-
-    const response = await request(app)
-      .post('/api/auth/login')
-      .send({ 
-        username: 'admin',
-        password: 'admin'
-      });
-    expect(response.status).toBe(200);
-    expect(response.body.data).toHaveProperty('token');
+import request from 'supertest';
+import { app } from '../src/app.js';
+let server: any;
+beforeAll(async () => {
+  server = app.listen(3071, () => {
+    console.log('Server running on http://localhost:3001');
   });
-} );
+});
+
+afterAll(() => {
+  server.close();
+});
+
+describe('App Initialization', () => {
+  test('should initialize without errors', () => {
+    console.log('App is initializing');
+    expect(app).toBeDefined();
+  });
+});

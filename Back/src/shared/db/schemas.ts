@@ -1,6 +1,6 @@
 
 import { z } from 'zod';
-import { BlocksRegularSchema } from '../../order/order.entity.js';
+
 // ObjectId Validation for MongoDB IDs
 const ObjectIdSchema = z
   .string()
@@ -51,5 +51,5 @@ const CuitSchema = z
 
 
 
-export { ObjectIdSchema,  CuitSchema, DniSchema, BlocksRegularSchema, NumBlockSchema  };
+export { ObjectIdSchema,  CuitSchema, DniSchema,NumBlockSchema  };
 
