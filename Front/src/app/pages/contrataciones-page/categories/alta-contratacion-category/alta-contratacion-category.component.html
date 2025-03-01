@@ -1,1 +1,41 @@
-<p>alta-contratacion-category works!</p>
+<div id="listado-publicitario">
+    <div id="datos-listado-publicitario">
+        <app-title-and-subtitle
+      [title]="'Datos del Listado Publicitario'"
+      [subtitle]="'Ingrese período de interés.'"
+    ></app-title-and-subtitle>
+    <form [formGroup]="list_form">
+      <div class="fila-data">
+        <fieldset>
+          <app-input-field
+            label="Fecha Desde"
+            type="text"
+            [control]="dateFromControl"
+            [validations]="{ required: true }"
+            [mode]="'date'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Fecha Hasta"
+            type="text"
+            [control]="dateToControl"
+            [validations]="{ required: true }"
+            [mode]="'date'"
+          ></app-input-field>
+        </fieldset>
+      </div>
+
+      <button
+            mat-raised-button
+            color="primary"
+            [disabled]="list_form.invalid"
+            (click)="null"
+          >
+            Siguiente
+          </button>
+    </form>
+    </div>
+  
+    <div id="listado"></div>
+  </div>
