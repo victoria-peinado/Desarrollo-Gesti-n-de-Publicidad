@@ -1,0 +1,38 @@
+<div class="table-container p-5">
+    <table class="w-full bg-gray-100 rounded-lg shadow-md">
+      <thead class="bg-gray-300">
+        <tr>
+          <th class="p-3 text-sm font-semibold text-left">N°</th>
+          <th class="p-3 text-sm font-semibold text-left">Fecha Desde</th>
+          <th class="p-3 text-sm font-semibold text-left">Fecha Hasta</th>
+          <th class="p-3 text-sm font-semibold text-left">Fecha Realización</th>
+          <th class="p-3 text-sm font-semibold text-left">Observaciones</th>
+          <th class="p-3 text-sm font-semibold text-left"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let contratacion of contrataciones; let i = index">
+          <tr class="border-b">
+            <td class="p-3 text-sm text-gray-700">{{ contratacion.numero }}</td>
+            <td class="p-3 text-sm text-gray-700">{{ contratacion.fechaDesde }}</td>
+            <td class="p-3 text-sm text-gray-700">{{ contratacion.fechaHasta }}</td>
+            <td class="p-3 text-sm text-gray-700">{{ contratacion.fechaRealizacion }}</td>
+            <td class="p-3 text-sm text-gray-700">{{ contratacion.observaciones || '-' }}</td>
+            <td class="p-3 text-sm text-gray-700">
+                <mat-radio-button [value]="i"></mat-radio-button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  
+    <!-- Paginación -->
+    <div class="pagination mt-4 flex justify-center space-x-2">
+      <button mat-button (click)="goToPage('prev')">Previo</button>
+      <button mat-button *ngFor="let page of pages" (click)="goToPage(page)">
+        {{ page }}
+      </button>
+      <button mat-button (click)="goToPage('next')">Siguiente</button>
+    </div>
+  </div>
+  
