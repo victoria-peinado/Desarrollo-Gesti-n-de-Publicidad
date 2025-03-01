@@ -1,1 +1,81 @@
-<p>edicion-contratacion-category works!</p>
+<div id="edicion-contratacion-categoria">
+    <div id="datos-titular">
+        <app-title-and-subtitle
+          [title]="'Datos del Titular'"
+          [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
+        ></app-title-and-subtitle>
+    
+        <form [formGroup]="owner_form">
+          <div class="fila-data">
+            <fieldset>
+              <app-input-field
+                label="CUIT Titular"
+                placeholder="Ejemplo: 25444505879"
+                type="text"
+                [hintLabel]="'11 dígitos'"
+                [control]="cuitControl"
+                [validations]="{ required: true, minLength: 11, maxLength: 11, pattern: '^[0-9]*$' }"
+                [mode]="'input'"
+              ></app-input-field>
+            </fieldset>
+    
+            <button
+              mat-raised-button 
+              color="primary" 
+              [disabled]="cuitControl.invalid" 
+              (click)="findOwner()">
+              Check
+            </button>
+    
+            @if (errorMessage) {
+              <button mat-button color="warn">
+                <mat-icon fontIcon="close"></mat-icon>
+                {{ errorMessage }}
+              </button>
+            } @else if (ownerFounded) {
+              <button mat-button color="accent">
+                <mat-icon fontIcon="check"></mat-icon>
+                Titular existente.
+              </button>
+            }
+    
+            
+          </div>
+    
+          <fieldset>
+            <fieldset>
+              <app-input-field
+                label="Comercio"
+                [control]="comercioControl"
+                [validations]="{ required: true }"
+                [mode]="'select'"
+                [options]="comercios"
+                [selectedOption]="comercios[0]"
+              ></app-input-field>
+            </fieldset>
+          </fieldset>
+    
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="owner_form.invalid || comercioControl.disabled"
+            (click)="siguiente()"
+          >
+            Siguiente
+          </button>
+        </form>
+      </div>
+  
+    <div id="datos-contratacion">
+        <div class="fila-data" >
+            <app-data-selection-table></app-data-selection-table>
+
+            
+        </div>
+        <button mat-raised-button color="primary" (click)="siguiente()">
+            Siguienteeeeeeeeeeee
+        </button>
+    </div>
+
+    <div id="edicion-contratacion"></div>
+  </div>
