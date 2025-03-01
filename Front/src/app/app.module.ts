@@ -61,6 +61,7 @@ import { UserLoginComponent } from './pages/user-login/user-login.component';
 import { ShopListComponent } from './pages/shop-list/shop-list.component';
 import { OrdenFechaComponent } from './pages/orden-fecha/orden-fecha.component';
 import { InicioPageComponent } from './pages/inicio-page/inicio-page.component';
+import { DataTableComponent } from './components/data-table/data-table.component';
 
 
 @NgModule({ declarations: [
@@ -118,7 +119,8 @@ import { InicioPageComponent } from './pages/inicio-page/inicio-page.component';
         ListadoBloquesCategoryComponent,
         EdicionBloqueCategoryComponent,
         UserLoginComponent,
-        InicioPageComponent
+        InicioPageComponent,
+        DataTableComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

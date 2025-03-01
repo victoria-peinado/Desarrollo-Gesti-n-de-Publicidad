@@ -1,1 +1,68 @@
-<p>listado-comercios-category works!</p>
+<div id="listado-comercios">
+  <div id="datos-titular">
+    <app-title-and-subtitle
+      [title]="'Datos del Titular'"
+      [subtitle]="'Ingrese el CUIT de un Titular.'"
+    ></app-title-and-subtitle>
+    <div class="fila-data">
+      <form [formGroup]="owner_form">
+        <div class="fila-data">
+          <fieldset>
+            <app-input-field
+              label="CUIT Titular"
+              placeholder="Ejemplo: 25444505879"
+              type="text"
+              [hintLabel]="'11 dígitos'"
+              [control]="cuitControl"
+              [validations]="{
+                required: true,
+                minLength: 11,
+                maxLength: 11,
+                pattern: '^[0-9]*$'
+              }"
+              [mode]="'input'"
+            ></app-input-field>
+          </fieldset>
+
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="cuitControl.invalid"
+            (click)="findOwner()"
+          >
+            Check
+          </button>
+
+          @if (errorMessageOwner) {
+          <button mat-button color="warn">
+            <mat-icon fontIcon="close"></mat-icon>
+            {{ errorMessageOwner }}
+          </button>
+          } @else if (ownerFounded) {
+          <button mat-button color="accent">
+            <mat-icon fontIcon="check"></mat-icon>
+            Titular existente.
+          </button>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="datos-comercios">
+    <app-data-table
+      [title]="'COMERCIOS DEL TITULAR'"
+      [data]="shops"
+      [columns]="[
+        { key: 'fantasyName', label: 'Nombre fantasía' },
+        { key: 'address', label: 'Dirección' },
+        { key: 'billingType', label: 'Tipo facturación' },
+        { key: 'mail', label: 'Email', type: 'email' },
+        { key: 'usualPaymentForm', label: 'Forma pago' },
+        { key: 'type', label: 'Tipo', type: 'badge' }
+      ]"
+      [noDataMessage]="'No hay comercios para mostrar.'"
+    >
+    </app-data-table>
+  </div>
+</div>
