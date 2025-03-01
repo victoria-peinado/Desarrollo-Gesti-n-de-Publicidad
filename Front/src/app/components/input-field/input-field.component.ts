@@ -14,7 +14,7 @@ export class InputFieldComponent {
   @Input() control: FormControl = new FormControl('');
   @Input() icon?: string;
   @Input() validations: any = {}; 
-  @Input() mode: 'input' | 'select' = 'input';
+  @Input() mode: 'input' | 'select' | 'date' = 'input';
   @Input() options: string[] = [];
   @Input() hintLabel: string = '';
 

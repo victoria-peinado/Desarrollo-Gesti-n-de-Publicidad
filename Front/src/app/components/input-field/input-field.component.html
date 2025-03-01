@@ -50,10 +50,25 @@
       <mat-option [value]="option">
         {{ option }}
       </mat-option>
-    }
+    } 
 
   </mat-select>
       
+      <mat-error *ngIf="control.hasError('required')">
+        * Campo obligatorio
+      </mat-error>
+    </mat-form-field>
+  }
+
+  @else if (mode === 'date') {
+
+    <mat-form-field class="w-full">
+      <mat-label>{{ label }}</mat-label>
+      <input matInput [matDatepicker]="picker" [formControl]="control">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+
       <mat-error *ngIf="control.hasError('required')">
         * Campo obligatorio
       </mat-error>
