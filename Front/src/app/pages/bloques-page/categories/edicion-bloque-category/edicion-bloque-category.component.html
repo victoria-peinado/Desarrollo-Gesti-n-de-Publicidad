@@ -1,1 +1,83 @@
-<p>edicion-bloque-category works!</p>
+<div id="edicion-bloque">
+  <div id="datos-bloque">
+    <app-title-and-subtitle
+      [title]="'Datos del Bloque'"
+      [subtitle]="'Ingrese el número del Bloque.'"
+    ></app-title-and-subtitle>
+
+    <form [formGroup]="block_form">
+      <div class="fila-data">
+        <fieldset>
+          <app-input-field
+            label="Nro. Bloque"
+            [control]="numBlockControl"
+            [validations]="{ required: true }"
+            [mode]="'select'"
+            [options]="blockTypes"
+          ></app-input-field>
+        </fieldset>
+
+        <div class="datos-asociados">
+          <app-datos-asociados
+            [datos]="[
+              { atributo: 'Hora Inicio', valor: '#34' },
+              { atributo: 'Precio Actual', valor: '400$' }
+            ]"
+            [formularioValido]="block_form.valid"
+            [cargando]="cargando"
+          >
+          </app-datos-asociados>
+        </div>
+      </div>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="block_form.invalid"
+        (click)="siguiente()"
+      >
+        Siguiente
+      </button>
+    </form>
+  </div>
+
+
+<div id="datos-nuevo-bloque">
+    <app-title-and-subtitle
+      [title]="'Edición de Bloque'"
+      [subtitle]="'Indique nuevo precio y fecha de vigencia para el Bloque.'"
+    ></app-title-and-subtitle>
+
+    <form [formGroup]="newBlock_form">
+      <div class="fila-data">
+        <app-input-field
+            label="Precio"
+            placeholder="Ejemplo: 1000"
+            type="text"
+            [control]="priceControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+
+          <app-input-field
+            label="Fecha Vigencia"
+            placeholder="Ejemplo: 1/3/2025"
+            type="text"
+            [control]="effectiveDateControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+
+      </div>
+
+      <button
+        class="btn-guardar-cambios"
+        mat-flat-button
+        color="accent"
+        [disabled]="!newBlock_form.valid"
+        (click)="openDialog()"
+      >
+        Guardar cambios
+      </button>
+    </form>
+  </div>
+</div>
