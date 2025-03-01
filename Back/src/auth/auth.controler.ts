@@ -9,6 +9,8 @@ import { t } from '@mikro-orm/core';
 import { env } from '../config_env/config.js'
 import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { validateUniqueFields } from '../shared/db/validations.js';	
+import { addToBlacklist } from "../shared/blacklist.js";
+
 
 const secret = env.JWT_SECRET;
 
@@ -106,10 +108,28 @@ async function findOne(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
-const logout= async (req: Request, res: Response) => {
-  res.status(200).json({message: 'User logged out successfully'});
-}
+const logout = async (req: Request, res: Response) => {
+    try {
+    const authHeader = req.headers.authorization || req.headers.Authorization;
 
+    if (!authHeader || typeof authHeader !== "string" || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Authorization header missing or incorrect format" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    // Decodificar el token para obtener su tiempo de expiración
+    const decoded: any = jwt.decode(token);
+    const expiresIn = decoded?.exp ? decoded.exp - Math.floor(Date.now() / 1000) : 3600;
+
+    // Agregar el token a la blacklist con su tiempo de expiración
+    addToBlacklist(token, expiresIn);
+
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 
 async function findAll(req: Request, res: Response) {
