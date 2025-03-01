@@ -2,8 +2,10 @@ import { Request, Response, NextFunction } from 'express'
 import { UserRole } from './auth.entity.js'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-const secret = process.env.JWT_SECRET;
+import { isBlacklisted } from "../shared/blacklist.js";
 
+const secret = process.env.JWT_SECRET;
+const tokenBlacklist = new Set<string>(); 
 
 const sanitizeAuthInput = (req: Request, res: Response, next: NextFunction) => {
   const { username, password, role } = req.body;
@@ -26,41 +28,60 @@ const sanitizeAuthInput = (req: Request, res: Response, next: NextFunction) => {
 };
 
 async function verifyToken(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization || req.headers.Authorization;
+ const authHeader = req.headers.authorization || req.headers.Authorization;
 
-  if (typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.split(' ')[1]; // Extrae el token después de 'Bearer'
-    
-    if (typeof token === 'string') {
-      if (!secret) {
-        return res.status(500).json({ message: 'JWT_SECRET is not defined' });
-      }
+  if (typeof authHeader === "string" && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.split(" ")[1]; // Extrae el token después de 'Bearer'
 
-      try {
-        const decodeduser = await jwt.verify(token, secret); // Usamos await para esperar la verificación
-        Object.assign(req, { user: decodeduser });
-        next(); // Continúa con la siguiente función
-      } catch (err) {
-        return res.status(403).json({ message: 'Invalid token' });
-      }
-    } else {
-      return res.status(400).json({ message: 'Token format is incorrect' });
+    if (!secret) {
+      return res.status(500).json({ message: "JWT_SECRET is not defined" });
+    }
+
+    if (isBlacklisted(token)) { // Verifica si el token está en la blacklist
+      return res.status(403).json({ message: "Token is blacklisted" });
+    }
+
+    try {
+      const decodedUser = jwt.verify(token, secret) as { id: string; role: string; exp: number };
+      Object.assign(req, { user: decodedUser });
+      next(); // Continúa con la siguiente función
+    } catch (err) {
+      return res.status(403).json({ message: "Invalid token" });
     }
   } else {
-    return res.status(401).json({ message: 'Authorization header missing or incorrect format' });
+    return res.status(401).json({ message: "Authorization header missing or incorrect format" });
   }
 }
 
-
 const authorizeUserRoles = (...allowedRoles: string[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const userRole = req.user?.role|| '';
-    if (!allowedRoles.includes(userRole)) {
-      return res.status(403).json({ message: "Access denied" });
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const authHeader = req.headers.authorization || req.headers.Authorization;
+
+      if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'Authorization header missing or incorrect format' });
+      }
+
+      const token = authHeader.split(' ')[1];
+
+      if (!secret) {
+        return res.status(500).json({ message: 'JWT secret is not defined' });
+      }
+
+      const decoded = jwt.verify(token, secret) as { id: string; role: string };
+
+      if (!allowedRoles.includes(decoded.role)) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+
+      (req as any).user = decoded; // Agregamos el usuario al request con un cast para evitar errores de tipado
+      next();
+    } catch (error) {
+      return res.status(403).json({ message: 'Invalid token' });
     }
-    next();
   };
 };
+
 
 
 export { verifyToken, authorizeUserRoles, sanitizeAuthInput };
