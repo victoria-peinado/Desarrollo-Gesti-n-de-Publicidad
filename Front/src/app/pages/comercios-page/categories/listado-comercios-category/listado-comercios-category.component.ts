@@ -41,7 +41,7 @@ export class ListadoComerciosCategoryComponent {
         this.ownerFounded = true;
         this.errorMessageOwner = null;
         this.shops = response.data.shops;
-        console.log(response.data);
+        console.log(this.shops);
       },
       error: () => {
         this.ownerFounded = false;

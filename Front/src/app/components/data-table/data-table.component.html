@@ -1,8 +1,4 @@
-<div class="p-5 h-screen">
-    <div class="mb-2 text-center md:text-left">
-      <b class="text-lg">{{ title }}</b>
-    </div>    
-  
+<div class=" h-screen">
     <div class="overflow-auto rounded-lg shadow hidden md:block">
       <table class="w-full">
         <thead class="bg-gray-400 border-b-2 border-gray-400">
@@ -14,7 +10,7 @@
                   <input
                     [(ngModel)]="filterText"
                     (input)="filterTable()"
-                    [disabled]="data.length === 0"
+                    [disabled]="shops.length === 0"
                     class="w-48 bg-gray-100 outline-none"
                     placeholder="Buscar"/>
                 </div>
@@ -72,5 +68,58 @@
         </td>
       </tr>
     </ng-template>
+    <div *ngIf="shops.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+      <div id="tarjetas" *ngFor="let shop of shops; let i = index" class="bg-white space-y-2 p-4 rounded-lg shadow relative">
+        <div class="flex items-center space-x-2 text-sm">
+          <div>
+            <a href="#" class="text-blue font-bold hover:underline">{{shop.fantasyName}}</a>
+          </div>
+          <div class="text-gray-500">{{shop.address}}</div>
+          <div>
+            <span [ngClass]="{
+              'bg-violet-400 text-violet-800': shop.type === 'Empresa',
+              'bg-green-400 text-green-800': shop.type === 'PyME',
+              'bg-gray-400 text-black': shop.type === 'Otro'
+            }" class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50">
+            {{shop.type}}</span>
+          </div>
+        </div>
+      
+        <div *ngIf="visibleContent[shop.fantasyName] || band " class="text-sm text-gray-700">
+          <a href="#" class="font-bold text-blue-500 hover:underline">{{shop.mail}}</a>
+        </div>
+      
+        <div *ngIf="visibleContent[shop.fantasyName] || band" class="text-sm text-gray-700">
+          {{shop.billingType}}
+        </div>
+
+        <div *ngIf="visibleContent[shop.fantasyName] || band" class="text-sm font-medium text-black">
+          {{shop.usualPaymentForm}}
+        </div>
+
+        <div class="absolute top-20 right-0 p-2 focus:outline-none group">
+
+            <button mat-icon-button color="primary">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-icon-button color="warn" (click)="confirmDelete(shops[i])">
+              <mat-icon>delete</mat-icon>
+            </button>
+
+        </div>
+      
+        <button
+          id="flechita"
+          *ngIf="isScreenSmall()"
+          (click)="toggleCardContent(shop)"
+          class="absolute top-0 right-0 p-2 focus:outline-none group"
+          [@rotateArrow]="visibleContent[shop.fantasyName] ? 'up' : 'down'"
+        >
+          <mat-icon class="text-gray-500">expand_more</mat-icon>
+        </button>
+
+      </div>
+    </div> 
   </div>
   
