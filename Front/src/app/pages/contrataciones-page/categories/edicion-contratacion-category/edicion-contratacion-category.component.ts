@@ -11,6 +11,7 @@ import { MyDataService } from 'src/app/services/my-data.service';
 })
 export class EdicionContratacionCategoryComponent {
   owner_form: FormGroup;
+  contract_form: FormGroup;
     shops: any[] = [];
     errorMessage: string | null = null;
     cuit: string = '';
@@ -29,6 +30,12 @@ export class EdicionContratacionCategoryComponent {
           { value: '', disabled: true },
           Validators.required
         ),
+      });
+
+      this.contract_form = new FormGroup({
+        dateFrom: new FormControl('', Validators.required),
+        dateTo: new FormControl('', Validators.required),
+        obs: new FormControl(''),
       });
     }
   
@@ -71,5 +78,20 @@ export class EdicionContratacionCategoryComponent {
       return this.owner_form.get('comercio') as FormControl;
     }
 
+    get dateFromControl(): FormControl {
+      return this.contract_form.get('dateFrom') as FormControl;
+    }
+  
+    get dateToControl(): FormControl {
+      return this.contract_form.get('dateTo') as FormControl;
+    }
 
+    get obsControl(): FormControl {
+      return this.contract_form.get('obs') as FormControl;
+    }
+
+
+    openDialog() {
+      
+    }
 }

@@ -69,13 +69,65 @@
     <div id="datos-contratacion">
         <div class="fila-data" >
             <app-data-selection-table></app-data-selection-table>
-
-            
         </div>
-        <button mat-raised-button color="primary" (click)="siguiente()">
-            Siguienteeeeeeeeeeee
-        </button>
+        <button
+        mat-raised-button
+        color="primary"
+        [disabled]="false"
+        (click)="siguiente()"
+      >
+        Siguiente
+      </button>
     </div>
 
-    <div id="edicion-contratacion"></div>
+    <div id="edicion-contratacion">
+      <app-title-and-subtitle
+      [title]="'Edición de la Contratación'"
+      [subtitle]="'Ingrese los nuevos datos de la Contratación.'"
+    ></app-title-and-subtitle>
+    <form [formGroup]="contract_form">
+      <div class="fila-data">
+        <fieldset>
+          <app-input-field
+            label="Fecha Desde"
+            placeholder="Ejemplo: Juan"
+            type="text"
+            [control]="dateFromControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Fecha Hasta"
+            placeholder="Ejemplo: Pérez"
+            type="text"
+            [control]="dateToControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Observaciones (opcional)"
+            placeholder="Ejemplo: 44996266"
+            type="text"
+            [control]="obsControl"
+            [validations]="{ required: true, minlength: 8, maxlength: 8 }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+      </div>
+
+      <button
+        class="btn-guardar-cambios"
+        mat-flat-button
+        color="accent"
+        [disabled]="contract_form.invalid"
+        (click)="openDialog()"
+      >
+        Guardar cambios
+      </button>
+    </form>
+    </div>
   </div>
