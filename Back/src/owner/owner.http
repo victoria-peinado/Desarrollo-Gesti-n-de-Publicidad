@@ -1,7 +1,7 @@
 @port = 3001
 ### findAll
 # @name findAll
-GET http://localhost:{{port}}/api/owner
+GET https://desarrollo-gesti-n-de-publicidad.onrender.com/api/owner
 
 ## ID
 @id = {{createOwner.response.body.data.id}}
@@ -48,5 +48,5 @@ DELETE http://localhost:{{port}}/api/owner/{{id}}
 
 
 ### get owner by cuit
-GET http://localhost:{{port}}/api/owner/cuit/{{cuitFirst}}
+GET https://desarrollo-gesti-n-de-publicidad.onrender.com/api/owner/cuit/33637617449
 Content-Type: application/json
