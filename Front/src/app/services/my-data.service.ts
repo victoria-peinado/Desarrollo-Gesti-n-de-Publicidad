@@ -7,24 +7,23 @@ import { Contact } from '../models/contact';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MyDataService {
-
   private apiUrl: string = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getBlocks() {
     return this.http.get(`${this.apiUrl}block`);
   }
-  createBlock(block:any) {
+  createBlock(block: any) {
     return this.http.post(`${this.apiUrl}block`, block);
   }
   getHistory() {
     return this.http.get(`${this.apiUrl}price`);
   }
-  createHistory(history:any) {
+  createHistory(history: any) {
     return this.http.post(`${this.apiUrl}price`, history);
   }
 
@@ -55,20 +54,25 @@ export class MyDataService {
   deleteShop(shop: Shop): Observable<any> {
     return this.http.delete(`${this.apiUrl}shop/${shop.id}`);
   }
-  
+
   getOwnerByCuit(cuit: string): Observable<any> {
     return this.http.get(`${this.apiUrl}owner/cuit/${cuit}`);
   }
 
-
-  getShopsByCuitAndFantasyName(fantasyName: string, cuit: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}shop/search?fantasyName=${fantasyName}&cuit=${cuit}`);
+  getShopsByCuitAndFantasyName(
+    fantasyName: string,
+    cuit: string
+  ): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}shop/search?fantasyName=${fantasyName}&cuit=${cuit}`
+    );
   }
- 
+
   // Servicio myDataService
   deleteOwner(id: string): Observable<any> {
-  return this.http.delete(`${this.apiUrl}owner/${id}`);
-}
+    return this.http.delete(`${this.apiUrl}owner/${id}`);
+  }
+
   createOwner(owner: Owner) {
     return this.http.post(`${this.apiUrl}owner`, owner);
   }
@@ -80,15 +84,14 @@ export class MyDataService {
     return this.http.get(`${this.apiUrl}contact/dni/${dni}`);
   }
   deleteContact(id: string): Observable<any> {
-  return this.http.delete(`${this.apiUrl}contact/${id}`);
-}
+    return this.http.delete(`${this.apiUrl}contact/${id}`);
+  }
   createContact(contact: Contact) {
     return this.http.post(`${this.apiUrl}contact`, contact);
   }
   updateContact(contact: Contact) {
     return this.http.put(`${this.apiUrl}contact`, contact);
   }
-
 
   getOrderById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}order/${id}`);
@@ -101,21 +104,16 @@ export class MyDataService {
   getOwnerById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}owner/${id}`);
   }
-  
-
-
 
   patchShop(id: string, shop: Partial<Shop>): Observable<any> {
     return this.http.patch(`${this.apiUrl}shop/${id}`, shop);
   }
-  
+
   patchOwner(ownerId: string, owner: any) {
     return this.http.patch(`${this.apiUrl}owner/${ownerId}`, owner);
   }
-  
 
   patchContact(contactId: string, contactData: any) {
     return this.http.patch(`${this.apiUrl}contact/${contactId}`, contactData);
   }
-  
 }

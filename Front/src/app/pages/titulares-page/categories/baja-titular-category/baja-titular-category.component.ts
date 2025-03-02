@@ -48,9 +48,8 @@ export class BajaTitularCategoryComponent {
             this.fiscalCondition = response.data.fiscalCondition;
             this.errorMessage = null;
           },
-          error: (data) => {
-            console.log(data.error);
-            console.log(data.message);
+          error: (error) => {
+            console.log(error);
             this.ownerFounded = false;
             this.cargando = false;
             this.errorMessage = 'Titular inexistente.';
@@ -68,7 +67,8 @@ export class BajaTitularCategoryComponent {
           next: () => {
             this.openSnackBar('Titular dado de baja', 'Cerrar');
           },
-          error: () => {
+          error: (error) => {
+            console.log(error);
             this.openSnackBar('Error al dar de baja el titular', 'Cerrar');
           },
         });

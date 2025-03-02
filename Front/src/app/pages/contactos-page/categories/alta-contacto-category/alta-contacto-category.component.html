@@ -1,1 +1,66 @@
-<p>alta-contacto-category works!</p>
+<div id="alta-contacto-category">
+    <div id="datos-contacto">
+        <app-title-and-subtitle
+          [title]="'Datos del Contacto'"
+          [subtitle]="'Ingrese los datos del nuevo Contacto.'"
+        ></app-title-and-subtitle>
+    
+        <div class="fila-data">
+          <form [formGroup]="owner_form">
+            <div class="fila-data">
+              <fieldset>
+                <app-input-field
+                  label="DNI Contacto"
+                  placeholder="Ejemplo: 25444505879"
+                  type="text"
+                  [hintLabel]="'11 dígitos'"
+                  [control]="cuitControl"
+                  [validations]="{
+                    required: true,
+                    minLength: 11,
+                    maxLength: 11,
+                    pattern: '^[0-9]*$'
+                  }"
+                  [mode]="'input'"
+                ></app-input-field>
+              </fieldset>
+    
+              <fieldset>
+                <app-input-field
+                  label="Razón Social"
+                  placeholder="Ejemplo: Juan Pérez"
+                  type="text"
+                  [control]="businessNameControl"
+                  [validations]="{ required: true }"
+                  [mode]="'input'"
+                ></app-input-field>
+              </fieldset>
+              <fieldset>
+                <app-input-field
+                  label="Condición Fiscal"
+                  [control]="fiscalConditionControl"
+                  [validations]="{ required: true }"
+                  [mode]="'select'"
+                  [options]="fiscalConditionTypes"
+                ></app-input-field>
+              </fieldset>
+            </div>
+            <app-tooltip [message]="'Complete los campos obligatorios (*).'" [disabled]="owner_form.valid">
+                <button
+                  class="btn-guardar-cambios"
+                  mat-flat-button
+                  type="submit"
+                  color="accent"
+                  [disabled]="owner_form.invalid"
+                  (click)="openDialog()"
+                >
+                  Guardar cambios
+                </button>
+              </app-tooltip>
+              
+              
+          </form>
+        </div>
+      </div>
+  
+  </div>

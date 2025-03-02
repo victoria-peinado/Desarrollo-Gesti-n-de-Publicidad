@@ -1,1 +1,63 @@
-<p>consulta-contacto-category works!</p>
+<div id="consulta-contacto-category">
+    <div id="datos-contacto">
+      <app-title-and-subtitle
+        [title]="'Datos del Contacto'"
+        [subtitle]="'Ingrese el DNI del Contacto.'"
+      ></app-title-and-subtitle>
+  
+      <form [formGroup]="cuit_form">
+        <div class="fila-data">
+          <fieldset>
+            <app-input-field
+              label="CUIT Titular"
+              placeholder="Ejemplo: 25444505879"
+              type="text"
+              [hintLabel]="'11 dígitos'"
+              [control]="cuitControl"
+              [validations]="{
+                required: true,
+                minLength: 11,
+                maxLength: 11,
+                pattern: '^[0-9]*$'
+              }"
+              [mode]="'input'"
+            ></app-input-field>
+          </fieldset>
+          <div class="datos-asociados">
+              <app-datos-asociados
+                [datos]="[
+                  { atributo: 'Razón Social', valor: bussinessName },
+                  { atributo: 'Condición Fiscal', valor: fiscalCondition }
+                ]"
+                [formularioValido]="ownerFounded"
+                [cargando]="cargando"
+              >
+              </app-datos-asociados>
+    
+              @if (errorMessage) {
+              <button mat-button color="warn">
+                <mat-icon fontIcon="close"></mat-icon>
+                {{ errorMessage }}
+              </button>
+              } @else if (ownerFounded) {
+              <button mat-button color="accent">
+                <mat-icon fontIcon="check"></mat-icon>
+                Orden existente.
+              </button>
+              }
+            </div>
+  
+          
+  
+        </div>
+        <button
+            mat-raised-button
+            color="primary"
+            [disabled]="cuit_form.invalid"
+            (click)="findOwner()"
+          >
+            Check
+          </button>
+      </form>
+    </div>
+  </div>
