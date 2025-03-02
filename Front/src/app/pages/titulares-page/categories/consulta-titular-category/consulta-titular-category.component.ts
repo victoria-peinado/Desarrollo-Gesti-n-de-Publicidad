@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MyDataService } from 'src/app/services/my-data.service';
 
 @Component({

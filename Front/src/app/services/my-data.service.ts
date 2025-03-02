@@ -109,6 +109,10 @@ export class MyDataService {
     return this.http.patch(`${this.apiUrl}shop/${id}`, shop);
   }
   
+  patchOwner(ownerId: string, owner: any) {
+    return this.http.patch(`${this.apiUrl}owner/${ownerId}`, owner);
+  }
+  
 
   patchContact(contactId: string, contactData: any) {
     return this.http.patch(`${this.apiUrl}contact/${contactId}`, contactData);

@@ -17,7 +17,7 @@ POST http://localhost:{{port}}/api/owner
 Content-Type: application/json
 
 {
-    "cuit": "55000000077",
+    "cuit": "32552535322",
     "businessName": "Transporte DJJB" ,
     "fiscalCondition": "Consumidor Final"
  

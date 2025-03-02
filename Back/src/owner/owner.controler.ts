@@ -133,7 +133,7 @@ async function remove(req: Request, res: Response) {
         if (!owner) return res.status(404).json({ message: 'Owner not found' });
 
         const isReferenced = await em.count(Shop, { owner: owner.id });
-        if (isReferenced > 0) return res.status(400).json({ message: 'Cannot delete owner because it is referenced in a shop' });
+        if (isReferenced > 0) return res.status(400).json({ message: 'Cannot delete owner because it is referenced in a shop'});
 
         await em.removeAndFlush(owner);
         res.status(200).json({ message: 'Owner deleted successfully', data: owner });

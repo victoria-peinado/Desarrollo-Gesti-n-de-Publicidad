@@ -1,1 +1,84 @@
-<p>edicion-titular-category works!</p>
+<div id="edicion-titular-category">
+    <div id="datos-titular">
+      <app-title-and-subtitle
+        [title]="'Datos del Titular'"
+        [subtitle]="'Ingrese el CUIT del Titular.'"
+      ></app-title-and-subtitle>
+  
+      <div class="fila-data">
+        <form [formGroup]="owner_form">
+          <div class="fila-data">
+            <fieldset>
+              <app-input-field
+                label="CUIT Titular"
+                placeholder="Ejemplo: 25444505879"
+                type="text"
+                [hintLabel]="'11 dígitos'"
+                [control]="cuitControl"
+                [validations]="{
+                  required: true,
+                  minLength: 11,
+                  maxLength: 11,
+                  pattern: '^[0-9]*$'
+                }"
+                [mode]="'input'"
+              ></app-input-field>
+            </fieldset>
+
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="cuitControl.invalid"
+              (click)="findOwner()"
+            >
+              Check
+            </button>
+  
+            @if (errorMessageOwner) {
+            <button mat-button color="warn">
+              <mat-icon fontIcon="close"></mat-icon>
+              {{ errorMessageOwner }}
+            </button>
+            } @else if (ownerFounded) {
+            <button mat-button color="accent">
+              <mat-icon fontIcon="check"></mat-icon>
+              Titular existente.
+            </button>
+            }
+          </div>
+  
+          <div class="fila-data">
+            <fieldset>
+              <app-input-field
+                label="Razón Social"
+                placeholder="Ejemplo: Juan Pérez"
+                type="text"
+                [control]="businessNameControl"
+                [validations]="{ required: true }"
+                [mode]="'input'"
+              ></app-input-field>
+            </fieldset>
+            <fieldset>
+              <app-input-field
+                label="Condición Fiscal"
+                [control]="fiscalConditionControl"
+                [validations]="{ required: true }"
+                [mode]="'select'"
+                [options]="fiscalConditionTypes"
+              ></app-input-field>
+            </fieldset>
+          </div>
+          <button
+        class="btn-guardar-cambios"
+        mat-flat-button
+        color="accent"
+        [disabled]="owner_form.invalid || !ownerFounded || btnControl"
+        (click)="openDialog()"
+      >
+        Guardar cambios
+      </button>
+        </form>
+      </div>
+    </div>
+
+</div>

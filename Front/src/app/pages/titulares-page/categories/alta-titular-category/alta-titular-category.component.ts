@@ -61,14 +61,16 @@ export class AltaTitularCategoryComponent {
     this.owner.fiscalCondition = this.fiscalConditionControl.value;
 
     this.myDataService.createOwner(this.owner).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log(response);
         this.openSnackBar(
           `Titular ${this.businessNameControl.value} creado con éxito`,
           'Cerrar'
         );
         this.clearForm()
       },
-      error: () => {
+      error: (error) => {
+        console.log(error);
         this.openSnackBar(
           `Error al crear el titular ${this.businessNameControl.value}`,
           'Cerrar'
