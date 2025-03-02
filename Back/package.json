@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.js",
+  "main": "dist/src/server.js",
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
     "_start:dev": "cross-env NODE_ENV=development tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/src/server.js\"",
