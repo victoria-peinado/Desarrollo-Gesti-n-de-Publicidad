@@ -1,1 +1,4 @@
-<p>tooltip works!</p>
+<div class="tooltip-container" [class.disabled]="disabled">
+    <ng-content></ng-content> <!-- Permite insertar cualquier elemento dentro -->
+    <span *ngIf="!disabled" class="tooltip-text">{{ message }}</span>
+  </div>

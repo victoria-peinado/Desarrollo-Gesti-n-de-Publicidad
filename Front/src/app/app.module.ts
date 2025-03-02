@@ -63,6 +63,7 @@ import { OrdenFechaComponent } from './pages/orden-fecha/orden-fecha.component';
 import { InicioPageComponent } from './pages/inicio-page/inicio-page.component';
 import { DataTableComponent } from './components/data-table/data-table.component';
 import { DataSelectionTableComponent } from './components/data-selection-table/data-selection-table.component';
+import { TooltipComponent } from './components/tooltip/tooltip.component';
 
 
 @NgModule({ declarations: [
@@ -122,7 +123,8 @@ import { DataSelectionTableComponent } from './components/data-selection-table/d
         UserLoginComponent,
         InicioPageComponent,
         DataTableComponent,
-        DataSelectionTableComponent
+        DataSelectionTableComponent,
+        TooltipComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

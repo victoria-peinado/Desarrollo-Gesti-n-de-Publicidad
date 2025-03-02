@@ -45,17 +45,20 @@
                 ></app-input-field>
               </fieldset>
             </div>
-
-            <button
-        class="btn-guardar-cambios"
-        mat-flat-button
-        type="submit"
-        color="accent"
-        [disabled]="owner_form.invalid"
-        (click)="openDialog()"
-      >
-        Guardar cambios
-      </button>
+            <app-tooltip [message]="'Complete los campos obligatorios (*).'" [disabled]="owner_form.valid">
+                <button
+                  class="btn-guardar-cambios"
+                  mat-flat-button
+                  type="submit"
+                  color="accent"
+                  [disabled]="owner_form.invalid"
+                  (click)="openDialog()"
+                >
+                  Guardar cambios
+                </button>
+              </app-tooltip>
+              
+              
           </form>
         </div>
       </div>

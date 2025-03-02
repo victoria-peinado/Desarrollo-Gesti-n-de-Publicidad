@@ -24,7 +24,7 @@
               [mode]="'input'"
             ></app-input-field>
           </fieldset>
-
+          <app-tooltip class="tooltip" [message]="'Ingrese un CUIT válido.'" [disabled]="cuitControl.valid">
           <button
             mat-raised-button
             color="primary"
@@ -33,6 +33,7 @@
           >
             Check
           </button>
+          </app-tooltip>
 
           @if (errorMessageOwner) {
           <button mat-button color="warn">
