@@ -1,3 +1,4 @@
 export const environment = {
-    apiUrl: 'http://localhost:3009/api/'
+    apiUrl: 'https://desarrollo-gesti-n-de-publicidad.onrender.com'
+    
 };
