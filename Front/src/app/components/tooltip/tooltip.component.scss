@@ -9,7 +9,7 @@
     visibility: hidden;
     background-color: rgb(60 60 60 / 0.8);
     color: white;
-    text-align: left; /* Justificado a la izquierda */
+    text-align: left;
     padding: 3px 10px;
     border-radius: 5px;
     position: absolute;
@@ -30,6 +30,6 @@
   }
 
   .tooltip-container.disabled .tooltip-text {
-    display: none; /* Oculta el tooltip si está deshabilitado */
+    display: none;
   }
   

@@ -94,6 +94,9 @@ export class AltaComercioCategoryComponent {
     });
   }
 
+
+
+  
   findOwner() {
     this.cuit = this.cuitControl.value.trim();
 
@@ -236,7 +239,7 @@ export class AltaComercioCategoryComponent {
   
   getContactId(): Observable<string> {
     if (this.contactId) {
-      return of(this.contactId); // Si ya está definido, lo retorna sin hacer la petición
+      return of(this.contactId);
     }
   
     const contactData: Contact = {
