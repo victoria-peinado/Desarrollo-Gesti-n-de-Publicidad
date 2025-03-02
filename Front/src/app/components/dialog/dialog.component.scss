@@ -43,3 +43,19 @@ th {
 .atribute-name {
     font-weight: lighter;
 }
+
+.title {
+    padding: 0px 20px !important;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.title mat-icon {
+    margin-bottom: -3px;
+}
+
+.title h2 {
+    padding: 0px;
+    margin: 0px;
+}

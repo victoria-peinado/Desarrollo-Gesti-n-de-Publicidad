@@ -1,0 +1,21 @@
+.fila-data {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2rem;
+    padding-bottom: 15px;
+}
+
+.datos-asociados {
+    padding: 2rem 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-eliminar-titular {
+    margin-bottom: 5rem;
+    margin-top: 2rem;
+
+}
