@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { BILLING_TYPES, SHOP_TYPES, USUAL_PAYMENT_FORMS } from 'src/app/constants/constants';
 import { Shop } from 'src/app/models/shop';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,6 +14,9 @@ import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping';
   styleUrl: './edicion-comercio-category.component.scss',
 })
 export class EdicionComercioCategoryComponent {
+
+  @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
+
   owner_form: FormGroup;
   shop_form: FormGroup;
   contact_form: FormGroup;
@@ -71,6 +74,10 @@ export class EdicionComercioCategoryComponent {
     
   }
 
+  clearForm() {
+    this.formDirective?.resetForm();
+    this.cuitControl.setValue(this.cuit);  
+  }
 
   findOwner() {
 
@@ -89,6 +96,7 @@ export class EdicionComercioCategoryComponent {
           (shop: Shop) => shop.fantasyName
         );
         this.comercioControl.enable();
+        this.clearForm();
       },
       error: () => {
         this.ownerFounded = false;

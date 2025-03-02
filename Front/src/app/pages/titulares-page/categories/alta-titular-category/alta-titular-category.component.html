@@ -1,1 +1,63 @@
-<p>alta-titular-category works!</p>
+<div id="alta-titular">
+    <div id="datos-titular">
+        <app-title-and-subtitle
+          [title]="'Datos del Titular'"
+          [subtitle]="'Ingrese los datos del nuevo Titular.'"
+        ></app-title-and-subtitle>
+    
+        <div class="fila-data">
+          <form [formGroup]="owner_form">
+            <div class="fila-data">
+              <fieldset>
+                <app-input-field
+                  label="CUIT Titular"
+                  placeholder="Ejemplo: 25444505879"
+                  type="text"
+                  [hintLabel]="'11 dígitos'"
+                  [control]="cuitControl"
+                  [validations]="{
+                    required: true,
+                    minLength: 11,
+                    maxLength: 11,
+                    pattern: '^[0-9]*$'
+                  }"
+                  [mode]="'input'"
+                ></app-input-field>
+              </fieldset>
+    
+              <fieldset>
+                <app-input-field
+                  label="Razón Social"
+                  placeholder="Ejemplo: Juan Pérez"
+                  type="text"
+                  [control]="businessNameControl"
+                  [validations]="{ required: true }"
+                  [mode]="'input'"
+                ></app-input-field>
+              </fieldset>
+              <fieldset>
+                <app-input-field
+                  label="Condición Fiscal"
+                  [control]="fiscalConditionControl"
+                  [validations]="{ required: true }"
+                  [mode]="'select'"
+                  [options]="fiscalConditionTypes"
+                ></app-input-field>
+              </fieldset>
+            </div>
+
+            <button
+        class="btn-guardar-cambios"
+        mat-flat-button
+        type="submit"
+        color="accent"
+        [disabled]="owner_form.invalid"
+        (click)="openDialog()"
+      >
+        Guardar cambios
+      </button>
+          </form>
+        </div>
+      </div>
+  
+  </div>

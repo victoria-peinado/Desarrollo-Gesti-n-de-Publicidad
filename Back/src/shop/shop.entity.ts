@@ -56,13 +56,19 @@ export enum PaymentMethod {
   Otro = "Otro",
 }
 
+export enum billingType {
+  FacturaA = "Factura A",
+  FacturaB = "Factura B",
+  SinFactura = "Sin Factura", 
+}
+
 export const ShopSchema = z.object({
   regDate: z.date().optional(), // Registration date, optional with a default value
   fantasyName: z.string().min(1, { message: "Fantasy name is required" }), // Fantasy name, cannot be empty
   address: z.string().min(1, { message: "Address is required" }), // Address, cannot be empty
   billingType: z.nativeEnum(FiscalCondition), // Fiscal condition, validated against the FiscalCondition enum
   mail: z.string().email({ message: "Invalid email address" }), // Email, must be valid
-  usualPaymentForm: z.nativeEnum(PaymentMethod).optional(), // Usual payment method, optional and validated against PaymentMethod enum
+  usualPaymentForm: z.nativeEnum(billingType).optional(), // Usual payment method, optional and validated against PaymentMethod enum
   type: z.string().optional(), // Shop type, optional
   contact: ObjectIdSchema, // Contact ID, must be a valid ObjectId
   owner: ObjectIdSchema, // Owner ID, must be a valid ObjectId

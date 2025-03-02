@@ -7,6 +7,7 @@ import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping.js';
 import {
   BILLING_TYPES,
+  FISCAL_CONDITION_TYPES,
   SHOP_TYPES,
   USUAL_PAYMENT_FORMS,
 } from 'src/app/constants/constants';
@@ -35,6 +36,7 @@ export class AltaComercioCategoryComponent {
   contactId: string = '';
 
   billingTypes: string[] = BILLING_TYPES;
+  fiscalConditionTypes: string[] = FISCAL_CONDITION_TYPES
   usualPaymentForms: string[] = USUAL_PAYMENT_FORMS;
   shopTypes: string[] = SHOP_TYPES;
 

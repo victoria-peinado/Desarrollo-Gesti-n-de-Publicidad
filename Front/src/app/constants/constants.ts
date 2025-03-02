@@ -6,7 +6,7 @@ export const USUAL_PAYMENT_FORMS: string[] = [
   'Otro',
 ];
 
-export const BILLING_TYPES: string[] = [
+export const FISCAL_CONDITION_TYPES: string[] = [
   'Responsable Inscripto',
 'Consumidor Final',
 'Monotributista',
@@ -20,6 +20,13 @@ export const BILLING_TYPES: string[] = [
 'Monotributista Social',
 'Autónomo',
 'Otro',
+];
+
+
+export const BILLING_TYPES: string[] = [
+'Factura A',
+'Factura B',
+'Sin Factura'
 ];
 
 
