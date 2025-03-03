@@ -2,51 +2,18 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-body {
-  font-family: "Roboto", sans-serif;
-  font-family: "Ubuntu", sans-serif;
-  margin: 0;
+
+html{
+  font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
 }
-html,
-body {
-  height: 100%;
-  width: 100%;
-  overflow: hidden !important;
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+body{
+  background-color: #FDFBFF;
+  color: #000000;
 }
 
 .mdc-notched-outline__notch /*p solucionar bug de appearance="outline" del form-field*/ {
   border-right: none;
 }
 
-.coloring {
-  color: #6200ee;
-}
-
-.coloring-deg {
-  background: #8400ff; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #6200ee,
-    #8400ff
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #6200ee,
-    #8400ff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: white;
-}
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-:root {
-  --mat-list-item-text-color: #1976d2;
-}

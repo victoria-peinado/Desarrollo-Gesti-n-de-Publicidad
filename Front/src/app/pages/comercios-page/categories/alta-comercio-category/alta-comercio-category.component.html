@@ -1,13 +1,12 @@
-<div id="alta-comercio">
+<div id="alta-comercio-category">
   <div id="datos-titular">
     <app-title-and-subtitle
       [title]="'Datos del Titular'"
       [subtitle]="'Ingrese los datos del Titular.'"
     ></app-title-and-subtitle>
 
-    <div class="fila-data">
       <form [formGroup]="owner_form">
-        <div class="fila-data">
+        <div class="grid-container">
           <fieldset>
             <app-input-field
               label="CUIT Titular"
@@ -48,7 +47,7 @@
           }
         </div>
 
-        <div class="fila-data">
+        <div class="grid-container">
           <fieldset>
             <app-input-field
               label="Razón Social"
@@ -70,7 +69,6 @@
           </fieldset>
         </div>
       </form>
-    </div>
   </div>
 
   <div id="datos-contacto">
@@ -79,7 +77,7 @@
       [subtitle]="'Modifique datos pertinentes del Contacto.'"
     ></app-title-and-subtitle>
     <form [formGroup]="contact_form">
-      <div class="fila-data">
+      <div class="grid-container">
         <fieldset>
           <app-input-field
             label="DNI"
@@ -119,7 +117,7 @@
         }
       </div>
 
-      <div class="fila-data">
+      <div class="grid-container">
         <fieldset>
           <app-input-field
             label="Nombre"
@@ -141,7 +139,7 @@
           ></app-input-field>
         </fieldset>
       </div>
-      <div class="fila-data">
+      <div class="grid-container">
         <fieldset>
           <app-input-field
             label="Teléfono(s) Contacto"
@@ -184,7 +182,7 @@
       [subtitle]="'Modifique datos pertinentes del Comercio.'"
     ></app-title-and-subtitle>
     <form [formGroup]="shop_form">
-      <div class="fila-data">
+      <div class="grid-container">
         <fieldset>
           <app-input-field
             label="Nombre Fantasía"
@@ -215,8 +213,6 @@
             [options]="billingTypes"
           ></app-input-field>
         </fieldset>
-      </div>
-      <div class="fila-data">
         <fieldset>
           <app-input-field
             label="Mail"
@@ -246,6 +242,7 @@
           ></app-input-field>
         </fieldset>
       </div>
+
       <button
         class="btn-guardar-cambios"
         mat-flat-button
@@ -258,5 +255,6 @@
         Guardar cambios
       </button>
     </form>
-  </div>
+</div>
+
 </div>

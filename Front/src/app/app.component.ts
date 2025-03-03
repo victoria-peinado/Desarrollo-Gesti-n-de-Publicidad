@@ -8,8 +8,8 @@ import { filter } from 'rxjs/operators';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  constructor(private router: Router) { }
+export class AppComponent {
+  /*constructor(private router: Router) { }
   title = 'Radio';
   isInicioRoute: boolean = false;
   ngOnInit(): void {
@@ -26,5 +26,5 @@ export class AppComponent implements OnInit {
       this.isInicioRoute= false;
   }
 });
-  }
+  }*/
 }
