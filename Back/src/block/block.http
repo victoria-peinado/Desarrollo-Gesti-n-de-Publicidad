@@ -13,6 +13,16 @@ GET http://localhost:{{port}}/api/block/{{id}}
 ###GET ONE BLOCK BY NUM
 @num = 5
 GET http://localhost:{{port}}/api/block/blockByNum/{{num}}
+
+
+###GET MANY BY NUM
+GET http://localhost:{{port}}/api/block/getManyByNum
+Content-Type: application/json
+
+{
+  "numsList": ["1", "2", "3"]
+}
+
 ### Creater a block
 # @name createBlock
 POST http://localhost:{{port}}/api/block
