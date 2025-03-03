@@ -30,7 +30,9 @@ const storage = multer.diskStorage({
         const fileExtension = extname(audio.originalname)
         const fileName = audio.originalname.split(fileExtension)[0]
         const storageName = fileName + '-' + Date.now() + fileExtension //el nombre es el nombre original + la fecha en mSeg + extension
-        cb(null, storageName)
+        const formatStorageName = storageName.replace(/\s+/g, "_");
+
+        cb(null, formatStorageName)
     }
 })
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, findOne, add, update, remove,sanitizeSpotInput, upload,  } from "./spot.controler.js";
+import { findAll, findOne, add, update, remove,sanitizeSpotInput, upload, findOneFile,  } from "./spot.controler.js";
 import { validateWithSchema , validateObjectId} from '../shared/db/middleware.js'
 import { SpotSchema , ParcialSpotSchema} from "./spot.entity.js";
 import { multerUploads } from "../shared/audioFunctions.js";
@@ -10,6 +10,7 @@ export const spotRouter = Router()
 
 spotRouter.get('/',  findAll)
 spotRouter.get('/:id',validateObjectId('id'), findOne)
+spotRouter.get('/file/:id', validateObjectId('id'), findOneFile)
 spotRouter.post('/',validateWithSchema(SpotSchema ),sanitizeSpotInput, add)
 spotRouter.post('/upload', multerUploads.single('audio'), sanitizeSpotInput, upload)
 spotRouter.put('/:id',validateObjectId('id'),validateWithSchema(SpotSchema ),sanitizeSpotInput, update)

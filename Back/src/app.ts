@@ -20,6 +20,7 @@ import { spotRouter } from './spot/spot.routes.js';
 import { orderRouter } from './order/order.routes.js';
 import { authRouter } from './auth/auth.routes.js';
 import {env} from './config_env/config.js';
+import { destDir } from './shared/audioFunctions.js';
 
 
 //server
@@ -30,6 +31,8 @@ const app = express();
 //base middlewares
 app.use(express.json());//middleware para parsear el body a json
 app.use(cors({ origin: env.FRONTEND_URL }));//acepts request from this origin only(frontend)
+app.use('/api/spot/publicSpots', express.static(destDir()))
+console.log(destDir())
 
 //orm middleware
 app.use((req, res, next) => {//after base middlewares and before routes and bisiness milddlewares

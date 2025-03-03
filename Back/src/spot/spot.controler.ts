@@ -107,4 +107,16 @@ async function upload(req: Request, res: Response){
 
 }
 
-export { sanitizeSpotInput, findAll, findOne, add, update, remove, upload }
+async function findOneFile(req: Request, res: Response) {
+    try {
+        const id = req.params.id
+        const spot = await em.findOneOrFail(Spot, { id })
+        const url = 'http://localhost:3001/api/spot/publicSpots/'+spot.name
+
+        res.status(200).json({ message: 'Spot founded sucsesfully', data: {spot, url}})
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+export { sanitizeSpotInput, findAll, findOne, add, update, remove, upload, findOneFile}
