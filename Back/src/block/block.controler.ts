@@ -2,9 +2,9 @@
 import { Request, Response, NextFunction } from 'express'
 import { Block } from './block.entity.js'
 import { orm } from '../shared/db/orm.js'
-import { Price } from '../price/price.entity.js'
 import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { validateUniqueFields } from '../shared/db/validations.js';	
+import { NumBlockSchema } from '../shared/db/schemas.js';
 
 
 
@@ -181,6 +181,16 @@ async function numsToIds(structure: string[][]) {
   return idStructure
 }
 
+async function findOneByNum(req: Request, res: Response){
+  try {
+    const num = req.params.num;
+    const block = await em.findOneOrFail(Block, { numBlock: num });
+    res.status(200).json({ message: 'Block found successfully', data: block });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 
 //el manejo con for es mejor por si falla alguna busqueda no se pierda la relacion con el indice
 async function numsToIds2(structure: string[][]) {
@@ -238,4 +248,4 @@ async function addAll(req: Request, res: Response) {
 //FIN DE FUNCIONES PARA CREAR TODOS LOS BLOQUES
 
 
-export { sanitizeBlockInput, findAll, findOne, add, update, remove, removeAll, addAll, isNumBlockUnique, numsToIds, checkAll, numsToIds2 }
+export { sanitizeBlockInput, findAll, findOne, add, update, remove, removeAll, addAll, isNumBlockUnique, numsToIds, checkAll, numsToIds2, findOneByNum }

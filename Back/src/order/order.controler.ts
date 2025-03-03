@@ -770,6 +770,7 @@ async function getNotPayOrdersByShop(req: Request, res: Response) {
 
 
 
+
 export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop }
 
 // ORDEN REGULAR

@@ -10,6 +10,9 @@ GET http://localhost:{{port}}/api/block
 GET http://localhost:{{port}}/api/block/{{id}}
 
 
+###GET ONE BLOCK BY NUM
+@num = 5
+GET http://localhost:{{port}}/api/block/blockByNum/{{num}}
 ### Creater a block
 # @name createBlock
 POST http://localhost:{{port}}/api/block
