@@ -1,10 +1,61 @@
-.fila-data {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+.grid-container {
+    display: grid;
+    width: 70%;
     gap: 2rem;
-    padding-bottom: 15px;
-}
+  
+    button {
+      width: 100px;
+    }
+  }
+  
+  fieldset {
+    width: 100%;
+  }
+  
+  @media (min-width: 768px) {
+    .grid-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    form {
+        display: grid;
+        gap: 2rem;
+      }
+      button {
+        width: 100px;
+      }
+  }
+  
+  @media (min-width: 426px) and (max-width: 767px) {
+    .grid-container {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      width: 100%;
+    }
+    form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 425px) {
+    .grid-container {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+    form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+
+  
 
 .datos-asociados {
     padding: 2rem 0;

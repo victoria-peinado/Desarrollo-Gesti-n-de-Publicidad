@@ -1,9 +1,4 @@
-.row {
-    display: flex;
-    align-items: center;
-    padding-top: 19.56px;
-    padding-bottom: 0px;
-  }
+
   
   .input-icon {
     margin-right: 10px;
@@ -12,9 +7,18 @@
   }
   
   .w-full {
-    width: 250px;
+    width: 100%; // Por defecto ocupa todo el espacio disponible
+  
+    @media (min-width: 768px) {
+      width: 100%; // Mantiene el tamaño correcto en pantallas grandes
+    }
+  
+    @media (max-width: 320px) {
+      width: 100%; // Se adapta a pantallas pequeñas
+    }
   }
   
+
 
   .password-toggle {
     position: absolute;
