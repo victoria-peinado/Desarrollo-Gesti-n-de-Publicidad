@@ -6,9 +6,8 @@
 //  <input type="file" name="audio" />
 
 
-import multer, { FileFilterCallback } from 'multer';
+import multer from 'multer';
 import path, { dirname, extname } from 'path';
-import { CallbackHandler } from 'supertest';
 import { fileURLToPath } from 'url';
 
 export function destDir(){
