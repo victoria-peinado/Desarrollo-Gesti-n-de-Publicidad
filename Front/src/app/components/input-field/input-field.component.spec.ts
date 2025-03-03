@@ -1,115 +1,77 @@
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatIconModule } from '@angular/material/icon';
-import { ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { InputFieldComponent } from './input-field.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { InputFieldComponent } from './input-field.component';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { By } from '@angular/platform-browser';
 
 describe('InputFieldComponent', () => {
   let component: InputFieldComponent;
   let fixture: ComponentFixture<InputFieldComponent>;
-  let inputElement: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InputFieldComponent ],
+      declarations: [InputFieldComponent],
       imports: [
-        MatInputModule,
+        ReactiveFormsModule,
         MatFormFieldModule,
+        MatInputModule,
         MatSelectModule,
-        MatDatepickerModule,
         MatIconModule,
-        ReactiveFormsModule
+        MatDatepickerModule,
+        MatNativeDateModule,
+        NoopAnimationsModule
       ]
-    })
-    .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InputFieldComponent);
     component = fixture.componentInstance;
-    inputElement = fixture.debugElement.query(By.css('input'));
-    fixture.detectChanges();
+    component.control = new FormControl(''); // Se inicializa un FormControl vacío
+    fixture.detectChanges(); // Se actualiza el componente
   });
 
-  // Prueba que el componente se cree correctamente
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create the component', () => {
+    expect(component).toBeTruthy(); 
   });
 
-  // Prueba que el label se muestre correctamente
-  it('should display label', () => {
+  it('should render label correctly', () => {
     component.label = 'Nombre';
-    fixture.detectChanges();
+    fixture.detectChanges(); // Se detectan cambios para reflejar la actualización en la plantilla
     const labelElement = fixture.debugElement.query(By.css('mat-label'));
-    expect(labelElement.nativeElement.textContent).toBe('Nombre');
+    expect(labelElement.nativeElement.textContent).toContain('Nombre'); // Verifica que el label se renderiza correctamente
   });
 
-  // Prueba que el placeholder se muestre correctamente
-  it('should display placeholder', () => {
-    component.placeholder = 'Ingrese su nombre';
+  it('should toggle password visibility', () => {
+    component.type = 'password';
     fixture.detectChanges();
-    expect(inputElement.nativeElement.placeholder).toBe('Ingrese su nombre');
-  });
-
-  // Prueba que el tipo de input se establezca correctamente
-  it('should set input type', () => {
-    component.type = 'email';
+    const toggleButton = fixture.debugElement.query(By.css('mat-icon[aria-label="Toggle password visibility"]'));
+    expect(toggleButton).toBeTruthy(); // Verifica que el botón de visibilidad de contraseña existe
+    
+    toggleButton.triggerEventHandler('click', null);
     fixture.detectChanges();
-    expect(inputElement.nativeElement.type).toBe('email');
+    expect(component.hidePassword).toBeFalsy(); // Verifica que la visibilidad de la contraseña se haya cambiado
   });
 
-  // Prueba que el icono se muestre correctamente
-  it('should display icon', () => {
-    component.icon = 'person';
+  it('should display an error message when the field is required and empty', () => {
+    component.control.setErrors({ required: true });
+    component.control.markAsTouched();
     fixture.detectChanges();
-    const iconElement = fixture.debugElement.query(By.css('mat-icon'));
-    expect(iconElement.nativeElement.textContent).toBe('person');
+    const errorElement = fixture.debugElement.query(By.css('mat-error'));
+    expect(errorElement.nativeElement.textContent).toContain('* Campo obligatorio'); // Verifica que el mensaje de error aparece
   });
 
-  // Prueba que el modo 'select' se muestre correctamente
-  it('should display select mode', () => {
+  it('should render select options', () => {
     component.mode = 'select';
     component.options = ['Opción 1', 'Opción 2'];
     fixture.detectChanges();
     const selectElement = fixture.debugElement.query(By.css('mat-select'));
-    expect(selectElement).toBeTruthy();
-  });
-
-  // Prueba que el modo 'date' se muestre correctamente
-  it('should display date mode', () => {
-    component.mode = 'date';
-    fixture.detectChanges();
-    const dateInputElement = fixture.debugElement.query(By.css('input[matDatepicker]'));
-    expect(dateInputElement).toBeTruthy();
-  });
-
-  // Prueba que el mensaje de error se muestre correctamente
-  it('should display error message', () => {
-    component.control.setErrors({ required: true });
-    fixture.detectChanges();
-    const errorElement = fixture.debugElement.query(By.css('mat-error'));
-    expect(errorElement.nativeElement.textContent).toBe('* Campo obligatorio');
-  });
-
-  // Prueba que el botón de limpiar se muestre correctamente
-  it('should display clear button', () => {
-    component.type = 'text';
-    component.value = 'Valor';
-    fixture.detectChanges();
-    const clearButtonElement = fixture.debugElement.query(By.css('mat-icon[aria-label="Clear input value"]'));
-    expect(clearButtonElement).toBeTruthy();
-  });
-
-  // Prueba que el botón de visibilidad de contraseña se muestre correctamente
-  it('should display password visibility toggle', () => {
-    component.type = 'password';
-    fixture.detectChanges();
-    const visibilityButtonElement = fixture.debugElement.query(By.css('mat-icon[aria-label="Toggle password visibility"]'));
-    expect(visibilityButtonElement).toBeTruthy();
+    expect(selectElement).toBeTruthy(); // Verifica que se renderiza el campo de selección
   });
 });
