@@ -9,6 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
+import { MockMatLabel, MockMatError, MockMatSelect, MockMatIcon } from '../../../mocks/material-mocks';
 
 describe('InputFieldComponent', () => {
   let component: InputFieldComponent;
@@ -16,17 +17,14 @@ describe('InputFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InputFieldComponent],
-      imports: [
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatIconModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        NoopAnimationsModule
+      declarations: [
+        InputFieldComponent,
+        MockMatLabel,
+        MockMatError,
+        MockMatSelect,
+        MockMatIcon
       ]
+   
     }).compileComponents();
   });
 
@@ -44,14 +42,14 @@ describe('InputFieldComponent', () => {
   it('should render label correctly', () => {
     component.label = 'Nombre';
     fixture.detectChanges(); // Se detectan cambios para reflejar la actualización en la plantilla
-    const labelElement = fixture.debugElement.query(By.css('mat-label'));
+    const labelElement = fixture.debugElement.query(By.directive(MockMatLabel));
     expect(labelElement.nativeElement.textContent).toContain('Nombre'); // Verifica que el label se renderiza correctamente
   });
 
   it('should toggle password visibility', () => {
     component.type = 'password';
     fixture.detectChanges();
-    const toggleButton = fixture.debugElement.query(By.css('mat-icon[aria-label="Toggle password visibility"]'));
+    const toggleButton = fixture.debugElement.query(By.directive(MockMatIcon));
     expect(toggleButton).toBeTruthy(); // Verifica que el botón de visibilidad de contraseña existe
     
     toggleButton.triggerEventHandler('click', null);
@@ -63,7 +61,7 @@ describe('InputFieldComponent', () => {
     component.control.setErrors({ required: true });
     component.control.markAsTouched();
     fixture.detectChanges();
-    const errorElement = fixture.debugElement.query(By.css('mat-error'));
+    const errorElement = fixture.debugElement.query(By.directive(MockMatError));
     expect(errorElement.nativeElement.textContent).toContain('* Campo obligatorio'); // Verifica que el mensaje de error aparece
   });
 
@@ -71,7 +69,7 @@ describe('InputFieldComponent', () => {
     component.mode = 'select';
     component.options = ['Opción 1', 'Opción 2'];
     fixture.detectChanges();
-    const selectElement = fixture.debugElement.query(By.css('mat-select'));
+    const selectElement = fixture.debugElement.query(By.directive(MockMatSelect));
     expect(selectElement).toBeTruthy(); // Verifica que se renderiza el campo de selección
   });
 });
