@@ -26,7 +26,7 @@ export class Contract extends BaseEntity{
     @Property({nullable: true})
     observations?: string
 
-    @ManyToOne(() => Shop)
+    @ManyToOne(() => Shop, {nullable: false})
     shop!: Rel<Shop>
 
     @OneToMany(() => Order, order => order.contract) //revisar asunto de persistencias

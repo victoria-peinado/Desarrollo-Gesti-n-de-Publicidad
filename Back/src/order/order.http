@@ -21,6 +21,14 @@ GET http://localhost:{{port}}/api/order/populate
 ### GET ONE
 GET http://localhost:{{port}}/api/order/{{idfirst}}
 
+### GET BY OWNER CUIT NOT PAY ORDERS
+@cuit = 23224249969
+GET http://localhost:{{port}}/api/order/notPayOrdersByOwnerCuit/{{cuit}}
+
+###GET BY SHOP ID
+@shopId = 65c090e1ad3fb943fc5cb298
+GET http://localhost:{{port}}/api/order/notPayOrdersByShop/{{shopId}}
+
 ### POST
 # @name createorder
 POST http://localhost:{{port}}/api/order
