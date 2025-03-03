@@ -10,6 +10,7 @@ function sanitizeSpotInput(req: Request, res: Response, next: NextFunction) {
     req.body.sanitizeInput = {
         long: req.body.long,
         name: req.body.name,
+        path: req.body.path,
         order: req.body.order
     }
     Object.keys(req.body.sanitizeInput).forEach( (key)=>{ 
@@ -89,4 +90,21 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-export {sanitizeSpotInput, findAll, findOne, add, update, remove}
+async function upload(req: Request, res: Response){
+    try {
+        const audioFile = req.file
+        console.log(audioFile)
+        req.body.sanitizeInput.path = audioFile?.path
+        req.body.sanitizeInput.name = audioFile?.filename 
+        req.body.sanitizeInput.long = audioFile?.size
+        const spot = em.create(Spot, req.body.sanitizeInput)
+        await em.flush()
+        res.status(200).json({ message: 'Spot upload and created successfully', data: audioFile });
+    
+    } catch (error:any) {
+        res.status(500).json({ message: error.message });
+    }
+
+}
+
+export { sanitizeSpotInput, findAll, findOne, add, update, remove, upload }
