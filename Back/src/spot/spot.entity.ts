@@ -16,6 +16,9 @@ export class Spot extends BaseEntity{
   @Property({nullable:false})
   name!: string
 
+  @Property()
+  path?:string
+
   @OneToMany(() => Order, order => order.spot)
   orders = new Collection<Order>(this) 
 }

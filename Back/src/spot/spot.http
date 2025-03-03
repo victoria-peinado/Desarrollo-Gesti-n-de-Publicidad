@@ -10,6 +10,10 @@ GET http://localhost:{{port}}/api/spot
 ### GET ONE
 GET http://localhost:{{port}}/api/spot/{{idFirsth}}
 
+### GET ONE FILE
+@idFile = 67c5270f29de2f00c7260987
+GET http://localhost:{{port}}/api/spot/file/{{idFile}}
+
 ### POST
 # @name createspot
 POST http://localhost:{{port}}/api/spot

@@ -2,9 +2,9 @@
 import { Request, Response, NextFunction } from 'express'
 import { Block } from './block.entity.js'
 import { orm } from '../shared/db/orm.js'
-import { Price } from '../price/price.entity.js'
 import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 import { validateUniqueFields } from '../shared/db/validations.js';	
+import { NumBlockSchema } from '../shared/db/schemas.js';
 
 
 
@@ -48,6 +48,7 @@ function sanitizeBlockInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizeInput = {
     numBlock: req.body.numBlock,
     startTime: req.body.startTime,
+    numsList: req.body.numsList
   };
 
   Object.keys(req.body.sanitizeInput).forEach((key) => {
@@ -165,6 +166,18 @@ async function checkAll(list_numBlocks: string[]) {
   return contieneTodos
 }
 
+//debería ser mas eficientes, solo trae los bloques enviados en la lista.
+async function checkAll2(list_numBlocks: string[]) {
+  const blocks = await em.find(Block, { numBlock: { $in: list_numBlocks } }, { fields: ['numBlock'] })
+  let allNumBlocks: string[] = []
+  blocks.forEach(b => {
+    allNumBlocks.push(b.numBlock)
+  });
+  const contieneTodos = list_numBlocks.every(bNum => allNumBlocks.includes(bNum));
+  //const existentes = list.filter(b => numBlocks.includes(b));
+  return contieneTodos
+}
+
 async function numsToIds(structure: string[][]) {
   const allBlocks = await em.find(Block, {}, { fields: ['numBlock'] })
   let idStructure: string[][] = []
@@ -179,6 +192,26 @@ async function numsToIds(structure: string[][]) {
     idStructure.push(daysIds)
   })
   return idStructure
+}
+
+async function findOneByNum(req: Request, res: Response){
+  try {
+    const num = req.params.num;
+    const block = await em.findOneOrFail(Block, { numBlock: num });
+    res.status(200).json({ message: 'Block found successfully', data: block });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function findSomeByNums(req: Request, res: Response){
+  try {
+    const nums: string[] = req.body.sanitizeInput.numsList
+    const blocks = await em.find(Block, { numBlock: {$in: nums}}, { populate: ['prices'] });
+    res.status(200).json({ message: 'Find Blocks   ' + nums, data: blocks });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 }
 
 
@@ -238,4 +271,4 @@ async function addAll(req: Request, res: Response) {
 //FIN DE FUNCIONES PARA CREAR TODOS LOS BLOQUES
 
 
-export { sanitizeBlockInput, findAll, findOne, add, update, remove, removeAll, addAll, isNumBlockUnique, numsToIds, checkAll, numsToIds2 }
+export { sanitizeBlockInput, findAll, findOne, add, update, remove, removeAll, addAll, isNumBlockUnique, numsToIds, checkAll, numsToIds2, findOneByNum, findSomeByNums }

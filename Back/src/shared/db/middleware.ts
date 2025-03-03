@@ -1,7 +1,7 @@
 
 import { Request, Response, NextFunction } from 'express'
 import { z, ZodError } from 'zod';
-import { ObjectIdSchema ,CuitSchema, DniSchema} from './schemas.js';
+import { ObjectIdSchema, CuitSchema, DniSchema } from './schemas.js';
 import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 
 
@@ -10,7 +10,7 @@ const validateWithSchema = (schema: z.ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // Parse and validate request body
-      req.body =  schema.parse(req.body);
+      req.body = schema.parse(req.body);
       next(); // Proceed to the next middleware
     } catch (error) {
       if (error instanceof ZodError) {
@@ -89,7 +89,7 @@ const validateUniqueField = (repository: any, field: string) => {
       return res.status(400).json({ message: `Missing ${field}` });  // Si no hay valor, retornar error
     }
 
-    
+
 
     // Verificar si el valor existe en la base de datos, excluyendo el objeto actual
     const valueExists = await createValueChecker(repository, field)(value, entityId);
@@ -125,4 +125,23 @@ function validateIdExistence<T extends object>(
     }
   };
 }
-export { validateWithSchema, validateObjectId,  validateCuit , validateDni, validateUniqueField, validateIdExistence };  
+
+/*
+
+function validateSchemaAtribute(schema: z.ZodSchema, atribute: any) {
+  let errorMessages = undefined
+  try {
+    // Parse and validate request body
+    atribute = schema.parse(atribute);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      // Unify the path and message into a single string
+      errorMessages = error.errors.map((err) => `${err.path.join(".")}: ${err.message}`);
+    }
+  }
+  return [atribute, errorMessages]
+};
+
+*/
+
+export { validateWithSchema, validateObjectId, validateCuit, validateDni, validateUniqueField, validateIdExistence,  };  

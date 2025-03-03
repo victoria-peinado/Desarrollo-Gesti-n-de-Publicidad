@@ -8,10 +8,11 @@ import { getNextMonthString, rewriteDaysArray } from "../shared/datesUtilities.j
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 import { Block } from "../block/block.entity.js";
 import { checkAll, numsToIds2 } from "../block/block.controler.js";
-import { PaymentMethod } from "../shop/shop.entity.js";
+import { PaymentMethod, Shop } from "../shop/shop.entity.js";
 import { Spot } from "../spot/spot.entity.js";
 import { validateIdsExistence, validateUniqueFields } from "../shared/db/validations.js";
 import { EntityRepository } from "@mikro-orm/core";
+import { Owner } from "../owner/owner.entity.js";
 
 const em = orm.em
 em.getRepository(Order)
@@ -60,7 +61,7 @@ async function validateIdsAndUniques<T extends object>(
 
     // Ejecutar validaciones
     const idValidation = await validateIdsExistence(
-        repositoryMap as Record<keyof T, EntityRepository<T>>, 
+        repositoryMap as Record<keyof T, EntityRepository<T>>,
         sanitizeInput);
 
 
@@ -253,25 +254,25 @@ function totalCostCalculete(ids: string[], allBlocks: Block[]) {
 
 
 async function update(req: Request, res: Response) {
-  try {
-    const id = req.params.id;
-    const sanitizeInput = req.body.sanitizeInput;
-
-    if (!(await validateRequestInput(res, sanitizeInput))) {
-      return;
-    }
-
     try {
-      const order = em.getReference(Order, id);
-      em.assign(order, sanitizeInput);
-      await em.flush();
-      res.status(200).json({ message: 'Order modified successfully', data: order });
-    } catch (updateError: any) {
-      res.status(500).json({ message: 'Order update failed', error: updateError.message });
+        const id = req.params.id;
+        const sanitizeInput = req.body.sanitizeInput;
+
+        if (!(await validateRequestInput(res, sanitizeInput))) {
+            return;
+        }
+
+        try {
+            const order = em.getReference(Order, id);
+            em.assign(order, sanitizeInput);
+            await em.flush();
+            res.status(200).json({ message: 'Order modified successfully', data: order });
+        } catch (updateError: any) {
+            res.status(500).json({ message: 'Order update failed', error: updateError.message });
+        }
+    } catch (error: any) {
+        res.status(500).json({ message: 'Unexpected error', error: error.message });
     }
-  } catch (error: any) {
-    res.status(500).json({ message: 'Unexpected error', error: error.message });
-  }
 }
 
 async function updateSpot(req: Request, res: Response) {
@@ -310,10 +311,10 @@ async function remove(req: Request, res: Response) {
         return res.status(403).json({ message: 'This operation is not allowed' });
 
 
-         //const id = req.params.id;
-         //const order = em.getReference(Order, id);
-         //await em.removeAndFlush(order);
-         //res.status(200).json({ message: 'Order deleted successfully', data: order });
+        //const id = req.params.id;
+        //const order = em.getReference(Order, id);
+        //await em.removeAndFlush(order);
+        //res.status(200).json({ message: 'Order deleted successfully', data: order });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
@@ -476,7 +477,7 @@ function dateToCalculate(dateFrom: Date, dateTo: Date | undefined) {
 }
 
 
-async function renovateRegularOrders(actualMonth: string): Promise<[boolean, Order|any]> {
+async function renovateRegularOrders(actualMonth: string): Promise<[boolean, Order | any]> {
     try {
         //podriamos pasar el mes anterior como parametro.
         //const actualMonth = format((new Date()), 'MM-yyyy')
@@ -559,11 +560,11 @@ async function testRenovarOrdenes(req: Request, res: Response) {
         const firstDayNextMonth = startOfMonth(addMonths(date, 1));
         const nextMonthString = format(firstDayNextMonth, 'MM-yyyy')
         const ordersCreated = await renovateRegularOrders(nextMonthString)
-        if (ordersCreated[0]===false){
+        if (ordersCreated[0] === false) {
             throw new Error('Ocurrio un error inesperado al crear las ordenes' + ordersCreated[1])
         }
         console.log('Ordenes creadas con exito: ', ordersCreated[1])
-        res.status(200).json({ message: 'Ordenes creadas con exito', data: ordersCreated[1]})
+        res.status(200).json({ message: 'Ordenes creadas con exito', data: ordersCreated[1] })
 
     } catch (error: any) { res.status(500).json({ message: error.message }) }
 }
@@ -688,18 +689,18 @@ async function registerPayment(req: Request, res: Response) {
 
         const order = await em.findOneOrFail(Order, { id })
 
-        if(order.paymentDate != undefined && order.liq === true){ //deberia ser valido considerar cualquiera de las dos.
+        if (order.paymentDate != undefined && order.liq === true) { //deberia ser valido considerar cualquiera de las dos.
 
-        order.paymentDate = paymentDate
-        order.paymentForm = paymentForm
-        order.paymentObs = paymentObs
-        order.liq = true
+            order.paymentDate = paymentDate
+            order.paymentForm = paymentForm
+            order.paymentObs = paymentObs
+            order.liq = true
 
-        em.persist(order)
+            em.persist(order)
 
-        await em.flush()
+            await em.flush()
 
-        res.status(200).json({ message: 'Order paid successfully', data: order })
+            res.status(200).json({ message: 'Order paid successfully', data: order })
         }
         else {
             throw new Error('La orden ya esta registrada como abonada. ' + order)
@@ -722,7 +723,55 @@ function isBeforeMonth(mes1: string, mes2: string): number {
     return compareAsc(fecha1, fecha2);
 }
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot }
+async function getNotPayOrdersByOwnerCuit(req: Request, res: Response) {
+    try {
+        const cuit = req.params.cuit
+        const owner = await em.findOneOrFail(Owner, { cuit: cuit }, { populate: ['shops', 'shops.contracts.orders'] })
+        const orders: Order[] = []
+        const shops = owner.shops.getItems()
+        for (const shop of shops) {
+            const contracts = shop.contracts.getItems()
+            for (const contract of contracts) {
+                const ords = contract.orders.getItems()
+                for (const or of ords) {
+                    if (or.liq === false) {
+                        orders.push(or)
+                    }
+                }
+
+            }
+        }
+
+        res.status(200).json({ message: 'Find not pay orders by owner CUIT', data: orders })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+async function getNotPayOrdersByShop(req: Request, res: Response) {
+    try {
+        const id_shop = req.params.shopId
+        const shop = await em.findOneOrFail(Shop, { id: id_shop }, { populate: ['contracts', 'contracts.orders'] })
+        const orders: Order[] = []
+        const contracts = shop.contracts.getItems()
+        for (const contract of contracts){
+            const ords = contract.orders.getItems()
+            for (const ord of ords){
+                if(ord.liq === false){
+                    orders.push(ord)
+                }
+            }
+        }
+        res.status(200).json({ message: 'Find not pay orders by shop Id.', data: orders })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+
+
+
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]

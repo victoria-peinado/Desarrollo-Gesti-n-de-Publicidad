@@ -38,3 +38,7 @@ export const BlockSchema = z.object({
   prices: z.array(PriceSchema).optional(), // Use PriceSchema for prices
 });
 export const ParcialBlockSchema = BlockSchema.partial(); // Schema for partial updates
+
+export const NumsList = z.object({
+  numsList: z.array(NumBlockSchema)
+})

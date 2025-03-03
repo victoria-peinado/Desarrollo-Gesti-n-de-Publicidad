@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot,  } from "./order.controler.js";
+import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop,  } from "./order.controler.js";
 import { validateWithSchema , validateObjectId, validateCuit} from '../shared/db/middleware.js'
 import { CancelOrderSchema, OrderSchema, PatchOrderSchema, PutOrderSchema, UpdSpotOrderSchema} from './order.entity.js'
 
@@ -9,6 +9,8 @@ import { CancelOrderSchema, OrderSchema, PatchOrderSchema, PutOrderSchema, UpdSp
 export const orderRouter = Router()
 
 orderRouter.get('/populate', findWithRelations);
+orderRouter.get('/notPayOrdersByOwnerCuit/:cuit', getNotPayOrdersByOwnerCuit)
+orderRouter.get('/notPayOrdersByShop/:shopId', getNotPayOrdersByShop)
 orderRouter.get('/', findAll);
 orderRouter.get('/:id', validateObjectId('id'), findOne); // Validate ID for finding an order by ID
 
