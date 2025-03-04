@@ -1,7 +1,27 @@
 @port = 3001
+### login
+# @name login
+@token = {{login.response.body.data.token}}
+POST http://localhost:{{port}}/api/auth/login
+Content-Type: application/json
+
+{
+ "username": "admin",
+ "password": "admin"  
+}
+
+### logout
+POST http://localhost:{{port}}/api/auth/logout
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+}
+
 ### findAll
 # @name findAll
 GET http://localhost:{{port}}/api/owner
+Authorization: Bearer {{token}}
 
 ## ID
 @id = {{createOwner.response.body.data.id}}
@@ -10,10 +30,12 @@ GET http://localhost:{{port}}/api/owner
 
 ### GET ONE
 GET http://localhost:{{port}}/api/owner/{{idFirst}}
+Authorization: Bearer {{token}}
 
 ### POST
 # @name createOwner
 POST http://localhost:{{port}}/api/owner
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -25,6 +47,7 @@ Content-Type: application/json
 
 ### PUTH Modifica todo el objeto -idempotente-
 PUT http://localhost:{{port}}/api/owner/{{id}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -36,6 +59,7 @@ Content-Type: application/json
 
 ### PATCH Modifica parcialmente el objeto -no idempotente-
 PATCH http://localhost:{{port}}/api/owner/{{id}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -45,8 +69,9 @@ Content-Type: application/json
 }
 ###Delete
 DELETE http://localhost:{{port}}/api/owner/{{id}}
-
+Authorization: Bearer {{token}}
 
 ### get owner by cuit
 GET http://localhost:{{port}}/api/owner/cuit/{{cuitFirst}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
