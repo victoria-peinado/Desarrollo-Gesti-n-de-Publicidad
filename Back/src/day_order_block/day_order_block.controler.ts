@@ -56,7 +56,7 @@ async function findByDates(req: Request, res: Response) {
                 $gte: dateFrom,  // Mayor o igual que fechaInicio
                 $lte: dateTo      // Menor o igual que fechaFin
             }
-        });
+        },{populate: ['order.spot']});
         const msj = 'Find DayOrderBlocks from: ' + dateFrom + ' to ' + dateTo
         res.status(200).json({ message: msj , data: dobs });
     } catch (error: any) {
