@@ -41,14 +41,19 @@ import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/
 import { UserLoginComponent } from './pages/user-login/user-login.component';
 import { ShopListComponent } from './pages/shop-list/shop-list.component';
 import { InicioPageComponent } from './pages/inicio-page/inicio-page.component';
+import { HomeComponent } from './home/home.component';
+import { WelcomePageComponent } from './pages/welcome-page/welcome-page.component';
+import { PerfilComponent } from './pages/perfil/perfil.component';
 
 
 const routes: Routes = [
-  { path:'', component: InicioPageComponent },
-  { path:'inicio', component: InicioPageComponent  },
+  { path:'', component: WelcomePageComponent },
+  { path:'inicio', component: HomeComponent  },
   { path:'login', component: UserLoginComponent  },
   // pages
   { path: 'asuncion', component: AsuncionPageComponent },
+
+  { path: 'perfil', component: PerfilComponent },
   { path: 'comercios/categories', component: ComerciosPageComponent },
   { path: 'contrataciones/categories', component: ContratacionesPageComponent },
   { path: 'pagos/categories', component: PagosPageComponent },

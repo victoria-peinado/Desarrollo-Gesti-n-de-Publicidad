@@ -1,4 +1,8 @@
-
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
   
   .input-icon {
     margin-right: 10px;
@@ -7,9 +11,9 @@
   }
   
   .w-full {
-    width: 100%; // Por defecto ocupa todo el espacio disponible
+    width: 350px; // Por defecto ocupa todo el espacio disponible
   
-    @media (min-width: 768px) {
+    @media (max-width: 768px) {
       width: 100%; // Mantiene el tamaño correcto en pantallas grandes
     }
   

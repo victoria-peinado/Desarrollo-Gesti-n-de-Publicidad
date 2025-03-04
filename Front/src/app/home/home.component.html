@@ -9,14 +9,14 @@
       </li>
 
       <li [class.active]="selectedMenuItem === 'Inicio'">
-        <a (click)="setActive('Inicio')">
+        <a (click)="setActive('Inicio')" routerLink="/inicio">
           <mat-icon>home</mat-icon>
           <span>Inicio</span>
         </a>
       </li>
 
       <li [class.active]="selectedMenuItem === 'Perfil'">
-        <a (click)="setActive('Perfil')">
+        <a (click)="setActive('Perfil')" routerLink="/perfil">
           <mat-icon>account_circle</mat-icon>
           <span>Perfil</span>
         </a>

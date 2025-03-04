@@ -65,6 +65,9 @@ import { DataTableComponent } from './components/data-table/data-table.component
 import { DataSelectionTableComponent } from './components/data-selection-table/data-selection-table.component';
 import { TooltipComponent } from './components/tooltip/tooltip.component';
 import { HomeComponent } from './home/home.component';
+import { WelcomePageComponent } from './pages/welcome-page/welcome-page.component';
+import { TestingComponent } from './pages/testing/testing.component';
+import { PerfilComponent } from './pages/perfil/perfil.component';
 
 
 @NgModule({ declarations: [
@@ -126,7 +129,10 @@ import { HomeComponent } from './home/home.component';
         DataTableComponent,
         DataSelectionTableComponent,
         TooltipComponent,
-        HomeComponent
+        HomeComponent,
+        WelcomePageComponent,
+        TestingComponent,
+        PerfilComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,

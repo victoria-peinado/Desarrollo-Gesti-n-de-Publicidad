@@ -17,3 +17,11 @@ body{
   border-right: none;
 }
 
+
+.unsuccess-snackbar {
+  --mdc-snackbar-container-color: rgb(234, 41, 41);
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
+  
+  
+}
