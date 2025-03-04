@@ -28,7 +28,3 @@ export class DayOrderBlock extends BaseEntity {
 
 }
 
-export const DaysSchema = z.object({
-    dateFrom: z.date({ required_error: 'La fecha desde es obligatoria' }).or(z.string().regex(/^\d{4}-\d{1,2}-\d{1,2}$/, 'Formato de fecha inválido (yyyy-m-d o yyyy-mm-dd)')),
-    dateTo: z.date().or(z.string().regex(/^\d{4}-\d{1,2}-\d{1,2}$/, 'Formato de fecha inválido (yyyy-m-d o yyyy-mm-dd)')).default(() => new Date())
-})

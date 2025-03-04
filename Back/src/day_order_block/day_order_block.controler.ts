@@ -11,8 +11,6 @@ function sanitizeDOBInput(req: Request, res: Response, next: NextFunction) {
         day: req.body.day,
         block: req.body.block,
         order: req.body.order,
-        dateFrom: req.body.dateFrom,
-        dateTo: req.body.dateTo,
     }
     Object.keys(req.body.sanitizeInput).forEach((key) => { //devuelve un arreglo con las keys y para cada uno chequeamos not null
         if (req.body.sanitizeInput[key] === undefined) {
@@ -22,6 +20,8 @@ function sanitizeDOBInput(req: Request, res: Response, next: NextFunction) {
 
     next()
 }
+
+
 
 
 async function findAll(req: Request, res: Response) {
