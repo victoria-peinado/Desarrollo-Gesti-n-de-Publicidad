@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material/material.module';
 import { BlockComponent } from './pages/block/block.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AltaComercioComponent } from './pages/alta-comercio/alta-comercio.component';
 import { NuevoComercioComponent } from './pages/nuevo-comercio/nuevo-comercio.component';
@@ -68,7 +68,7 @@ import { HomeComponent } from './home/home.component';
 import { WelcomePageComponent } from './pages/welcome-page/welcome-page.component';
 import { TestingComponent } from './pages/testing/testing.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
-
+import { TokenInterceptorService } from './services/token-interceptor.service';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -140,5 +140,14 @@ import { PerfilComponent } from './pages/perfil/perfil.component';
         BrowserAnimationsModule,
         MaterialModule,
         FormsModule,
-        ReactiveFormsModule], providers: [provideHttpClient(withInterceptorsFromDi()), provideAnimationsAsync()] })
+        ReactiveFormsModule], 
+    providers: [
+        provideHttpClient(withInterceptorsFromDi()), 
+        provideAnimationsAsync(),
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: TokenInterceptorService,
+            multi: true
+        }
+    ] })
 export class AppModule { }

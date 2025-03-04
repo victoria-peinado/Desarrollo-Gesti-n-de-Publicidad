@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Shop } from '../models/shop';
 import { Owner } from '../models/owner';
 import { Contact } from '../models/contact';
+import { User } from '../models/user.js';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -13,6 +14,20 @@ export class MyDataService {
   private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
+
+  register(user: User){
+    return this.http.post(`${this.apiUrl}auth/register`, user);
+  }
+  login(user: User){
+    return this.http.post(`${this.apiUrl}auth/login`, user);
+  }
+  logout(){
+    localStorage.removeItem('token');
+    return this.http.get(`${this.apiUrl}auth/logout`);
+  } 
+  islogged(){
+    return !!localStorage.getItem('token');
+  }
 
   getBlocks() {
     return this.http.get(`${this.apiUrl}block`);

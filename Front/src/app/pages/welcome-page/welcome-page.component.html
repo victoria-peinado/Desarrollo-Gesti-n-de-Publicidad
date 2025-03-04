@@ -37,7 +37,7 @@
           mat-flat-button
           color="accent"
           type="submit"
-          (click)="validateCredentials()"
+          (click)="login()"
         >
           Iniciar Sesión
         </button>
@@ -57,7 +57,7 @@
           </a>
         </div>
       </form>
-      <form action="#" class="sign-up-form">
+      <form action="#" class="sign-up-form" [formGroup]="reg_form">
         <h2 class="title">Registrarse</h2>
 
         <div class="data-fila">
@@ -68,13 +68,13 @@
                 label="Usuario"
                 placeholder="Ingrese su usuario"
                 type="text"
-                [control]="usernameControl"
+                [control]="rUsernameControl"
                 [validations]="{ required: true }"
               >
               </app-input-field>
             </div>
           </fieldset>
-          <fieldset>
+          <!-- <fieldset>
             <div class="row -mb-2">
               <app-input-field
                 icon="mail"
@@ -86,7 +86,7 @@
               >
               </app-input-field>
             </div>
-          </fieldset>
+          </fieldset> -->
           <fieldset>
             <div class="row -mb-2">
               <app-input-field
@@ -94,7 +94,7 @@
                 label="Contraseña"
                 placeholder="Ingrese su contraseña"
                 type="password"
-                [control]="passwordControl"
+                [control]="rPasswordControl"
                 [validations]="{ required: true }"
               >
               </app-input-field>

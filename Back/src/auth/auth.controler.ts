@@ -53,28 +53,42 @@ async function validateRequestInput(res: Response, sanitizeInput: any): Promise<
 
 
 async function add(req: Request, res: Response) {  
-try {
-   const sanitizeInput = req.body.sanitizeInput; // Se asume que ya está sanitizado
+  try {
+    const sanitizeInput = req.body.sanitizeInput; // Se asume que ya está sanitizado
 
     // Llamar a la función de validación antes de continuar
     if (!(await validateRequestInput(res, sanitizeInput))) {
         return;
     }
 
-
     // Creación del usuario
     try {
-        const auth = em.create(User, sanitizeInput);
-        await em.flush();
-        res.status(201).json({ message: 'User created successfully', data: auth });
+      const auth = em.create(User, sanitizeInput);
+      await em.flush();
+
+      // Generar el token si el usuario se creó exitosamente
+      if (!secret) {
+        return res.status(500).json({ message: 'Server error: secret key not set' });
+      }
+
+      const token = jwt.sign(
+        { id: auth.id, role: auth.role },
+        secret,
+        { expiresIn: '1h' }
+      );
+
+      res.status(201).json({
+        message: 'User created successfully',
+        data: { user: auth, token: token }
+      });
+
     } catch (creationError: any) {
-        res.status(500).json({ message: 'User creation failed', error: creationError.message });
+      res.status(500).json({ message: 'User creation failed', error: creationError.message });
     }
-} catch (error: any) {
+
+  } catch (error: any) {
     res.status(500).json({ message: 'Unexpected error', error: error.message });
-}
-
-
+  }
 }
 
 

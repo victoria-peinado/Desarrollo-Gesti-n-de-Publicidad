@@ -2,6 +2,8 @@ import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MyDataService } from '../../services/my-data.service';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-welcome-page',
@@ -12,13 +14,19 @@ export class WelcomePageComponent implements AfterViewInit {
   @ViewChild('container', { static: false }) container!: ElementRef;
 
   login_form: FormGroup;
+  reg_form: FormGroup;
   u: string = 'admin';
   p: string = 'admin';
 
-  constructor(private _snackBar: MatSnackBar, private router: Router) {
+  constructor(private myDataService: MyDataService,private _snackBar: MatSnackBar, private router: Router) {
     this.login_form = new FormGroup({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
+    });
+    this.reg_form = new FormGroup({
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
+      // rol: new FormControl('user', Validators.required),
     });
   }
 
@@ -41,6 +49,14 @@ export class WelcomePageComponent implements AfterViewInit {
 
   get passwordControl(): FormControl {
     return this.login_form.get('password') as FormControl;
+  }
+
+  get rUsernameControl(): FormControl {
+    return this.reg_form.get('username') as FormControl;
+  }
+
+  get rPasswordControl(): FormControl {
+    return this.reg_form.get('password') as FormControl;
   }
 
   validateCredentials() {
@@ -67,10 +83,47 @@ export class WelcomePageComponent implements AfterViewInit {
     }
   }
 
-  registration() {
-    console.log('registrado');
+ registration() {
+    const newUser: User = {
+      username: this.reg_form.get('username')?.value,
+      password: this.reg_form.get('password')?.value,
+      role: 'user'
+    };
+    console.log(newUser);
+    this.myDataService.register(newUser).subscribe({
+      next: (response: any) => {
+        console.log('Usuario creado:', response);
+        this.openSnackBar('Registro exitoso', 'Cerrar', 5000, 'success-snackbar');
+        localStorage.setItem('token', response.data.token);
+        this.router.navigate(['/inicio']);
+      },
+      error: (error: any) => {
+        console.error('Error al registrar usuario:', error);
+        this.openSnackBar('Error al registrarse', 'Cerrar', 5000, 'unsuccess-snackbar');
+      }
+    });
   }
 
+   login() {
+    const newUser: User = {
+      username: this.login_form.get('username')?.value,
+      password: this.login_form.get('password')?.value,
+      role: 'user'
+    };
+    console.log(newUser);
+    this.myDataService.login(newUser).subscribe({
+      next: (response: any) => {
+        console.log('Usuario logeado:', response);
+        this.openSnackBar('Registro exitoso', 'Cerrar', 5000, 'success-snackbar');
+        localStorage.setItem('token', response.data.token);
+        this.router.navigate(['/inicio']);
+      },
+      error: (error: any) => {
+        console.error('Error al loguear usuario:', error);
+        this.openSnackBar('Error al registrarse', 'Cerrar', 5000, 'unsuccess-snackbar');
+      }
+    });
+  }
   openSnackBar(
     message: string,
     action: string,
