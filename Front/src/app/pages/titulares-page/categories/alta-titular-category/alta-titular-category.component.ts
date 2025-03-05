@@ -61,14 +61,13 @@ export class AltaTitularCategoryComponent {
     this.owner.fiscalCondition = this.fiscalConditionControl.value;
 
     this.myDataService.createOwner(this.owner).subscribe({
-      next: (response) => {
-        console.log(response);
-        this._snackBar.openSnackBar(`Titular ${this.businessNameControl.value} creado con éxito`, 'success-snackbar');
-        this.clearForm()
+      next: (response: any) => {
+        this._snackBar.openSnackBar(response.message, 'success-snackbar');
+        this.clearForm();
       },
-      error: (err) => {
-        console.log(err);
-        this._snackBar.openSnackBar(err.error.message, 'unsuccess-snackbar');
+      error: (error: any) => {
+        let errorMessage = error.error.errors ? error.error.errors || error.error.messages: error.error.messages;
+        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
       },
     });
   }

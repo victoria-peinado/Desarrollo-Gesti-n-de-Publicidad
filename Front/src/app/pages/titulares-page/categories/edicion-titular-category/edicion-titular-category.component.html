@@ -5,9 +5,8 @@
         [subtitle]="'Ingrese el CUIT del Titular.'"
       ></app-title-and-subtitle>
   
-      <div class="fila-data">
         <form [formGroup]="owner_form">
-          <div class="fila-data">
+          <div class="flex-container">
             <fieldset>
               <app-input-field
                 label="CUIT Titular"
@@ -47,7 +46,7 @@
             }
           </div>
   
-          <div class="fila-data">
+          <div class="flex-container mt-4">
             <fieldset>
               <app-input-field
                 label="Razón Social"
@@ -68,17 +67,13 @@
               ></app-input-field>
             </fieldset>
           </div>
-          <button
-        class="btn-guardar-cambios"
-        mat-flat-button
-        color="accent"
-        [disabled]="owner_form.invalid || !ownerFounded || btnControl"
-        (click)="openDialog()"
-      >
-        Guardar cambios
-      </button>
+
+      <app-btn-guardar-cambios
+          [disabled]="owner_form.invalid || !ownerFounded || btnControl"
+          (clickEvent)="openDialog()" 
+          [text]="'Guardar cambios'"
+        ></app-btn-guardar-cambios>
         </form>
-      </div>
     </div>
 
 </div>

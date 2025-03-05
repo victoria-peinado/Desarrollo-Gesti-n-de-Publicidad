@@ -1,12 +1,12 @@
 <div class="btn-guardar-cambios">
     <button
+      mat-flat-button
+      color="accent"
+      [disabled]="disabled"
+      (click)="onClick()"
+    >
+      {{ text }}
+    </button>
+  </div>
   
-  mat-flat-button
-  color="accent"
-  [disabled]="disabled"
->
-  {{ text }}
-</button>
-</div>
-
 
