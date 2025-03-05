@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { MyDataService } from '../services/my-data.service.js';
+import { MyDataService } from '../services/my-data.service';
+import { ShowForRolesDirective } from '../guards/show-for-roles.directive';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -115,13 +116,16 @@ export class HomeComponent implements AfterViewInit {
   }
 
  userRoleIn(roles: string[]): boolean {
-  const userRole = this.myDataService.getUserRole();
+    const userRole = this.myDataService.getUserRole();
 
-  // Verifica si el rol es null o no
-  if (userRole === null) {
-    return false; 
+    // Verifica si el rol es null o no
+    if (userRole === null) {
+      return false; 
+    }
+
+    return roles.includes(userRole);
   }
-
-  return roles.includes(userRole);
-}
+  logout() {
+    this.myDataService.logout();
+  }
 }

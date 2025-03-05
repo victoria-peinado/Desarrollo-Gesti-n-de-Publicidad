@@ -15,14 +15,22 @@
         </a>
       </li>
 
-      <li [class.active]="selectedMenuItem === 'Perfil'">
-        <a (click)="setActive('Perfil')" routerLink="/perfil">
+      <li *appShowForRoles="['admin','user']">
+        <button (click)="toggleSubMenu($event)" class="dropdown-btn">
           <mat-icon>account_circle</mat-icon>
           <span>Perfil</span>
-        </a>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <ul class="sub-menu">
+          <div>
+            <li [class.active]="selectedMenuItem === 'Logout'">
+              <a (click)="logout()" routerLink="/">Logout</a>
+            </li>
+          </div>
+        </ul>
       </li>
 
-      <li>
+      <li *appShowForRoles="['admin']" >
         <button (click)="toggleSubMenu($event)" class="dropdown-btn">
           <mat-icon>storefront</mat-icon>
           <span>Comercios</span>
@@ -41,7 +49,7 @@
         </ul>
       </li>
 
-      <li>
+      <li *appShowForRoles="['admin']" >
         <button (click)="toggleSubMenu($event)" class="dropdown-btn">
           <mat-icon>gavel</mat-icon>
           <span>Contrataciones</span>
@@ -57,7 +65,7 @@
         </ul>
       </li>
 
-      <li>
+      <li *appShowForRoles="['admin']" >
         <button (click)="toggleSubMenu($event)" class="dropdown-btn">
           <mat-icon>payments</mat-icon>
           <span>Pagos</span>
@@ -73,7 +81,7 @@
         </ul>
       </li>
 
-      <li>
+      <li *appShowForRoles="['admin','user']">
         <button (click)="toggleSubMenu($event)" class="dropdown-btn">
           <mat-icon>campaign</mat-icon>
           <span>Publicidades</span>
@@ -81,17 +89,17 @@
         </button>
         <ul class="sub-menu">
           <div>
-            <li [class.active]="selectedMenuItem === 'Emisión Órdenes'">
+            <li *appShowForRoles="['admin']" [class.active]="selectedMenuItem === 'Emisión Órdenes'">
               <a (click)="setActive('Emisión Órdenes')" routerLink="/publicidades/emision-ordenes">Emisión Órdenes</a></li>
-            <li [class.active]="selectedMenuItem === 'Listado Publicitario'">
+            <li *appShowForRoles="['admin','user']" [class.active]="selectedMenuItem === 'Listado Publicitario'">
               <a (click)="setActive('Listado Publicitario')" routerLink="/publicidades/listado-publicitario">Listado Publicitario</a></li>
-            <li [class.active]="selectedMenuItem === 'Edición Spot'">
+            <li *appShowForRoles="['admin']" [class.active]="selectedMenuItem === 'Edición Spot'">
               <a (click)="setActive('Edición Spot')" routerLink="/publicidades/edicion-spot">Edición Spot</a></li>
           </div>
         </ul>
       </li>
 
-      <li>
+      <li *appShowForRoles="['admin']">
         <button (click)="toggleSubMenu($event)" class="dropdown-btn">
           <mat-icon>grid_view</mat-icon>
           <span>Bloques</span>
@@ -107,7 +115,7 @@
         </ul>
       </li>
 
-      <li>
+      <li *appShowForRoles="['admin']">
         <button (click)="toggleSubMenu($event)" class="dropdown-btn">
           <mat-icon>groups</mat-icon>
           <span>Titulares</span>
@@ -127,7 +135,7 @@
         </ul>
       </li>
 
-      <li>
+      <li *appShowForRoles="['admin']">
         <button (click)="toggleSubMenu($event)" class="dropdown-btn">
           <mat-icon>call</mat-icon>
           <span>Contactos</span>
