@@ -47,7 +47,9 @@ import { PerfilComponent } from './pages/perfil/perfil.component';
 import  {isLoggedInGuard} from './guards/is-logged-in.guard';
 import  {hasRoleGuardGuard,canActivateWithRoles} from './guards/has-role-guard.guard';
 const routes: Routes = [
-  { path: '', component: WelcomePageComponent, pathMatch: 'full' }, // Solo para "/"
+  { path: '', component: WelcomePageComponent, pathMatch: 'full' ,
+    
+  }, // Solo para "/"
   { path: 'login', component: UserLoginComponent },
 
   // Rutas con menú
@@ -62,7 +64,7 @@ const routes: Routes = [
 { path: 'perfil', component: PerfilComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 
 // Páginas principales
-{ path: 'asuncion', component: AsuncionPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: '', component: AsuncionPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 { path: 'comercios/categories', component: ComerciosPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 { path: 'contrataciones/categories', component: ContratacionesPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 { path: 'pagos/categories', component: PagosPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
