@@ -49,7 +49,12 @@
               
           </form>
 
-            <app-btn-guardar-cambios [disabled]="false" (click)="openDialog()" [text]="'Guardar cambios'"></app-btn-guardar-cambios>
+          <app-btn-guardar-cambios
+          [disabled]="owner_form.invalid"
+          (clickEvent)="openDialog()" 
+          [text]="'Guardar cambios'"
+        ></app-btn-guardar-cambios>
+        
       </div>
   
   </div>

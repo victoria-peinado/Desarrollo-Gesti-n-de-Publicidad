@@ -68,7 +68,7 @@ export class AltaTitularCategoryComponent {
       },
       error: (err) => {
         console.log(err);
-        this._snackBar.openSnackBar(err.error.message, 'unsuccess-snackbar');
+        this._snackBar.openSnackBar(err.error.errors ? err.error.errors || err.error.messages: err.error.messages, 'unsuccess-snackbar');
       },
     });
   }
