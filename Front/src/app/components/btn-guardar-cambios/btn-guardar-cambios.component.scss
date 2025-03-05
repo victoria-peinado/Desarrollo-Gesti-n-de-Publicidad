@@ -1,0 +1,10 @@
+.btn-guardar-cambios {
+    margin: 10px;
+}
+
+@media(width <= 584px) {
+    .btn-guardar-cambios {
+        display: flex;
+        justify-content: center;
+    }
+}

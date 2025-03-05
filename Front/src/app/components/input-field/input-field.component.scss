@@ -11,19 +11,9 @@
   }
   
   .w-full {
-    width: 350px; // Por defecto ocupa todo el espacio disponible
-  
-    @media (max-width: 768px) {
-      width: 100%; // Mantiene el tamaño correcto en pantallas grandes
-    }
-  
-    @media (max-width: 320px) {
-      width: 100%; // Se adapta a pantallas pequeñas
-    }
+    width: 250px;
+
   }
-  
-
-
   .password-toggle {
     position: absolute;
     right: 0%;

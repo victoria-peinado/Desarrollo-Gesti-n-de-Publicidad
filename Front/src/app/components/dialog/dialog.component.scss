@@ -45,7 +45,7 @@ th {
 }
 
 .title {
-    padding: 0px 20px !important;
+    padding: 0px 20px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -58,4 +58,35 @@ th {
 .title h2 {
     padding: 0px;
     margin: 0px;
+    font-weight: 400;
+}
+
+
+
+@media(max-width: 584px) {
+    mat-dialog-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .dialog {
+        width: 95%; /* Más flexible en pantallas muy pequeñas */
+        min-width: 260px;
+        padding: 10px;
+    }
+
+    mat-dialog-actions button {
+        width: 100%;
+    }
+
+    .title h2 {
+        font-size: 1em;
+    }
+
+    .title mat-icon {
+        font-size: 1em;
+        margin-right: -10px;
+        margin-bottom: -10px;
+    }
 }

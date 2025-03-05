@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { FISCAL_CONDITION_TYPES } from 'src/app/constants/constants';
 import { Owner } from 'src/app/models/owner';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-alta-titular-category',
@@ -24,7 +24,7 @@ export class AltaTitularCategoryComponent {
 
   constructor(
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
+    private _snackBar: SnackbarService,
     private myDataService: MyDataService
   ) {
     this.owner_form = new FormGroup({
@@ -63,18 +63,12 @@ export class AltaTitularCategoryComponent {
     this.myDataService.createOwner(this.owner).subscribe({
       next: (response) => {
         console.log(response);
-        this.openSnackBar(
-          `Titular ${this.businessNameControl.value} creado con éxito`,
-          'Cerrar'
-        );
+        this._snackBar.openSnackBar(`Titular ${this.businessNameControl.value} creado con éxito`, 'success-snackbar');
         this.clearForm()
       },
-      error: (error) => {
-        console.log(error);
-        this.openSnackBar(
-          `Error al crear el titular ${this.businessNameControl.value}`,
-          'Cerrar'
-        );
+      error: (err) => {
+        console.log(err);
+        this._snackBar.openSnackBar(err.error.message, 'unsuccess-snackbar');
       },
     });
   }
@@ -94,9 +88,4 @@ export class AltaTitularCategoryComponent {
     });
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 5000,
-    });
-  }
 }

@@ -69,6 +69,7 @@ import { WelcomePageComponent } from './pages/welcome-page/welcome-page.componen
 import { TestingComponent } from './pages/testing/testing.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { TokenInterceptorService } from './services/token-interceptor.service';
+import { BtnGuardarCambiosComponent } from './components/btn-guardar-cambios/btn-guardar-cambios.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -132,7 +133,8 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
         HomeComponent,
         WelcomePageComponent,
         TestingComponent,
-        PerfilComponent
+        PerfilComponent,
+        BtnGuardarCambiosComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent], imports: [BrowserModule,
