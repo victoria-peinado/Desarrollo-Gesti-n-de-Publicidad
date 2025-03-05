@@ -47,75 +47,89 @@ import { PerfilComponent } from './pages/perfil/perfil.component';
 
 
 const routes: Routes = [
-  { path:'', component: WelcomePageComponent },
-  { path:'inicio', component: HomeComponent  },
-  { path:'login', component: UserLoginComponent  },
-  // pages
-  { path: 'asuncion', component: AsuncionPageComponent },
+  { path: '', component: WelcomePageComponent, pathMatch: 'full' }, // Solo para "/"
+  { path: 'login', component: UserLoginComponent },
 
-  { path: 'perfil', component: PerfilComponent },
-  { path: 'comercios/categories', component: ComerciosPageComponent },
-  { path: 'contrataciones/categories', component: ContratacionesPageComponent },
-  { path: 'pagos/categories', component: PagosPageComponent },
-  { path: 'publicidades/categories', component: PublicidadesPageComponent },
-  { path: 'bloques/categories', component: BloquesPageComponent },
-  { path: 'titulares/categories', component: TitularesPageComponent },
-  { path: 'contactos/categories', component: ContactosPageComponent },
-  // categories
-  { path: 'comercios/alta-comercio', component: AltaComercioCategoryComponent },
-  { path: 'comercios/listado-comercios', component: ListadoComerciosCategoryComponent },
-  { path: 'comercios/edicion-comercio', component: EdicionComercioCategoryComponent },
-  { path: 'contrataciones/alta-contratacion', component: AltaContratacionCategoryComponent },
-  { path: 'contrataciones/edicion-contratacion', component: EdicionContratacionCategoryComponent },
-  { path: 'pagos/registro-pago', component: RegistroPagoCategoryComponent },
-  { path: 'pagos/informe-falta-pago', component: InformeFaltaPagoCategoryComponent },
-  { path: 'publicidades/emision-ordenes', component: EmisionOrdenesCategoryComponent },
-  { path: 'publicidades/listado-publicitario', component: ListadoPublicitarioCategoryComponent },
-  { path: 'publicidades/edicion-spot', component: EdicionSpotCategoryComponent },
-  { path: 'bloques/listado-bloques', component: ListadoBloquesCategoryComponent },
-  { path: 'bloques/edicion-bloque', component: EdicionBloqueCategoryComponent },
-  { path: 'titulares/alta-titular', component: AltaTitularCategoryComponent },
-  { path: 'titulares/consulta-titular', component: ConsultaTitularCategoryComponent  },
-  { path: 'titulares/edicion-titular', component: EdicionTitularCategoryComponent },
-  { path: 'titulares/baja-titular', component: BajaTitularCategoryComponent },
-  { path: 'contactos/alta-contacto', component: AltaContactoCategoryComponent },
-  { path: 'contactos/consulta-contacto', component: ConsultaContactoCategoryComponent },
-  { path: 'contactos/edicion-contacto', component: EdicionContactoCategoryComponent },
-  { path: 'contactos/baja-contacto', component: BajaContactoCategoryComponent },
-  // shop ruting
-  { path:'listaComercios', component: AltaComercioComponent},
-  { path:'altaComercio/listaComercios', component: ShopListComponent},
-  { path:'altaComercio', component: NewOwnerContactShopComponent},
-  { path:'altaComercio/nuevoComercio', component: NuevoComercioComponent },
-  { path:'actualizacionComercio', component: ActualizacionComercioComponent },
-  // contracit ruting
-  { path:'altaContratacion', component: NuevoContratoComponent },
-  { path:'actualizacionContratacion', component: InicioPageComponent },
-  //blocks and history ruting
-  { path:'actualizacionBLoque', component: BlockComponent },
-  {path:'bolockList', component: BlockListComponent},
-  //owner ruting
-  { path: 'addOwner', component: OwnerComponent, data: { crud: 'create' } },
-  { path: 'updateOwner', component: OwnerComponent, data: { crud: 'update' } },
-  { path: 'deleteOwner', component: OwnerComponent, data: { crud: 'delete' } },
-  //contact ruting
-  { path: 'addContact', component: ContactComponent, data: { crud: 'create' } },
-  { path: 'updateContact', component: ContactComponent, data: { crud: 'update' } },
-  { path: 'deleteContact', component: ContactComponent, data: { crud: 'delete' } },
+  // Rutas con menú
+  { 
+    path: '', 
+    component: HomeComponent, 
+    children: [
+      { path: 'inicio', component: InicioPageComponent },
+      { path: 'perfil', component: PerfilComponent },
 
+      // Páginas principales
+      { path: 'asuncion', component: AsuncionPageComponent },
+      { path: 'comercios/categories', component: ComerciosPageComponent },
+      { path: 'contrataciones/categories', component: ContratacionesPageComponent },
+      { path: 'pagos/categories', component: PagosPageComponent },
+      { path: 'publicidades/categories', component: PublicidadesPageComponent },
+      { path: 'bloques/categories', component: BloquesPageComponent },
+      { path: 'titulares/categories', component: TitularesPageComponent },
+      { path: 'contactos/categories', component: ContactosPageComponent },
 
-  { path:'altaPublicista', component: InicioPageComponent },
-  { path:'liquidacionPublicistas', component: InicioPageComponent },
-  { path:'listadoLiquidaciones', component: InicioPageComponent },
-  { path:'registroPagoPub', component: InicioPageComponent },
-  { path:'actualizacionPublicista', component: InicioPageComponent },
-  { path:'registroPago', component: InicioPageComponent },
-  { path:'informeFaltaPago', component: InicioPageComponent },
-  { path:'emisionOrdenes', component: NuevaOrdenComponent },
-  { path:'listadoPublicitario', component: InicioPageComponent },
+      // Categorías específicas
+      { path: 'comercios/alta-comercio', component: AltaComercioCategoryComponent },
+      { path: 'comercios/listado-comercios', component: ListadoComerciosCategoryComponent },
+      { path: 'comercios/edicion-comercio', component: EdicionComercioCategoryComponent },
+      { path: 'contrataciones/alta-contratacion', component: AltaContratacionCategoryComponent },
+      { path: 'contrataciones/edicion-contratacion', component: EdicionContratacionCategoryComponent },
+      { path: 'pagos/registro-pago', component: RegistroPagoCategoryComponent },
+      { path: 'pagos/informe-falta-pago', component: InformeFaltaPagoCategoryComponent },
+      { path: 'publicidades/emision-ordenes', component: EmisionOrdenesCategoryComponent },
+      { path: 'publicidades/listado-publicitario', component: ListadoPublicitarioCategoryComponent },
+      { path: 'publicidades/edicion-spot', component: EdicionSpotCategoryComponent },
+      { path: 'bloques/listado-bloques', component: ListadoBloquesCategoryComponent },
+      { path: 'bloques/edicion-bloque', component: EdicionBloqueCategoryComponent },
+      { path: 'titulares/alta-titular', component: AltaTitularCategoryComponent },
+      { path: 'titulares/consulta-titular', component: ConsultaTitularCategoryComponent },
+      { path: 'titulares/edicion-titular', component: EdicionTitularCategoryComponent },
+      { path: 'titulares/baja-titular', component: BajaTitularCategoryComponent },
+      { path: 'contactos/alta-contacto', component: AltaContactoCategoryComponent },
+      { path: 'contactos/consulta-contacto', component: ConsultaContactoCategoryComponent },
+      { path: 'contactos/edicion-contacto', component: EdicionContactoCategoryComponent },
+      { path: 'contactos/baja-contacto', component: BajaContactoCategoryComponent },
 
-  { path: '**', redirectTo: '', pathMatch: 'full'} // cuando el usuario pone una ruta inexistente redirige a http://localhost:4200
+      // Comercios
+      { path: 'listaComercios', component: AltaComercioComponent },
+      { path: 'altaComercio', component: NewOwnerContactShopComponent },
+      { path: 'altaComercio/listaComercios', component: ShopListComponent },
+      { path: 'altaComercio/nuevoComercio', component: NuevoComercioComponent },
+      { path: 'actualizacionComercio', component: ActualizacionComercioComponent },
 
+      // Contrataciones
+      { path: 'altaContratacion', component: NuevoContratoComponent },
+      { path: 'actualizacionContratacion', component: InicioPageComponent },
+
+      // Bloques e Historial
+      { path: 'actualizacionBloque', component: BlockComponent },
+      { path: 'blockList', component: BlockListComponent },
+
+      // Propietarios
+      { path: 'addOwner', component: OwnerComponent, data: { crud: 'create' } },
+      { path: 'updateOwner', component: OwnerComponent, data: { crud: 'update' } },
+      { path: 'deleteOwner', component: OwnerComponent, data: { crud: 'delete' } },
+
+      // Contactos
+      { path: 'addContact', component: ContactComponent, data: { crud: 'create' } },
+      { path: 'updateContact', component: ContactComponent, data: { crud: 'update' } },
+      { path: 'deleteContact', component: ContactComponent, data: { crud: 'delete' } },
+
+      // Publicistas y pagos
+      { path: 'altaPublicista', component: InicioPageComponent },
+      { path: 'liquidacionPublicistas', component: InicioPageComponent },
+      { path: 'listadoLiquidaciones', component: InicioPageComponent },
+      { path: 'registroPagoPub', component: InicioPageComponent },
+      { path: 'actualizacionPublicista', component: InicioPageComponent },
+      { path: 'registroPago', component: InicioPageComponent },
+      { path: 'informeFaltaPago', component: InicioPageComponent },
+      { path: 'emisionOrdenes', component: NuevaOrdenComponent },
+      { path: 'listadoPublicitario', component: InicioPageComponent }
+    ]
+  },
+
+  // Redirección si la ruta no existe
+  { path: '**', redirectTo: 'inicio', pathMatch: 'full' }
 ];
 
 @NgModule({
