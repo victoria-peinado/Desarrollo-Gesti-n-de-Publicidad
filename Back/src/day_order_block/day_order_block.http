@@ -1,0 +1,45 @@
+@port = 3001
+
+### login
+# @name login
+@token = {{login.response.body.data.token}}
+POST http://localhost:{{port}}/api/auth/login
+Content-Type: application/json
+
+{
+ "username": "admin",
+ "password": "admin"  
+}
+
+### logout
+POST http://localhost:{{port}}/api/auth/logout
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+}
+
+
+
+### FIND ALL
+GET http://localhost:{{port}}/api/dayorderblock/
+Authorization: Bearer {{token}}
+
+### FIND ONE
+@id= 67b9378f348d061c1ebe69ab
+GET http://localhost:{{port}}/api/dayorderblock/{{id}}
+Authorization: Bearer {{token}}
+
+###FIND BY DATES
+GET http://localhost:{{port}}/api/dayorderblock/dates
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "dateFrom": "2025-2-27" ,
+    "dateTo": "2025-2-27"
+
+}
+
+###dateTo no es obligatoria, default HOY. // dateFrom no puede ser mayor que dateTo
+###DATE: string AAAA-MM-DD o AAAA-M-D

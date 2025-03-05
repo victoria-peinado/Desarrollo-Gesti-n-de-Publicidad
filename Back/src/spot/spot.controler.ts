@@ -98,6 +98,8 @@ async function upload(req: Request, res: Response){
         req.body.sanitizeInput.name = audioFile?.filename 
         req.body.sanitizeInput.long = audioFile?.size
         const spot = em.create(Spot, req.body.sanitizeInput)
+        em.persist(spot)
+        console.log('El spot creado es: ', spot)
         await em.flush()
         res.status(200).json({ message: 'Spot upload and created successfully', data: audioFile });
     

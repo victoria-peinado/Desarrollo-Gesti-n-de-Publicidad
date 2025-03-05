@@ -2,6 +2,7 @@ import { Entity, ManyToOne, Property, Rel } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Block } from "../block/block.entity.js";
 import { Order } from "../order/order.entity.js";
+import { z } from "zod";
 
 
 @Entity()
@@ -26,3 +27,4 @@ export class DayOrderBlock extends BaseEntity {
     order!: Rel<Order>
 
 }
+

@@ -47,6 +47,9 @@ function sanitizeOrderInput(req: Request, res: Response, next: NextFunction) {
 
     next()
 }
+
+
+
 async function validateIdsAndUniques<T extends object>(
     sanitizeInput: Partial<T>
 ): Promise<{ valid: boolean; messages: string[] }> {
@@ -768,10 +771,40 @@ async function getNotPayOrdersByShop(req: Request, res: Response) {
     }
 }
 
+async function findAllNotPayOrders(req: Request, res: Response) {
+    try {
+        const orders = await em.find(Order, {liq: false}, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
+        res.status(200).json({ message: 'Find all not pay Orders', data: orders })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
+async function findNotPayOrdersByDates(req: Request, res: Response) {
+    try {
+        const dateFrom = new Date(req.body.sanitizeInput.dateFrom)
+        const dateTo = new Date(req.body.sanitizeInput.dateTo)
+        if (compareAsc(dateFrom, dateTo) === 1) {
+            throw new Error('La fecha DESDE no puede ser mayor que la fecha HASTA')
+        }
+        const monthFrom = format(dateFrom, "MM-yyyy"); 
+        const monthTo = format(dateTo, "MM-yyyy"); 
+
+        const orders = await em.find(Order, {
+            liq: false, month: {
+                $gte: monthFrom,  
+                $lte: monthTo     
+            } }, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
+        res.status(200).json({ message: 'Find all not pay Orders', data: orders })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
 
 
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop }
+
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]
