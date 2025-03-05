@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-
+import { MyDataService } from '../services/my-data.service.js';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,7 +15,7 @@ export class HomeComponent implements AfterViewInit {
     itemsWithoutSubMenu: ['Inicio', 'Perfil']
   };
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef,private myDataService:MyDataService ) {}
 
   ngAfterViewInit() {
     this.loadMenuState();
@@ -113,4 +113,15 @@ export class HomeComponent implements AfterViewInit {
   isItemWithoutSubMenu(menuItem: string): boolean {
     return this.menuItems.itemsWithoutSubMenu.includes(menuItem);
   }
+
+ userRoleIn(roles: string[]): boolean {
+  const userRole = this.myDataService.getUserRole();
+
+  // Verifica si el rol es null o no
+  if (userRole === null) {
+    return false; 
+  }
+
+  return roles.includes(userRole);
+}
 }

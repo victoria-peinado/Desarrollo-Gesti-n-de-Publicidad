@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BlockComponent } from './pages/block/block.component';
-import { RouterModule, Routes } from '@angular/router';
+import { Route, RouterModule, Routes, UrlSegment } from '@angular/router';
 import { AltaComercioComponent } from './pages/alta-comercio/alta-comercio.component';
 import { NuevoComercioComponent } from './pages/nuevo-comercio/nuevo-comercio.component';
 import { NuevoContratoComponent } from './pages/nuevo-contrato/nuevo-contrato.component';
@@ -44,92 +44,85 @@ import { InicioPageComponent } from './pages/inicio-page/inicio-page.component';
 import { HomeComponent } from './home/home.component';
 import { WelcomePageComponent } from './pages/welcome-page/welcome-page.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
-
-
+import  {isLoggedInGuard} from './guards/is-logged-in.guard';
+import  {hasRoleGuardGuard,canActivateWithRoles} from './guards/has-role-guard.guard';
 const routes: Routes = [
   { path: '', component: WelcomePageComponent, pathMatch: 'full' }, // Solo para "/"
   { path: 'login', component: UserLoginComponent },
 
   // Rutas con menú
   { 
-    path: '', 
+    path: '',
+     canMatch: [
+      isLoggedInGuard
+    ], 
     component: HomeComponent, 
     children: [
-      { path: 'inicio', component: InicioPageComponent },
-      { path: 'perfil', component: PerfilComponent },
+    { path: 'inicio', component: InicioPageComponent },
+{ path: 'perfil', component: PerfilComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 
-      // Páginas principales
-      { path: 'asuncion', component: AsuncionPageComponent },
-      { path: 'comercios/categories', component: ComerciosPageComponent },
-      { path: 'contrataciones/categories', component: ContratacionesPageComponent },
-      { path: 'pagos/categories', component: PagosPageComponent },
-      { path: 'publicidades/categories', component: PublicidadesPageComponent },
-      { path: 'bloques/categories', component: BloquesPageComponent },
-      { path: 'titulares/categories', component: TitularesPageComponent },
-      { path: 'contactos/categories', component: ContactosPageComponent },
+// Páginas principales
+{ path: 'asuncion', component: AsuncionPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'comercios/categories', component: ComerciosPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'contrataciones/categories', component: ContratacionesPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'pagos/categories', component: PagosPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'publicidades/categories', component: PublicidadesPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'bloques/categories', component: BloquesPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'titulares/categories', component: TitularesPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'contactos/categories', component: ContactosPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 
-      // Categorías específicas
-      { path: 'comercios/alta-comercio', component: AltaComercioCategoryComponent },
-      { path: 'comercios/listado-comercios', component: ListadoComerciosCategoryComponent },
-      { path: 'comercios/edicion-comercio', component: EdicionComercioCategoryComponent },
-      { path: 'contrataciones/alta-contratacion', component: AltaContratacionCategoryComponent },
-      { path: 'contrataciones/edicion-contratacion', component: EdicionContratacionCategoryComponent },
-      { path: 'pagos/registro-pago', component: RegistroPagoCategoryComponent },
-      { path: 'pagos/informe-falta-pago', component: InformeFaltaPagoCategoryComponent },
-      { path: 'publicidades/emision-ordenes', component: EmisionOrdenesCategoryComponent },
-      { path: 'publicidades/listado-publicitario', component: ListadoPublicitarioCategoryComponent },
-      { path: 'publicidades/edicion-spot', component: EdicionSpotCategoryComponent },
-      { path: 'bloques/listado-bloques', component: ListadoBloquesCategoryComponent },
-      { path: 'bloques/edicion-bloque', component: EdicionBloqueCategoryComponent },
-      { path: 'titulares/alta-titular', component: AltaTitularCategoryComponent },
-      { path: 'titulares/consulta-titular', component: ConsultaTitularCategoryComponent },
-      { path: 'titulares/edicion-titular', component: EdicionTitularCategoryComponent },
-      { path: 'titulares/baja-titular', component: BajaTitularCategoryComponent },
-      { path: 'contactos/alta-contacto', component: AltaContactoCategoryComponent },
-      { path: 'contactos/consulta-contacto', component: ConsultaContactoCategoryComponent },
-      { path: 'contactos/edicion-contacto', component: EdicionContactoCategoryComponent },
-      { path: 'contactos/baja-contacto', component: BajaContactoCategoryComponent },
+// Categorías específicas
+{ path: 'comercios/alta-comercio', component: AltaComercioCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'comercios/listado-comercios', component: ListadoComerciosCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'comercios/edicion-comercio', component: EdicionComercioCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'contrataciones/alta-contratacion', component: AltaContratacionCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'contrataciones/edicion-contratacion', component: EdicionContratacionCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'pagos/registro-pago', component: RegistroPagoCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'pagos/informe-falta-pago', component: InformeFaltaPagoCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'publicidades/emision-ordenes', component: EmisionOrdenesCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'publicidades/listado-publicitario', component: ListadoPublicitarioCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin', 'user'] } },
+{ path: 'publicidades/edicion-spot', component: EdicionSpotCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'bloques/listado-bloques', component: ListadoBloquesCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'bloques/edicion-bloque', component: EdicionBloqueCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'titulares/alta-titular', component: AltaTitularCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'titulares/consulta-titular', component: ConsultaTitularCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'titulares/edicion-titular', component: EdicionTitularCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'titulares/baja-titular', component: BajaTitularCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'contactos/alta-contacto', component: AltaContactoCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'contactos/consulta-contacto', component: ConsultaContactoCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'contactos/edicion-contacto', component: EdicionContactoCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'contactos/baja-contacto', component: BajaContactoCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 
-      // Comercios
-      { path: 'listaComercios', component: AltaComercioComponent },
-      { path: 'altaComercio', component: NewOwnerContactShopComponent },
-      { path: 'altaComercio/listaComercios', component: ShopListComponent },
-      { path: 'altaComercio/nuevoComercio', component: NuevoComercioComponent },
-      { path: 'actualizacionComercio', component: ActualizacionComercioComponent },
+// Comercios
+{ path: 'listaComercios', component: AltaComercioComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'altaComercio', component: NewOwnerContactShopComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'altaComercio/listaComercios', component: ShopListComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'altaComercio/nuevoComercio', component: NuevoComercioComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'actualizacionComercio', component: ActualizacionComercioComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 
-      // Contrataciones
-      { path: 'altaContratacion', component: NuevoContratoComponent },
-      { path: 'actualizacionContratacion', component: InicioPageComponent },
+// Contrataciones
+{ path: 'altaContratacion', component: NuevoContratoComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'actualizacionContratacion', component: InicioPageComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 
-      // Bloques e Historial
-      { path: 'actualizacionBloque', component: BlockComponent },
-      { path: 'blockList', component: BlockListComponent },
+// Bloques e Historial
+{ path: 'actualizacionBloque', component: BlockComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'blockList', component: BlockListComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 
-      // Propietarios
-      { path: 'addOwner', component: OwnerComponent, data: { crud: 'create' } },
-      { path: 'updateOwner', component: OwnerComponent, data: { crud: 'update' } },
-      { path: 'deleteOwner', component: OwnerComponent, data: { crud: 'delete' } },
+// Propietarios
+{ path: 'addOwner', component: OwnerComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'create' } },
+{ path: 'updateOwner', component: OwnerComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'update' } },
+{ path: 'deleteOwner', component: OwnerComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'delete' } },
 
-      // Contactos
-      { path: 'addContact', component: ContactComponent, data: { crud: 'create' } },
-      { path: 'updateContact', component: ContactComponent, data: { crud: 'update' } },
-      { path: 'deleteContact', component: ContactComponent, data: { crud: 'delete' } },
-
-      // Publicistas y pagos
-      { path: 'altaPublicista', component: InicioPageComponent },
-      { path: 'liquidacionPublicistas', component: InicioPageComponent },
-      { path: 'listadoLiquidaciones', component: InicioPageComponent },
-      { path: 'registroPagoPub', component: InicioPageComponent },
-      { path: 'actualizacionPublicista', component: InicioPageComponent },
-      { path: 'registroPago', component: InicioPageComponent },
-      { path: 'informeFaltaPago', component: InicioPageComponent },
-      { path: 'emisionOrdenes', component: NuevaOrdenComponent },
-      { path: 'listadoPublicitario', component: InicioPageComponent }
-    ]
+// Contactos
+{ path: 'addContact', component: ContactComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'create' } },
+{ path: 'updateContact', component: ContactComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'update' } },
+{ path: 'deleteContact', component: ContactComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'delete' } }
+  ]
+   
   },
 
   // Redirección si la ruta no existe
-  { path: '**', redirectTo: 'inicio', pathMatch: 'full' }
+  { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
 @NgModule({

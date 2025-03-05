@@ -106,7 +106,7 @@ const login= async (req: Request, res: Response) => {
         {id: auth.id, role: auth.role}, 
         secret, 
         {expiresIn: '1h'})
-      res.status(200).json({message: 'User logged in successfully', data: {  token: token }});
+      res.status(200).json({message: 'User logged in successfully', data: {  user:auth,token: token }});
     }else{
       res.status(401).json({message: 'Invalid credentials', data:{valid: valid}});
     }

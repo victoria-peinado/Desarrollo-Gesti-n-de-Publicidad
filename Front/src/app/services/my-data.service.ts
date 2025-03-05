@@ -23,10 +23,14 @@ export class MyDataService {
   }
   logout(){
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     return this.http.get(`${this.apiUrl}auth/logout`);
   } 
   islogged(){
     return !!localStorage.getItem('token');
+  }
+  getUserRole(){
+    return localStorage.getItem('role');
   }
 
   getBlocks() {
