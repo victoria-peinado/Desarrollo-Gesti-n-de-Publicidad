@@ -6,11 +6,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { FISCAL_CONDITION_TYPES } from 'src/app/constants/constants';
-import { Owner } from 'src/app/models/owner.js';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-edicion-titular-category',
@@ -33,7 +32,7 @@ export class EdicionTitularCategoryComponent {
 
   constructor(
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
+    private _snackBar: SnackbarService,
     private myDataService: MyDataService
   ) {
     this.owner_form = new FormGroup({
@@ -108,6 +107,7 @@ export class EdicionTitularCategoryComponent {
     this.formDirective?.resetForm();
     this.errorMessageOwner = null;
     this.ownerFounded = false;
+    this.cuit = '';
     this.bussinessName = '';
     this.fiscalCondition = '';
     this.cargando = false;
@@ -123,12 +123,18 @@ export class EdicionTitularCategoryComponent {
       this.owner.fiscalCondition = this.fiscalConditionControl.value;
     }
 
-    this.myDataService
-      .patchOwner(this.ownerId, this.owner)
-      .subscribe((response) => {
+    this.myDataService.patchOwner(this.ownerId, this.owner).subscribe({
+      next: (response: any) => {
+        this._snackBar.openSnackBar(response.message, 'success-snackbar');
         this.clearForm();
-        this.openSnackBar('Titular modificado exitosamente', 'Cerrar');
-      });
+      },
+      error: (error: any) => {
+        let errorMessage = error.error.errors
+          ? error.error.errors || error.error.messages
+          : error.error.messages;
+        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+      },
+    });
   }
 
   openDialog(): void {
@@ -143,12 +149,6 @@ export class EdicionTitularCategoryComponent {
       if (result) {
         this.patchOwner();
       }
-    });
-  }
-
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 5000,
     });
   }
 }
