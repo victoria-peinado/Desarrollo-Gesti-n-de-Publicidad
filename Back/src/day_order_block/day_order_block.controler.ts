@@ -43,6 +43,8 @@ async function findOne(req: Request, res: Response) {
     }
 }
 
+//ESTOY CAMBIANDO LA EN LA OTRA RAMA
+
 async function findByDates(req: Request, res: Response) {
     try {
         const dateFrom = new Date(req.body.sanitizeInput.dateFrom)
