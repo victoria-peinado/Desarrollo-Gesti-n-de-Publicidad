@@ -17,7 +17,7 @@ export class ShowForRolesDirective implements OnInit {
   ngOnInit(): void {
     // Obtenemos el valor de getUserRole() directamente
     const userRole = this.myDataService.getUserRole();
-    console.log(userRole);
+  
 
     // Si el rol del usuario está en la lista de roles permitidos, mostramos el contenido
     if (userRole && this.appShowForRoles.includes(userRole)) {
