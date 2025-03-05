@@ -144,4 +144,18 @@ function validateSchemaAtribute(schema: z.ZodSchema, atribute: any) {
 
 */
 
-export { validateWithSchema, validateObjectId, validateCuit, validateDni, validateUniqueField, validateIdExistence,  };  
+function sanitizeDatesFilterInput(req: Request, res: Response, next: NextFunction) {
+    req.body.sanitizeInput = {
+        dateFrom: req.body.dateFrom,
+        dateTo: req.body.dateTo,
+    }
+    Object.keys(req.body.sanitizeInput).forEach((key) => {
+        if (req.body.sanitizeInput[key] === undefined) {
+            delete req.body.sanitizeInput[key]
+        }
+    })
+
+    next()
+}
+
+export { validateWithSchema, validateObjectId, validateCuit, validateDni, validateUniqueField, validateIdExistence, sanitizeDatesFilterInput };  

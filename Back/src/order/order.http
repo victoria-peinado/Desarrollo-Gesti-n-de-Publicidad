@@ -53,6 +53,22 @@ Authorization: Bearer {{token}}
 GET http://localhost:{{port}}/api/order/notPayOrdersByShop/{{shopId}}
 Authorization: Bearer {{token}}
 
+### GET ALL NOT PAY ORDERS
+GET http://localhost:{{port}}/api/order/allNotPayOrders
+Authorization: Bearer {{token}}
+
+### GET NOT PAY ORDERS FILTER BY DATES
+GET http://localhost:{{port}}/api/order/dates/notPayOrders
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "dateFrom": "2025-3-27" ,
+    "dateTo": "2025-3-27"
+
+}
+
+
 ### POST
 # @name createorder
 POST http://localhost:{{port}}/api/order

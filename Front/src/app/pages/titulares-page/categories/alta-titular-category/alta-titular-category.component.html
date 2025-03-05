@@ -5,9 +5,8 @@
           [subtitle]="'Ingrese los datos del nuevo Titular.'"
         ></app-title-and-subtitle>
     
-        <div class="fila-data">
           <form [formGroup]="owner_form">
-            <div class="fila-data">
+            <div class="grid-container">
               <fieldset>
                 <app-input-field
                   label="CUIT Titular"
@@ -45,22 +44,12 @@
                 ></app-input-field>
               </fieldset>
             </div>
-            <app-tooltip [message]="'Complete los campos obligatorios (*).'" [disabled]="owner_form.valid">
-                <button
-                  class="btn-guardar-cambios"
-                  mat-flat-button
-                  type="submit"
-                  color="accent"
-                  [disabled]="owner_form.invalid"
-                  (click)="openDialog()"
-                >
-                  Guardar cambios
-                </button>
-              </app-tooltip>
+            
               
               
           </form>
-        </div>
+
+            <app-btn-guardar-cambios [disabled]="false" (click)="openDialog()" [text]="'Guardar cambios'"></app-btn-guardar-cambios>
       </div>
   
   </div>

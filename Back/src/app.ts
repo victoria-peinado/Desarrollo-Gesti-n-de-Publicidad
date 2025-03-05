@@ -21,6 +21,7 @@ import { orderRouter } from './order/order.routes.js';
 import { authRouter } from './auth/auth.routes.js';
 import {env} from './config_env/config.js';
 import { destDir } from './shared/audioFunctions.js';
+import { dobRouter } from './day_order_block/day_order_block.router.js';
 
 
 //server
@@ -51,6 +52,8 @@ app.use("/api/price", priceRouter)
 app.use("/api/spot", spotRouter)
 app.use("/api/order", orderRouter)
 app.use("/api/auth", authRouter)
+app.use("/api/dayorderblock", dobRouter)
+
 
 // default route for not found resources
 
