@@ -16,7 +16,7 @@ Esta es la minuta de relevamiento inicial. [Minuta relevamiento](https://docs.go
 
 
 ### Modelo
-![](https://github.com/victoria-peinado/Desarrollo-Gesti-n-de-Publicidad/blob/main/Documentacion/Modelo%20de%20Dominio%20-%20Publicidades-recortado.pdf)
+![](https://github.com/victoria-peinado/Desarrollo-Gesti-n-de-Publicidad/blob/main/Documentacion/Modelo%20de%20Dominio%20-%20Publicidades-recortado.jpg)
 
 
 ## Alcance Funcional 
