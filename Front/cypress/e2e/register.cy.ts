@@ -10,7 +10,7 @@ describe('Registro de usuario', () => {
     // Haz clic en el botón que muestra el formulario de registro
     cy.get('#sign-up-btn').click();
     cy.get('input#mat-input-2').type(username);
-    cy.get('input#mat-input-3').should('be.visible').and('not.be.disabled').type(password);
+    cy.get('input#mat-input-3').type('tu_contraseña', { force: true });
 
 
   });

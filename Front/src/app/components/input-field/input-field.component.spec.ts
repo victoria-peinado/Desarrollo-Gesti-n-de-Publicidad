@@ -1,33 +1,37 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InputFieldComponent } from './input-field.component';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { MatSelectModule } from '@angular/material/select';
+import { MockMatLabel, MockMatError,  MockMatIcon } from '../../../mocks/material-mocks';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { By } from '@angular/platform-browser';
-import { MockMatLabel, MockMatError, MockMatSelect, MockMatIcon } from '../../../mocks/material-mocks';
-import {jest} from '@jest/globals';
+import { ReactiveFormsModule } from '@angular/forms';
 describe('InputFieldComponent', () => {
   let component: InputFieldComponent;
   let fixture: ComponentFixture<InputFieldComponent>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         InputFieldComponent,
         MockMatLabel,
         MockMatError,
-        MockMatSelect,
         MockMatIcon
-      ]
-   
+      ],
+      imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MatSelectModule 
+      ],
     }).compileComponents();
   });
-
   beforeEach(() => {
     fixture = TestBed.createComponent(InputFieldComponent);
     component = fixture.componentInstance;
@@ -65,11 +69,11 @@ describe('InputFieldComponent', () => {
     expect(errorElement.nativeElement.textContent).toContain('* Campo obligatorio'); // Verifica que el mensaje de error aparece
   });
 
-  it('should render select options', () => {
+ it('should render select options', () => {
     component.mode = 'select';
     component.options = ['Opción 1', 'Opción 2'];
     fixture.detectChanges();
-    const selectElement = fixture.debugElement.query(By.directive(MockMatSelect));
+    const selectElement = fixture.debugElement.query(By.css('mat-select'));
     expect(selectElement).toBeTruthy(); // Verifica que se renderiza el campo de selección
   });
 });
