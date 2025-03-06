@@ -39,6 +39,6 @@ Adicionales para Aprobación:
 |Req|Detalle|
 |:-|:-|
 |CRUD| 1. CRUD Contact <br> 2. CRUD Owner <br> 3. CRUD Shop <br> 4. CRUD Contract <br> 5. CRUD Order <br> 6. CRUD Spot <br> 7. CRUD Block <br> 8. CRUD Price <br> 9. CRUD DayOrderBlock |
-|CUU/Epic| 1. Registrar una orden publicitaria y todas sus clases asociadas, calculando los atributos propios de sus relaciones. <br> 2. Renovar automaticamente ordenes publicitarias regulares en el ultimo día del mes (cron.schedule). <br> 3. Cargar un archivo de audio en el spot y poder reproducirlo (Multer). <br> 4. Emitir listado de deudores <br> 5. Emitir estado de deuda de un titular. <br> 6. Registrar el pago de una orden. <br> 7. Registrar cancelación de una orden. <br> 7. Listado de publicidades a emitir. 
+|CUU/Epic| 1. Registrar una orden publicitaria y todas sus clases asociadas, calculando los atributos propios de sus relaciones. <br> 2. Renovar automaticamente ordenes publicitarias regulares en el ultimo día del mes (cron.schedule). <br> 3. Cargar un archivo de audio en el spot y poder reproducirlo (Multer). <br> 4. Emitir listado de deudores <br> 5. Emitir estado de deuda de un titular. <br> 6. Registrar el pago de una orden. <br> 7. Registrar cancelación de una orden. <br> 8. Listado de publicidades a emitir. 
 
 
