@@ -22,7 +22,8 @@ function sanitizeShopInput(req: Request, res: Response, next: NextFunction) {
         type: req.body.type,
         //numShop: req.body.numShop,
         contact: req.body.contact,
-        owner: req.body.owner
+        owner: req.body.owner,
+        id: req.params.id,
     }
 
     Object.keys(req.body.sanitizeInput).forEach( (key)=>{ //devuelve un arreglo con las keys y para cada uno chequeamos not null

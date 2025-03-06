@@ -48,7 +48,8 @@ function sanitizeContractInput(req: Request, res: Response, next: NextFunction) 
         dateFrom : req.body.dateFrom,
         dateTo : req.body.dateTo,
         observations : req.body.observations,
-        shop: req.body.shop
+        shop: req.body.shop,
+        id: req.params.id
     }
 
     Object.keys(req.body.sanitizeInput).forEach( (key)=>{ //devuelve un arreglo con las keys y para cada uno chequeamos not null
