@@ -8,4 +8,7 @@ import { Component, Input } from '@angular/core';
 export class CardComponent {
   @Input() title: string = '';
   @Input() summary: string = '';
+  @Input() options: string[] = [];
+  @Input() imagePath: string = '';
+  @Input() routerLinks: string[] = [];
 }
