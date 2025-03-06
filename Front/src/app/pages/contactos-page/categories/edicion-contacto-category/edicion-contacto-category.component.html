@@ -1,84 +1,80 @@
 <div id="edicion-contacto-category">
-    <div id="datos-contacto">
-      <app-title-and-subtitle
-        [title]="'Datos del Contacto'"
-        [subtitle]="'Ingrese el DNI del Contacto.'"
-      ></app-title-and-subtitle>
-  
-      <div class="fila-data">
-        <form [formGroup]="owner_form">
-          <div class="fila-data">
-            <fieldset>
-              <app-input-field
-                label="CUIT Titular"
-                placeholder="Ejemplo: 25444505879"
-                type="text"
-                [hintLabel]="'11 dígitos'"
-                [control]="cuitControl"
-                [validations]="{
-                  required: true,
-                  minLength: 11,
-                  maxLength: 11,
-                  pattern: '^[0-9]*$'
-                }"
-                [mode]="'input'"
-              ></app-input-field>
-            </fieldset>
+  <div id="datos-contacto">
+    <app-title-and-subtitle
+      [title]="'Datos del Contacto'"
+      [subtitle]="'Ingrese el DNI del Contacto.'"
+    ></app-title-and-subtitle>
 
-            <button
-              mat-raised-button
-              color="primary"
-              [disabled]="cuitControl.invalid"
-              (click)="findOwner()"
-            >
-              Check
-            </button>
-  
-            @if (errorMessageOwner) {
-            <button mat-button color="warn">
-              <mat-icon fontIcon="close"></mat-icon>
-              {{ errorMessageOwner }}
-            </button>
-            } @else if (ownerFounded) {
-            <button mat-button color="accent">
-              <mat-icon fontIcon="check"></mat-icon>
-              Titular existente.
-            </button>
-            }
-          </div>
-  
-          <div class="fila-data">
-            <fieldset>
-              <app-input-field
-                label="Razón Social"
-                placeholder="Ejemplo: Juan Pérez"
-                type="text"
-                [control]="businessNameControl"
-                [validations]="{ required: true }"
-                [mode]="'input'"
-              ></app-input-field>
-            </fieldset>
-            <fieldset>
-              <app-input-field
-                label="Condición Fiscal"
-                [control]="fiscalConditionControl"
-                [validations]="{ required: true }"
-                [mode]="'select'"
-                [options]="fiscalConditionTypes"
-              ></app-input-field>
-            </fieldset>
-          </div>
+      <form [formGroup]="contact_form">
+        <div class="flex-container">
+          <fieldset>
+            <app-input-field
+            label="DNI Contacto"
+            placeholder="Ejemplo: 44450587"
+            type="text"
+            [hintLabel]="'8 dígitos'"
+            [control]="dniControl"
+            [validations]="{
+              required: true,
+              minLength: 8,
+              maxLength: 8,
+              pattern: '^[0-9]*$'
+            }"
+            [mode]="'input'"
+          ></app-input-field>
+          </fieldset>
+
           <button
-        class="btn-guardar-cambios"
-        mat-flat-button
-        color="accent"
-        [disabled]="owner_form.invalid || !ownerFounded || btnControl"
-        (click)="openDialog()"
-      >
-        Guardar cambios
-      </button>
-        </form>
-      </div>
-    </div>
+            mat-raised-button
+            color="primary"
+            [disabled]="dniControl.invalid"
+            (click)="findContact()"
+          >
+            Check
+          </button>
+
+          @if (errorMessageContact) {
+          <button mat-button color="warn">
+            <mat-icon fontIcon="close"></mat-icon>
+            {{ errorMessageContact }}
+          </button>
+          } @else if (contactFounded) {
+          <button mat-button color="accent">
+            <mat-icon fontIcon="check"></mat-icon>
+            Contacto existente.
+          </button>
+          }
+        </div>
+
+        <div class="flex-container mt-4">
+          <fieldset>
+            <app-input-field
+              label="Nombre"
+              placeholder="Ejemplo: Marcos"
+              type="text"
+              [control]="nameControl"
+              [validations]="{ required: true }"
+              [mode]="'input'"
+            ></app-input-field>
+          </fieldset>
+          <fieldset>
+            <app-input-field
+              label="Apellido"
+              placeholder="Ejemplo: Del Solar"
+              type="text"
+              [control]="lastnameControl"
+              [validations]="{ required: true }"
+              [mode]="'input'"
+            ></app-input-field>
+          </fieldset>
+        </div>
+
+    <app-btn-guardar-cambios
+        [disabled]="contact_form.invalid || !contactFounded || btnControl"
+        (clickEvent)="openDialog()" 
+        [text]="'Guardar cambios'"
+      ></app-btn-guardar-cambios>
+      </form>
+  </div>
 
 </div>

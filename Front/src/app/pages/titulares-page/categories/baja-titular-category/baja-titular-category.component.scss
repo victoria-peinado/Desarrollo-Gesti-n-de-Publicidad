@@ -35,12 +35,12 @@
 }
 
 
-.btn-eliminar-titular {
+.btn-eliminar {
     margin: 1rem 0;
 }
 
 @media(width <= 584px) {
-    .btn-eliminar-titular {
+    .btn-eliminar {
         margin: 1rem auto;
         display: flex;
         flex-direction: row;

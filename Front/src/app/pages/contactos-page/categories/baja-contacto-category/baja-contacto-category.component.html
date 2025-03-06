@@ -1,73 +1,77 @@
 <div id="baja-contacto-category">
-    <div id="datos-contacto">
-      <app-title-and-subtitle
-        [title]="'Datos del Contacto'"
-        [subtitle]="'Ingrese el DNI del Contacto.'"
-      ></app-title-and-subtitle>
-  
-      <form [formGroup]="cuit_form">
-        <div class="grid-container">
-          <fieldset>
-            <app-input-field
-              label="CUIT Titular"
-              placeholder="Ejemplo: 25444505879"
-              type="text"
-              [hintLabel]="'11 dígitos'"
-              [control]="cuitControl"
-              [validations]="{
-                required: true,
-                minLength: 11,
-                maxLength: 11,
-                pattern: '^[0-9]*$'
-              }"
-              [mode]="'input'"
-            ></app-input-field>
-          </fieldset>
-              <app-datos-asociados
-                [datos]="[
-                  { atributo: 'Razón Social', valor: bussinessName },
-                  { atributo: 'Condición Fiscal', valor: fiscalCondition }
-                ]"
-                [formularioValido]="ownerFounded"
-                [cargando]="cargando"
-              >
-              </app-datos-asociados>
-    
-              @if (errorMessage) {
-              <button mat-button color="warn">
-                <mat-icon fontIcon="close"></mat-icon>
-                {{ errorMessage }}
-              </button>
-              } @else if (ownerFounded) {
-              <button mat-button color="accent">
-                <mat-icon fontIcon="check"></mat-icon>
-                Orden existente.
-              </button>
-              }
+  <div id="datos-contacto">
+    <app-title-and-subtitle
+      [title]="'Datos del Contacto'"
+      [subtitle]="'Ingrese el DNI del Contacto.'"
+    ></app-title-and-subtitle>
 
-  
-              
-  
-        </div>
+    <form [formGroup]="dni_form">
+      <div class="flex-container">
+        <fieldset>
+          <app-input-field
+            label="DNI Contacto"
+            placeholder="Ejemplo: 44450587"
+            type="text"
+            [hintLabel]="'8 dígitos'"
+            [control]="dniControl"
+            [validations]="{
+              required: true,
+              minLength: 8,
+              maxLength: 8,
+              pattern: '^[0-9]*$'
+            }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        
+
         <button
-              mat-raised-button
-              color="primary"
-              [disabled]="cuit_form.invalid"
-              (click)="findOwner()"
-            >
-              Check
-            </button>
-      </form>
-      <div class="fila-data">
-        <button
-        class="btn-eliminar-titular"
-        mat-flat-button
-        color="warn"
-        [disabled]="!ownerFounded || cuit_form.invalid"
-        (click)="openDialog()"
-      >
-        Eliminar Titular
-      </button>
+          mat-raised-button
+          color="primary"
+          [disabled]="dni_form.invalid"
+          (click)="findContact()"
+        >
+          Check
+        </button>
+
       </div>
-    </div>
+      
+
+      <div class="flex-container">
+        <app-datos-asociados
+          [datos]="[
+            { atributo: 'Nombre', valor: name },
+            { atributo: 'Apellido', valor: lastname }
+          ]"
+          [formularioValido]="contactFounded"
+          [cargando]="cargando"
+        >
+        </app-datos-asociados>
+
+        @if (errorMessage) {
+        <button mat-button color="warn">
+          <mat-icon fontIcon="close"></mat-icon>
+          {{ errorMessage }}
+        </button>
+        } @else if (contactFounded) {
+        <button mat-button color="accent">
+          <mat-icon fontIcon="check"></mat-icon>
+          Contacto existente.
+        </button>
+        }
+      </div>
+    </form>
+
+
+      <button
+      class="btn-eliminar"
+      mat-flat-button
+      color="warn"
+      [disabled]="!contactFounded || dni_form.invalid"
+      (click)="openDialog()"
+    >
+      Eliminar Contacto
+    </button>
+
   </div>
+</div>

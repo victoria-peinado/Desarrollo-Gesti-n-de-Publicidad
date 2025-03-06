@@ -6,11 +6,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { FISCAL_CONDITION_TYPES } from 'src/app/constants/constants';
-import { Owner } from 'src/app/models/owner.js';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-edicion-contacto-category',
@@ -20,136 +19,135 @@ import { MyDataService } from 'src/app/services/my-data.service';
 export class EdicionContactoCategoryComponent {
   @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
   
-    owner_form: FormGroup;
-    errorMessageOwner: string | null = null;
-    cuit: string = '';
-    ownerFounded: boolean = false;
-    bussinessName: string = '';
-    fiscalCondition: string = '';
+    contact_form: FormGroup;
+    errorMessageContact: string | null = null;
+    dni: string = '';
+    contactFounded: boolean = false;
+    name: string = '';
+    lastname: string = '';
     cargando: boolean = false;
-    ownerId: string = '';
-    owner: any = {};
-    fiscalConditionTypes: string[] = FISCAL_CONDITION_TYPES;
+    contactId: string = '';
+    contact: any = {};
   
     constructor(
       public dialog: MatDialog,
-      private _snackBar: MatSnackBar,
+      private _snackBar: SnackbarService,
       private myDataService: MyDataService
     ) {
-      this.owner_form = new FormGroup({
-        cuit: new FormControl('', [
+      this.contact_form = new FormGroup({
+        dni: new FormControl('', [
           Validators.required,
-          Validators.maxLength(11),
-          Validators.minLength(11),
+          Validators.maxLength(8),
+          Validators.minLength(8),
           Validators.pattern(/^[0-9]+$/),
         ]),
-        businessName: new FormControl(
+        name: new FormControl(
           { value: '', disabled: true },
           Validators.required
         ),
-        fiscalCondition: new FormControl(
+        lastname: new FormControl(
           { value: '', disabled: true },
           Validators.required
         ),
       });
     }
   
-    findOwner() {
-      this.cuit = this.cuitControl.value.trim();
+    findContact() {
+      this.dni = this.dniControl.value.trim();
   
-      if (!this.cuit) return;
+      if (!this.dni) return;
       this.cargando = true;
-      this.myDataService.getOwnerByCuit(this.cuit).subscribe({
+      this.myDataService.getContactByDni(this.dni).subscribe({
         next: (response) => {
-          this.ownerFounded = true;
-          this.ownerId = response.data.id;
-          this.cuit = response.data.cuit;
-          this.bussinessName = response.data.businessName;
-          this.fiscalCondition = response.data.fiscalCondition;
-          this.errorMessageOwner = null;
-          this.businessNameControl.enable();
-          this.fiscalConditionControl.enable();
-          this.businessNameControl.setValue(response.data.businessName);
-          this.fiscalConditionControl.setValue(response.data.fiscalCondition);
+          this.contactFounded = true;
+          this.contactId = response.data.id;
+          this.dni = response.data.dni;
+          this.name = response.data.name;
+          this.lastname = response.data.lastname;
+          this.errorMessageContact = null;
+          this.nameControl.enable();
+          this.lastnameControl.enable();
+          this.nameControl.setValue(response.data.name);
+          this.lastnameControl.setValue(response.data.lastname);
         },
         error: () => {
-          this.ownerFounded = false;
+          this.contactFounded = false;
           this.cargando = false;
-          this.errorMessageOwner = 'Titular inexistente.';
-          this.businessNameControl.disable();
-          this.fiscalConditionControl.disable();
-          this.businessNameControl.reset();
-          this.fiscalConditionControl.reset();
+          this.errorMessageContact = 'Contacto inexistente.';
+          this.nameControl.disable();
+          this.lastnameControl.disable();
+          this.nameControl.reset();
+          this.lastnameControl.reset();
           console.log('pasó por aquí');
         },
       });
     }
   
-    get cuitControl(): FormControl {
-      return this.owner_form.get('cuit') as FormControl;
+    get dniControl(): FormControl {
+      return this.contact_form.get('dni') as FormControl;
     }
   
-    get businessNameControl(): FormControl {
-      return this.owner_form.get('businessName') as FormControl;
+    get nameControl(): FormControl {
+      return this.contact_form.get('name') as FormControl;
     }
   
-    get fiscalConditionControl(): FormControl {
-      return this.owner_form.get('fiscalCondition') as FormControl;
+    get lastnameControl(): FormControl {
+      return this.contact_form.get('lastname') as FormControl;
     }
   
     get btnControl(): boolean {
       return (
-        this.bussinessName === this.businessNameControl.value &&
-        this.fiscalCondition === this.fiscalConditionControl.value
+        this.name === this.nameControl.value &&
+        this.lastname === this.lastnameControl.value
       );
     }
   
     clearForm() {
       this.formDirective?.resetForm();
-      this.errorMessageOwner = null;
-      this.ownerFounded = false;
-      this.bussinessName = '';
-      this.fiscalCondition = '';
+      this.errorMessageContact = null;
+      this.contactFounded = false;
+      this.dni = '';
+      this.name = '';
+      this.lastname = '';
       this.cargando = false;
-      this.ownerId = '';
-      this.owner = {};
+      this.contactId = '';
+      this.contact = {};
     }
-    patchOwner() {
-      if (this.bussinessName != this.businessNameControl.value) {
-        this.owner.businessName = this.businessNameControl.value;
+    patchContact() {
+      if (this.name != this.nameControl.value) {
+        this.contact.name = this.nameControl.value;
       }
   
-      if (this.fiscalCondition != this.fiscalConditionControl.value) {
-        this.owner.fiscalCondition = this.fiscalConditionControl.value;
+      if (this.lastname != this.lastnameControl.value) {
+        this.contact.lastname = this.lastnameControl.value;
       }
   
-      this.myDataService
-        .patchOwner(this.ownerId, this.owner)
-        .subscribe((response) => {
+      this.myDataService.patchContact(this.contactId, this.contact).subscribe({
+        next: (response: any) => {
+          this._snackBar.openSnackBar(response.message, 'success-snackbar');
           this.clearForm();
-          this.openSnackBar('Titular modificado exitosamente', 'Cerrar');
-        });
+        },
+        error: (error: any) => {
+          let errorMessage = error.error.errors
+            ? error.error.errors || error.error.messages
+            : error.error.messages;
+          this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+        },
+      });
     }
   
     openDialog(): void {
       console.log('xd');
       const dialogRef = this.dialog.open(DialogComponent, {
         data: {
-          text: `<p>¿Seguro que desea editar el Titular de CUIT <strong>${this.cuit}</strong>?</p>`,
+          text: `<p>¿Seguro que desea editar el Contacto de DNI <strong>${this.dni}</strong>?</p>`,
         },
       });
   
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
-          this.patchOwner();
+          this.patchContact();
         }
       });
     }
-  
-    openSnackBar(message: string, action: string) {
-      this._snackBar.open(message, action, {
-        duration: 5000,
-      });
-    }
-
 }
