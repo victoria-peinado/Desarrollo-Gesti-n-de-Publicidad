@@ -70,7 +70,9 @@ import { TestingComponent } from './pages/testing/testing.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { BtnGuardarCambiosComponent } from './components/btn-guardar-cambios/btn-guardar-cambios.component';
-
+import { ShowForRolesDirective } from './guards/show-for-roles.directive';
+import { CardComponent } from './components/card/card.component';
+import { InputContactsComponent } from './components/input-contacts/input-contacts.component';
 @NgModule({ declarations: [
         AppComponent,
         MainNavComponent,
@@ -134,15 +136,21 @@ import { BtnGuardarCambiosComponent } from './components/btn-guardar-cambios/btn
         WelcomePageComponent,
         TestingComponent,
         PerfilComponent,
-        BtnGuardarCambiosComponent
+        BtnGuardarCambiosComponent,
+        CardComponent,
+        InputContactsComponent,
+        
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [AppComponent], 
+    imports: [BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         MaterialModule,
         FormsModule,
-        ReactiveFormsModule], 
+        ReactiveFormsModule,
+        ShowForRolesDirective
+    ], 
     providers: [
         provideHttpClient(withInterceptorsFromDi()), 
         provideAnimationsAsync(),

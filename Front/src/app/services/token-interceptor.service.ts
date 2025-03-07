@@ -10,7 +10,7 @@ export class TokenInterceptorService implements HttpInterceptor {
   constructor() { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('token');
-    console.log('Token obtenido:', token);
+    // console.log('Token obtenido:', token);
     if (token) {
       const cloned = req.clone({
         headers: req.headers.set('Authorization', 'Bearer ' + token)

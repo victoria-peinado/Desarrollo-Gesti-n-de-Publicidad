@@ -1,12 +1,21 @@
-.fila-data {
+.flex-container {
     display: flex;
+    flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    gap: 2rem;
-    padding-bottom: 15px;
+    gap: 1rem;
+
+    button {
+        width: auto;
+        margin-bottom: 20px;
+    }
 }
 
-.btn-guardar-cambios {
-    margin-bottom: 5rem;
-
-}
+@media(width <= 584px) {
+    .flex-container {
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }

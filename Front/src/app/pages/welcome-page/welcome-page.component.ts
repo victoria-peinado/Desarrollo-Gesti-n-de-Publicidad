@@ -95,6 +95,7 @@ export class WelcomePageComponent implements AfterViewInit {
         console.log('Usuario creado:', response);
         this.openSnackBar('Registro exitoso', 'Cerrar', 5000, 'success-snackbar');
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.user.role);
         this.router.navigate(['/inicio']);
       },
       error: (error: any) => {
@@ -116,6 +117,7 @@ export class WelcomePageComponent implements AfterViewInit {
         console.log('Usuario logeado:', response);
         this.openSnackBar('Registro exitoso', 'Cerrar', 5000, 'success-snackbar');
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.user.role);
         this.router.navigate(['/inicio']);
       },
       error: (error: any) => {

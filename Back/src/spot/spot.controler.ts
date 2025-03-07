@@ -11,7 +11,8 @@ function sanitizeSpotInput(req: Request, res: Response, next: NextFunction) {
         long: req.body.long,
         name: req.body.name,
         path: req.body.path,
-        order: req.body.order
+        order: req.body.order,
+        id: req.params.id
     }
     Object.keys(req.body.sanitizeInput).forEach( (key)=>{ 
             if (req.body.sanitizeInput[key] === undefined) {

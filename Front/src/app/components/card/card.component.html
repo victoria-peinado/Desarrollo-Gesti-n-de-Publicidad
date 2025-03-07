@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="image-container">
+    <img class="image-wrapper" [src]="imagePath" alt="Autocomplete" />
+  </div>
+  <div class="card-title">{{ title }}</div>
+  <div class="card-summary">{{ summary }}</div>
+  <div class="options">
+    <button
+      *ngFor="let option of options"
+      mat-button
+      color="primary"
+      [routerLink]="routerLinks[options.indexOf(option)]"
+    >
+      {{ option }}
+    </button>
+  </div>
+</div>

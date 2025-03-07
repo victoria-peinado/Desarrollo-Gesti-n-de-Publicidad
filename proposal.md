@@ -12,10 +12,11 @@
 ## Tema
 ### Descripción
 La organización objeto de nuestro trabajo es una emisora de radio FM. Su equipo directivo nos encargó desarrollar un sistema que permita agilizar la gestión de publicidades de la misma. 
+Esta es la minuta de relevamiento inicial. [Minuta relevamiento](https://docs.google.com/document/d/17VS5a1s4kwa8LozVOTpg5zMMIRsvXpUy/edit?usp=sharing&ouid=117489587614602605707&rtpof=true&sd=true)
 
 
 ### Modelo
-![](https://github.com/victoria-peinado/Desarrollo-Gesti-n-de-Publicidad/blob/main/Documentacion/model.jpeg)
+![](https://github.com/victoria-peinado/Desarrollo-Gesti-n-de-Publicidad/blob/main/Documentacion/Modelo%20de%20Dominio%20-%20Publicidades-recortado.jpg)
 
 
 ## Alcance Funcional 
@@ -31,7 +32,14 @@ Regularidad:
 |CUU/Epic|1. Realizar una contratación<br>2. Realizar Orden_Publicitaria|
 
 
-//Cuando se diagrame nuevamente se eliminara la clase Dia
 
+### Alcance Aprobación directa
+
+Adicionales para Aprobación:
+|Req|Detalle|
+|:-|:-|
+|CRUD| 1. CRUD Contact <br> 2. CRUD Owner <br> 3. CRUD Shop <br> 4. CRUD Contract <br> 5. CRUD Order <br> 6. CRUD Spot <br> 7. CRUD Block <br> 8. CRUD Price <br> 9. CRUD DayOrderBlock |
+|CUU/Epic| 1. Registrar una orden publicitaria y todas sus clases asociadas, calculando los atributos propios de sus relaciones. <br> 2. Renovar automaticamente ordenes publicitarias regulares en el ultimo día del mes (cron.schedule). <br> 3. Cargar un archivo de audio en el spot y poder reproducirlo (Multer). <br> 4. Emitir listado de deudores <br> 5. Emitir estado de deuda de un titular. <br> 6. Registrar el pago de una orden. <br> 7. Registrar cancelación de una orden. <br> 8. Listado de publicidades a emitir. 
+|Métodos auxiliares| 1. Crear automaticamente todos los bloques. Uno cada 30 minutos. <br> 2. Asignar un precio a todos los bloques. |
 
 

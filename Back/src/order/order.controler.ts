@@ -37,7 +37,8 @@ function sanitizeOrderInput(req: Request, res: Response, next: NextFunction) {
         paymentObs: req.body.paymentObs,
         notRegStructure: req.body.notRegStructure,
         contract: req.body.contract,
-        spot: req.body.spot
+        spot: req.body.spot,
+        id: req.params.id
     }
     Object.keys(req.body.sanitizeInput).forEach((key) => {
         if (req.body.sanitizeInput[key] === undefined) {

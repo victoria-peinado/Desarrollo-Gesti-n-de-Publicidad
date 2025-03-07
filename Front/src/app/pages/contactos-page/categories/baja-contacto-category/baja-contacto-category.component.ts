@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-baja-contacto-category',
@@ -11,87 +11,99 @@ import { MyDataService } from 'src/app/services/my-data.service';
   styleUrl: './baja-contacto-category.component.scss'
 })
 export class BajaContactoCategoryComponent {
+@ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
 
-  cuit_form: FormGroup;
-        errorMessage: string | null = null;
-        cuit: string = '';
-        ownerFounded: boolean = false;
-        bussinessName: string = '';
-        fiscalCondition: string = '';
-        cargando: boolean = false;
-        ownerId: string = '';
-    
-        constructor(public dialog: MatDialog,
-            private _snackBar: MatSnackBar, private myDataService: MyDataService) {
-          this.cuit_form = new FormGroup({
-            cuit: new FormControl('', [
-              Validators.required,
-              Validators.maxLength(11),
-              Validators.minLength(11),
-              Validators.pattern(/^[0-9]+$/),
-            ])
-          });
-    
-        }
-      
-        findOwner() {
-          this.cuit = this.cuitControl.value.trim();
-      
-          if(!this.cuit) return;
-          this.cargando = true;
-          this.myDataService.getOwnerByCuit(this.cuit).subscribe({
-            next: (response) => {
-              this.ownerFounded = true;
-              this.ownerId = response.data.id;
-              this.cuit = response.data.cuit;
-              this.bussinessName = response.data.businessName;
-              this.fiscalCondition = response.data.fiscalCondition;
-              this.errorMessage = null;
-            },
-            error: (error) => {
-              console.log(error);
-              this.ownerFounded = false;
-              this.cargando = false;
-              this.errorMessage = 'Titular inexistente.';
-            },
-          });
-  
-        }
-      
-        get cuitControl(): FormControl {
-          return this.cuit_form.get('cuit') as FormControl;
-        }
-  
-        deleteOwner() {
-          this.myDataService.deleteOwner(this.ownerId).subscribe({
-            next: () => {
-              this.openSnackBar('Titular dado de baja', 'Cerrar');
-            },
-            error: (error) => {
-              console.log(error);
-              this.openSnackBar('Error al dar de baja el titular', 'Cerrar');
-            },
-          });
-        }
-  
-  
-        openDialog(): void {
-            const dialogRef = this.dialog.open(DialogComponent, {
-              data: {
-                text: `<p>¿Seguro que desea eliminar el Titular de CUIT <strong>${this.cuit}</strong>?</p>`,
-              },
-            });
-        
-            dialogRef.afterClosed().subscribe((result) => {
-              if (result) {
-                this.deleteOwner();
-              }
-            });
-          }
-        
-          openSnackBar(message: string, action: string) {
-            this._snackBar.open(message, action, {
-              duration: 5000,
-            });
-          }
+  dni_form: FormGroup;
+  errorMessage: string | null = null;
+  dni: string = '';
+  contactFounded: boolean = false;
+  name: string = '';
+  lastname: string = '';
+  contacts: string = '';
+  cargando: boolean = false;
+  contactId: string = '';
+
+  constructor(
+    public dialog: MatDialog,
+    private _snackBar: SnackbarService,
+    private myDataService: MyDataService
+  ) {
+    this.dni_form = new FormGroup({
+      dni: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(8),
+        Validators.minLength(8),
+        Validators.pattern(/^[0-9]+$/),
+      ]),
+    });
+  }
+
+  findContact() {
+    this.dni = this.dniControl.value.trim();
+
+    if (!this.dni) return;
+    this.cargando = true;
+    this.myDataService.getContactByDni(this.dni).subscribe({
+      next: (response) => {
+        this.contactFounded = true;
+        this.contactId = response.data.id;
+        this.dni = response.data.dni;
+        this.name = response.data.name;
+        this.lastname = response.data.lastname;
+        this.contacts = response.data.contacts.join(", ");
+        this.errorMessage = null;
+      },
+      error: (error) => {
+        console.log(error);
+        this.contactFounded = false;
+        this.cargando = false;
+        this.errorMessage = 'Contacto inexistente.';
+      },
+    });
+  }
+
+  get dniControl(): FormControl {
+    return this.dni_form.get('dni') as FormControl;
+  }
+
+  clearForm() {
+    this.formDirective?.resetForm();
+    this.errorMessage = null;
+    this.contactFounded = false;
+    this.dni = '';
+    this.name = '';
+    this.lastname = '';
+    this.contacts = '';
+    this.cargando = false;
+    this.contactId = '';
+  }
+
+  deleteContact() {
+    this.myDataService.deleteContact(this.contactId).subscribe({
+      next: (response: any) => {
+        this._snackBar.openSnackBar(response.message, 'success-snackbar');
+        this.clearForm();
+      },
+      error: (error: any) => {
+        let errorMessage = error.error.errors
+          ? error.error.errors || error.error.messages
+          : error.error.messages;
+        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+      },
+    });
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        text: `<p>¿Seguro que desea eliminar el Contacto de DNI <strong>${this.dni}</strong>?</p>`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteContact();
+      }
+    });
+  }
 }

@@ -24,6 +24,7 @@ async function validateUniqueFields<T extends { id?: any }>(
     uniqueFieldsMap: Record<keyof T, EntityRepository<T>>,
     sanitizeInput: Partial<T>
 ): Promise<{ valid: boolean; messages: string[] }> {
+    console.log(sanitizeInput.id);
     const errors = await Promise.all(
         Object.entries(uniqueFieldsMap).map(async ([field, repository]) => {
             const exists = await valueExists(repository, field as keyof T, sanitizeInput[field as keyof T], sanitizeInput.id);
