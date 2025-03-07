@@ -3,6 +3,7 @@ import { MyDataService } from '../services/my-data.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 import { ShowForRolesDirective } from '../guards/show-for-roles.directive';
+import { ContentObserver } from '@angular/cdk/observers/index.js';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -123,7 +124,10 @@ ngOnInit() {
             return span && span.textContent?.trim() === this.lastOpenedSubMenu;
           });
           if (targetButton) {
-            this.toggleSubMenuInternal(targetButton);
+            const nextElement = targetButton.nextElementSibling as HTMLElement;
+            if (!nextElement.classList.contains('show')) {
+              this.toggleSubMenuInternal(targetButton);
+            }
           }
         }, 100);
       }
@@ -131,7 +135,7 @@ ngOnInit() {
   });
 }
  ngAfterViewInit() {
-    this.loadMenuState();
+    // this.loadMenuState();
   }
 
 toggleSidebar() {
@@ -152,7 +156,8 @@ toggleSubMenuInternal(button: HTMLElement) {
   const nextElement = button.nextElementSibling as HTMLElement;
   if (!nextElement) return;
 
-  const menuTitle = button.textContent?.trim();
+  const span = button.querySelector('span');
+  const menuTitle = span?.textContent?.trim();
 
   if (!nextElement.classList.contains('show')) {
     this.closeAllSubMenus();
@@ -171,64 +176,67 @@ toggleSubMenuInternal(button: HTMLElement) {
 
   setActive(menuItem: string) {
     this.selectedMenuItem = menuItem;
-
+    console.log(this.selectedMenuItem);
+    console.log(this.lastOpenedSubMenu);
     if (this.isItemWithoutSubMenu(menuItem)) {
-      
+      this.closeAllSubMenus();
       this.saveMenuState();
     } else {
       this.saveMenuState();
+
     }
   }
 
   closeAllSubMenus() {
-    // console.log('closeAllSubMenus');
-    // if (this.sidebar) {
-    //   Array.from(this.sidebar.nativeElement.getElementsByClassName('show') as HTMLCollectionOf<HTMLElement>).forEach((ul) => {
-    //     ul.classList.remove('show');
-    //     const previousSibling = ul.previousElementSibling as HTMLElement;
-    //     if (previousSibling) {
-    //       previousSibling.classList.remove('rotate');
-    //     }
-    //     this.cdr.detectChanges();
-    //   });
-    // }
+    console.log('closeAllSubMenus');
+    if (this.sidebar) {
+      Array.from(this.sidebar.nativeElement.getElementsByClassName('show') as HTMLCollectionOf<HTMLElement>).forEach((ul) => {
+        ul.classList.remove('show');
+        const previousSibling = ul.previousElementSibling as HTMLElement;
+        if (previousSibling) {
+          previousSibling.classList.remove('rotate');
+        }
+        this.cdr.detectChanges();
+      });
+    }
   }
 
   saveMenuState() {
     localStorage.setItem('selectedMenuItem', this.selectedMenuItem);
     localStorage.setItem('lastOpenedSubMenu', this.lastOpenedSubMenu);
+    
   }
 
   loadMenuState() {
-    // const savedMenuItem = localStorage.getItem('selectedMenuItem');
-    // const savedLastOpenedSubMenu = localStorage.getItem('lastOpenedSubMenu');
+  const savedMenuItem = localStorage.getItem('selectedMenuItem');
+  const savedLastOpenedSubMenu = localStorage.getItem('lastOpenedSubMenu');
 
-    // if (savedMenuItem) {
-    //   this.selectedMenuItem = savedMenuItem;
-    // }
-
-    // // if (this.isItemWithoutSubMenu(this.selectedMenuItem)) {
-    // //   this.closeAllSubMenus();
-    // // }
-
-    // if (savedLastOpenedSubMenu) {
-    //   this.lastOpenedSubMenu = savedLastOpenedSubMenu;
-
-    //   setTimeout(() => {
-    //     const button = Array.from(document.querySelectorAll('.dropdown-btn')) as HTMLElement[];
-    //     const targetButton = button.find(btn => btn.textContent?.trim() === this.lastOpenedSubMenu);
-
-    //     if (targetButton && !this.isItemWithoutSubMenu(this.selectedMenuItem)) {
-    //       const nextElement = targetButton.nextElementSibling as HTMLElement;
-    //       if (nextElement) {
-    //         nextElement.classList.add('show');
-    //         targetButton.classList.add('rotate');
-    //       }
-    //     }
-    //   }, 100);
-    // }
-    // this.cdr.detectChanges();
+  if (savedMenuItem) {
+    this.selectedMenuItem = savedMenuItem;
   }
+
+  if (savedLastOpenedSubMenu) {
+    this.lastOpenedSubMenu = savedLastOpenedSubMenu;
+
+    setTimeout(() => {
+      const button = Array.from(document.querySelectorAll('.dropdown-btn')) as HTMLElement[];
+      const targetButton = button.find(btn => {
+        const span = btn.querySelector('span');
+        return span && span.textContent?.trim() === this.lastOpenedSubMenu;
+      });
+
+      if (targetButton && !this.isItemWithoutSubMenu(this.selectedMenuItem)) {
+        const nextElement = targetButton.nextElementSibling as HTMLElement;
+        if (nextElement) {
+          nextElement.classList.add('show');
+          targetButton.classList.add('rotate');
+        }
+      }
+    }, 100);
+  }
+  this.cdr.detectChanges();
+}
+
 
   isItemWithoutSubMenu(menuItem: string): boolean {
     return this.menuItems.itemsWithoutSubMenu.includes(menuItem);
