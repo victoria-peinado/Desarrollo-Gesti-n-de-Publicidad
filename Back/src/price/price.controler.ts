@@ -12,7 +12,8 @@ em.getRepository(Block)
 function sanitizePriceInput(req: Request, res: Response, next: NextFunction) {
     req.body.sanitizeInput = {
         value: req.body.value,
-        block: req.body.block
+        block: req.body.block,
+        id: req.params.id
     }
     Object.keys(req.body.sanitizeInput).forEach( (key)=>{ //devuelve un arreglo con las keys y para cada uno chequeamos not null
         if (req.body.sanitizeInput[key] === undefined) {

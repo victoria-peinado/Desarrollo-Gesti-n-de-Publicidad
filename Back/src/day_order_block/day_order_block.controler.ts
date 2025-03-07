@@ -11,6 +11,7 @@ function sanitizeDOBInput(req: Request, res: Response, next: NextFunction) {
         day: req.body.day,
         block: req.body.block,
         order: req.body.order,
+        id: req.params.id
     }
     Object.keys(req.body.sanitizeInput).forEach((key) => { //devuelve un arreglo con las keys y para cada uno chequeamos not null
         if (req.body.sanitizeInput[key] === undefined) {
@@ -43,7 +44,7 @@ async function findOne(req: Request, res: Response) {
     }
 }
 
-//ESTOY CAMBIANDO LA EN LA OTRA RAMA
+
 
 async function findByDates(req: Request, res: Response) {
     try {

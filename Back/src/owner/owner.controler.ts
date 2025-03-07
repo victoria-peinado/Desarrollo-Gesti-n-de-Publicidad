@@ -12,9 +12,11 @@ em.getRepository(Owner)
 
 function sanitizeOwnerInput(req: Request, res: Response, next: NextFunction) {
     req.body.sanitizeInput = {
+
         cuit: req.body.cuit,
         businessName: req.body.businessName,
         fiscalCondition: req.body.fiscalCondition,
+        id: req.params.id,
     }
     Object.keys(req.body.sanitizeInput).forEach( (key)=>{ //devuelve un arreglo con las keys y para cada uno chequeamos not null
         if (req.body.sanitizeInput[key] === undefined) {

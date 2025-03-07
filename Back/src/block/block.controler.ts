@@ -48,7 +48,8 @@ function sanitizeBlockInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizeInput = {
     numBlock: req.body.numBlock,
     startTime: req.body.startTime,
-    numsList: req.body.numsList
+    numsList: req.body.numsList,
+    id: req.params.id
   };
 
   Object.keys(req.body.sanitizeInput).forEach((key) => {

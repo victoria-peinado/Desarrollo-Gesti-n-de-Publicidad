@@ -148,6 +148,7 @@ function sanitizeDatesFilterInput(req: Request, res: Response, next: NextFunctio
     req.body.sanitizeInput = {
         dateFrom: req.body.dateFrom,
         dateTo: req.body.dateTo,
+        id: req.params.id
     }
     Object.keys(req.body.sanitizeInput).forEach((key) => {
         if (req.body.sanitizeInput[key] === undefined) {

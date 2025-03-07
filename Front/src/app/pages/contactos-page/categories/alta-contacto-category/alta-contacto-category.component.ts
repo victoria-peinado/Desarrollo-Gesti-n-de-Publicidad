@@ -1,101 +1,112 @@
-import { Component, ViewChild } from '@angular/core';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { Component, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
-import { FISCAL_CONDITION_TYPES } from 'src/app/constants/constants';
-import { Owner } from 'src/app/models/owner';
+import { Contact } from 'src/app/models/contact';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { InputContactsComponent } from 'src/app/components/input-contacts/input-contacts.component';
+
 @Component({
   selector: 'app-alta-contacto-category',
   templateUrl: './alta-contacto-category.component.html',
-  styleUrl: './alta-contacto-category.component.scss'
+  styleUrl: './alta-contacto-category.component.scss',
 })
 export class AltaContactoCategoryComponent {
-@ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
-  owner_form: FormGroup;
-  fiscalConditionTypes: string[] = FISCAL_CONDITION_TYPES;
-  owner: Owner = {
-    cuit: '',
-    businessName: '',
-    fiscalCondition: '',
+  addOnBlur = true;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  contacts: string[] = [];
+
+  
+  
+  @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
+  @ViewChild(InputContactsComponent) inputContactsComponent!: InputContactsComponent;
+  
+
+  contact_form: FormGroup;
+  contact: Contact = {
+    dni: '',
+    name: '',
+    lastname: '',
+    contacts: []
   };
 
   constructor(
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
+    private _snackBar: SnackbarService,
     private myDataService: MyDataService
   ) {
-    this.owner_form = new FormGroup({
-      cuit: new FormControl('', [
+    this.contact_form = new FormGroup({
+      dni: new FormControl('', [
         Validators.required,
-        Validators.maxLength(11),
-        Validators.minLength(11),
+        Validators.maxLength(8),
+        Validators.minLength(8),
         Validators.pattern(/^[0-9]+$/),
       ]),
-      businessName: new FormControl('', Validators.required),
-      fiscalCondition: new FormControl('', Validators.required),
+      name: new FormControl('', Validators.required),
+      lastname: new FormControl('', Validators.required)
     });
   }
 
-  get cuitControl(): FormControl {
-    return this.owner_form.get('cuit') as FormControl;
+  get dniControl(): FormControl {
+    return this.contact_form.get('dni') as FormControl;
   }
 
-  get businessNameControl(): FormControl {
-    return this.owner_form.get('businessName') as FormControl;
+  get nameControl(): FormControl {
+    return this.contact_form.get('name') as FormControl;
   }
 
-  get fiscalConditionControl(): FormControl {
-    return this.owner_form.get('fiscalCondition') as FormControl;
+  get lastnameControl(): FormControl {
+    return this.contact_form.get('lastname') as FormControl;
   }
 
   clearForm() {
     this.formDirective?.resetForm();
+    this.inputContactsComponent.clearForm();
+    this.contacts = [];
+    this.contact ={
+      dni: '',
+      name: '',
+      lastname: '',
+      contacts: []}
+    
   }
 
-  createOwner() {
-    this.owner.cuit = this.cuitControl.value;
-    this.owner.businessName = this.businessNameControl.value;
-    this.owner.fiscalCondition = this.fiscalConditionControl.value;
+  createContact() {
+    this.contact.dni = this.dniControl.value;
+    this.contact.name = this.nameControl.value;
+    this.contact.lastname = this.lastnameControl.value;
+    this.contact.contacts = this.contacts;
 
-    this.myDataService.createOwner(this.owner).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.openSnackBar(
-          `Titular ${this.businessNameControl.value} creado con éxito`,
-          'Cerrar'
-        );
-        this.clearForm()
+    this.myDataService.createContact(this.contact).subscribe({
+      next: (response: any) => {
+        this._snackBar.openSnackBar(response.message, 'success-snackbar');
+        this.clearForm();
       },
-      error: (error) => {
-        console.log(error);
-        this.openSnackBar(
-          `Error al crear el titular ${this.businessNameControl.value}`,
-          'Cerrar'
-        );
+      error: (error: any) => {
+        let errorMessage = error.error.errors ? error.error.errors || error.error.messages: error.error.messages;
+        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
       },
     });
   }
 
   openDialog(): void {
+    console.log(this.contacts);
     console.log('xd');
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
-        text: `<p>¿Seguro que desea crear el nuevo Titular ${this.businessNameControl.value}?</p>`,
+        text: `<p>¿Seguro que desea crear el nuevo Contacto ${this.nameControl.value + ' ' + this.lastnameControl.value}?</p>`,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.createOwner();
+        this.createContact();
       }
     });
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 5000,
-    });
-  }
 }
