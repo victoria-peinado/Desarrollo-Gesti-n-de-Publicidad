@@ -107,9 +107,7 @@ export class HomeComponent implements AfterViewInit {
 
 ngOnInit() {
   this.router.events.subscribe(event => {
-    console.log('Evento de router:', event);
     if ((event as any).routerEvent && (event as any).routerEvent instanceof NavigationEnd) {
-      console.log('Evento NavigationEnd capturado');
       const currentPath = (event as any).routerEvent.urlAfterRedirects;
       const menuConfig = this.menuMapping[currentPath];
       if (menuConfig) {
@@ -132,7 +130,7 @@ ngOnInit() {
     }
   });
 }
-  ngAfterViewInit() {
+ ngAfterViewInit() {
     this.loadMenuState();
   }
 
@@ -175,7 +173,7 @@ toggleSubMenuInternal(button: HTMLElement) {
     this.selectedMenuItem = menuItem;
 
     if (this.isItemWithoutSubMenu(menuItem)) {
-      this.closeAllSubMenus();
+      
       this.saveMenuState();
     } else {
       this.saveMenuState();
@@ -183,16 +181,17 @@ toggleSubMenuInternal(button: HTMLElement) {
   }
 
   closeAllSubMenus() {
-    if (this.sidebar) {
-      Array.from(this.sidebar.nativeElement.getElementsByClassName('show') as HTMLCollectionOf<HTMLElement>).forEach((ul) => {
-        ul.classList.remove('show');
-        const previousSibling = ul.previousElementSibling as HTMLElement;
-        if (previousSibling) {
-          previousSibling.classList.remove('rotate');
-        }
-        this.cdr.detectChanges();
-      });
-    }
+    // console.log('closeAllSubMenus');
+    // if (this.sidebar) {
+    //   Array.from(this.sidebar.nativeElement.getElementsByClassName('show') as HTMLCollectionOf<HTMLElement>).forEach((ul) => {
+    //     ul.classList.remove('show');
+    //     const previousSibling = ul.previousElementSibling as HTMLElement;
+    //     if (previousSibling) {
+    //       previousSibling.classList.remove('rotate');
+    //     }
+    //     this.cdr.detectChanges();
+    //   });
+    // }
   }
 
   saveMenuState() {
@@ -201,34 +200,34 @@ toggleSubMenuInternal(button: HTMLElement) {
   }
 
   loadMenuState() {
-    const savedMenuItem = localStorage.getItem('selectedMenuItem');
-    const savedLastOpenedSubMenu = localStorage.getItem('lastOpenedSubMenu');
+    // const savedMenuItem = localStorage.getItem('selectedMenuItem');
+    // const savedLastOpenedSubMenu = localStorage.getItem('lastOpenedSubMenu');
 
-    if (savedMenuItem) {
-      this.selectedMenuItem = savedMenuItem;
-    }
+    // if (savedMenuItem) {
+    //   this.selectedMenuItem = savedMenuItem;
+    // }
 
-    if (this.isItemWithoutSubMenu(this.selectedMenuItem)) {
-      this.closeAllSubMenus();
-    }
+    // // if (this.isItemWithoutSubMenu(this.selectedMenuItem)) {
+    // //   this.closeAllSubMenus();
+    // // }
 
-    if (savedLastOpenedSubMenu) {
-      this.lastOpenedSubMenu = savedLastOpenedSubMenu;
+    // if (savedLastOpenedSubMenu) {
+    //   this.lastOpenedSubMenu = savedLastOpenedSubMenu;
 
-      setTimeout(() => {
-        const button = Array.from(document.querySelectorAll('.dropdown-btn')) as HTMLElement[];
-        const targetButton = button.find(btn => btn.textContent?.trim() === this.lastOpenedSubMenu);
+    //   setTimeout(() => {
+    //     const button = Array.from(document.querySelectorAll('.dropdown-btn')) as HTMLElement[];
+    //     const targetButton = button.find(btn => btn.textContent?.trim() === this.lastOpenedSubMenu);
 
-        if (targetButton && !this.isItemWithoutSubMenu(this.selectedMenuItem)) {
-          const nextElement = targetButton.nextElementSibling as HTMLElement;
-          if (nextElement) {
-            nextElement.classList.add('show');
-            targetButton.classList.add('rotate');
-          }
-        }
-      }, 100);
-    }
-    this.cdr.detectChanges();
+    //     if (targetButton && !this.isItemWithoutSubMenu(this.selectedMenuItem)) {
+    //       const nextElement = targetButton.nextElementSibling as HTMLElement;
+    //       if (nextElement) {
+    //         nextElement.classList.add('show');
+    //         targetButton.classList.add('rotate');
+    //       }
+    //     }
+    //   }, 100);
+    // }
+    // this.cdr.detectChanges();
   }
 
   isItemWithoutSubMenu(menuItem: string): boolean {
