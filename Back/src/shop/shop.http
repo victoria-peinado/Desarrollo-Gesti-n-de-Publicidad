@@ -61,6 +61,9 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
+    "fantasyName": "Prueba 4",
+    "address": "Sarmiento 439",
+    "billingType": "Factura A",
     "fantasyName": "Indumentaria Styles",
     "address": {
         "street": "Calle",
@@ -74,7 +77,7 @@ Content-Type: application/json
     "usualPaymentForm": "Factura A",
     "type": "Minorista",
     "contact":"654ad0d341b4fa27919f8af8",
-    "owner": "65c08f2dad3fb943fc5cb294"   
+    "owner": "65c08f2dad3fb943fc5cb294"
 }
 
 ### PUT

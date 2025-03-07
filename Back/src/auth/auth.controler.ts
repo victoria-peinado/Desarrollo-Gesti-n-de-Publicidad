@@ -74,7 +74,7 @@ async function add(req: Request, res: Response) {
       const token = jwt.sign(
         { id: auth.id, role: auth.role },
         secret,
-        { expiresIn: '1h' }
+        { expiresIn: '5h' }
       );
 
       res.status(201).json({
