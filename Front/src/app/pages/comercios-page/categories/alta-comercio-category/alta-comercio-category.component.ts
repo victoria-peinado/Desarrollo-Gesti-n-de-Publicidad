@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormArray, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
-import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping.js';
+
 import {
   BILLING_TYPES,
   FISCAL_CONDITION_TYPES,
@@ -22,9 +22,18 @@ import { MyDataService } from 'src/app/services/my-data.service';
   styleUrl: './alta-comercio-category.component.scss',
 })
 export class AltaComercioCategoryComponent {
+  @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
+
   owner_form: FormGroup;
   shop_form: FormGroup;
   contact_form: FormGroup;
+
+  isOwnerChecked: boolean = true;
+  isOwnerFirstChecked: boolean = false;
+  isNextContact: boolean = false;
+  isNextShop: boolean = false;
+
+
 
   fantasyName: string = '';
   bussinessName: string = '';
@@ -95,12 +104,30 @@ export class AltaComercioCategoryComponent {
   }
 
 
-
+  clearForm(defaultValues: any) {
+    if (this.formDirective) {
+      this.formDirective.resetForm(defaultValues);
+    }
+  }
+  
+  
   
   findOwner() {
     this.cuit = this.cuitControl.value.trim();
 
     if (!this.cuit) return;
+
+    
+
+    if(this.isOwnerFirstChecked) {
+      this.isOwnerChecked = false; 
+    setTimeout(() => {
+      this.isOwnerChecked = true;
+    });
+    }
+
+    this.isOwnerFirstChecked = true;
+    
 
     this.myDataService.getOwnerByCuit(this.cuit).subscribe({
       next: (response: any) => {
@@ -108,6 +135,8 @@ export class AltaComercioCategoryComponent {
         this.ownerFounded = true;
         this.errorMessageOwner = null;
         this.ownerId = response.data.id;
+        this.businessNameControl.disable();
+        this.fiscalConditionControl.disable();
         this.businessNameControl.setValue(response.data.businessName);
         this.fiscalConditionControl.setValue(response.data.fiscalCondition);
       },
@@ -115,11 +144,11 @@ export class AltaComercioCategoryComponent {
         this.ownerFounded = false;
         this.businessNameControl.enable();
         this.fiscalConditionControl.enable();
-        this.businessNameControl.reset();
-        this.fiscalConditionControl.reset();
+        this.clearForm({ cuit: this.owner_form.get('cuit')?.value, businessName: '', fiscalCondition: '' });
         this.ownerId = '';
-        this.errorMessageOwner = 'Titular inexistente.';
+        this.errorMessageOwner = 'Titular nuevo.';
       },
+
     });
   }
 
@@ -140,8 +169,6 @@ export class AltaComercioCategoryComponent {
         this.contactFounded = false;
         this.nameControl.enable();
         this.lastnameControl.enable();
-        this.nameControl.reset();
-        this.lastnameControl.reset();
         this.contactId = '';
         this.errorMessageContact = 'Contacto inexistente.';
       },
@@ -293,7 +320,13 @@ export class AltaComercioCategoryComponent {
     });
   }
   
+  nextContact() {
+    this.isNextContact = true;
+  }
 
+  nextShop() {
+    this.isNextShop = true;
+  }
   openDialog(): void {
     console.log('xd')
     const dialogRef = this.dialog.open(DialogComponent, {

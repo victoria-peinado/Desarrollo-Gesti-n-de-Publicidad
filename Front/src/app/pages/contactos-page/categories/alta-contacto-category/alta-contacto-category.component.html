@@ -45,13 +45,16 @@
               ></app-input-field>
             </fieldset>
           </div>
+
+          <div class="mt-4">
+            <app-input-contacts [(contacts)]="contacts"></app-input-contacts>
+          </div>
           
-            
-            
+
         </form>
 
         <app-btn-guardar-cambios
-        [disabled]="contact_form.invalid"
+        [disabled]="contact_form.invalid || (contacts.length===0)"
         (clickEvent)="openDialog()" 
         [text]="'Guardar cambios'"
       ></app-btn-guardar-cambios>

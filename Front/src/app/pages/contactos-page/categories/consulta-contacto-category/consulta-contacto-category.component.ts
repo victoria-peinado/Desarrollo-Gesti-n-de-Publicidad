@@ -13,6 +13,7 @@ export class ConsultaContactoCategoryComponent {
     contactFounded: boolean = false;
     name: string = '';
     lastname: string = '';
+    contacts: string = '';
     cargando: boolean = false;
 
     constructor(private myDataService: MyDataService) {
@@ -37,6 +38,7 @@ export class ConsultaContactoCategoryComponent {
           this.contactFounded = true;
           this.name = response.data.name;
           this.lastname = response.data.lastname;
+          this.contacts = response.data.contacts.join(", ");
           this.errorMessage = null;
         },
         error: () => {

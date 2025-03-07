@@ -18,6 +18,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatChipsModule} from '@angular/material/chips';
 
 
 
@@ -40,7 +41,8 @@ const MaterialComponents = [
   MatMenuModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatRadioModule
+  MatRadioModule,
+  MatChipsModule
 
 ]
 
@@ -48,6 +50,6 @@ const MaterialComponents = [
   imports: [MaterialComponents    
   ],
   exports: [MaterialComponents 
-  ]
+  ],
 })
 export class MaterialModule { }
