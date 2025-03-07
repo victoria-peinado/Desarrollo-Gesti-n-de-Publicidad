@@ -1,0 +1,1959 @@
+tags:
+
+  - name: Auth
+    description: Autenticacion de usuario.
+
+  - name: Order
+    description: Orden publicitaria.
+
+  - name: Contract
+    description: Acuerdo entre la emisora y el comercio.
+
+  - name: Owner
+    description: Dueño de un comercio.
+
+  - name: Contact
+    description: Dueño de un comercio.
+
+  - name: Shop
+    description: Representación de un comercio.
+
+  - name: Spot
+    description: Audio de una publicidad.
+
+paths:
+
+# AUTH
+
+  /api/auth/login:
+    post:
+      tags: 
+        - Auth
+      summary: Logea a un usuario
+      security:
+        - bearerAuth: []
+      description: Logea a un usuario y devuelve el token
+      operationId: logIn
+      requestBody:
+        description: Envio de credenciales para login
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/Auth'
+          required: true
+      responses:
+        '200':
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+                            
+            
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+# CONTRACT
+
+  #Get-All-Contracts
+  /api/contract:
+    get:
+      tags: 
+        - Contract
+      summary: Lista todos los contractos existentes
+      security:
+        - bearerAuth: []
+      description: Listar todos los contratos existentes con sus respectivos comercios.
+      operationId: CONTRACT-GET-ALL
+
+      responses:
+        '200':
+          description: All contracts found successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                    - $ref: '#/components/schemas/ApiResponse'
+                    - type: object
+                      properties:
+                        data:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Contract'      
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindOneContract
+  /api/contract/{contractId}:
+    get:
+      tags: 
+        - Contract
+      summary: Encuentra un contrato
+      security:
+        - bearerAuth: []
+      description: Devuelve un contrato y sus comercios.
+      operationId: CONTRACT-GET-ONE
+      parameters:
+        - name: contractId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: All contacts found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contract founded
+                  data:
+                    $ref: '#/components/schemas/Contract'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Add-Contract
+  /api/contract/:
+    post:
+      tags: 
+        - Contract
+      summary: Crear un contrato
+      security:
+        - bearerAuth: []
+      description: Da de alta un nuevo contrato con los datos enviados.
+      operationId: CONTRACT-ADD
+
+      requestBody:
+        description: Envio de datos para crear el nuevo contrato
+        $ref: '#/components/requestBodies/Contract'
+
+
+      responses:
+        '201':
+          description: Contract created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contract created successfully
+                  data:
+                    $ref: '#/components/schemas/Contract'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+  
+  #Put
+  /api/contract/{putId}:
+    put:
+      tags: 
+        - Contract
+      summary: Editar un contrato
+      security:
+        - bearerAuth: []
+      description: Edita un contrato de forma idempotente (siempre que se ejecuta logra el mismo resultado).
+      operationId: CONTRACT-PUT
+
+      parameters:
+        - name: putId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar el contrato
+        $ref: '#/components/requestBodies/Contract'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y el contrato actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contract updated successfully
+                  data:
+                    $ref: '#/components/schemas/Contract'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+            
+  #Patch
+  /api/contract/{patchId}:
+    patch:
+      tags: 
+        - Contract
+      summary: Editar un contrato
+      security:
+        - bearerAuth: []
+      description: Edita un contrato de forma parcial o total.
+      operationId: CONTRACT-PATCH
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar el contrato
+        $ref: '#/components/requestBodies/ContractPatch'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y el contrato actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contract updated successfully
+                  data:
+                    $ref: '#/components/schemas/Contract'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Delete
+  /api/contract/{deleteId}:
+    delete: 
+      tags: 
+        - Contract
+      summary: Eliminar un contrato
+      security:
+        - bearerAuth: []
+      description: OPERACIÓN NO PERMITIDA
+      operationId: CONTRACT-DELETE
+
+      parameters:
+        - name: deleteId
+          in: path
+          required: true
+          schema:
+            type: string
+
+  
+
+      responses:
+        '403':
+          description: La operación no esta habilitada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: This operation is not allowed
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+#OWNER
+
+  #Get-all-Owners
+  /api/owner:
+    get:
+      tags: 
+        - Owner
+      summary: Lista todos los owners (dueños) existentes
+      security:
+        - bearerAuth: []
+      description: Listar todos los dueños existentes con sus respectivos comercios. El dueño es a quien se factura los servicios.
+      operationId: OWNER-GET-ALL
+
+      responses:
+        '200':
+          description: All owners found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All owners found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Owner'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindOneOwner
+  /api/owner/{ownerId}:
+    get:
+      tags: 
+        - Owner
+      summary: Encontrar un Owner
+      security:
+        - bearerAuth: []
+      description: Devuelve un dueño con sus comercios (shops) y sus contactos (contact)-
+      operationId: OWNER-GET-ONE
+      parameters:
+        - name: ownerId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Owners found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Owners found successfully
+                  data:
+                    $ref: '#/components/schemas/Owner'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #GetOwnerByCuit
+  /api/owner/cuit/{ownerCuit}:
+    get:
+      tags: 
+        - Owner
+      summary: Encontrar un Owner por su cuit
+      security:
+        - bearerAuth: []
+      description: Devuelve un dueño con sus comercios (shops).
+      operationId: OWNER-GET-ONE-BY-CUIT
+      parameters:
+        - name: ownerCuit
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Owners found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Owners found successfully
+                  data:
+                    $ref: '#/components/schemas/Owner'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+        '404':
+          description: Owner not found
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Owner not found'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Add-Owner
+  /api/owner/:
+    post:
+      tags: 
+        - Owner
+      summary: Crear un Dueño (Owner)
+      security:
+        - bearerAuth: []
+      description: Dar de alta un nuevo dueño.
+      operationId: OWNER-ADD
+
+      requestBody:
+        description: Envio de datos para crear el nuevo Dueño
+        $ref: '#/components/requestBodies/Owner'
+
+
+      responses:
+        '201':
+          description: Owner created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Owner created successfully
+                  data:
+                    $ref: '#/components/schemas/Owner'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Put
+  /api/owner/{putId}:
+    put:
+      tags: 
+        - Owner
+      summary: Editar un dueño
+      security:
+        - bearerAuth: []
+      description: Edita un dueño de forma idempotente (siempre que se ejecuta logra el mismo resultado).
+      operationId: OWNER-PUT
+
+      parameters:
+        - name: putId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar el dueño
+        $ref: '#/components/requestBodies/Owner'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y el dueño actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Owner updated successfully
+                  data:
+                    $ref: '#/components/schemas/Owner'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+       
+  #Patch
+  /api/owner/{patchId}:
+    patch:
+      tags: 
+        - Owner
+      summary: Editar un dueño (titular/owner)
+      security:
+        - bearerAuth: []
+      description: Edita un dueño de forma parcial o total.
+      operationId: OWNER-PATCH
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar un dueño
+        $ref: '#/components/requestBodies/OwnerPatch'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos actualizados del dueño 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Owner updated successfully
+                  data:
+                    $ref: '#/components/schemas/Owner'
+
+
+
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Delete
+  /api/owner/{deleteId}:
+    delete: 
+      tags: 
+        - Owner
+      summary: Eliminar un owner
+      security:
+        - bearerAuth: []
+      description: Eliminar los dueños que no tengan asociados comercios (shops)
+      operationId: OWNER-DELETE
+
+      parameters:
+        - name: deleteId
+          in: path
+          required: true
+          schema:
+            type: string
+
+  
+
+      responses:
+        '200':
+          description: Titular eliminado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Owner deleted successfully
+                  data: 
+                    $ref: '#/components/schemas/Owner'
+
+                  
+        '404':
+          description: Titular no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Owner not found
+        
+          '403':
+            description: No se permite eliminar a titulares con comercios asociados.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Cannot delete owner because it is referenced in a shop
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+#CONTACT
+  #Get-all-Contacts
+  /api/contact:
+    get:
+      tags: 
+        - Contact
+      summary: Lista todos los Contacts (dueños) existentes
+      security:
+        - bearerAuth: []
+      description: Listar todos los contactos existentes.
+      operationId: CONTACT-GET-ALL
+
+      responses:
+        '200':
+          description: All Contacts found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All Contacts found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contact'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindOneContact
+  /api/contact/{contactId}:
+    get:
+      tags: 
+        - Contact
+      summary: Encontrar un Contact
+      security:
+        - bearerAuth: []
+      description: Devuelve un contacto.
+      operationId: CONTACT-GET-ONE
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Contact found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact found successfully
+                  data:
+                    $ref: '#/components/schemas/Contact'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #GetContactByDNI
+  /api/contact/dni/{contactDNI}:
+    get:
+      tags: 
+        - Contact
+      summary: Encontrar un Contact por su DNI
+      security:
+        - bearerAuth: []
+      description: Devuelve un Contact por su DNI
+      operationId: CONTACT-GET-ONE-BY-DNI
+      parameters:
+        - name: contactDNI
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Contact found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact found successfully
+                  data:
+                    $ref: '#/components/schemas/Contact'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+        '404':
+          description: Contact not found
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Contact not found'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Add-Contact
+  /api/contact/:
+    post:
+      tags: 
+        - Contact
+      summary: Crear un Contact (Contacto)
+      security:
+        - bearerAuth: []
+      description: Dar de alta un nuevo Contacto.
+      operationId: CONTACT-ADD
+
+      requestBody:
+        description: Envio de datos para crear el nuevo Contacto
+        $ref: '#/components/requestBodies/Contact'
+
+
+      responses:
+        '201':
+          description: Contact created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact created successfully
+                  data:
+                    $ref: '#/components/schemas/Contact'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Put
+  /api/contact/{putId}:
+    put:
+      tags: 
+        - Contact
+      summary: Editar un Contact
+      security:
+        - bearerAuth: []
+      description: Edita un Contact de forma idempotente (siempre que se ejecuta logra el mismo resultado).
+      operationId: Contact-PUT
+
+      parameters:
+        - name: putId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar el Contact
+        $ref: '#/components/requestBodies/Contact'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y el Contact actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Contact'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+       
+  #Patch
+  /api/contact/{patchId}:
+    patch:
+      tags: 
+        - Contact
+      summary: Editar un Contact (Contacto)
+      security:
+        - bearerAuth: []
+      description: Edita un Contact de forma parcial o total.
+      operationId: Contact-PATCH
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar un Contact
+        $ref: '#/components/requestBodies/ContactPatch'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos actualizados del Contact 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Contact'
+
+
+
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Delete
+  /api/contact/{deleteId}:
+    delete: 
+      tags: 
+        - Contact
+      summary: Eliminar un Contact
+      security:
+        - bearerAuth: []
+      description: Eliminar los Contact que no tengan asociados comercios (shops)
+      operationId: Contact-DELETE
+
+      parameters:
+        - name: deleteId
+          in: path
+          required: true
+          schema:
+            type: string
+
+  
+
+      responses:
+        '200':
+          description: Contact eliminado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact deleted successfully
+                  data: 
+                    $ref: '#/components/schemas/Contact'
+
+                  
+        '404':
+          description: Contact no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact not found
+        
+          '403':
+            description: No se permite eliminar a Contact con comercios asociados.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Cannot delete Contact because it is referenced in a shop
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+#SHOP
+
+  #Get-all-Shops
+  /api/shop:
+    get:
+      tags: 
+        - Shop
+      summary: Lista todos los Shops (comercios) existentes
+      security:
+        - bearerAuth: []
+      description: Listar todos los comercios existentes con su dueño y contacto.
+      operationId: SHOP-GET-ALL
+
+      responses:
+        '200':
+          description: All Shop found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All Shops found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Shop'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindOneShop
+  /api/shop/{shopId}:
+    get:
+      tags: 
+        - Shop
+      summary: Encontrar un Shop
+      security:
+        - bearerAuth: []
+      description: Devuelve un Shop con su contacto y dueño.
+      operationId: SHOP-GET-ONE
+      parameters:
+        - name: shopId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 65c0922dad3fb943fc5cb29d
+
+      responses:
+        '200':
+          description: Shop found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Shop found successfully
+                  data:
+                    $ref: '#/components/schemas/Shop'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindShopByCuitAndFantasyName
+  /api/shop/search?fantasyName={fantasyName}&cuit={cuitOwner}:
+    get:
+      tags: 
+        - Shop
+      summary: Encontrar uno o varios Shops por su nombre de fantasia y el cuit del titular 
+      security:
+        - bearerAuth: []
+      description: Devuelve uno o varios Shops.
+      operationId: SHOP-GET-BY-OWNER-&-NAME
+      parameters:
+        - name: fantasyName
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 30628284357
+        - name: cuitOwner
+          in: query
+          required: true
+          schema:
+            type: string
+            example: Arte en Flores Decorativas
+
+      responses:
+        '200':
+          description: Shops found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Shops found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Shop'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+        '404':
+          description: No se encontraron owner con ese cuit o shops con el fantasyName dado para ese owner.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Owner not found for the provided cuit'
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindShopsByOwnerCuit
+  /api/shop/{cuitOwner}:
+    get:
+      tags: 
+        - Shop
+      summary: Encontrar Shops de un titular
+      security:
+        - bearerAuth: []
+      description: Devuelve una lista de Shops de un titular.
+      operationId: SHOP-GET-BY-OWNER
+      parameters:
+        - name: cuitOwner
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 30628284357
+
+      responses:
+        '200':
+          description: Shops found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Shops found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Shop'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+        '404':
+          description: No se encontraron owner con ese cuit.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Owner not found for the provided cuit'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindShopsByOwnerId
+  /api/shop/owner/{idOwner}:
+    get:
+      tags: 
+        - Shop
+      summary: Encontrar Shops de un titular
+      security:
+        - bearerAuth: []
+      description: Devuelve una lista de Shops de un titular y su contacto.
+      operationId: SHOP-GET-BY-OWNER
+      parameters:
+        - name: idOwner
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Shops found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Shops found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Shop'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Add-Shop
+  /api/shop/:
+    post:
+      tags: 
+        - Shop
+      summary: Crear un Shop (Comercio)
+      security:
+        - bearerAuth: []
+      description: Dar de alta un nuevo comercio.
+      operationId: SHOP-ADD
+
+      requestBody:
+        description: Envio de datos para crear el nuevo comercio
+        $ref: '#/components/requestBodies/Shop'
+
+
+      responses:
+        '201':
+          description: Shop created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Shop created successfully
+                  data:
+                    $ref: '#/components/schemas/Shop'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Put
+  /api/shop/{putId}:
+    put:
+      tags: 
+        - Shop
+      summary: Editar un Shop
+      security:
+        - bearerAuth: []
+      description: Edita un Shop de forma idempotente (siempre que se ejecuta logra el mismo resultado).
+      operationId: Shop-PUT
+
+      parameters:
+        - name: putId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar el Shop
+        $ref: '#/components/requestBodies/Shop'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y el Shop actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Shop updated successfully
+                  data:
+                    $ref: '#/components/schemas/Shop'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+       
+  #Patch
+  /api/shop/{patchId}:
+    patch:
+      tags: 
+        - Shop
+      summary: Editar un Shop (Contacto)
+      security:
+        - bearerAuth: []
+      description: Edita un Shop de forma parcial o total.
+      operationId: Shop-PATCH
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar un Shop
+        $ref: '#/components/requestBodies/ShopPatch'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos actualizados del Shop 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Shop'
+
+
+
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Delete
+  /api/shop/{deleteId}:
+    delete: 
+      tags: 
+        - Shop
+      summary: Eliminar un Shop
+      security:
+        - bearerAuth: []
+      description: Eliminar los Shop que no tengan asociados contratos (contracts)
+      operationId: Shop-DELETE
+
+      parameters:
+        - name: deleteId
+          in: path
+          required: true
+          schema:
+            type: string
+
+  
+
+      responses:
+        '200':
+          description: Shop eliminado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Shop deleted successfully
+                  data: 
+                    $ref: '#/components/schemas/Shop'
+
+                  
+        '404':
+          description: Shop no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Shop not found
+        
+          '403':
+            description: No se permite eliminar a Shop con contratos asociados.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Cannot delete Shop because it is referenced in a contract
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+# SPOT 
+
+
+
+
+
+
+
+
+
+components:
+
+  securitySchemes:
+
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+  
+    Contract:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 654aefd5c3991db2b0d46152
+        regDate:
+          type: string
+          format: date-time
+          example: "2023-11-08T02:17:57.072Z"
+        dateFrom:
+          type: string
+          format: date-time
+          example: "2023-11-07T03:00:00.000Z"
+        dateTo:
+          type: string
+          format: date-time
+        observations:
+          type: string
+          example: Prefiere estar al principio de la tanda.
+        shop:
+          $ref: '#/components/schemas/Shop'
+
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 65c090e1ad3fb943fc5cb298
+        regDate:
+          type: string
+          format: date-time
+          example: "2023-11-08T02:17:57.072Z"
+        fantasyName: 
+          type: string
+          example: Transporte DJJB
+        address: 
+          type: string
+          example: JB JUSTO 596
+        billingType: 
+          type: string
+          example: Responsable Inscripto
+        mail: 
+          type: string
+          format: email
+          example: djjb@gmail.com
+        usualPaymentForm: 
+          type: string
+          example: Efectivo
+        type: 
+          type: string
+          example: PyME
+        contact:
+          $ref: '#/components/schemas/Contact'
+          #type: string
+          example: 654ad0d341b4fa27919f8af8
+        owner:
+          $ref: '#/components/schemas/Owner' 
+          #type: string
+          example: 65c08f2dad3fb943fc5cb294
+       
+    Order:
+      type: object
+      properties:
+          id: 
+            type: string 
+            example: 67c213596c542306ce30406d
+          regDate: 
+            type: string
+            format: date-time
+            example: "2025-02-28T19:49:45.269Z"
+          totalAds: 
+            type: integer
+            format: int64
+            example: 124
+          daysAmount: 
+            type: integer
+            format: int64
+            example: 31
+          nameStrategy: 
+            type: string
+            example: Esperemos que calcule el mismo precio
+          totalCost: 
+            type: integer
+            format: int64
+            example: 12400
+          obs: 
+            type: string
+            example: No puede estar vacio... un error. Directamente no hay que mandarlo.
+          showName: 
+            type: string
+            example: Siempre Al Dia
+          liq: 
+            type: boolean
+            example: false
+          month: 
+            type: string
+            example: 03-2025
+          regular: 
+            type: boolean
+            example: true
+          regStructure:  
+            type: array
+            example: ""
+          cancelDate:
+            type: string
+            format: date-time
+            example: "2023-11-07T03:00:00.000Z"
+          paymentDate:
+            type: string
+            format: date-time
+            example:
+          paymentForm:
+            type: string
+            example: "Efectivo"
+          paymentObs:
+            type: string
+            example: "Se quejo del precio"
+          contract: 
+            $ref: '#/components/schemas/Contract'
+          spot: 
+            type: string
+          days_orders_blocks:
+            type: array
+
+    Owner:
+      type: object
+      properties:
+        id: 
+          type: string 
+          example: 65c08f2dad3fb943fc5cb294
+        regDate: 
+          type: string
+          format: date-time
+          example: "2025-02-28T19:49:45.269Z"
+        cuit:  
+          type: string
+          example: "23876545669"
+        businessName:
+          type: string
+          example: Transporte DJJB
+        fiscalCondition:
+          type: string
+          example: Consumidor Final
+        shops:
+          $ref: '#/components/schemas/shop'
+
+    Contact: 
+      type: object
+      properties:
+        id: 
+          type: string
+          example: 654ad0d341b4fa27919f8af8
+        regDate: 
+          type: string
+          format: date-time
+          example: "2025-02-28T19:49:45.269Z"
+        name: 
+          type: string 
+          example: Lautaro
+        lastname:
+          type: string
+          example: B
+        dni: 
+          type: string
+          example: "44996788"
+        contacts:
+          type: array
+          format: string
+          example: ['lautarob@gmail.com', '98763456789']
+
+
+    
+    ApiResponse:
+       type: object
+       properties:
+         message:
+           type: string
+         data: 
+          type: object
+
+    ApiErrorResponse: 
+      type: object
+      properties:
+        message:
+          type: string
+        error:
+          type: object
+
+    Auth:
+      type: object
+      properties:
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: admin
+
+
+  requestBodies:
+
+      Auth: 
+        description: Credenciales para autenticarse
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+        required: true
+      
+      Contract:
+        description: Datos del contrato
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Contract'
+                - type: object
+                  properties:
+                    id:
+                      readOnly: true
+                    regDate:
+                      readOnly: true
+                    dateTo:
+                      nullable: true
+
+        required: true
+
+      ContractPatch:
+        description: Datos para actualizar un contrato
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Contract'
+                - type: object
+                  properties:
+                    id:
+                      readOnly: true
+                    regDate:
+                      readOnly: true
+                    dateTo:
+                      nullable: true
+                    dateFrom:
+                      nullable: true
+                    observations:
+                      nullable: true
+                    shop:
+                      nullable: true
+                      type: string
+                      example: 65c090e1ad3fb943fc5cb298
+
+      Owner:
+        description: Datos del Dueño
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Owner'
+                - type: object
+                  properties:
+                    id:
+                      readOnly: true
+                    regDate:
+                      readOnly: true
+                    shops:
+                      nullable: true
+    
+      OwnerPatch:
+        description: Datos para actualizar el dueño.
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Owner'
+                - type: object
+                  properties:
+                    id:
+                      readOnly: true
+                    regDate:
+                      readOnly: true
+                    cuit:  
+                      readOnly: true
+                    businessName:
+                      nullable: true
+                    fiscalCondition:
+                      nullable: true
+                    shops:
+                      nullable: true
+
+      Contact:
+        description: Datos del Contacto
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Contact'
+                - type: object
+                  properties:
+                    id:
+                      readOnly: true
+                    regDate:
+                      readOnly: true
+                    dateTo:
+                      nullable: true
+                    shop:
+                      type: string
+                      example: 65c090e1ad3fb943fc5cb298           
+
+      ContactPatch:
+        description: Datos del Contacto
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Contact'
+                - type: object
+                  properties:
+                    id:
+                      readOnly: true
+                    regDate:
+                      readOnly: true
+                    name: 
+                      nullable: true
+                    lastname:
+                      nullable: true
+                    dni: 
+                      nullable: true
+                    contacts:
+                      nullable: true
+        
+      Shop:
+        description: Datos del contrato
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Shop'
+                - type: object
+                  properties:             
+                    id:
+                      readOnly: true
+                    regDate:
+                      readOnly: true
+                    contact:
+                      type: string
+                      example: 654ad0d341b4fa27919f8af8
+                    owner:
+                      type: string
+                      example: 65c08f2dad3fb943fc5cb294
+
+                    
+      ShopPatch:
+        description: Datos del contrato
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Contract'
+                - type: object
+                  properties:             
+                    id:
+                      readOnly: true
+                    regDate:
+                      readOnly: true
+                    fantasyName: 
+                      nullable: true
+                    address: 
+                      nullable: true
+                    billingType: 
+                      nullable: true
+                    mail: 
+                      nullable: true
+                    usualPaymentForm: 
+                      nullable: true
+                    type: 
+                      nullable: true
+                    contact:
+                      nullable: true
+                    owner:
+                      nullable: true
+
