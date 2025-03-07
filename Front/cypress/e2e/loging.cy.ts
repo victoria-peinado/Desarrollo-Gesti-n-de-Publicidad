@@ -1,6 +1,6 @@
 
 describe(' Iniciar Sesión  de usuario', () => {
-  let username = 'test';
+let username = 'test';
 let password = 'test';
   beforeEach(() => {
     // Visita la página principal

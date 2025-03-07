@@ -3,6 +3,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "rootDir": "./src",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -26,6 +27,7 @@
     "types": [
       "node",
       "jest",
+      "cypress",
     ],
   },
   "angularCompilerOptions": {
@@ -38,7 +40,12 @@
   "./cypress.config.ts",
   "node_modules",
   "cypress",
-  "**/*.cy.tsx"
-]
+  "**/*.cy.tsx",
+  "cypress/e2e/**/*.cy.ts"
+  
+],
+"include": [
+    "src/**/*"
+  ]
 
 }

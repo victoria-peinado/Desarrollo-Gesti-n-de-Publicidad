@@ -35,3 +35,12 @@
 //     }
 //   }
 // }
+declare namespace Cypress {
+    interface Chainable<Subject = any> {
+        myCommand(): Chainable<any>;
+    }
+}
+
+Cypress.Commands.add('myCommand', () => {
+    cy.visit('https://example.cypress.io')
+})
