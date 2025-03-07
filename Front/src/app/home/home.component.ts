@@ -72,6 +72,7 @@ export class HomeComponent implements AfterViewInit {
         if (previousSibling) {
           previousSibling.classList.remove('rotate');
         }
+        this.cdr.detectChanges();
       });
     }
   }
@@ -109,6 +110,7 @@ export class HomeComponent implements AfterViewInit {
         }
       }, 100);
     }
+    this.cdr.detectChanges();
   }
 
   isItemWithoutSubMenu(menuItem: string): boolean {
