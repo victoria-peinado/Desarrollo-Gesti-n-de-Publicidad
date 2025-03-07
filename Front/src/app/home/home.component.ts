@@ -1,7 +1,8 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { MyDataService } from '../services/my-data.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-
+import { DialogComponent } from 'src/app/components/dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { ShowForRolesDirective } from '../guards/show-for-roles.directive';
 import { ContentObserver } from '@angular/cdk/observers/index.js';
 @Component({
@@ -104,7 +105,7 @@ export class HomeComponent implements AfterViewInit {
     lastOpenedSubMenu: 'Contactos',
   },
 };
-  constructor(private cdr: ChangeDetectorRef,private myDataService:MyDataService,private route: ActivatedRoute ,private router: Router) {}
+  constructor(private cdr: ChangeDetectorRef,private myDataService:MyDataService,private route: ActivatedRoute ,private router: Router,public dialog: MatDialog,) {}
 
 ngOnInit() {
   this.router.events.subscribe(event => {
@@ -176,8 +177,7 @@ toggleSubMenuInternal(button: HTMLElement) {
 
   setActive(menuItem: string) {
     this.selectedMenuItem = menuItem;
-    console.log(this.selectedMenuItem);
-    console.log(this.lastOpenedSubMenu);
+
     if (this.isItemWithoutSubMenu(menuItem)) {
       this.closeAllSubMenus();
       this.saveMenuState();
@@ -188,7 +188,7 @@ toggleSubMenuInternal(button: HTMLElement) {
   }
 
   closeAllSubMenus() {
-    console.log('closeAllSubMenus');
+    
     if (this.sidebar) {
       Array.from(this.sidebar.nativeElement.getElementsByClassName('show') as HTMLCollectionOf<HTMLElement>).forEach((ul) => {
         ul.classList.remove('show');
@@ -255,4 +255,22 @@ toggleSubMenuInternal(button: HTMLElement) {
   logout() {
     this.myDataService.logout();
   }
+  openDialog(): void {
+
+      const dialogRef = this.dialog.open(DialogComponent, {
+        data: {
+          text: `<p>¿Seguro que desea cerrar seción?</p>`,
+        },
+      });
+  
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.logout();
+          this.router.navigate(['/']);
+        }
+      });
+  }
+  
+  
+  
 }
