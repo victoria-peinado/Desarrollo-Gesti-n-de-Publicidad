@@ -124,10 +124,8 @@ ngOnInit() {
             const span = btn.querySelector('span');
             return span && span.textContent?.trim() === this.lastOpenedSubMenu;
           });
-          console.log('Submenu no abierto:', this.lastOpenedSubMenu);
           if (targetButton) {
             this.toggleSubMenuInternal(targetButton);
-            console.log('Submenu abierto:', this.lastOpenedSubMenu);
           }
         }, 100);
       }
