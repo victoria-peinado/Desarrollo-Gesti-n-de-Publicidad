@@ -1,5 +1,30 @@
-<a href="#" class="card">
-  <img class="image-wrapper" src="https://material.angular.io/assets/screenshots/autocomplete.scene.png" alt="Autocomplete">
-  <div class="card-title">{{title}}</div>
-  <div class="card-summary">{{summary}}</div>
-</a>
+<form [formGroup]="contacts_form">
+  <mat-form-field class="example-chip-list">
+    <mat-label>Contactos (teléfono/email)</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Ingresar contactos (teléfono/email)" formControlName="contact">
+      <mat-chip-row *ngFor="let contact of contacts"
+                    (removed)="remove(contact)"
+                    [editable]="true"
+                    (edited)="edit(contact, $event)"
+                    [aria-description]="'Presione enter para editar ' + contact.num_email">
+        {{contact.num_email}}
+        <button matChipRemove [attr.aria-label]="'Eliminar ' + contact.num_email">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+      <input placeholder="Nuevo contacto..."
+             formControlName="contact"
+             [matChipInputFor]="chipGrid"
+             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+             [matChipInputAddOnBlur]="addOnBlur"
+             (matChipInputTokenEnd)="add($event)" required
+             >
+    </mat-chip-grid>
+    <mat-error *ngIf="contacts_form.get('contact')?.hasError('pattern')">
+      Número de teléfono inválido
+    </mat-error>
+    <mat-error *ngIf="contacts_form.get('contact')?.hasError('required') && contacts_form.get('contact')?.touched && contacts.length===0">
+      * Campo obligatorio
+    </mat-error>
+  </mat-form-field>
+</form>

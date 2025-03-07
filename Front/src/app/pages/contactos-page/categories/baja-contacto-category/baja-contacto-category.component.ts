@@ -19,6 +19,7 @@ export class BajaContactoCategoryComponent {
   contactFounded: boolean = false;
   name: string = '';
   lastname: string = '';
+  contacts: string = '';
   cargando: boolean = false;
   contactId: string = '';
 
@@ -49,6 +50,7 @@ export class BajaContactoCategoryComponent {
         this.dni = response.data.dni;
         this.name = response.data.name;
         this.lastname = response.data.lastname;
+        this.contacts = response.data.contacts.join(", ");
         this.errorMessage = null;
       },
       error: (error) => {
@@ -71,6 +73,7 @@ export class BajaContactoCategoryComponent {
     this.dni = '';
     this.name = '';
     this.lastname = '';
+    this.contacts = '';
     this.cargando = false;
     this.contactId = '';
   }

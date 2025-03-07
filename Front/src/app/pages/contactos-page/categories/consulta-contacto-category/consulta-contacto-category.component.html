@@ -41,7 +41,8 @@
         <app-datos-asociados
           [datos]="[
             { atributo: 'Nombre', valor: name },
-            { atributo: 'Apellido', valor: lastname }
+            { atributo: 'Apellido', valor: lastname },
+            { atributo: 'Contactos', valor: contacts }
           ]"
           [formularioValido]="contactFounded"
           [cargando]="cargando"
@@ -49,12 +50,12 @@
         </app-datos-asociados>
 
         @if (errorMessage) {
-        <button mat-button color="warn">
+        <button mat-button color="warn" class="pointer-events-none">
           <mat-icon fontIcon="close"></mat-icon>
           {{ errorMessage }}
         </button>
         } @else if (contactFounded) {
-        <button mat-button color="accent">
+        <button mat-button color="accent" class="pointer-events-none">
           <mat-icon fontIcon="check"></mat-icon>
           Contacto existente.
         </button>

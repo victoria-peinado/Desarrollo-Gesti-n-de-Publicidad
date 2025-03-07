@@ -34,12 +34,12 @@
             </button>
   
             @if (errorMessageOwner) {
-            <button mat-button color="warn">
+            <button mat-button color="warn" class="pointer-events-none">
               <mat-icon fontIcon="close"></mat-icon>
               {{ errorMessageOwner }}
             </button>
             } @else if (ownerFounded) {
-            <button mat-button color="accent">
+            <button mat-button color="accent" class="pointer-events-none">
               <mat-icon fontIcon="check"></mat-icon>
               Titular existente.
             </button>

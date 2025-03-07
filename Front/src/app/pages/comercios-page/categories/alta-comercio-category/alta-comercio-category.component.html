@@ -6,7 +6,7 @@
     ></app-title-and-subtitle>
 
       <form [formGroup]="owner_form">
-        <div class="grid-container">
+        <div class="flex-container">
           <fieldset>
             <app-input-field
               label="CUIT Titular"
@@ -23,7 +23,6 @@
               [mode]="'input'"
             ></app-input-field>
           </fieldset>
-          <app-tooltip class="tooltip" [message]="'Ingrese un CUIT válido.'" [disabled]="cuitControl.valid">
           <button
             mat-raised-button
             color="primary"
@@ -32,22 +31,22 @@
           >
             Check
           </button>
-          </app-tooltip>
+
 
           @if (errorMessageOwner) {
-          <button mat-button color="warn">
-            <mat-icon fontIcon="close"></mat-icon>
+          <button mat-button color="accent" class="btn-new-owner">
+            <mat-icon fontIcon="new_releases"></mat-icon>
             {{ errorMessageOwner }}
           </button>
           } @else if (ownerFounded) {
-          <button mat-button color="accent">
+          <button mat-button color="accent" class="pointer-events-none">
             <mat-icon fontIcon="check"></mat-icon>
             Titular existente.
           </button>
           }
         </div>
 
-        <div class="grid-container">
+        <div *ngIf="isOwnerFirstChecked" [ngClass]="{ 'show': isOwnerChecked && isOwnerFirstChecked}" class="flex-container mt-4">
           <fieldset>
             <app-input-field
               label="Razón Social"
@@ -68,16 +67,25 @@
             ></app-input-field>
           </fieldset>
         </div>
+
+        <button *ngIf="!isNextContact" [ngClass]="{ 'mt-4': !isOwnerFirstChecked}"
+        mat-raised-button
+        color="primary"
+        [disabled]="owner_form.invalid || !isOwnerFirstChecked"
+        (click)="nextContact()"
+      >
+        Siguiente
+      </button>
       </form>
   </div>
 
-  <div id="datos-contacto">
+  <div *ngIf="isNextContact" id="datos-contacto">
     <app-title-and-subtitle
       [title]="'Datos del Contacto'"
       [subtitle]="'Modifique datos pertinentes del Contacto.'"
     ></app-title-and-subtitle>
     <form [formGroup]="contact_form">
-      <div class="grid-container">
+      <div class="flex-container">
         <fieldset>
           <app-input-field
             label="DNI"
@@ -117,7 +125,7 @@
         }
       </div>
 
-      <div class="grid-container">
+      <div class="flex-container mt-4">
         <fieldset>
           <app-input-field
             label="Nombre"
@@ -139,7 +147,7 @@
           ></app-input-field>
         </fieldset>
       </div>
-      <div class="grid-container">
+      <div class="flex-container mt-4">
         <fieldset>
           <app-input-field
             label="Teléfono(s) Contacto"
@@ -150,18 +158,6 @@
             [mode]="'input'"
           ></app-input-field>
         </fieldset>
-        <button
-          mat-stroked-button
-          color="accent"
-          [disabled]="contactsControl.invalid"
-          [ngClass]="{
-            'btn-tel': !contactsControl.invalid,
-            'scale-90': contactsControl.invalid
-          }"
-          (click)="addContacts()"
-        >
-          <mat-icon>add</mat-icon> Añadir
-        </button>
 
         @for (number of numbers; track $index) {
             <div class="tel">
@@ -176,7 +172,7 @@
     </form>
   </div>
 
-  <div id="datos-comercio">
+  <div *ngIf="isNextShop" id="datos-comercio">
     <app-title-and-subtitle
       [title]="'Datos del Comercio'"
       [subtitle]="'Modifique datos pertinentes del Comercio.'"
@@ -243,17 +239,11 @@
         </fieldset>
       </div>
 
-      <button
-        class="btn-guardar-cambios"
-        mat-flat-button
-        color="accent"
-        [disabled]="
-          !owner_form.valid || !shop_form.valid || !contact_form.valid
-        "
-        (click)="openDialog()"
-      >
-        Guardar cambios
-      </button>
+      <app-btn-guardar-cambios
+          [disabled]="!owner_form.valid || !shop_form.valid || !contact_form.valid"
+          (clickEvent)="openDialog()" 
+          [text]="'Guardar cambios'"
+        ></app-btn-guardar-cambios>
     </form>
 </div>
 

@@ -34,12 +34,12 @@
           </button>
 
           @if (errorMessageContact) {
-          <button mat-button color="warn">
+          <button mat-button color="warn" class="pointer-events-none">
             <mat-icon fontIcon="close"></mat-icon>
             {{ errorMessageContact }}
           </button>
           } @else if (contactFounded) {
-          <button mat-button color="accent">
+          <button mat-button color="accent" class="pointer-events-none">
             <mat-icon fontIcon="check"></mat-icon>
             Contacto existente.
           </button>
@@ -67,6 +67,10 @@
               [mode]="'input'"
             ></app-input-field>
           </fieldset>
+        </div>
+
+        <div class="mt-4">
+          <app-input-contacts [(contacts)]="contacts" [disabled]="true"></app-input-contacts>
         </div>
 
     <app-btn-guardar-cambios
