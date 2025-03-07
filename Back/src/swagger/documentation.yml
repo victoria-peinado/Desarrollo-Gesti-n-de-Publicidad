@@ -21,6 +21,15 @@ tags:
   - name: Spot
     description: Audio de una publicidad.
 
+  - name: Block
+    description: Bloque publicitario de un determinado horario.
+
+  - name: Price
+    description: Precio de un bloque.
+
+  - name: DayOrderBlock
+    description: Asociación entre ordenes y los bloques en los que se emitirá cada día.  
+
 paths:
 
 # AUTH
@@ -1554,7 +1563,1115 @@ paths:
                 $ref: '#/components/schemas/ApiErrorResponse'
 
 
+
 # SPOT 
+  #Get-all-Shops
+  /api/spot:
+    get:
+      tags: 
+        - Spot
+      summary: Lista todos los Spot (Audios) existentes
+      security:
+        - bearerAuth: []
+      description: Listar todos los Spot existentes.
+      operationId: SPOT-GET-ALL
+
+      responses:
+        '200':
+          description: All Spot found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Find all spot
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Spot'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindOneShop
+  /api/spot/file/{idSpot}:
+    get:
+      tags: 
+        - Spot
+      summary: Encontrar un Spot
+      security:
+        - bearerAuth: []
+      description: Devuelve un Spot .
+      operationId: Spot-GET-ONE
+      parameters:
+        - name: idSpot
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 67c5228d1e93f1e663eb6884
+
+      responses:
+        '200':
+          description: Spot found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Spot found successfully
+                  data:
+                    type: object
+                    properties:
+                      $ref: '#/components/schemas/Spot'
+                      url:
+                        type: string
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  #FindOneSpotFile
+  /api/spot/publicSpots/{spotName}:
+    get:
+      tags: 
+        - Spot
+      summary: Encontrar un archivo de Spot
+      security:
+        - bearerAuth: []
+      description: Devuelve un audio de Spot .
+      operationId: Spot-GET-FILE
+      parameters:
+        - name: spotName
+          in: path
+          required: true
+          schema:
+            type: string
+            example: Universo_Paralelo_-_La_K'onga-1740973839666.mp3
+
+      responses:
+        '200':
+          description: Spot found successfully
+          content:
+            audio/mpeg: 
+              schema:
+                type: string
+                format: binary
+        
+          '404':
+            description: File not finded.
+        
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Cargar un archivo de audio.
+  /api/spot/upload:
+    post:
+      tags: 
+        - Spot
+      summary: Subir un spot
+      security:
+        - bearerAuth: []
+      description: Guarda un archivo de audio.
+      operationId: Spot-UPLOAD-FILE     
+
+      requestBody:
+        $ref: '#/components/requestBodies/SpotFile'
+
+      responses:
+        '201':
+          description: Shop created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Shop created successfully
+                  data:
+                    $ref: '#/components/schemas/Spot'
+      
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+    #Patch
+  /api/spot/{patchId}:
+    patch:
+      tags: 
+        - Spot
+      summary: Editar un Spot (audio)
+      security:
+        - bearerAuth: []
+      description: Edita un Spot de forma parcial o total.
+      operationId: Spot-PATCH
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar un Spot
+        $ref: '#/components/requestBodies/SpotFile'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos actualizados del Spot 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Spot'
+
+
+
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  
+  #Delete
+  /api/spot/{deleteId}:
+    delete: 
+      tags: 
+        - Spot
+      summary: Eliminar un Spot
+      security:
+        - bearerAuth: []
+      description: Eliminar un Spot
+      operationId: Spot-DELETE
+
+      parameters:
+        - name: deleteId
+          in: path
+          required: true
+          schema:
+            type: string
+
+  
+
+      responses:
+        '200':
+          description: Spot eliminado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Spot deleted successfully
+                  data: 
+                    $ref: '#/components/schemas/Shop'
+
+                  
+        '404':
+          description: Spot no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Spot not found
+        
+          # '403':
+          #   description: No se permite eliminar a Spot con ordenes asociados.
+          #   content:
+          #     application/json:
+          #       schema:
+          #         type: object
+          #         properties:
+          #           message:
+          #             type: string
+          #             example: Cannot delete Spot because it is referenced in a orders
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+ 
+# BLOCK
+
+  #Get-all-Shops
+  /api/block:
+    get:
+      tags: 
+        - Block
+      summary: Lista todos los Block  existentes
+      security:
+        - bearerAuth: []
+      description: Listar todos los Block existentes.
+      operationId: Block-GET-ALL
+
+      responses:
+        '200':
+          description: All Block found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Find all Block
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Block'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindOneShop
+  /api/block/{idBlock}:
+    get:
+      tags: 
+        - Block
+      summary: Encontrar un Block
+      security:
+        - bearerAuth: []
+      description: Devuelve un Block .
+      operationId: Block-GET-ONE
+      parameters:
+        - name: idBlock
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 67c5228d1e93f1e663eb6884
+
+      responses:
+        '200':
+          description: Block found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Block found successfully
+                  data:
+                    $ref: '#/components/schemas/Block'
+
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindByNum
+  /api/block/blockByNum/{num}:
+    get:
+      tags: 
+        - Block
+      summary: Encontrar un Block
+      security:
+        - bearerAuth: []
+      description: Devuelve un Block .
+      operationId: Block-GET-ONE-BY-NUM
+      parameters:
+        - name: num
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "5"
+
+      responses:
+        '200':
+          description: Block found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Block found successfully
+                  data:
+                    $ref: '#/components/schemas/Block'
+
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #GetManyByNumbers
+  /api/block/getManyByNum:
+      get:
+        tags: 
+          - Block
+        summary: Lista todos los Block  existentes
+        security:
+          - bearerAuth: []
+        description: Listar todos los Block existentes.
+        operationId: Block-GET-ALL
+
+        requestBody:
+          contentType: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numsList: 
+                    type: array
+                       
+                
+
+
+        responses:
+          '200':
+            description:  Block found successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Find  Block
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Block'    
+                  
+          '500':
+            description: Mensaje de error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Create all blocks
+  /api/block/all:
+    post:
+      tags:
+        - Block
+      description: Crea todos los bloques. Uno cada 30 min.
+  
+  #Create one block
+  /api/block/:
+    post:
+      tag:
+        - Block
+      summary: Crear un bloque. 
+      description: create One block.
+      security:
+        - bearerAuth: []
+      operationId: BLOCK-ADD
+
+      requestBody:
+        description: Envio de datos para crear el nuevo BLOQUE
+        $ref: '#/components/requestBodies/Block'
+
+
+      responses:
+        '201':
+          description: Block created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Block created successfully
+                  data:
+                    $ref: '#/components/schemas/Block'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+    #Patch
+  /api/block/{patchId}:
+    patch:
+      tags: 
+        - Block
+      summary: Editar un Block (bloque)
+      security:
+        - bearerAuth: []
+      description: Edita un Block de forma parcial o total.
+      operationId: Block-PATCH
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar un Block
+        $ref: '#/components/requestBodies/BlockPatch'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos actualizados del Block 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Block'
+
+
+
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+    #Delete all blocks
+  /api/block/deleteall:
+    delete: 
+      tags:
+        - Block  
+      description: Elimina todos los bloques registrados.
+  
+    #Delete one block
+  /api/block/{deleteId}:
+    delete:
+      tags: 
+        - Block
+      summary: Eliminar un Block
+      security:
+        - bearerAuth: []
+      description: Eliminar un Block
+      operationId: Block-DELETE
+
+      parameters:
+        - name: deleteId
+          in: path
+          required: true
+          schema:
+            type: string
+
+  
+
+      responses:
+        '200':
+          description: Block eliminado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Block deleted successfully
+                  data: 
+                    $ref: '#/components/schemas/Block'
+
+                  
+        '404':
+          description: Block no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Block not found
+        
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+#PRICE
+
+  #Get-all-Prices
+  /api/price:
+    get:
+      tags: 
+        - Price
+      summary: Lista todos los Prices (precios) existentes
+      security:
+        - bearerAuth: []
+      description: Listar todos los precios existentes con su bloque.
+      operationId: Price-GET-ALL
+
+      responses:
+        '200':
+          description: All Prices found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All Prices found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Price'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindOnePrice
+  /api/price/{priceId}:
+    get:
+      tags: 
+        - Price
+      summary: Encontrar un Price
+      security:
+        - bearerAuth: []
+      description: Devuelve un Price con su bloque.
+      operationId: PRICE-GET-ONE
+      parameters:
+        - name: priceId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 67b904464bd0c3f4c7685769
+
+      responses:
+        '200':
+          description: Price found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Price found successfully
+                  data:
+                    $ref: '#/components/schemas/Price'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Add-Shop
+  /api/price/:
+    post:
+      tags: 
+        - Price
+      summary: Crear un Price (precio) para un bloque
+      security:
+        - bearerAuth: []
+      description: Dar de alta un nuevo precio.
+      operationId: PRICE-ADD
+
+      requestBody:
+        description: Envio de datos para crear el nuevo precio
+        $ref: '#/components/requestBodies/Price'
+
+
+      responses:
+        '201':
+          description: Price created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Price created successfully
+                  data:
+                    $ref: '#/components/schemas/Price'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Add prices to all blocks
+  /api/price/all:
+    post:
+      tags:
+        - Price
+      summary: Agrega un precio a todos los bloques.
+      description: Agrega a todos los bloques existentes el mismo precio.
+
+      security:
+        - bearerAuth: []
+
+
+      requestBody:
+        description: Valor a agregar a todos los bloques
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:             
+                  value: 
+                    type: number
+                    format: int64
+                    example: 100.00
+                    nullable: false
+      
+      responses: 
+
+        '200':
+          description: All blocks whit a new price assigned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All blocks whit a new price assigned
+                  data:
+                    $ref: '#/components/schemas/Price'
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Patch
+  /api/price/{patchId}:
+    patch:
+      tags: 
+        - Price
+      summary: Editar un Price (Precio)
+      security:
+        - bearerAuth: []
+      description: Edita un Price de forma parcial o total.
+      operationId: Price-PATCH
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar un Price
+        $ref: '#/components/requestBodies/PricePatch'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos actualizados del Price 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Price'
+
+
+
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Delete
+  /api/price/{deleteId}:
+    delete: 
+      tags: 
+        - Price
+      summary: Eliminar un Price
+      security:
+        - bearerAuth: []
+      description: La opración no esta disponible
+      operationId: Shop-DELETE
+
+      parameters:
+        - name: deleteId
+          in: path
+          required: true
+          schema:
+            type: string
+
+  
+
+      responses:
+        # '200':
+        #   description: Price eliminado con exito
+        #   content:
+        #     application/json:
+        #       schema:
+        #         type: object
+        #         properties:
+        #           message:
+        #             type: string
+        #             example: Shop deleted successfully
+        #           data: 
+        #             $ref: '#/components/schemas/Price'
+
+                  
+        # '404':
+        #   description: Price no encontrado.
+        #   content:
+        #     application/json:
+        #       schema:
+        #         type: object
+        #         properties:
+        #           message:
+        #             type: string
+        #             example: Price not found
+        
+          '403':
+            description: No se permite eliminar los precios.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: This operation is not allowed. 
+
+
+          '500':
+            description: Mensaje de error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiErrorResponse'
+
+      
+
+#DAYORDERBLOCK
+
+  #Get-all-DOBs
+  /api/dayorderblock:
+    get:
+      tags: 
+        - DayOrderBlock
+      summary: Lista todos los DayOrderBlock (ternarias/DOBs) existentes
+      security:
+        - bearerAuth: []
+      description: Listar todas las ternarias existentes (SIN POPULAR).
+      operationId: Price-GET-ALL
+
+      responses:
+        '200':
+          description: All DOBS found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All DayOrderBlocks found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DayOrderBlock'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindOnePrice
+  /api/dayorderblock/{dobId}:
+    get:
+      tags: 
+        - Price
+      summary: Encontrar un DayOrderBlock
+      security:
+        - bearerAuth: []
+      description: Devuelve un DayOrderBlock sin popular.
+      operationId: DOB-GET-ONE
+      parameters:
+        - name: dobId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 67b9378f348d061c1ebe69ab
+
+      responses:
+        '200':
+          description: DayOrderBlock found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: DayOrderBlock found successfully
+                  data:
+                    $ref: '#/components/schemas/DayOrderBlock'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  #Get-all-DOBs
+  /api/dayorderblock/dates:
+    get:
+      tags: 
+        - DayOrderBlock
+      summary: Lista todos los DayOrderBlock (ternarias/DOBs) entre las fechas dadas
+      security:
+        - bearerAuth: []
+      description: Listar todas las ternarias existentes (SIN POPULAR) entre las fechas dadas como parametros.
+      operationId: Price-GET-ALL
+
+      requestBody:
+        description: Fecha desde y fecha hasta para filtrar. La fecha hasta no es oblicatoria. Fecha desde no puede ser mayor que fecha hasta. El formato es string AAAA-MM-DD o AAAA-M-D.
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:             
+                dateFrom: 
+                  type: string
+                  example: "2025-2-27"
+                  nullable: false
+                dateTo: 
+                  type: string
+                  example: "2025-3-6"
+                  nullable: true        
+
+
+      responses:
+        '200':
+          description: All DOBS found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All DayOrderBlocks found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DayOrderBlock'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+
+
+#ORDER
 
 
 
@@ -1720,7 +2837,7 @@ components:
           type: string
           example: Consumidor Final
         shops:
-          $ref: '#/components/schemas/shop'
+          $ref: '#/components/schemas/Shop'
 
     Contact: 
       type: object
@@ -1745,6 +2862,83 @@ components:
           type: array
           format: string
           example: ['lautarob@gmail.com', '98763456789']
+
+
+    Spot:
+      type: object
+      properties:
+        id: 
+          type: string
+          example: 67c5228d1e93f1e663eb6884
+        regDate: 
+          type: string
+          format: date-time
+          example: "2025-02-28T19:49:45.269Z"
+        long: 
+          type: number
+          format: int64
+          example: "9876567"
+        name: 
+          type: string
+          example: Universo Paralelo - La K'onga-1740972685919.mp3
+        path: 
+          type: string
+          example: "./audios//Universo Paralelo_-_La_K'onga-1740972685919.mp3"
+        
+    Block:
+      type: object
+      properties: 
+        id: 
+          type: string
+          example: 67b8ffd0cb7daee6202cfff6
+        numBlock:
+          type: string
+          example: "1"
+        starTime: 
+          type: string
+          example: "00:30:00"
+        prices:
+          type: array
+          example: ["67b904464bd0c3f4c7685767"]
+
+
+    Price: 
+      type: object
+      properties:
+          id: 
+            type: string 
+            example: 67b904464bd0c3f4c7685767
+          value: 
+            type: number
+            format: int64 
+            example: 100
+          regDate: 
+            type: string 
+            example: "2025-02-21T22:55:02.354Z"
+          block: 
+            type: string 
+            example: 67b8ffd0cb7daee6202cfff6
+
+
+
+    DayOrderBlock:
+      type: object 
+      properties: 
+        id: 
+          type: string
+          example: 67b9378f348d061c1ebe69ab
+        day: 
+          type: string
+          formate: date-time
+          example: "2025-02-25T03:00:00.000Z"
+        block: 
+          type: string
+          example: 67b8ffd0cb7daee6202cfff8
+        order: 
+          type: string
+          example: 67b9378d348d061c1ebe699c
+
+
 
 
     
@@ -1957,3 +3151,89 @@ components:
                     owner:
                       nullable: true
 
+      SpotFile:
+        description: Carga el archivo de audio.
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                  example: 'Nombre'
+                audio:
+                  type: string
+                  format: binary
+            encoding:
+              audio:
+                contentType: audio/mpeg
+
+
+      Block:
+        description: Datos del bloque a crear
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Block'
+                - type: object
+                  properties:             
+                    id:
+                      readOnly: true
+
+                    prices:
+                      nullable: true
+
+
+      BlockParch:
+        description: Datos del bloque a editar
+        content:
+          application/json:
+            schema: 
+              allOf:
+                - $ref: '#/components/schemas/Block'
+                - type: object
+                  properties:             
+                    id:
+                      readOnly: true
+                    numBlock:
+                      nullable: true
+                      example: "50"
+                    starTime: 
+                      nullable: true
+                      example: "10:15:00"
+                    prices:
+                      nullable: true
+
+
+      Price:
+        description: Datos del precio a crear
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:             
+                value: 
+                  type: number
+                  format: int64
+                  example: 100.00
+                block: 
+                  type: string
+                  example: 67b8ffd0cb7daee6202cfff8
+
+      PricePatch:
+        description: Datos del precio a crear
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:             
+                value: 
+                  type: number
+                  format: int64
+                  example: 100.00
+                  nullable: true
+                block: 
+                  type: string
+                  example: 67b8ffd0cb7daee6202cfff8
+                  nullable: true

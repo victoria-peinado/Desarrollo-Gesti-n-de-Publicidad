@@ -47,20 +47,28 @@ async function findOne(req: Request, res: Response) {
 
 async function findByDates(req: Request, res: Response) {
     try {
-        const dateFrom = new Date(req.body.sanitizeInput.dateFrom)
-        const dateTo = new Date(req.body.sanitizeInput.dateTo)
-        if (compareAsc(dateFrom, dateTo) === 1){
+        if (req.query.dateFrom === undefined) {
+            return res.status(400).json({ message: "Debe enviarse una fecha Desde" });
+        }
+        const { dateFrom, dateTo } = req.query;
+
+        const dF = new Date(dateFrom.toString())
+        let dT: Date
+        if (dateTo === undefined) {  dT = new Date() } else {
+             dT = new Date(dateTo.toString())
+        }
+        if (compareAsc(dF, dT) === 1) {
             throw new Error('La fecha DESDE no puede ser mayor que la fecha HASTA')
         }
-        console.log('Las fechas son desde: ', dateFrom, 'hasta ', dateTo)
+        console.log('Las fechas son desde: ', dF, 'hasta ', dT)
         const dobs = await em.find(DayOrderBlock, {
             day: {
-                $gte: dateFrom,  // Mayor o igual que fechaInicio
-                $lte: dateTo      // Menor o igual que fechaFin
+                $gte: dF,  // Mayor o igual que fechaInicio
+                $lte: dT      // Menor o igual que fechaFin
             }
-        },{populate: ['order.spot']});
-        const msj = 'Find DayOrderBlocks from: ' + dateFrom + ' to ' + dateTo
-        res.status(200).json({ message: msj , data: dobs });
+        }, { populate: ['order.spot.id'] });
+        const msj = 'Find DayOrderBlocks from: ' + dF + ' to ' + dT
+        res.status(200).json({ message: msj, data: dobs });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

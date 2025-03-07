@@ -91,17 +91,28 @@ async function remove(req: Request, res: Response) {
 }
 
 async function upload(req: Request, res: Response){
+    console.log('ingrese a la funcion upload.')
     try {
         const audioFile = req.file
         console.log(audioFile)
         req.body.sanitizeInput.path = audioFile?.path
         req.body.sanitizeInput.name = audioFile?.filename 
         req.body.sanitizeInput.long = audioFile?.size
-        const spot = em.create(Spot, req.body.sanitizeInput)
+        if (audioFile){
+        const data = {
+            regDate: new Date(),
+            path: audioFile?.path,
+            name: audioFile?.filename,
+            long: audioFile?.size,  
+            order: req.body.sanitizeInput.order }
+        
+        const em = orm.em.fork()
+        const spot = em.create(Spot, data)
         em.persist(spot)
         console.log('El spot creado es: ', spot)
         await em.flush()
-        res.status(200).json({ message: 'Spot upload and created successfully', data: audioFile });
+        res.status(200).json({ message: 'Spot upload and created successfully', data: audioFile })}
+        else {throw new Error('Error al subir el archivo. ')};
     
     } catch (error:any) {
         res.status(500).json({ message: error.message });
@@ -111,6 +122,8 @@ async function upload(req: Request, res: Response){
 
 async function findOneFile(req: Request, res: Response) {
     try {
+        const em = orm.em.fork()
+
         const id = req.params.id
         const spot = await em.findOneOrFail(Spot, { id })
         const url = 'http://localhost:3001/api/spot/publicSpots/'+spot.name

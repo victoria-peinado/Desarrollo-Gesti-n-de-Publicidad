@@ -15,15 +15,24 @@ function sanitizeShopInput(req: Request, res: Response, next: NextFunction) {
     req.body.sanitizeInput = {
         //regDate: req.body.regDate, //duda, no deberia entrar?
         fantasyName: req.body.fantasyName,
-        address: req.body.address,
         billingType: req.body.billingType,
         mail: req.body.mail,
         usualPaymentForm: req.body.usualPaymentForm,
         type: req.body.type,
         //numShop: req.body.numShop,
         contact: req.body.contact,
-        owner: req.body.owner
-    }
+        owner: req.body.owner,
+        //adress
+        address: req.body.address,
+
+        // streat: req.body.streat,
+        // number: req.body.number,
+        // level: req.body.level,
+        // department: req.body.department,
+        // postalCode: req.body.postalCode,
+        // city: req.body.city,
+        // province: req.body.province,    
+        }
 
     Object.keys(req.body.sanitizeInput).forEach( (key)=>{ //devuelve un arreglo con las keys y para cada uno chequeamos not null
         if (req.body.sanitizeInput[key] === undefined) {
