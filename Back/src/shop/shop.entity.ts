@@ -8,6 +8,18 @@ import { Owner, FiscalCondition } from '../owner/owner.entity.js';
 import {ObjectIdSchema} from '../shared/db/schemas.js';
 import { z } from 'zod';
 
+
+interface Address{
+  street: string,
+  number: string,
+  level: string, 
+  department: string,
+  postalCode: string,
+  city: string,
+  province: string
+}
+
+
 @Entity()
 export class Shop extends BaseEntity{
    
@@ -19,7 +31,7 @@ export class Shop extends BaseEntity{
     fantasyName!: string
     
     @Property({nullable:false})    
-    address!: string
+    address!: Address
     
     @Property({nullable:false})    
     billingType!: string //condicionfiscal. fiscalCondition
@@ -62,16 +74,27 @@ export enum billingType {
   SinFactura = "Sin Factura", 
 }
 
+export const AdressSchema = z.object({
+  street: z.string().min(1, { message: 'Street Name is required' }),
+  number: z.string().optional(),
+  level: z.string().optional(),
+  department: z.string().optional(),
+  postalCode: z.string().min(1, { message: 'Postal Code must have four numbers.'}),
+  city: z.string(),
+  province: z.string().optional()
+})
+
 export const ShopSchema = z.object({
   regDate: z.date().optional(), // Registration date, optional with a default value
   fantasyName: z.string().min(1, { message: "Fantasy name is required" }), // Fantasy name, cannot be empty
-  address: z.string().min(1, { message: "Address is required" }), // Address, cannot be empty
   billingType: z.nativeEnum(FiscalCondition), // Fiscal condition, validated against the FiscalCondition enum
   mail: z.string().email({ message: "Invalid email address" }), // Email, must be valid
   usualPaymentForm: z.nativeEnum(billingType).optional(), // Usual payment method, optional and validated against PaymentMethod enum
   type: z.string().optional(), // Shop type, optional
   contact: ObjectIdSchema, // Contact ID, must be a valid ObjectId
   owner: ObjectIdSchema, // Owner ID, must be a valid ObjectId
+  address: AdressSchema, // Address, cannot be empty
+
 });
 export const ShopPutSchema = ShopSchema.omit({ regDate: true, contact:true, owner:true }); // Schema for full updates
 export const PartialShopSchema = ShopPutSchema.partial(); // Partial schema for updates

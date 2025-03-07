@@ -22,18 +22,19 @@ import { authRouter } from './auth/auth.routes.js';
 import {env} from './config_env/config.js';
 import { destDir } from './shared/audioFunctions.js';
 import { dobRouter } from './day_order_block/day_order_block.router.js';
+import swaggerUI from "swagger-ui-express"
+import configSwagger from './swagger/swagger.js';
 
 
 //server
 const app = express();
 
 
-
 //base middlewares
 app.use(express.json());//middleware para parsear el body a json
 app.use(cors({ origin: env.FRONTEND_URL }));//acepts request from this origin only(frontend)
 app.use('/api/spot/publicSpots', express.static(destDir()))
-console.log(destDir())
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(configSwagger))
 
 //orm middleware
 app.use((req, res, next) => {//after base middlewares and before routes and bisiness milddlewares

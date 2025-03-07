@@ -41,5 +41,17 @@ Content-Type: application/json
 
 }
 
+
+
+
+
+###
+@dateFrom = 2025-2-27
+@dateTo= 2025-2-27
+GET http://localhost:{{port}}/api/dayorderblock/dates?dateFrom={{dateFrom}}&dateTo={{dateTo}}
+Authorization: Bearer {{token}}
+
+
+
 ###dateTo no es obligatoria, default HOY. // dateFrom no puede ser mayor que dateTo
 ###DATE: string AAAA-MM-DD o AAAA-M-D

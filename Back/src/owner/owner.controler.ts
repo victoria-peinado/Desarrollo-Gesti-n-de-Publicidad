@@ -51,6 +51,8 @@ async function validateIdsAndUniques<T extends object>(
         messages: allErrors
     };
 }
+
+
 async function validateRequestInput(res: Response, sanitizeInput: any): Promise<boolean> {
     try {
         const validation = await validateIdsAndUniques(sanitizeInput);
@@ -73,6 +75,8 @@ async function findAll(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
+
+
 async function findOne(req: Request, res: Response) {
    try {
     const id = req.params.id
@@ -143,6 +147,8 @@ async function remove(req: Request, res: Response) {
         res.status(500).json({ message: error.message });
     }
 }
+
+
 async function getOwnerByCuit(req: Request, res: Response) {
     try {
         const cuit = req.params.cuit;

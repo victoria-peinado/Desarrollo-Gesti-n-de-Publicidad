@@ -62,13 +62,19 @@ Content-Type: application/json
 
 {
     "fantasyName": "Indumentaria Styles",
-    "address": "Sarmiento 439",
+    "address": {
+        "street": "Calle",
+        "number": "Nro",
+        "postalCode": "2128",
+        "city": "Arroyo Seco",
+        "province": "Santa Fe"
+    },
     "billingType": "Responsable Inscripto",
     "mail": "indumentariast@gmail.com",
-    "usualPaymentForm": "Tarjeta de Crédito",
+    "usualPaymentForm": "Factura A",
     "type": "Minorista",
     "contact":"654ad0d341b4fa27919f8af8",
-    "owner": "65c08f54ad3fb943fc5cb296"   
+    "owner": "65c08f2dad3fb943fc5cb294"   
 }
 
 ### PUT
