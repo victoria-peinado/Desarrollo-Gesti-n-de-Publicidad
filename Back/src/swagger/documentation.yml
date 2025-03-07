@@ -2618,31 +2618,31 @@ paths:
 
 
   #Get-all-DOBs
-  /api/dayorderblock/dates:
+  /api/dayorderblock/dates?dateFrom={dateFrom}&dateTo={dateTo}:
     get:
       tags: 
         - DayOrderBlock
       summary: Lista todos los DayOrderBlock (ternarias/DOBs) entre las fechas dadas
       security:
         - bearerAuth: []
-      description: Listar todas las ternarias existentes (SIN POPULAR) entre las fechas dadas como parametros.
+      description: Listar todas las ternarias existentes (SIN POPULAR) entre las fechas dadas como parametros. Fecha desde y fecha hasta para filtrar. La fecha hasta no es oblicatoria (puede estar o no en la url.). Fecha desde no puede ser mayor que fecha hasta. El formato es string AAAA-MM-DD o AAAA-M-D.
       operationId: Price-GET-ALL
 
-      requestBody:
-        description: Fecha desde y fecha hasta para filtrar. La fecha hasta no es oblicatoria. Fecha desde no puede ser mayor que fecha hasta. El formato es string AAAA-MM-DD o AAAA-M-D.
-        content:
-          application/json:
-            schema: 
-              type: object
-              properties:             
-                dateFrom: 
-                  type: string
-                  example: "2025-2-27"
-                  nullable: false
-                dateTo: 
-                  type: string
-                  example: "2025-3-6"
-                  nullable: true        
+      parameters:
+        
+        - name: dateFrom
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 2025-3-6
+        - name: dateTo
+          in: query
+          required: false
+          schema:
+            type: string
+            example: 2025-3-7
+     
 
 
       responses:
@@ -2715,6 +2715,31 @@ components:
         shop:
           $ref: '#/components/schemas/Shop'
 
+    Adress: 
+      type: object
+      properties:
+          street: 
+            type: string
+            example: "Juan B Justo"
+          number: 
+            type: string
+            example: "500"
+          level: 
+            type: string,
+            example: "5"
+          department: 
+            type: string
+            example: B
+          postalCode: 
+            type: string
+            example: "2000"
+          city: 
+            type: string
+            example: "Rosario"
+          province: 
+            type: string
+            example: "Santa Fe"
+
     Shop:
       type: object
       properties:
@@ -2729,7 +2754,7 @@ components:
           type: string
           example: Transporte DJJB
         address: 
-          type: string
+          $ref: '#/components/schemas/Adress'
           example: JB JUSTO 596
         billingType: 
           type: string

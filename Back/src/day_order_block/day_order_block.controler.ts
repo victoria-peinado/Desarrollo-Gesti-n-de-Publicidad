@@ -55,7 +55,7 @@ async function findByDates(req: Request, res: Response) {
 
         const dF = new Date(dateFrom.toString())
         let dT: Date
-        if (dateTo === undefined) {  dT = new Date() } else {
+        if (dateTo === undefined || dateTo === '') {  dT = new Date() } else {
              dT = new Date(dateTo.toString())
         }
         if (compareAsc(dF, dT) === 1) {
