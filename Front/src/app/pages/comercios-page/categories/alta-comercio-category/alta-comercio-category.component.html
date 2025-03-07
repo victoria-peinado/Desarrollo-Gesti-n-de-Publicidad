@@ -5,7 +5,7 @@
       [subtitle]="'Ingrese los datos del Titular.'"
     ></app-title-and-subtitle>
 
-      <form [formGroup]="owner_form">
+      <form [formGroup]="owner_form" #of="ngForm">
         <div class="flex-container">
           <fieldset>
             <app-input-field
@@ -46,7 +46,7 @@
           }
         </div>
 
-        <div *ngIf="isOwnerFirstChecked" [ngClass]="{ 'show': isOwnerChecked && isOwnerFirstChecked}" class="flex-container mt-4">
+        <div class="flex-container mt-4">
           <fieldset>
             <app-input-field
               label="Razón Social"
@@ -67,40 +67,31 @@
             ></app-input-field>
           </fieldset>
         </div>
-
-        <button *ngIf="!isNextContact" [ngClass]="{ 'mt-4': !isOwnerFirstChecked}"
-        mat-raised-button
-        color="primary"
-        [disabled]="owner_form.invalid || !isOwnerFirstChecked"
-        (click)="nextContact()"
-      >
-        Siguiente
-      </button>
       </form>
   </div>
 
-  <div *ngIf="isNextContact" id="datos-contacto">
+  <div id="datos-contacto">
     <app-title-and-subtitle
       [title]="'Datos del Contacto'"
-      [subtitle]="'Modifique datos pertinentes del Contacto.'"
+      [subtitle]="'Ingrese los datos del Contacto.'"
     ></app-title-and-subtitle>
-    <form [formGroup]="contact_form">
+    <form [formGroup]="contact_form" #cf="ngForm">
       <div class="flex-container">
         <fieldset>
           <app-input-field
-            label="DNI"
-            placeholder="Ejemplo: 44996266"
-            type="text"
-            [hintLabel]="'8 dígitos'"
-            [control]="dniControl"
-            [validations]="{
-              required: true,
-              minLength: 8,
-              maxLength: 8,
-              pattern: '^[0-9]*$'
-            }"
-            [mode]="'input'"
-          ></app-input-field>
+          label="DNI Contacto"
+          placeholder="Ejemplo: 44450587"
+          type="text"
+          [hintLabel]="'8 dígitos'"
+          [control]="dniControl"
+          [validations]="{
+            required: true,
+            minLength: 8,
+            maxLength: 8,
+            pattern: '^[0-9]*$'
+          }"
+          [mode]="'input'"
+        ></app-input-field>
         </fieldset>
 
         <button
@@ -113,12 +104,12 @@
         </button>
 
         @if (errorMessageContact) {
-        <button mat-button color="warn">
-          <mat-icon fontIcon="close"></mat-icon>
+        <button mat-button color="accent" class="btn-new-owner pointer-events-none">
+          <mat-icon fontIcon="new_releases"></mat-icon>
           {{ errorMessageContact }}
         </button>
         } @else if (contactFounded) {
-        <button mat-button color="accent">
+        <button mat-button color="accent" class="pointer-events-none">
           <mat-icon fontIcon="check"></mat-icon>
           Contacto existente.
         </button>
@@ -129,7 +120,7 @@
         <fieldset>
           <app-input-field
             label="Nombre"
-            placeholder="Ejemplo: Juan"
+            placeholder="Ejemplo: Marcos"
             type="text"
             [control]="nameControl"
             [validations]="{ required: true }"
@@ -139,7 +130,7 @@
         <fieldset>
           <app-input-field
             label="Apellido"
-            placeholder="Ejemplo: Pérez"
+            placeholder="Ejemplo: Del Solar"
             type="text"
             [control]="lastnameControl"
             [validations]="{ required: true }"
@@ -147,35 +138,17 @@
           ></app-input-field>
         </fieldset>
       </div>
-      <div class="flex-container mt-4">
-        <fieldset>
-          <app-input-field
-            label="Teléfono(s) Contacto"
-            placeholder="Ejemplo: 3402546820"
-            type="number"
-            [control]="contactsControl"
-            [validations]="{ required: true }"
-            [mode]="'input'"
-          ></app-input-field>
-        </fieldset>
 
-        @for (number of numbers; track $index) {
-            <div class="tel">
-              <mat-icon class="scale-50">phone</mat-icon>
-              <span> {{ number }} </span>
-              <mat-icon color="accent"  class="scale-50 cursor-pointer" (click)="removeContacts(number)">close</mat-icon>
-            </div>
-        }
-        
-
+      <div class="mt-4">
+        <app-input-contacts [(contacts)]="contacts" [disabled]="true"></app-input-contacts>
       </div>
     </form>
   </div>
 
-  <div *ngIf="isNextShop" id="datos-comercio">
+  <div id="datos-comercio">
     <app-title-and-subtitle
       [title]="'Datos del Comercio'"
-      [subtitle]="'Modifique datos pertinentes del Comercio.'"
+      [subtitle]="'Ingrese los datos del Comercio.'"
     ></app-title-and-subtitle>
     <form [formGroup]="shop_form">
       <div class="grid-container">
