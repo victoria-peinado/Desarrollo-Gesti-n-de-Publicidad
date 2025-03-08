@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates,  } from "./order.controler.js";
+import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2,  } from "./order.controler.js";
 import { validateWithSchema , validateObjectId, validateCuit, sanitizeDatesFilterInput} from '../shared/db/middleware.js'
 import { CancelOrderSchema, OrderSchema, PatchOrderSchema, PutOrderSchema, UpdSpotOrderSchema} from './order.entity.js'
 import {  verifyToken,authorizeUserRoles } from '../auth/auth.middleware.js'
@@ -14,6 +14,8 @@ orderRouter.get('/notPayOrdersByOwnerCuit/:cuit',verifyToken, authorizeUserRoles
 orderRouter.get('/notPayOrdersByShop/:shopId',verifyToken, authorizeUserRoles('admin'), getNotPayOrdersByShop)
 orderRouter.get('/allNotPayOrders', verifyToken, authorizeUserRoles('admin'), findAllNotPayOrders)
 orderRouter.get('/dates/notPayOrders', verifyToken, authorizeUserRoles('admin'), validateWithSchema(DaysSchema), sanitizeDatesFilterInput, findNotPayOrdersByDates)
+
+orderRouter.get('/dates/v2/notPayOrders', verifyToken, authorizeUserRoles('admin'),  findNotPayOrdersByDates2)
 
 orderRouter.get('/',verifyToken, authorizeUserRoles('admin'), findAll);
 orderRouter.get('/:id',verifyToken, authorizeUserRoles('admin'), validateObjectId('id'), findOne); // Validate ID for finding an order by ID

@@ -443,7 +443,6 @@ function createDOB(o: string | undefined, b: string | undefined, d: Date | strin
 
 async function findWithRelations(req: Request, res: Response) {
     try {
-        console.log('Entre al findWithRelations')
         const orders = await em.find(Order, {}, { populate: ['days_orders_blocks', 'days_orders_blocks.block', 'days_orders_blocks.block.prices.value', 'contract', 'spot'] })
 
         res.status(200).json({ message: 'Orders populated succesfully', data: orders })
@@ -802,10 +801,41 @@ async function findNotPayOrdersByDates(req: Request, res: Response) {
     }
 }
 
+async function findNotPayOrdersByDates2(req: Request, res: Response) {
+    try {
+        if (req.query.dateFrom === undefined) {
+            return res.status(400).json({ message: "Debe enviarse una fecha Desde" });
+        }
+        const { dateFrom, dateTo } = req.query;
+
+        const dF = new Date(dateFrom.toString())
+        let dT: Date
+        if (dateTo === undefined || dateTo === '') { dT = new Date() } else {
+            dT = new Date(dateTo.toString())
+        }
+        if (compareAsc(dF, dT) === 1) {
+            throw new Error('La fecha DESDE no puede ser mayor que la fecha HASTA')
+        }
+        
+        const monthFrom = format(dF, "MM-yyyy");
+        const monthTo = format(dT, "MM-yyyy");
+
+        const orders = await em.find(Order, {
+            liq: false, month: {
+                $gte: monthFrom,
+                $lte: monthTo
+            }
+        }, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
+        res.status(200).json({ message: 'Find all not pay Orders', data: orders })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
 
 
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates }
+
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2 }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]

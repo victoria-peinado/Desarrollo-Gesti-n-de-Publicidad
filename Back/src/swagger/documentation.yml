@@ -30,6 +30,9 @@ tags:
   - name: DayOrderBlock
     description: Asociación entre ordenes y los bloques en los que se emitirá cada día.  
 
+
+
+
 paths:
 
 # AUTH
@@ -65,6 +68,209 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Get-all-Owners
+  /api/auth:
+    get:
+      tags: 
+        - Auth
+      summary: Lista todos los usuarios existentes
+      security:
+        - bearerAuth: []
+      description: Listar todos los usuarios existentes 
+      operationId: USERS-GET-ALL
+
+      responses:
+        '200':
+          description: All users found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All users found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Add-user
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Agregar un usuario
+      security:
+        - bearerAuth: []
+      description: Da de alta un nuevo usuario.
+      operationId: USER-ADD
+
+      requestBody:
+        description: Envio de datos para crear el nuevo usuario
+        $ref: '#/components/requestBodies/User'
+
+
+      responses:
+        '201':
+          description: Contract created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contract created successfully
+                  data:
+                    $ref: '#/components/schemas/User'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #FindOneContract
+  /api/auth/{userId}:
+    get:
+      tags: 
+        - Auth
+      summary: Encuentra un User
+      security:
+        - bearerAuth: []
+      description: Devuelve user.
+      operationId: USER-GET-ONE
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description:  Usuario encontrado con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User founded
+                  data:
+                    $ref: '#/components/schemas/User'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  #Update an user
+  /api/auth/{patchId}:
+    patch:
+      tags: 
+        - Auth
+      summary: Editar un usuario
+      security:
+        - bearerAuth: []
+      description: Edita un usuario de forma parcial o total.
+      operationId: USER-PATCH
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar el usuario
+        $ref: '#/components/requestBodies/UserPatch'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y el usuario actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User updated successfully
+                  data:
+                    $ref: '#/components/schemas/User'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  #Delete an user
+  /api/auth/{deleteId}:
+    delete: 
+      tags: 
+        - Auth
+      summary: Eliminar un usuario
+      security:
+        - bearerAuth: []
+      description: Eliminar un usuario
+      operationId: USER-DELETE
+
+      parameters:
+        - name: deleteId
+          in: path
+          required: true
+          schema:
+            type: string
+
+  
+
+      responses:
+        '200':
+          description: User eliminado con exito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User deleted successfully
+                  data: 
+                    $ref: '#/components/schemas/User'
+
+        
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+
+
 
 # CONTRACT
 
@@ -2054,7 +2260,7 @@ paths:
   #Create one block
   /api/block/:
     post:
-      tag:
+      tags:
         - Block
       summary: Crear un bloque. 
       description: create One block.
@@ -2470,7 +2676,7 @@ paths:
       security:
         - bearerAuth: []
       description: La opración no esta disponible
-      operationId: Shop-DELETE
+      operationId: Price-DELETE
 
       parameters:
         - name: deleteId
@@ -2642,6 +2848,7 @@ paths:
           schema:
             type: string
             example: 2025-3-7
+            default: ""
      
 
 
@@ -2672,11 +2879,629 @@ paths:
 
 
 #ORDER
+  #Get-all-Orders
+  /api/order:
+    get:
+      tags: 
+        - Order
+      summary: Lista todos las Ordenes (Orders) existentes
+      security:
+        - bearerAuth: []
+      description: Listar todos los Ordenes existentes.
+      operationId: Ordenes-GET-ALL
+
+      responses:
+        '200':
+          description: All Orders found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All Orders found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Find One Order
+  /api/order/{idOrder}:
+    get:
+      tags: 
+        - Order
+      summary: Encontrar un Order
+      security:
+        - bearerAuth: []
+      description: Devuelve un Order con su bloque.
+      operationId: Order-GET-ONE
+      parameters:
+        - name: idOrder
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 67b904464bd0c3f4c7685769
+
+      responses:
+        '200':
+          description: Price found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Price found successfully
+                  data:
+                    $ref: '#/components/schemas/Order'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Get all orders populated
+  /api/order/populate:
+    get:
+      tags:
+        - Order
+      summary: Lista todos las Ordenes (Orders) existentes POPULADAS CON SUS RELACIONES
+      security:
+        - bearerAuth: []
+      description: Listar todos los Ordenes existentes con todas sus relaciones.
+      operationId: Ordenes-GET-ALL
+
+      responses:
+        '200':
+          description: All Orders found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Orders populated successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Get not paid orders from a owner.
+  /api/order/notPayOrdersByOwnerCuit/{cuit}:
+    get:
+      tags:
+        - Order
+      summary: Listar las ordenes adeudadas por un titular.
+      security:
+        - bearerAuth: []
+      description: Lista las ordenes adeudadas por un titular dado su cuit. Pueden ser de varios comercios y distintas contrataciones. 
+      operationId: DOB-GET-ONE
+      parameters:
+        - name: cuit
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "20449962665"
+      
+      responses:
+        '200':
+          description: 'Find not pay orders by owner CUIT'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Find not pay orders by owner CUIT'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+      
+  #Get not paid orders from a shop
+  /api/order/notPayOrdersByShop/{shopId}:
+    get:
+      tags:
+        - Order
+      summary: Listar las ordenes adeudadas por un comercio.
+      security:
+        - bearerAuth: []
+      description: Lista las ordenes adeudadas por un comercio dado su cuit. Pueden ser de varios comercios y distintas contrataciones. 
+      operationId: DOB-GET-ONE
+      parameters:
+        - name: shopId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "20449962665"
+      
+      responses:
+        '200':
+          description: Find not pay orders by shop Id.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Find not pay orders by shop Id.
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'    
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+  #Get noy pay orders filter by dates v2. 
+  /api/order/dates/v2/notPayOrders?dateFrom={dateFrom}&dateTo={dateTo}:
+    get:
+      tags: 
+        - Order
+      summary: Lista todos los Order  entre las fechas dadas
+      security:
+        - bearerAuth: []
+      description: Listar todas las Ordenes existentes (SIN POPULAR) entre las fechas dadas como parametros. Fecha desde y fecha hasta para filtrar. La fecha hasta no es oblicatoria (puede estar o no en la url.). Fecha desde no puede ser mayor que fecha hasta. El formato es string AAAA-MM-DD o AAAA-M-D.
+      operationId: Order-GET-ALL
+
+      parameters:
+          
+        - name: dateFrom
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 2025-3-6
+        - name: dateTo
+          in: query
+          required: false
+          schema:
+            type: string
+            example: 2025-3-7
+            default: ""
+      
+
+
+      responses:
+        '200':
+          description: All Order found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All Order found successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'    
+                  
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  #Renovar ordenes automaticas
+  /api/order/renovateOrders:
+    post:
+      tags:
+        - Order
+      summary: Aplicar renovador automatico.
+      description: Ejecuta el metodo de renovar las ordenes regulares de forma manual.  
+
+      security:
+        - bearerAuth: []
+
+  #Add-Order
+  /api/order/:
+    post:
+      tags: 
+        - Order
+      summary: Crear un Order publicitaria.
+      security:
+        - bearerAuth: []
+      description: Dar de alta una nueva orden.
+      operationId: ORDER-ADD
+
+      requestBody:
+        description: Envio de datos para crear una nueva Order.
+        $ref: '#/components/requestBodies/Order'
+
+
+      responses:
+        '201':
+          description: Price created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Price created successfully
+                  data:
+                    $ref: '#/components/schemas/Order'
+        
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+
+
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  #Edit an orden
+  /api/order/{patchId}:
+    patch:
+      tags: 
+        - Order
+      summary: Editar un Order (orden)
+      security:
+        - bearerAuth: []
+      description: Edita un Order de forma parcial o total.
+      operationId: Order-PATCH
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar un Order
+        $ref: '#/components/requestBodies/OrderPatch'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos actualizados del Order 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Order'
 
 
 
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
 
 
+  #Cancel an orden
+  /api/order/cancelOrder/{patchId}:
+    patch:
+      tags: 
+        - Order
+      summary: Cancelar una Order (orden)
+      security:
+        - bearerAuth: []
+      description: Asignar fecha de cancelacion a la orden. Elimina todos los DOBS futuros. 
+      operationId: Order-PATCH-Cancel
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para cancelar un Order
+        $ref: '#/components/requestBodies/CancelOrder'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos de la orden cancelada. 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Order'
+
+
+
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  #Pay an orden
+  /api/order/registerPayment/{patchId}:
+    patch:
+      tags: 
+        - Order
+      summary: Registrar el pago una Order (orden)
+      security:
+        - bearerAuth: []
+      description: Asignar un pago a una orden. Registra la fecha y la metodologia.
+      operationId: Order-PATCH-Pay
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para pagar un Order
+        $ref: '#/components/requestBodies/PayOrder'
+
+
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos de la orden cancelada. 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Order'
+
+
+
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  #Update an order spot
+  /api/order/updateSpot/{idOrder}:
+    patch:
+      tags: 
+        - Order
+      summary: Actualizar el spot de una Order (orden)
+      security:
+        - bearerAuth: []
+      description: Actualizar el spot 
+      operationId: Order-PATCH-Cancel
+
+      parameters:
+        - name: patchId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        description: Envio de datos para actualizar el spot de una Order
+        content:
+          application/json: 
+            schema:
+              type: object
+              properties: 
+                spot:
+                  type: string
+                  example: 654e3fbc97ea9f854e9fa08b
+      responses:
+        '200':
+          description: Devuelve el mensaje de confirmación y los datos de la orden cancelada. 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contact updated successfully
+                  data:
+                    $ref: '#/components/schemas/Order'
+
+
+
+        '400':
+          description: Error en las validaciones 
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Validation fail'
+                
+        '500':
+          description: Mensaje de error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  #Delete an order
+  /api/order/{deleteId}:
+    delete: 
+      tags: 
+        - Order
+      summary: Eliminar un Order
+      security:
+        - bearerAuth: []
+      description: La opración no esta disponible
+      operationId: Order-DELETE
+
+      parameters:
+        - name: deleteId
+          in: path
+          required: true
+          schema:
+            type: string
+
+  
+
+      responses:
+        # '200':
+        #   description: Price eliminado con exito
+        #   content:
+        #     application/json:
+        #       schema:
+        #         type: object
+        #         properties:
+        #           message:
+        #             type: string
+        #             example: Shop deleted successfully
+        #           data: 
+        #             $ref: '#/components/schemas/Order'
+
+                  
+        # '404':
+        #   description: Price no encontrado.
+        #   content:
+        #     application/json:
+        #       schema:
+        #         type: object
+        #         properties:
+        #           message:
+        #             type: string
+        #             example: Price not found
+        
+          '403':
+            description: No se permite eliminar las Order.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: This operation is not allowed. 
+
+
+          '500':
+            description: Mensaje de error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiErrorResponse'
+
+      
+
+  
 
 
 
@@ -2821,6 +3646,10 @@ components:
           regStructure:  
             type: array
             example: ""
+          notRegularStructure: 
+            type: array
+            example: ""
+            nullable: true
           cancelDate:
             type: string
             format: date-time
@@ -2964,7 +3793,25 @@ components:
           example: 67b9378d348d061c1ebe699c
 
 
-
+    User: 
+      type: object
+      properties: 
+        id: 
+          type: string
+          example: 67c5228d1e93f1e663eb6884
+        regDate: 
+          type: string
+          format: date-time
+          example: "2025-02-28T19:49:45.269Z"
+        username: 
+          type: string
+          example: admin
+        password: 
+          type: string
+          example: admin
+        role: 
+          type: string
+          example: admin
 
     
     ApiResponse:
@@ -3009,17 +3856,25 @@ components:
         content:
           application/json:
             schema: 
-              allOf:
-                - $ref: '#/components/schemas/Contract'
-                - type: object
-                  properties:
-                    id:
-                      readOnly: true
-                    regDate:
-                      readOnly: true
+                type: object
+                properties:
                     dateTo:
+                      type: string
+                      format: date-time
+                      example: "2023-11-07T03:00:00.000Z"
                       nullable: true
-
+                    dateFrom:
+                      type: string
+                      format: date-time
+                      example: "2023-11-07T03:00:00.000Z"
+                    observations:
+                      type: string
+                      example: Prefiere estar al principio de la tanda.
+                      nullable: true
+                    shop: 
+                      type: string
+                      example: 65c090e1ad3fb943fc5cb298
+                      nullable: false
         required: true
 
       ContractPatch:
@@ -3051,16 +3906,18 @@ components:
         content:
           application/json:
             schema: 
-              allOf:
-                - $ref: '#/components/schemas/Owner'
                 - type: object
                   properties:
-                    id:
-                      readOnly: true
-                    regDate:
-                      readOnly: true
-                    shops:
-                      nullable: true
+                    cuit: 
+                      type: string
+                      example: 23876545669
+                    businessName: 
+                      type: string
+                      example: Transporte DJJB
+                    fiscalCondition: 
+                      type: string
+                      example: Consumidor Final
+                    
     
       OwnerPatch:
         description: Datos para actualizar el dueño.
@@ -3089,19 +3946,21 @@ components:
         content:
           application/json:
             schema: 
-              allOf:
-                - $ref: '#/components/schemas/Contact'
-                - type: object
-                  properties:
-                    id:
-                      readOnly: true
-                    regDate:
-                      readOnly: true
-                    dateTo:
-                      nullable: true
-                    shop:
-                      type: string
-                      example: 65c090e1ad3fb943fc5cb298           
+              type: object
+              properties:
+                name: 
+                  type: string 
+                  example: Lautaro
+                lastname:
+                  type: string
+                  example: B
+                dni: 
+                  type: string
+                  example: "44996788"
+                contacts:
+                  type: array
+                  example: [lb@info.com, '345344332']
+                       
 
       ContactPatch:
         description: Datos del Contacto
@@ -3199,15 +4058,15 @@ components:
         content:
           application/json:
             schema: 
-              allOf:
-                - $ref: '#/components/schemas/Block'
                 - type: object
-                  properties:             
-                    id:
-                      readOnly: true
+                  properties:   
+                    numBlock: 
+                      type: string
+                      example: "1"
+                    starTime: 
+                      type: string
+                      example: "00:30:00"
 
-                    prices:
-                      nullable: true
 
 
       BlockParch:
@@ -3261,4 +4120,189 @@ components:
                 block: 
                   type: string
                   example: 67b8ffd0cb7daee6202cfff8
+                  nullable: true
+
+      Order:
+        description: Datos para crear una orden 
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties:
+                  nameStrategy: 
+                    type: string
+                    example: Esperemos que calcule el mismo precio
+                    nullable: true
+                  obs: 
+                    type: string
+                    example: No puede estar vacio... un error. Directamente no hay que mandarlo.
+                    nullable: true
+                  showName: 
+                    type: string
+                    example: Siempre Al Dia
+                    nullable: true
+                
+                  month: 
+                    type: string
+                    example: 03-2025
+                    nullable: false
+
+                  regular: 
+                    type: boolean
+                    example: true
+
+                  regStructure:  
+                    type: object
+                    example:  {
+                        monday: ["25", "26", "27", "28"],
+                        tuesday: ["5", "6", "7", "8"],
+                        wednesday: ["9", "10", "11", "12"],
+                        thursday: ["13", "14", "15", "16"],
+                        friday: ["17", "18", "19", "20"],
+                        saturday: ["21", "22", "23", "24"],
+                        sunday: ["25", "26", "27", "28"] }
+                    nullable: true
+
+                  notRegularStructure: 
+                    type: array
+                    example: ["2025-2-25",["1", "2", "3", "4"]]
+                    nullable: true
+
+                  contract: 
+                    type: string
+                    example:
+                    nullable: false
+
+                  spot: 
+                    type: string
+                    nullable: false
+
+                  days_orders_blocks:
+                    type: array
+                    nullable: false
+
+      OrderPatch:
+        description: Datos para crear una orden 
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties:
+                  nameStrategy: 
+                    type: string
+                    example: Esperemos que calcule el mismo precio
+                    nullable: true
+                  obs: 
+                    type: string
+                    example: No puede estar vacio... un error. Directamente no hay que mandarlo.
+                    nullable: true
+                  showName: 
+                    type: string
+                    example: Siempre Al Dia
+                    nullable: true
+                
+                  month: 
+                    type: string
+                    example: 03-2025
+                    nullable: true
+
+                  regStructure:  
+                    type: object
+                    example:  {
+                        monday: ["25", "26", "27", "28"],
+                        tuesday: ["5", "6", "7", "8"],
+                        wednesday: ["9", "10", "11", "12"],
+                        thursday: ["13", "14", "15", "16"],
+                        friday: ["17", "18", "19", "20"],
+                        saturday: ["21", "22", "23", "24"],
+                        sunday: ["25", "26", "27", "28"] }
+                    nullable: true
+
+                  notRegularStructure: 
+                    type: array
+                    example: ["2025-2-25",["1", "2", "3", "4"]]
+                    nullable: true
+
+                  contract: 
+                    type: string
+                    example:
+                    nullable: true
+
+                  spot: 
+                    type: string
+                    nullable: true
+
+                  days_orders_blocks:
+                    type: array
+                    nullable: true
+
+      CancelOrder:
+        description: Fecha para cancela una orden.
+        content:
+          application/json: 
+            schema:
+              type: object
+              properties: 
+                cancelDate:
+                  type: string
+                  format: date-time
+                  example: "2023-11-07T03:00:00.000Z"
+
+
+      PayOrder:
+        description: Fecha para pagar una orden.
+        content:
+          application/json: 
+            schema:
+              type: object
+              properties: 
+                paymentDate:
+                  type: string
+                  format: date-time
+                  example:
+                paymentForm:
+                  type: string
+                  example: "Efectivo"
+                paymentObs:
+                  type: string
+                  example: "Se quejo del precio"
+
+      
+
+      User:
+        description: Datos para crear un usuario.
+        content:
+          application/json: 
+            schema:
+              type: object
+              properties: 
+                username:
+                  type: string
+                  example: admin4
+                password:
+                  type: string
+                  example: "admin4"
+                role:
+                  type: string
+                  example: "admin"
+
+
+      UserPatch:
+        description: Datos para actualizar un usuario.
+        content:
+          application/json: 
+            schema:
+              type: object
+              properties: 
+                username:
+                  type: string
+                  example: admin4
+                  nullable: true
+                password:
+                  type: string
+                  example: "admin4"
+                  nullable: true
+                role:
+                  type: string
+                  example: "admin"
                   nullable: true
