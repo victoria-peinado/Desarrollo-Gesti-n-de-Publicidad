@@ -42,6 +42,7 @@ export class InputFieldComponent {
     if (this.control.hasError('maxlength')) return `Máximo ${this.validations.maxLength} caracteres.`;
     if (this.control.hasError('email')) return 'Formato de mail incorrecto.';
     if (this.control.hasError('fantasyNameRepeated')) return 'Nombre fantasía repetido.';
+    if (this.control.hasError('invalidEmail')) return 'Formato de mail incorrecto.';
     return '';
   }
 
