@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <div id="datos-comercios">
+  <div id="datos-comercios" class="mt-4">
     <app-data-table *ngIf="shops.length > 0"
       [shops]="shops"
       [columns]="[
@@ -60,7 +60,6 @@
         { key: 'usualPaymentForm', label: 'Forma pago' },
         { key: 'type', label: 'Tipo', type: 'badge' }
       ]"
-      [noDataMessage]="'No hay comercios para mostrar.'"
     >
     </app-data-table>
   </div>

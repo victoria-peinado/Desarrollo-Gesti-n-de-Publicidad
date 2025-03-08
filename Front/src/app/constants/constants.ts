@@ -1,36 +1,35 @@
+// for owner attributes
+export const FISCAL_CONDITION_TYPES: string[] = [
+  'Responsable Inscripto',
+  'Consumidor Final',
+  'Monotributista',
+  'IVA Exento',
+  'Sujeto No Categorizado',
+  'Exento',
+  'Sujeto Extranjero',
+  'Agente de Percepción',
+  'Agente de Retención',
+  'No Alcanzado por IVA',
+  'Monotributista Social',
+  'Autónomo',
+  'Otro',
+];
+
+// for shop attributes
 export const USUAL_PAYMENT_FORMS: string[] = [
   'Efectivo',
   'Tarjeta de Crédito',
   'Tarjeta de Débito',
   'Cheque',
+  'Transferencia',
   'Otro',
 ];
 
-export const FISCAL_CONDITION_TYPES: string[] = [
-  'Responsable Inscripto',
-'Consumidor Final',
-'Monotributista',
-'IVA Exento',
-'Sujeto No Categorizado',
- 'Exento',
-'Sujeto Extranjero',
-'Agente de Percepción',
-'Agente de Retención',
-'No Alcanzado por IVA',
-'Monotributista Social',
-'Autónomo',
-'Otro',
-];
-
-
 export const BILLING_TYPES: string[] = [
-'Factura A',
-'Factura B',
-'Sin Factura'
+  'Factura A',
+  'Factura B',
+  'Sin Factura',
 ];
-
-
-
 
 export const SHOP_TYPES: string[] = [
   'Empresa',
@@ -41,7 +40,11 @@ export const SHOP_TYPES: string[] = [
   'Otro',
 ];
 
-
+export const USER_ROLES: string[] = [
+  'admin',
+  'user',
+  'guest',
+];
 
 export const BLOCK_TYPES: string[] = [
   '0',
@@ -92,5 +95,5 @@ export const BLOCK_TYPES: string[] = [
   '45',
   '46',
   '47',
-  '48'
+  '48',
 ];

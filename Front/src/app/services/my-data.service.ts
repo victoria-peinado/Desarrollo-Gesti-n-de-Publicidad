@@ -32,6 +32,16 @@ export class MyDataService {
   getUserRole(){
     return localStorage.getItem('role');
   }
+  getUserByUsername(username: string){
+    return this.http.get(`${this.apiUrl}auth/byUsername/${username}`);
+  }
+  updateUser(user: User){
+    console.log(user);
+    return this.http.patch(`${this.apiUrl}auth/${user.id}`, user);
+  }
+  deleteUser(user: User){
+    return this.http.delete(`${this.apiUrl}auth/${user.id}`);
+  }
 
   getBlocks() {
     return this.http.get(`${this.apiUrl}block`);

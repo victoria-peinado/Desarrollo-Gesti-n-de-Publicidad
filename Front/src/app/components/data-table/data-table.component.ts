@@ -1,10 +1,10 @@
-import { Component, HostListener, Input } from '@angular/core';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { Component, Input, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { Shop } from 'src/app/models/shop';
-import { MatDialog } from '@angular/material/dialog';
-import { MyDataService } from 'src/app/services/my-data.service';
 
-interface ColumnConfig {
+interface Column {
   key: string;
   label: string;
   type?: 'text' | 'email' | 'badge';
@@ -13,119 +13,70 @@ interface ColumnConfig {
 @Component({
   selector: 'app-data-table',
   templateUrl: './data-table.component.html',
-  styleUrl: './data-table.component.scss'
+  styleUrls: ['./data-table.component.scss']
 })
-export class DataTableComponent {
+export class DataTableComponent implements AfterViewInit {
+  @Input() shops: Shop[] = [];
+  @Input() columns: Column[] = [];
+  noDataMessage: string = 'No se encontraron coincidencias.';
 
+  displayedColumns: string[] = [];
+  dataSource: MatTableDataSource<Shop>;
+  filteredShops: Shop[] = []; // Nueva propiedad para filtrar las tarjetas
 
+  @ViewChild(MatPaginator) paginator?: MatPaginator;
+  @ViewChild(MatSort) sort?: MatSort;
+  
+  isMobile: boolean = window.innerWidth <= 768;
 
   @HostListener('window:resize', ['$event'])
-    onResize(event: any): void {
-      this.band = window.innerWidth > 640;
-    }
-
-  @Input() shops: any[] = [];
-  @Input() columns: ColumnConfig[] = [];
-  @Input() noDataMessage: string = 'No hay datos disponibles.';
-
-  filterText: string = '';
-  sortedColumn: string = '';
-  sortOrder: 'asc' | 'desc' = 'asc';
-  filteredData: any[] = [];
-  band: boolean = true;
-  visibleContent: { [key: string]: boolean } = {};
-  rotationAngle: number = 0;
-  rotationAngles: { [key: string]: number } = {};
-  allShops: Shop[] = [];
-  private cuit: string = '';
-
-  ngOnInit(): void {
-    this.filteredData = [...this.shops];
-    console.log(this.filteredData);
+  onResize(event: any) {
+    this.isMobile = event.target.innerWidth <= 768;
   }
 
-  constructor(public dialog: MatDialog, private _shopService: MyDataService) {}
+  panelOpenState = false;
 
-  filterTable(): void {
-    this.filteredData = this.shops.filter(row =>
-      this.columns.some(col => 
-        row[col.key]?.toString().toLowerCase().includes(this.filterText.toLowerCase())
+  constructor() {
+    this.dataSource = new MatTableDataSource();
+  }
+
+  ngOnInit() {
+    this.displayedColumns = this.columns.map(col => col.key);
+    this.dataSource.data = this.shops;
+    this.filteredShops = this.shops; // Inicializar con todos los comercios
+  }
+
+  ngAfterViewInit() {
+    if (this.paginator) this.dataSource.paginator = this.paginator;
+    if (this.sort) this.dataSource.sort = this.sort;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+
+    // Filtrar la tabla
+    this.dataSource.filter = filterValue;
+
+    // Filtrar también las tarjetas
+    this.filteredShops = this.shops.filter(shop => 
+      Object.values(shop).some(value =>
+        typeof value === 'string' && value.toLowerCase().includes(filterValue)
       )
     );
-  }
 
-  sortColumn(column: string): void {
-    if (this.sortedColumn === column) {
-      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortedColumn = column;
-      this.sortOrder = 'asc';
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
-    this.filteredData.sort((a, b) => 
-      this.sortOrder === 'asc' 
-        ? (a[column] > b[column] ? 1 : -1) 
-        : (a[column] < b[column] ? 1 : -1)
-    );
   }
 
   getBadgeClass(type: string): string {
     return {
-      'Empresa': 'bg-violet-400 text-violet-800',
-      'PyME': 'bg-green-400 text-green-800',
-      'Otro': 'bg-gray-400 text-black'
-    }[type] || '';
-  }
-
-  deleteRow(row: any): void {
-    console.log('Eliminar:', row);
-  }
-
-  confirmDelete(shop: Shop): void {
-  
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '250px',
-      data: { name: shop.fantasyName }
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this._shopService.deleteShop(shop).subscribe({
-          next: (response: any) => {
-            this.getComercios();
-          },
-          error: (error: any) => {
-            //console.log(error); caombiar por un pomnpout de error
-            console.log(error)
-          },
-        });
-      }
-    });
-  }
-
-  toggleCardContent(shop: Shop) {
-    this.rotationAngles[shop.fantasyName] =
-      (this.rotationAngles[shop.fantasyName] || 0) + 180;
-    this.visibleContent[shop.fantasyName] =
-      !this.visibleContent[shop.fantasyName];
-  }
-  isScreenSmall(): boolean {
-    // Verificar si el tamaño de la pantalla es 'sm' o menor
-    return window.innerWidth <= 640; // Ajusta según tus necesidades
-  }
-
-  getComercios() {
-    if (this.cuit) {
-      this._shopService.getShopsByCuit(this.cuit).subscribe({
-        next: (response: any) => {
-          this.allShops = response.data.slice();
-          this.shops = response.data;
-        },
-        error: (error: any) => {
-          console.log(error);
-        },
-      });
-    } else {
-      console.error('Cuit no proporcionado.');
-    }
+      'Empresa': 'bg-[#FFD5FF] text-[#BB01B7] py-1 px-3 rounded-lg text-xs',
+      'PyME': 'bg-[#D7E3FF] text-[#005CBB] py-1 px-3 rounded-lg text-xs',
+      'Minorista': 'bg-[#D6FFD4] text-[#01BB05] py-1 px-3 rounded-lg text-xs',
+      'Mayorista': 'bg-[#FFEAD4] text-[#BB7200] py-1 px-3 rounded-lg text-xs',
+      'Distribuidor': 'bg-[#FFD5D6] text-[#BB0003] py-1 px-3 rounded-lg text-xs',
+      'Otro': 'bg-[#D6D6D6] text-[#3B3B3B] py-1 px-3 rounded-lg text-xs'
+    }[type] || 'bg-gray-200 text-black py-1 px-3 rounded-lg text-xs';
   }
 }

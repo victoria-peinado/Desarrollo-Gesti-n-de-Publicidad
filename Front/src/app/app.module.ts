@@ -73,6 +73,8 @@ import { BtnGuardarCambiosComponent } from './components/btn-guardar-cambios/btn
 import { ShowForRolesDirective } from './guards/show-for-roles.directive';
 import { CardComponent } from './components/card/card.component';
 import { InputContactsComponent } from './components/input-contacts/input-contacts.component';
+import { AltaUsuarioComponent } from './pages/usuarios-page/categories/alta-usuario/alta-usuario.component';
+import { EdicionUsuarioComponent} from './pages/usuarios-page/categories/edicion-usuario/edicion-usuario.component';
 @NgModule({ declarations: [
         AppComponent,
         MainNavComponent,
@@ -139,6 +141,8 @@ import { InputContactsComponent } from './components/input-contacts/input-contac
         BtnGuardarCambiosComponent,
         CardComponent,
         InputContactsComponent,
+        AltaUsuarioComponent,
+        EdicionUsuarioComponent
         
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

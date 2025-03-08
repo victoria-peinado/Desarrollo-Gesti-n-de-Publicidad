@@ -18,6 +18,25 @@ const secret = env.JWT_SECRET;
 const em = orm.em
 em.getRepository(User)
 
+
+function sanitizeInput(req: Request, res: Response, next: NextFunction) {
+  req.body.sanitizeInput = {
+    username: req.body.username,
+    password: req.body.password,
+    role: req.body.role,
+    id: req.params.id
+  };
+
+  Object.keys(req.body.sanitizeInput).forEach((key) => {
+    if (req.body.sanitizeInput[key] === undefined) {
+      delete req.body.sanitizeInput[key];
+    }
+  });
+
+  next();
+}
+
+
 async function validateIdsAndUniques<T extends object>(
     sanitizeInput: Partial<T>
 ): Promise<{ valid: boolean; messages: string[] }> {
@@ -105,7 +124,7 @@ const login= async (req: Request, res: Response) => {
       const token = jwt.sign(
         {id: auth.id, role: auth.role}, 
         secret, 
-        {expiresIn: '1h'})
+        {expiresIn: '5h'})
       res.status(200).json({message: 'User logged in successfully', data: {  user:auth,token: token }});
     }else{
       res.status(401).json({message: 'Invalid credentials', data:{valid: valid}});
@@ -120,6 +139,16 @@ async function findOne(req: Request, res: Response) {
     const auth = await em.findOneOrFail(User, { id });
     res.status(200).json({ message: 'User found successfully', data: auth });
   } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+async function findOneByUsername(req: Request, res: Response) {
+  try {
+    const username = req.params.username;
+    const auth = await em.findOneOrFail(User, { username });
+    res.status(200).json({ message: 'User found successfully', data: auth });
+  }
+  catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 }
@@ -194,4 +223,4 @@ async function remove(req: Request, res: Response) {
 
 
 
-export { findAll, findOne, add, update, remove,  login, logout}
+export { findAll, findOne, add, update, remove,  login, logout, findOneByUsername, sanitizeInput }

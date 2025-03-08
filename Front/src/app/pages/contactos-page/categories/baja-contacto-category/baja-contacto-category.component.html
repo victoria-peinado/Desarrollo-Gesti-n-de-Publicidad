@@ -64,13 +64,8 @@
     </form>
 
 
-      <button
-      class="btn-eliminar"
-      mat-flat-button
-      color="warn"
-      [disabled]="!contactFounded || dni_form.invalid"
-      (click)="openDialog()"
-    >
+    <button class="btn-eliminar" mat-flat-button color="warn" 
+      [disabled]="!contactFounded || dni_form.invalid" (click)="openDialog()">
       Eliminar Contacto
     </button>
 

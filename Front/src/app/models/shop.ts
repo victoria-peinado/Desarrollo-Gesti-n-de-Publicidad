@@ -10,6 +10,7 @@ export class Shop {
     owner: string;
     contact: string;
     contracts?: string[];
+    [key: string]: any; 
 
     constructor(regDate: Date, fantasyName: string, address: string, billingType: string, mail: string, usualPaymentForm: string, type: string, owner: string, contact: string, contracts: string[]) {
         this.regDate = regDate;

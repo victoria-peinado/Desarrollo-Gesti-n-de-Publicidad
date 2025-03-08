@@ -1,10 +1,13 @@
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormControl,
   FormGroup,
   FormGroupDirective,
   NgForm,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,6 +27,8 @@ import { Contact } from 'src/app/models/contact.js';
 import { Owner } from 'src/app/models/owner.js';
 import { Shop } from 'src/app/models/shop.js';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { z } from 'zod';
 
 @Component({
   selector: 'app-alta-comercio-category',
@@ -61,6 +66,8 @@ export class AltaComercioCategoryComponent {
   cuit: string = '';
   ownerFounded: boolean = false;
   ownerId: string = '';
+  shops: Shop[] = [];
+  shopsFantasyName: string[] = [];
 
   billingTypes: string[] = BILLING_TYPES;
   fiscalConditionTypes: string[] = FISCAL_CONDITION_TYPES;
@@ -75,7 +82,7 @@ export class AltaComercioCategoryComponent {
 
   constructor(
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
+    private _snackBar: SnackbarService,
     private myDataService: MyDataService
   ) {
     this.owner_form = new FormGroup({
@@ -110,10 +117,10 @@ export class AltaComercioCategoryComponent {
     });
 
     this.shop_form = new FormGroup({
-      fantasyName: new FormControl('', Validators.required),
+      fantasyName: new FormControl('', [Validators.required, this.verifyFantasyNameRepeated()]),
       address: new FormControl('', Validators.required),
       billingType: new FormControl('', Validators.required),
-      mail: new FormControl('', [Validators.required, Validators.email]),
+      mail: new FormControl('', [Validators.required, this.verifyEmail()]),
       usualPaymentForm: new FormControl('', Validators.required),
       type: new FormControl('', Validators.required),
     });
@@ -123,13 +130,27 @@ export class AltaComercioCategoryComponent {
     setTimeout(() => this.inputContactsComponent.disableForm());
   }
 
-  /*clearContactForm() {
-    this.contact_form.reset();
-    Object.keys(this.contact_form.controls).forEach(key => {
-      this.contact_form.controls[key].setErrors(null)
-    });
-    } // Esta solución funciona pero al cliquear un input y salir, no muestra el error required! */
+  verifyFantasyNameRepeated(): ValidatorFn {
+      return (control: AbstractControl) : ValidationErrors | null => {
+        const value = control.value;
+  
+        if (this.shopsFantasyName.includes(value)) {
+          return {fantasyNameRepeated:true};
+        } else {
+          return null;
+        }
+  
+      }
+    }
 
+    verifyEmail(): ValidatorFn {
+      return (control: AbstractControl): ValidationErrors | null => {
+        const schema = z.string().email({ message: "Invalid email address" });
+        const result = schema.safeParse(control.value);
+    
+        return result.success ? null : { invalidEmail: true };
+      };
+    }
   clearForm(form: NgForm | undefined, values: any) {
     form?.resetForm(values);
   }
@@ -145,6 +166,10 @@ export class AltaComercioCategoryComponent {
         this.ownerFounded = true;
         this.errorMessageOwner = null;
         this.ownerId = response.data.id;
+        this.shops = response.data.shops;
+        this.shopsFantasyName = response.data.shops.map(
+          (shop: Shop) => shop.fantasyName
+        );
         this.businessNameControl.disable();
         this.fiscalConditionControl.disable();
         this.businessNameControl.setValue(response.data.businessName);
@@ -275,7 +300,7 @@ export class AltaComercioCategoryComponent {
 
   getOwnerId(): Observable<string> {
     if (this.ownerId) {
-      return of(this.ownerId); // Si ya está definido, lo retorna sin hacer la petición
+      return of(this.ownerId);
     }
 
     const ownerData: Owner = {
@@ -341,15 +366,19 @@ export class AltaComercioCategoryComponent {
             contact: this.contactId,
           };
 
+          console.log(shopData);
+
           return this.myDataService.createShop(shopData);
         })
       )
       .subscribe({
-        next: (response) => {
-          console.log('Shop created successfully:', response);
+        next: (response: any) => {
+          this._snackBar.openSnackBar(response.message, 'success-snackbar');
+          //this.clearForm();
         },
-        error: (error) => {
-          console.error('Error creating shop:', error);
+        error: (error: any) => {
+          let errorMessage = error.error.errors ? error.error.errors || error.error.messages: error.error.messages;
+          this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
         },
       });
   }
@@ -362,7 +391,6 @@ export class AltaComercioCategoryComponent {
     this.isNextShop = true;
   }
   openDialog(): void {
-    console.log('xd');
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         text: `<p>¿Seguro que desea crear el nuevo Comercio <strong>${this.fantasyNameControl.value}</strong> para el Titular <strong>${this.businessNameControl.value}</strong>?</p>`,
@@ -376,9 +404,4 @@ export class AltaComercioCategoryComponent {
     });
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 5000,
-    });
-  }
 }

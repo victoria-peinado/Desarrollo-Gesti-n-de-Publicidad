@@ -1,0 +1,69 @@
+<div class="container w-full h-full">
+  <app-title-and-subtitle [title]="'Editar/Eliminar usuario'"
+    [subtitle]="'Ingrese los datos del Usuario.'"></app-title-and-subtitle>
+  <mat-horizontal-stepper [linear]="true" #stepper>
+    <mat-step [stepControl]="search_form">
+      <form [formGroup]="search_form">
+        <ng-template matStepLabel>Buscar Usuario</ng-template>
+        <div class="data-fila">
+          <fieldset>
+            <div class="row -mb-2">
+              <app-input-field icon="person" label="Usuario" placeholder="Ingrese su usuario" type="text"
+                [control]="searchUsernameControl" [validations]="{ required: true }">
+              </app-input-field>
+            </div>
+          </fieldset>
+        </div>
+
+      <app-btn-guardar-cambios [disabled]="!search_form.valid" (clickEvent)="buscarUsuarioAndNext(stepper)"
+        [text]="'Buscar'"></app-btn-guardar-cambios>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="edit_form" *ngIf="usuarioEncontrado">
+      <form [formGroup]="edit_form">
+        <ng-template matStepLabel>Editar Usuario</ng-template>
+        <div class="data-fila">
+          <fieldset>
+            <div class="row -mb-2">
+              <app-input-field icon="person" label="Usuario" placeholder="Ingrese su usuario" type="text"
+                [control]="editUsernameControl" [validations]="{ required: true }">
+              </app-input-field>
+            </div>
+          </fieldset>
+          <fieldset>
+            <div class="row -mb-2">
+              <app-input-field icon="lock" label="Contraseña" placeholder="Ingrese su contraseña" type="password"
+                [control]="editPasswordControl" [validations]="{ required: true }">
+              </app-input-field>
+            </div>
+          </fieldset>
+          <fieldset>
+            <div class="row -mb-2">
+              <app-input-field icon="admin_panel_settings" label="Rol del Usuario" [control]="editRoleControl"
+                [validations]="{ required: true }" [mode]="'select'" [options]="userRoles">
+              </app-input-field>
+            </div>
+          </fieldset>
+        </div>
+        <div class="botones">
+          <button matStepperPrevious>Regresar</button>
+          <button class="btn-eliminar" mat-flat-button color="warn" [disabled]="!search_form.valid" (click)="deleteUser()">
+            Eliminar Usuario
+          </button>
+          <app-btn-guardar-cambios [disabled]="!edit_form.valid" (clickEvent)="editarUsuario()"
+            [text]="'Guardar'"></app-btn-guardar-cambios>
+        </div>
+      </form>
+    </mat-step>
+    
+
+    <mat-step *ngIf="!usuarioEncontrado">
+      <ng-template matStepLabel>Usuario no encontrado</ng-template>
+      <p>El usuario ingresado no existe en la base de datos.</p>
+      <div>
+        <button matStepperPrevious>Regresar</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

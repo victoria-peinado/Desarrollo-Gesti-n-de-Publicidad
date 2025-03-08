@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import {  findAll, findOne, add, update, remove,login, logout} from './auth.controler.js'
+import {  findAll, findOne, add, update, remove,login, logout,findOneByUsername} from './auth.controler.js'
 import { UserSchema, LoginSchema, PartialUserSchema } from './auth.entity.js'
 import { validateWithSchema , validateObjectId} from '../shared/db/middleware.js'
 import { sanitizeAuthInput, verifyToken,authorizeUserRoles } from './auth.middleware.js'
@@ -14,6 +14,7 @@ import { sanitizeAuthInput, verifyToken,authorizeUserRoles } from './auth.middle
   authRouter.put("/:id",verifyToken, authorizeUserRoles('admin'),validateObjectId("id"), validateWithSchema(UserSchema), sanitizeAuthInput, update);
   authRouter.patch("/:id",verifyToken, authorizeUserRoles('admin'),validateObjectId("id"), validateWithSchema(PartialUserSchema), sanitizeAuthInput,  update);
   authRouter.delete("/:id",verifyToken, authorizeUserRoles('admin'), validateObjectId("id"), remove);
+  authRouter.get('/byUsername/:username',verifyToken, authorizeUserRoles('admin'),findOneByUsername);
   
 
 

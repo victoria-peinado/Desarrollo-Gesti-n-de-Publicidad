@@ -94,18 +94,18 @@ export const AdressSchema = z.object({
   city: z.string(),
   province: z.string().optional()
 })
-
+export const SimpleAdressSchema = z.string().regex(/^.*\s\d+$/, { message: 'Address must contain a space followed by a number' });
 export const ShopSchema = z.object({
   regDate: z.date().optional(), // Registration date, optional with a default value
   fantasyName: z.string().min(1, { message: "Fantasy name is required" }), // Fantasy name, cannot be empty
 
-  billingType: z.nativeEnum(FiscalCondition), // Fiscal condition, validated against the FiscalCondition enum
+  billingType: z.nativeEnum(billingType), // Fiscal condition, validated against the FiscalCondition enum
   mail: z.string().email({ message: "Invalid email address" }), // Email, must be valid
   usualPaymentForm: z.nativeEnum(PaymentMethod), // Usual payment method, optional and validated against PaymentMethod enum
   type: z.nativeEnum(ShopType), // Shop type, optional
   contact: ObjectIdSchema, // Contact ID, must be a valid ObjectId
   owner: ObjectIdSchema, // Owner ID, must be a valid ObjectId
-  address: AdressSchema, // Address, cannot be empty
+  address: SimpleAdressSchema, // Address, cannot be empty
 
 });
 export const ShopPutSchema = ShopSchema.omit({ regDate: true, contact:true, owner:true }); // Schema for full updates
