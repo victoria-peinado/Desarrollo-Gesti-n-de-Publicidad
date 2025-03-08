@@ -104,6 +104,14 @@ export class HomeComponent implements AfterViewInit {
     selectedMenuItem: 'Baja Contacto',
     lastOpenedSubMenu: 'Contactos',
   },
+  'usuarios/altaUsuario': {
+    selectedMenuItem: 'Alta Usuario',
+    lastOpenedSubMenu: 'Perfil',
+  },
+  'usuarios/edicionUsuario': {
+    selectedMenuItem: 'Editar Usuario',
+    lastOpenedSubMenu: 'Perfil',
+  },
 };
   constructor(private cdr: ChangeDetectorRef,private myDataService:MyDataService,private route: ActivatedRoute ,private router: Router,public dialog: MatDialog,) {}
 

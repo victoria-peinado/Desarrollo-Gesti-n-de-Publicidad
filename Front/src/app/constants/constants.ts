@@ -41,7 +41,11 @@ export const SHOP_TYPES: string[] = [
   'Otro',
 ];
 
-
+export const USER_ROLES: string[] = [
+  'admin',
+  'user',
+  'guest',
+];
 
 export const BLOCK_TYPES: string[] = [
   '0',

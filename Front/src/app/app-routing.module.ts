@@ -38,6 +38,7 @@ import { EdicionContactoCategoryComponent } from './pages/contactos-page/categor
 import { BajaContactoCategoryComponent } from './pages/contactos-page/categories/baja-contacto-category/baja-contacto-category.component';
 import { ListadoBloquesCategoryComponent } from './pages/bloques-page/categories/listado-bloques-category/listado-bloques-category.component';
 import { EdicionBloqueCategoryComponent } from './pages/bloques-page/categories/edicion-bloque-category/edicion-bloque-category.component';
+import {AltaUsuarioComponent} from './pages/usuarios-page/categories/alta-usuario/alta-usuario.component';
 import { UserLoginComponent } from './pages/user-login/user-login.component';
 import { ShopListComponent } from './pages/shop-list/shop-list.component';
 import { InicioPageComponent } from './pages/inicio-page/inicio-page.component';
@@ -46,6 +47,8 @@ import { WelcomePageComponent } from './pages/welcome-page/welcome-page.componen
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import  {isLoggedInGuard} from './guards/is-logged-in.guard';
 import  {hasRoleGuardGuard,canActivateWithRoles} from './guards/has-role-guard.guard';
+import { EdicionUsuarioComponent } from './pages/usuarios-page/categories/edicion-usuario/edicion-usuario.component';
+import { from } from 'rxjs';
 const routes: Routes = [
   { path: '', component: WelcomePageComponent, pathMatch: 'full' ,
     
@@ -118,8 +121,11 @@ const routes: Routes = [
 // Contactos
 { path: 'addContact', component: ContactComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'create' } },
 { path: 'updateContact', component: ContactComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'update' } },
-{ path: 'deleteContact', component: ContactComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'delete' } }
-  ]
+{ path: 'deleteContact', component: ContactComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'], crud: 'delete' } },
+// Usuarios
+{path: 'usuarios/altaUsuario', component: AltaUsuarioComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{path: 'usuarios/edicionUsuario', component: EdicionUsuarioComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } }
+]
    
   },
 

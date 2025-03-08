@@ -1,0 +1,38 @@
+<div class="container w-full h-full" #container>
+  <div class="forms-container">
+    <div class="signin-signup">
+      <form action="#" class="sign-up-form" [formGroup]="reg_form">
+        <app-title-and-subtitle [title]="'Registrar usuario'"
+          [subtitle]="'Ingrese los datos del nuevo Usuario.'"></app-title-and-subtitle>
+
+        <div class="data-fila">
+          <fieldset>
+            <div class="row -mb-2">
+              <app-input-field icon="person" label="Usuario" placeholder="Ingrese su usuario" type="text"
+                [control]="rUsernameControl" [validations]="{ required: true }">
+              </app-input-field>
+            </div>
+          </fieldset>
+          <fieldset>
+            <div class="row -mb-2">
+              <app-input-field icon="lock" label="Contraseña" placeholder="Ingrese su contraseña" type="password"
+                [control]="rPasswordControl" [validations]="{ required: true }">
+              </app-input-field>
+            </div>
+          </fieldset>
+          <fieldset>
+            <div class="row -mb-2">
+              <app-input-field icon="admin_panel_settings" label="Tipo Comercio" [control]="roleControl" [validations]="{ required: true }"
+                [mode]="'select'" [options]="userRoles">
+              </app-input-field>
+            </div>
+          </fieldset>
+
+        </div>
+
+        <app-btn-guardar-cambios [disabled]="!reg_form.valid" (clickEvent)="registration()"
+          [text]="'Registrar'"></app-btn-guardar-cambios>
+      </form>
+    </div>
+  </div>
+</div>

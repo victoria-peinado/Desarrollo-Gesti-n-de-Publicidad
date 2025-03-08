@@ -115,7 +115,7 @@ export class WelcomePageComponent implements AfterViewInit {
     this.myDataService.login(newUser).subscribe({
       next: (response: any) => {
         console.log('Usuario logeado:', response);
-        this.openSnackBar('Registro exitoso', 'Cerrar', 5000, 'success-snackbar');
+        this.openSnackBar('Logueo exitoso', 'Cerrar', 5000, 'success-snackbar');
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('role', response.data.user.role);
         this.router.navigate(['/inicio']);
