@@ -99,7 +99,7 @@ export const ShopSchema = z.object({
   regDate: z.date().optional(), // Registration date, optional with a default value
   fantasyName: z.string().min(1, { message: "Fantasy name is required" }), // Fantasy name, cannot be empty
 
-  billingType: z.nativeEnum(FiscalCondition), // Fiscal condition, validated against the FiscalCondition enum
+  billingType: z.nativeEnum(billingType), // Fiscal condition, validated against the FiscalCondition enum
   mail: z.string().email({ message: "Invalid email address" }), // Email, must be valid
   usualPaymentForm: z.nativeEnum(PaymentMethod), // Usual payment method, optional and validated against PaymentMethod enum
   type: z.nativeEnum(ShopType), // Shop type, optional
