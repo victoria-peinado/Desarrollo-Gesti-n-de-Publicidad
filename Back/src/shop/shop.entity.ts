@@ -90,7 +90,7 @@ export const AdressSchema = z.object({
   number: z.string().optional(),
   level: z.string().optional(),
   department: z.string().optional(),
-  postalCode: z.string().min(1, { message: 'Postal Code must have four numbers.'}).optional(),
+  postalCode: z.string().min(1, { message: 'Postal Code must have four numbers.'}),
   city: z.string(),
   province: z.string().optional()
 })

@@ -36,11 +36,12 @@ export class InputFieldComponent {
   }
 
   getErrorMessage(): string {
-    if (this.control.hasError('required')) return '* Campo obligatorio';
-    if (this.control.hasError('pattern')) return 'Solo números';
-    if (this.control.hasError('minlength')) return `Mínimo ${this.validations.minLength} caracteres`;
-    if (this.control.hasError('maxlength')) return `Máximo ${this.validations.maxLength} caracteres`;
-    if (this.control.hasError('email')) return 'Formato de mail incorrecto';
+    if (this.control.hasError('required')) return '* Campo obligatorio.';
+    if (this.control.hasError('pattern')) return 'Solo números.';
+    if (this.control.hasError('minlength')) return `Mínimo ${this.validations.minLength} caracteres.`;
+    if (this.control.hasError('maxlength')) return `Máximo ${this.validations.maxLength} caracteres.`;
+    if (this.control.hasError('email')) return 'Formato de mail incorrecto.';
+    if (this.control.hasError('fantasyNameRepeated')) return 'Nombre fantasía repetido.';
     return '';
   }
 
