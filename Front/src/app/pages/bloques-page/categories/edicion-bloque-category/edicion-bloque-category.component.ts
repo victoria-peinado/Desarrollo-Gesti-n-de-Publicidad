@@ -42,6 +42,7 @@ export class EdicionBloqueCategoryComponent implements OnInit {
         Validators.required,
         Validators.maxLength(10),
         Validators.minLength(8),
+        this.validateDate.bind(this),
         
       ])
     })
@@ -51,6 +52,26 @@ export class EdicionBloqueCategoryComponent implements OnInit {
     this.getBlocks(); // get the blocks when the component is loaded
 
   }
+  // Validador personalizado para fecha
+validateDate(control: FormControl): { [s: string]: boolean } | null {
+  const dateValue = control.value;
+
+  // Convertir el valor a un objeto Date
+  const dateObject = new Date(dateValue);
+
+  if (isNaN(dateObject.getTime())) {
+    return { invalidDate: true }; // Fecha inválida
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Establecer la fecha de hoy al inicio del día
+
+  if (dateObject < today) {
+    return { dateBeforeToday: true }; // Fecha antes de hoy
+  }
+
+  return null; // Fecha válida y mayor o igual a hoy
+}
 
   //get the blocks of the database
   getBlocks() {
