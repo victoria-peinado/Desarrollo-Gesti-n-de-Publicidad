@@ -9,6 +9,7 @@ const tokenBlacklist = new Set<string>();
 
 const sanitizeAuthInput = (req: Request, res: Response, next: NextFunction) => {
   const { username, password, role } = req.body;
+  const id = req.params.id;
 
   // If the password exists, hash it; otherwise, leave it unchanged
   if (password) {
@@ -16,13 +17,15 @@ const sanitizeAuthInput = (req: Request, res: Response, next: NextFunction) => {
   }
 
   // Sanitize the input and assign the necessary fields to sanitizeInput
-  req.body.sanitizeInput = { username, password: req.body.password, role };
-    // Remove undefined fields
+  req.body.sanitizeInput = { username, password: req.body.password, role, id };
+
+  // Remove undefined fields
   Object.keys(req.body.sanitizeInput).forEach((key) => {
     if (req.body.sanitizeInput[key] === undefined) {
       delete req.body.sanitizeInput[key];
     }
   });
+  console.log(req.body.sanitizeInput);
 
   next(); // Proceed to the next middleware or controller
 };

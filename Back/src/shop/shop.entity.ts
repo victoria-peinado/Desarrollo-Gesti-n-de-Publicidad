@@ -90,11 +90,11 @@ export const AdressSchema = z.object({
   number: z.string().optional(),
   level: z.string().optional(),
   department: z.string().optional(),
-  postalCode: z.string().min(1, { message: 'Postal Code must have four numbers.'}),
+  postalCode: z.string().min(1, { message: 'Postal Code must have four numbers.'}).optional(),
   city: z.string(),
   province: z.string().optional()
 })
-
+export const SimpleAdressSchema = z.string().regex(/^.*\s\d+$/, { message: 'Address must contain a space followed by a number' });
 export const ShopSchema = z.object({
   regDate: z.date().optional(), // Registration date, optional with a default value
   fantasyName: z.string().min(1, { message: "Fantasy name is required" }), // Fantasy name, cannot be empty
@@ -105,7 +105,7 @@ export const ShopSchema = z.object({
   type: z.nativeEnum(ShopType), // Shop type, optional
   contact: ObjectIdSchema, // Contact ID, must be a valid ObjectId
   owner: ObjectIdSchema, // Owner ID, must be a valid ObjectId
-  address: AdressSchema, // Address, cannot be empty
+  address: SimpleAdressSchema, // Address, cannot be empty
 
 });
 export const ShopPutSchema = ShopSchema.omit({ regDate: true, contact:true, owner:true }); // Schema for full updates

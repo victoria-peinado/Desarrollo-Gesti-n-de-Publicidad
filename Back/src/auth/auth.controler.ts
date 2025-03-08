@@ -18,6 +18,25 @@ const secret = env.JWT_SECRET;
 const em = orm.em
 em.getRepository(User)
 
+
+function sanitizeInput(req: Request, res: Response, next: NextFunction) {
+  req.body.sanitizeInput = {
+    username: req.body.username,
+    password: req.body.password,
+    role: req.body.role,
+    id: req.params.id
+  };
+
+  Object.keys(req.body.sanitizeInput).forEach((key) => {
+    if (req.body.sanitizeInput[key] === undefined) {
+      delete req.body.sanitizeInput[key];
+    }
+  });
+
+  next();
+}
+
+
 async function validateIdsAndUniques<T extends object>(
     sanitizeInput: Partial<T>
 ): Promise<{ valid: boolean; messages: string[] }> {
@@ -204,4 +223,4 @@ async function remove(req: Request, res: Response) {
 
 
 
-export { findAll, findOne, add, update, remove,  login, logout, findOneByUsername}
+export { findAll, findOne, add, update, remove,  login, logout, findOneByUsername, sanitizeInput }
