@@ -7,7 +7,7 @@
 
     <form [formGroup]="block_form">
       <div class="fila-data">
-        <fieldset>
+        <!-- <fieldset>
           <app-input-field
             label="Nro. Bloque"
             [control]="numBlockControl"
@@ -15,13 +15,23 @@
             [mode]="'select'"
             [options]="blockTypes"
           ></app-input-field>
-        </fieldset>
+        </fieldset> -->
+      <fieldset>
+        <mat-form-field floatLabel="auto" class="w-full">
+          <mat-label>Nro. Bloque</mat-label>
+          <mat-select formControlName="numBlock" required (ngModelChange)="selectedBlock()"> 
+            <mat-option *ngFor="let block of blocks" [value]="block">{{block.numBlock}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </fieldset>
 
         <div class="datos-asociados">
           <app-datos-asociados
             [datos]="[
-              { atributo: 'Hora Inicio', valor: '#34' },
-              { atributo: 'Precio Actual', valor: '400$' }
+              { atributo: 'Hora Inicio', valor: selectedValue?.startTime },
+              { atributo: 'Precio Actual', valor: (last?.value ?? 'Sin precio').toString() },
+              { atributo: 'Fecha de Actualización', valor:  (last?.formattedDate  ?? 'Sin actualizar').toString()}
+
             ]"
             [formularioValido]="block_form.valid"
             [cargando]="cargando"
@@ -29,14 +39,14 @@
           </app-datos-asociados>
         </div>
       </div>
-      <button
+      <!-- <button
         mat-raised-button
         color="primary"
         [disabled]="block_form.invalid"
         (click)="siguiente()"
       >
         Siguiente
-      </button>
+      </button> -->
     </form>
   </div>
 
@@ -58,14 +68,11 @@
             [mode]="'input'"
           ></app-input-field>
 
-          <app-input-field
-            label="Fecha Vigencia"
-            placeholder="Ejemplo: 1/3/2025"
-            type="text"
-            [control]="effectiveDateControl"
-            [validations]="{ required: true }"
-            [mode]="'input'"
-          ></app-input-field>
+          
+          <fieldset>
+            <app-input-field label="Fecha Vigencia" type="text" [control]="effectiveDateControl" [validations]="{ required: true }"
+              [mode]="'date'"></app-input-field>
+          </fieldset>
 
       </div>
 
@@ -73,8 +80,8 @@
         class="btn-guardar-cambios"
         mat-flat-button
         color="accent"
-        [disabled]="!newBlock_form.valid"
-        (click)="openDialog()"
+        [disabled]="!newBlock_form.valid || block_form.invalid"
+        (click)="submit()"
       >
         Guardar cambios
       </button>

@@ -40,8 +40,13 @@ Content-Type: application/json
 
 {
     "value": 100.00,
-    "block": "{{block}}"
+    "block": "{{block}}",
+    "regDate": "2025-03-08T03:00:00.000Z"
 }
+### Get last price by block
+GET http://localhost:{{port}}/api/price/last/67b8ffd0cb7daee6202cfff5
+Authorization: Bearer {{token}}
+
 
 
 ###POST A PRICE TO ALL BLOCKS

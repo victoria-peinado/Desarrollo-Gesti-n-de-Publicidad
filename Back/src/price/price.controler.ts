@@ -10,9 +10,11 @@ em.getRepository(Price)
 em.getRepository(Block)
 
 function sanitizePriceInput(req: Request, res: Response, next: NextFunction) {
+  
     req.body.sanitizeInput = {
         value: req.body.value,
         block: req.body.block,
+        regDate: req.body.regDate,
         id: req.params.id
     }
     Object.keys(req.body.sanitizeInput).forEach( (key)=>{ //devuelve un arreglo con las keys y para cada uno chequeamos not null
@@ -23,6 +25,32 @@ function sanitizePriceInput(req: Request, res: Response, next: NextFunction) {
 
     next()
 }
+async function lastPrice(req: Request, res: Response, next: NextFunction) {
+  const idBlock = req.params.id;
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1); // Establece la fecha para mañana
+  tomorrow.setHours(0, 0, 0, 0); // Establece la hora al inicio del día
+  tomorrow.setMilliseconds(-1); // Ajusta la fecha para que sea un milisegundo antes del inicio del día de mañana
+
+  try {
+    // Realizar la consulta
+    const price = await em.findOne(Price, {
+      block: idBlock,
+      regDate: { $lte: tomorrow } // Filtra fechas menores a mañana
+    }, {
+      populate: ['block'],
+      orderBy: { regDate: 'desc' },
+    });
+
+    res.status(200).json({
+      message: 'Last history founded successfully',
+      data: price
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+        
 
 
 async function validateIdsAndUniques<T extends object>(
@@ -79,6 +107,7 @@ async function findOne(req: Request, res: Response) {
 async function add(req: Request, res: Response) {
   try {
     const sanitizeInput = req.body.sanitizeInput;
+    sanitizeInput.regDate = new Date(sanitizeInput.regDate);
 
     if (!(await validateRequestInput(res, sanitizeInput))) {
       return;
@@ -152,4 +181,4 @@ async function addAllPrices (req: Request, res: Response){
 }
 
 
-export {sanitizePriceInput, findAll, findOne, add, update, remove, addAllPrices}
+export {sanitizePriceInput, findAll, findOne, add, update, remove, addAllPrices, lastPrice}

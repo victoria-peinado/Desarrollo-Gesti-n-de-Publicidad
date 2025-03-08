@@ -12,7 +12,7 @@ export class Price extends BaseEntity{
   value!: number              
 
   @Property({type: DateTimeType, nullable:false})
-  regDate = new Date()
+  regDate : Date  = new Date()
 
   @ManyToOne(() => Block,{ nullable: false })
   block!: Rel<Block> 
@@ -23,6 +23,7 @@ export const PriceSchema = z.object({
     .min(0, { message: 'Value must be a non-negative number' })
     .refine(value => !isNaN(value), { message: 'Value must be a valid number' }),
   block: ObjectIdSchema,
+  regDate: z.string().datetime().optional(),
 });
 export const PriceAllSchema = PriceSchema.omit({ block: true });
 // export const PriceAllSchema = z.object({

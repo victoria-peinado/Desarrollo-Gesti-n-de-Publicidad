@@ -1,10 +1,10 @@
 <h1 class="text-center">Actualización Bloque</h1>
 
-<form *ngIf="isBlocksEmpty" class="flex flex-col items-center justify-center">
+<form *ngIf="" class="flex flex-col items-center justify-center">
   <app-btn-degrade (click)="createBlocks()" [text]="'Crear Bloques'"></app-btn-degrade>
 </form>
 
-<form *ngIf="!isBlocksEmpty" [formGroup]="form" class="flex flex-col items-center justify-center"
+<form [formGroup]="form" class="flex flex-col items-center justify-center"
   (keydown.enter)="$event.preventDefault()">
 
   <mat-form-field floatLabel="auto" class="w-1/2">
