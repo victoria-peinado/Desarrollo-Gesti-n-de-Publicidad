@@ -188,7 +188,7 @@
             placeholder="Ejemplo: normita@gmail.com"
             type="text"
             [control]="mailControl"
-            [validations]="{ required: true }"
+            [validations]="{ required: true, invalidEmail: true }"
             [mode]="'input'"
           ></app-input-field>
         </fieldset>

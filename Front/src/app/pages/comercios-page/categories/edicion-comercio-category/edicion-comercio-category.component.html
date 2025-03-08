@@ -54,19 +54,10 @@
           ></app-input-field>
         </fieldset>
       </fieldset>
-
-      <button
-        mat-raised-button
-        color="primary"
-        [disabled]="owner_form.invalid || comercioControl.disabled"
-        (click)="siguiente()"
-      >
-        Siguiente
-      </button>
     </form>
   </div>
 
-  <div [hidden]="!shopFounded" id="datos-comercio">
+  <div id="datos-comercio">
     <app-title-and-subtitle
       [title]="'Datos del Comercio'"
       [subtitle]="'Modifique datos pertinentes del Comercio.'"
@@ -137,7 +128,7 @@
     </form>
   </div>
 
-  <div [hidden]="!shopFounded" id="datos-contacto">
+  <div id="datos-contacto">
     <app-title-and-subtitle
       [title]="'Datos del Contacto'"
       [subtitle]="'Modifique datos pertinentes del Contacto.'"
