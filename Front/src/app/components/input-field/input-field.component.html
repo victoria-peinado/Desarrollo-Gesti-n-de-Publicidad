@@ -2,7 +2,7 @@
   <mat-icon *ngIf="icon" class="input-icon">{{ icon }}</mat-icon>
 
   @if (mode === 'input') {
-    <mat-form-field class="w-full" [hintLabel]="hintLabel">
+    <mat-form-field class="w-full" [hintLabel]="hintLabel" appearance="outline">
       <mat-label>{{ label }}</mat-label>
 
       <input

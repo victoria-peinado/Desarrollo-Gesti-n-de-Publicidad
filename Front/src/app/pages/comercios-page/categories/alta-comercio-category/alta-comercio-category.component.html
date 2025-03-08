@@ -158,7 +158,7 @@
             placeholder="Ejemplo: Librería Normita"
             type="text"
             [control]="fantasyNameControl"
-            [validations]="{ required: true }"
+            [validations]="{ required: true, fantasyNameRepeated: true }"
             [mode]="'input'"
           ></app-input-field>
         </fieldset>

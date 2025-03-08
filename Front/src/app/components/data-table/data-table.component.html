@@ -1,125 +1,86 @@
-<div class=" h-screen">
-    <div class="overflow-auto rounded-lg shadow hidden md:block">
-      <table class="w-full">
-        <thead class="bg-gray-400 border-b-2 border-gray-400">
-          <tr>
-            <td [attr.colspan]="columns.length + 2" class="p-3 text-sm">
-              <div class="flex items-center">
-                <div class="bg-gray-100 p-2 rounded-md flex" style="min-width: 100px;">
-                  <mat-icon class="mr-2">search</mat-icon>
-                  <input
-                    [(ngModel)]="filterText"
-                    (input)="filterTable()"
-                    [disabled]="shops.length === 0"
-                    class="w-48 bg-gray-100 outline-none"
-                    placeholder="Buscar"/>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th class="w-10 p-3 text-sm font-semibold tracking-wide text-left">#</th>
-            <th *ngFor="let col of columns" 
-                class="w-40 p-3 text-sm font-semibold tracking-wide text-left cursor-pointer"
-                (click)="sortColumn(col.key)">
-              {{ col.label }}
-              <mat-icon *ngIf="sortedColumn === col.key" class="ml-1">
-                {{ sortOrder === 'asc' ? 'north' : 'south' }}
-              </mat-icon>
-            </th>
-            <th class="w-10 p-3 text-sm font-semibold tracking-wide text-left"></th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-          <ng-container *ngIf="filteredData.length > 0; else noDataTemplate">
-            <tr *ngFor="let row of filteredData; let i = index" [class.bg-gray-100]="i % 2 === 0">
-              <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ i + 1 }}</td>
-              <td *ngFor="let col of columns" class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                <ng-container [ngSwitch]="col.type">
-                  <a *ngSwitchCase="'email'" href="mailto:{{ row[col.key] }}" class="font-bold text-blue-500 hover:underline">
-                    {{ row[col.key] }}
-                  </a>
-                  <span *ngSwitchCase="'badge'" 
-                        [ngClass]="getBadgeClass(row[col.key])"
-                        class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50">
-                    {{ row[col.key] }}
-                  </span>
-                  <span *ngSwitchDefault>{{ row[col.key] }}</span>
-                </ng-container>
-              </td>
-              <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                <button mat-icon-button color="primary">
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-icon-button color="warn" (click)="deleteRow(row)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </td>
-            </tr>
+<div class="h-screen">
+  <mat-form-field>
+    <mat-label>Filtrar</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Ex. Mia"
+      #input
+    />
+  </mat-form-field>
+
+  <div class="mat-elevation-z8" *ngIf="!isMobile">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ column.label }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <ng-container [ngSwitch]="column.type">
+            <a *ngSwitchCase="'email'" [href]="'mailto:' + row[column.key]">{{
+              row[column.key]
+            }}</a>
+            <span
+              *ngSwitchCase="'badge'"
+              [ngClass]="getBadgeClass(row[column.key])"
+            >
+              {{ row[column.key] }}
+            </span>
+            <span *ngSwitchDefault>{{ row[column.key] }}</span>
           </ng-container>
-        </tbody>
-      </table>
-    </div>
-  
-    <ng-template #noDataTemplate>
-      <tr class="bg-white">
-        <td [attr.colspan]="columns.length + 2"  class="p-3 text-sm text-gray-700 whitespace-nowrap">
-          {{ noDataMessage }}
         </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <tr class="mat-row data-error" *matNoDataRow>
+        <td class="mat-cell" colspan="columns.length">{{ noDataMessage }}</td>
       </tr>
-    </ng-template>
-    <div *ngIf="shops.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-      <div id="tarjetas" *ngFor="let shop of shops; let i = index" class="bg-white space-y-2 p-4 rounded-lg shadow relative">
-        <div class="flex items-center space-x-2 text-sm">
-          <div>
-            <a href="#" class="text-blue font-bold hover:underline">{{shop.fantasyName}}</a>
-          </div>
-          <div class="text-gray-500">{{shop.address}}</div>
-          <div>
-            <span [ngClass]="{
-              'bg-violet-400 text-violet-800': shop.type === 'Empresa',
-              'bg-green-400 text-green-800': shop.type === 'PyME',
-              'bg-gray-400 text-black': shop.type === 'Otro'
-            }" class="p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50">
-            {{shop.type}}</span>
-          </div>
-        </div>
-      
-        <div *ngIf="visibleContent[shop.fantasyName] || band " class="text-sm text-gray-700">
-          <a href="#" class="font-bold text-blue-500 hover:underline">{{shop.mail}}</a>
-        </div>
-      
-        <div *ngIf="visibleContent[shop.fantasyName] || band" class="text-sm text-gray-700">
-          {{shop.billingType}}
-        </div>
+    </table>
 
-        <div *ngIf="visibleContent[shop.fantasyName] || band" class="text-sm font-medium text-black">
-          {{shop.usualPaymentForm}}
-        </div>
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of users"
+    ></mat-paginator>
+  </div>
 
-        <div class="absolute top-20 right-0 p-2 focus:outline-none group">
-
-            <button mat-icon-button color="primary">
-              <mat-icon>edit</mat-icon>
-            </button>
-
-            <button mat-icon-button color="warn" (click)="confirmDelete(shops[i])">
-              <mat-icon>delete</mat-icon>
-            </button>
-
-        </div>
-      
-        <button
-          id="flechita"
-          *ngIf="isScreenSmall()"
-          (click)="toggleCardContent(shop)"
-          class="absolute top-0 right-0 p-2 focus:outline-none group"
-          [@rotateArrow]="visibleContent[shop.fantasyName] ? 'up' : 'down'"
+  <div class="cards" *ngIf="isMobile" class="grid-container">
+    <div *ngFor="let shop of filteredShops" class="card">
+      <mat-accordion>
+        <mat-expansion-panel
+          (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false"
         >
-          <mat-icon class="text-gray-500">expand_more</mat-icon>
-        </button>
-
-      </div>
-    </div> 
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              {{ shop.fantasyName }}
+            </mat-panel-title>
+            <mat-panel-description>
+              <span [ngClass]="getBadgeClass(shop.type)">{{ shop.type }}</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>
+            <span class="font-bold">Dirección: </span>
+            <span>{{ shop.address }}</span>
+          </p>
+          <p>
+            <span class="font-bold">Email: </span> <span>{{ shop.mail }}</span>
+          </p>
+          <p>
+            <span class="font-bold">Tipo Facturación: </span>
+            <span>{{ shop.billingType }}</span>
+          </p>
+          <p>
+            <span class="font-bold">Forma Pago Usual: </span>
+            <span>{{ shop.usualPaymentForm }}</span>
+          </p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <p *ngIf="filteredShops.length === 0 && isMobile" class="no-results">
+      {{ noDataMessage }}
+    </p>
   </div>
   
+</div>
