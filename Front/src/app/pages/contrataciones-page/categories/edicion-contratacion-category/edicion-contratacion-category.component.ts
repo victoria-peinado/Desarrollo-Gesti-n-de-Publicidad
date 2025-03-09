@@ -5,6 +5,7 @@ import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { Contract } from 'src/app/models/contract';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-edicion-contratacion-category',
@@ -40,7 +41,7 @@ export class EdicionContratacionCategoryComponent {
   obs: string = '';
   id: string = '';
     
-    constructor(public dialog: MatDialog, private myDataService: MyDataService, private _snackBar: MatSnackBar) {
+    constructor(public dialog: MatDialog, private myDataService: MyDataService, private _snackBar: SnackbarService,) {
       this.owner_form = new FormGroup({
         cuit: new FormControl('', [
           Validators.required,
@@ -168,29 +169,32 @@ export class EdicionContratacionCategoryComponent {
         this.obs === this.obsControl.value
       );
     }
+     formatDateToYYYYMMDD(date: Date | string): string | undefined {
+      if (!date) return undefined;
+    
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0'); // sumamos 1 porque los meses empiezan en 0
+      const day = String(d.getDate()).padStart(2, '0');
+    
+      return `${year}-${month}-${day}`;
+    }
     save() {
-      const contract = new Contract(this.id, this.dateToControl.value, this.obsControl.value);
+      const contract = new Contract(this.id, this.formatDateToYYYYMMDD(this.dateToControl.value), this.obsControl.value);
       console.log(contract);
-      this.myDataService.updateContract(contract).subscribe({
-        next: () => {
-          this.openSnackBar('Registro exitoso', 'Cerrar', 5000, 'success-snackbar');
-        },
-        error: (error) => {
-          this.openSnackBar(error.error.messages[0], 'Cerrar', 5000, 'unsuccess-snackbar');
-        },
+      this.myDataService.patchContract(contract).subscribe({
+   
+        next: (response: any) => {
+            this._snackBar.openSnackBar(response.message, 'success-snackbar');
+          },
+          error: (error: any) => {
+            console.log(error);
+            let errorMessage = error.error.errors ? error.error.errors || error.error.messages: error.error.messages;
+            this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+          },
       });
     }
-    openSnackBar(
-      message: string,
-      action: string,
-      duration: number,
-      panelClass: string
-    ) {
-      this._snackBar.open(message, action, {
-        duration: duration,
-        panelClass: [panelClass],
-      });
-    }
+ 
 
     openDialog() {
       

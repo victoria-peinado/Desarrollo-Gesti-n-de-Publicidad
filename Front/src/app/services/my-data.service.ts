@@ -158,5 +158,9 @@ export class MyDataService {
 
   getContractsByShopId(idShop: string): Observable<any> {return this.http.get(`${this.apiUrl}contract/shop/${idShop}`);}
 
-  updateContract(contract: Contract): Observable<any> {return this.http.put(`${this.apiUrl}contract`, contract);}
+
+  
+  patchContract( contract: Partial<Contact>): Observable<any> {
+    return this.http.patch(`${this.apiUrl}contract/${contract.id}`, contract);
+  }
 }
