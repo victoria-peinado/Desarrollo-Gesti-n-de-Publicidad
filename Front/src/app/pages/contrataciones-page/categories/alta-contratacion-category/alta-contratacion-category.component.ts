@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
@@ -51,11 +51,40 @@ export class AltaContratacionCategoryComponent {
       });
 
       this.contract_form = new FormGroup({
-        dateFrom: new FormControl('', Validators.required),
+        dateFrom: new FormControl('', [Validators.required, this.verifyDate()]),
         dateTo: new FormControl(''),
         obs: new FormControl(''),
       });
     }
+
+    ngOnInit() {
+      this.dateToControl.valueChanges.subscribe((valor) => {
+        this.dateTo = valor;
+        this.dateFromControl.updateValueAndValidity();
+
+      });
+    }
+    
+
+verifyDate(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+
+    console.log('value: ', value);
+    console.log('date from: ', this.dateTo);
+  
+      if (!this.dateTo) {
+        return null;
+      } else {
+        if (value >= this.dateTo) {
+          return {dateToGreater:true};
+        } else {
+          return null;
+        }
+  
+      }
+  };
+}
 
     
     
@@ -104,36 +133,9 @@ export class AltaContratacionCategoryComponent {
     next() {
       
       this.nextStep = true;
-      const selectedShop = this.shops.find(shop => shop.fantasyName === this.comercioControl.value);
-      if (selectedShop) {
-        this.myDataService.getContractsByShopId(selectedShop.id).subscribe({
-          next: (response: any) => {
-            this.contracts = response.data;
-            this.contractsDetailed = this.contracts.map((contract: any, index: number) => ({
-              id: index + 1,
-              dateFrom: contract.dateFrom,
-              dateTo: contract.dateTo,
-              regDate: contract.regDate,
-              obs: contract.observations
-            }));
-          },
-          
-          error: () => {
-          }
-        
-      });}
+
     }
 
-    onRowSelected(row: any) {
-      this.dateFrom = row.dateFrom;
-      this.dateTo = row.dateTo;
-      this.obs = row.obs;
-      
-      this.dateFromControl.setValue(row.dateFrom);
-      this.dateToControl.setValue(row.dateTo);
-      this.obsControl.setValue(row.obs);
-    }
-  
     get cuitControl(): FormControl {
       return this.owner_form.get('cuit') as FormControl;
     }
@@ -152,14 +154,6 @@ export class AltaContratacionCategoryComponent {
 
     get obsControl(): FormControl {
       return this.contract_form.get('obs') as FormControl;
-    }
-
-    get btnControl(): boolean {
-      return (
-        this.dateTo === this.dateToControl.value &&
-        this.dateFrom === this.dateFromControl.value &&
-        this.obs === this.obsControl.value
-      );
     }
 
     openDialog() {

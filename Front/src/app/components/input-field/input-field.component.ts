@@ -19,7 +19,8 @@ export class InputFieldComponent {
   @Input() hintLabel: string = '';
 
   hidePassword: boolean = true;
-  value: string = '';
+  value = '';
+  
 
   @Input() selectedOption: string = '';
 
@@ -43,7 +44,12 @@ export class InputFieldComponent {
     if (this.control.hasError('email')) return 'Formato de mail incorrecto.';
     if (this.control.hasError('fantasyNameRepeated')) return 'Nombre fantasía repetido.';
     if (this.control.hasError('invalidEmail')) return 'Formato de mail incorrecto.';
+    if (this.control.hasError('dateToGreater')) return 'Debe ser menor a Fecha Hasta.';
     return '';
   }
 
+  clearDate() {
+    this.control.setValue(null);
+  }
+  
 }

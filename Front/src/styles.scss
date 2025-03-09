@@ -35,3 +35,14 @@ body{
   --mdc-snackbar-supporting-text-color: white;
   --mat-snack-bar-button-color: white;
 }
+
+
+.mat-mdc-form-field-icon-suffix {
+
+  padding: 0 0 0 4px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0px;
+  
+  }
