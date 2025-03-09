@@ -4,6 +4,7 @@ import { Contract } from "./contract.entity.js";
 import { EntityRepository } from "@mikro-orm/core";	
 import { Shop } from "../shop/shop.entity.js";
 import { validateUniqueFields,validateIdsExistence } from "../shared/db/validations.js";
+import { compareAsc } from "date-fns";
 
 const em = orm.em //entityManager
 em.getRepository(Contract)
@@ -113,6 +114,13 @@ async function update(req: Request, res: Response) {
 
     try {
       const contractToUpdate = await em.findOneOrFail(Contract, { id });
+      if (contractToUpdate.dateTo !== undefined){
+          const today = new Date()
+        if (compareAsc(contractToUpdate.dateTo, today)<=0){
+          //si el contrato ya termino
+          return res.status(500).json({ message: 'Is not possible edit finished contracts.' })
+        }
+      }
       em.assign(contractToUpdate, sanitizeInput);
       await em.flush();
       res.status(200).json({ message: 'Contract updated successfully', data: contractToUpdate });
