@@ -73,7 +73,6 @@ export class AltaTitularCategoryComponent {
   }
 
   openDialog(): void {
-    console.log('xd');
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         text: `<p>¿Seguro que desea crear el nuevo Titular ${this.businessNameControl.value}?</p>`,

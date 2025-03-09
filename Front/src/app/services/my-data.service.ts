@@ -6,6 +6,7 @@ import { Owner } from '../models/owner';
 import { Contact } from '../models/contact';
 import { User } from '../models/user.js';
 import { environment } from 'src/environments/environment';
+import { Contract } from '../models/contract.js';
 
 @Injectable({
   providedIn: 'root',
@@ -121,6 +122,11 @@ export class MyDataService {
   }
   createContact(contact: Contact) {
     return this.http.post(`${this.apiUrl}contact`, contact);
+  }
+
+  createContract(contract: Contract) {
+    return this.http.post(`${this.apiUrl}contract`, contract);
+    
   }
   updateContact(contact: Contact) {
     return this.http.put(`${this.apiUrl}contact`, contact);

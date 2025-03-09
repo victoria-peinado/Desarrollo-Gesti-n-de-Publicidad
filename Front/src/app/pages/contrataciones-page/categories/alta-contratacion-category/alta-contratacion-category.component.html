@@ -77,7 +77,7 @@
       [subtitle]="'Ingrese los datos de la nueva Contratación.'"
     ></app-title-and-subtitle>
 
-    <form [formGroup]="contract_form">
+    <form [formGroup]="contract_form" #cf="ngForm">
       <div class="flex-container mt-4">
         <fieldset>
           <app-input-field
@@ -112,7 +112,7 @@
       </div>
 
       <app-btn-guardar-cambios
-          [disabled]="contract_form.invalid || !ownerFounded"
+          [disabled]="owner_form.invalid || contract_form.invalid || !ownerFounded"
           (clickEvent)="openDialog()" 
           [text]="'Guardar cambios'"
         ></app-btn-guardar-cambios>
