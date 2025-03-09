@@ -149,4 +149,6 @@ export class MyDataService {
   patchContact(contactId: string, contactData: any) {
     return this.http.patch(`${this.apiUrl}contact/${contactId}`, contactData);
   }
+
+  getContractsByShopId(idShop: string): Observable<any> {return this.http.get(`${this.apiUrl}contract/shop/${idShop}`);}
 }
