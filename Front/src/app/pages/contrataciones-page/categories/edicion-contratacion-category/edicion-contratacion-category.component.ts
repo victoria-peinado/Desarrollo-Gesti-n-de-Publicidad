@@ -56,7 +56,7 @@ export class EdicionContratacionCategoryComponent {
       });
 
       this.contract_form = new FormGroup({
-        dateFrom: new FormControl('', Validators.required),
+        dateFrom: new FormControl({ value: '', disabled: true }),
         dateTo: new FormControl(''),
         obs: new FormControl(''),
       });
@@ -165,7 +165,6 @@ export class EdicionContratacionCategoryComponent {
     get btnControl(): boolean {
       return (
         this.dateTo === this.dateToControl.value &&
-        this.dateFrom === this.dateFromControl.value &&
         this.obs === this.obsControl.value
       );
     }
