@@ -52,7 +52,11 @@ export class MyDataService {
   getHistory() {
     return this.http.get(`${this.apiUrl}price`);
   }
+  getLastHistoryByBlock(block: any) : Observable<any> {
+    return this.http.get(`${this.apiUrl}price/last/${block.id}`);
+  }
   createHistory(history: any) {
+    console.log(history);
     return this.http.post(`${this.apiUrl}price`, history);
   }
 

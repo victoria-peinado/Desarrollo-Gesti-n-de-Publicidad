@@ -8,6 +8,7 @@ import { EntityRepository, FilterQuery } from '@mikro-orm/core';
 // Zod validation middleware
 const validateWithSchema = (schema: z.ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
+
     try {
       // Parse and validate request body
       req.body = schema.parse(req.body);
