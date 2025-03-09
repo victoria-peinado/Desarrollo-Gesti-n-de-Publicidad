@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
@@ -10,13 +10,31 @@ import { MyDataService } from 'src/app/services/my-data.service';
   styleUrl: './edicion-contratacion-category.component.scss'
 })
 export class EdicionContratacionCategoryComponent {
+  @ViewChild('of') ownerNgForm: NgForm | undefined;
+
   owner_form: FormGroup;
   contract_form: FormGroup;
     shops: any[] = [];
-    errorMessage: string | null = null;
+    errorMessageOwner: string | null = null;
     cuit: string = '';
     comercios: string[] = [];
     ownerFounded: boolean = false;
+    nextStep: boolean = false;
+
+    contracts = [];
+
+    contractsDetailed: {id: number, dateFrom: string, dateTo: string, regDate: string, obs: string}[] = [];
+    
+    columnDefs = [
+      { key: 'id', label: 'N°' },
+      { key: 'dateFrom', label: 'Fecha Desde' },
+      { key: 'dateTo', label: 'Fecha Hasta' },
+      { key: 'regDate', label: 'Fecha Realización' },
+      { key: 'obs', label: 'Observaciones' }
+    ];
+  dateTo: Date | null = null;
+  dateFrom: Date | null = null;
+  obs: string = '';
     
     constructor(public dialog: MatDialog, private myDataService: MyDataService) {
       this.owner_form = new FormGroup({
@@ -34,11 +52,24 @@ export class EdicionContratacionCategoryComponent {
 
       this.contract_form = new FormGroup({
         dateFrom: new FormControl('', Validators.required),
-        dateTo: new FormControl('', Validators.required),
+        dateTo: new FormControl(''),
         obs: new FormControl(''),
       });
     }
-  
+
+    
+    
+    
+    
+
+
+
+
+
+
+    clearForm(form: NgForm | undefined, values: any) {
+        form?.resetForm(values);
+      }
   
     findOwner() {
   
@@ -51,24 +82,57 @@ export class EdicionContratacionCategoryComponent {
         next: (response: any) => {
           this.ownerFounded = true;
           this.shops = response.data.shops;
-          this.errorMessage = null;
+          this.errorMessageOwner = null;
           this.comercios = response.data.shops.map(
             (shop: Shop) => shop.fantasyName
           );
           this.comercioControl.enable();
+          this.clearForm(this.ownerNgForm, {
+            cuit: this.cuitControl.value,
+            comercio: ''
+          });
         },
         error: () => {
           this.ownerFounded = false;
           this.shops = [];
           this.comercioControl.disable();
-          this.errorMessage = 'Titular inexistente.';
+          this.errorMessageOwner = 'Titular inexistente.';
         },
       });
     }
   
-    siguiente() {
+    next() {
+      
+      this.nextStep = true;
+      const selectedShop = this.shops.find(shop => shop.fantasyName === this.comercioControl.value);
+      if (selectedShop) {
+        this.myDataService.getContractsByShopId(selectedShop.id).subscribe({
+          next: (response: any) => {
+            this.contracts = response.data;
+            this.contractsDetailed = this.contracts.map((contract: any, index: number) => ({
+              id: index + 1,
+              dateFrom: contract.dateFrom,
+              dateTo: contract.dateTo,
+              regDate: contract.regDate,
+              obs: contract.observations
+            }));
+          },
+          
+          error: () => {
+          }
         
-      }
+      });}
+    }
+
+    onRowSelected(row: any) {
+      this.dateFrom = row.dateFrom;
+      this.dateTo = row.dateTo;
+      this.obs = row.obs;
+      
+      this.dateFromControl.setValue(row.dateFrom);
+      this.dateToControl.setValue(row.dateTo);
+      this.obsControl.setValue(row.obs);
+    }
   
     get cuitControl(): FormControl {
       return this.owner_form.get('cuit') as FormControl;
@@ -90,6 +154,13 @@ export class EdicionContratacionCategoryComponent {
       return this.contract_form.get('obs') as FormControl;
     }
 
+    get btnControl(): boolean {
+      return (
+        this.dateTo === this.dateToControl.value &&
+        this.dateFrom === this.dateFromControl.value &&
+        this.obs === this.obsControl.value
+      );
+    }
 
     openDialog() {
       

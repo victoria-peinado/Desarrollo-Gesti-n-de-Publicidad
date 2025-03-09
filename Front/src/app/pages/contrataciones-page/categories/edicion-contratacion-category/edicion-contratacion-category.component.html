@@ -5,8 +5,8 @@
           [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
         ></app-title-and-subtitle>
     
-        <form [formGroup]="owner_form">
-          <div class="fila-data">
+        <form [formGroup]="owner_form" #of="ngForm">
+          <div class="flex-container">
             <fieldset>
               <app-input-field
                 label="CUIT Titular"
@@ -14,35 +14,39 @@
                 type="text"
                 [hintLabel]="'11 dígitos'"
                 [control]="cuitControl"
-                [validations]="{ required: true, minLength: 11, maxLength: 11, pattern: '^[0-9]*$' }"
+                [validations]="{
+                  required: true,
+                  minLength: 11,
+                  maxLength: 11,
+                  pattern: '^[0-9]*$'
+                }"
                 [mode]="'input'"
               ></app-input-field>
             </fieldset>
-    
+
             <button
-              mat-raised-button 
-              color="primary" 
-              [disabled]="cuitControl.invalid" 
-              (click)="findOwner()">
+              mat-raised-button
+              color="primary"
+              [disabled]="cuitControl.invalid"
+              (click)="findOwner()"
+            >
               Check
             </button>
-    
-            @if (errorMessage) {
-              <button mat-button color="warn">
-                <mat-icon fontIcon="close"></mat-icon>
-                {{ errorMessage }}
-              </button>
+  
+            @if (errorMessageOwner) {
+            <button mat-button color="warn" class="pointer-events-none">
+              <mat-icon fontIcon="close"></mat-icon>
+              {{ errorMessageOwner }}
+            </button>
             } @else if (ownerFounded) {
-              <button mat-button color="accent">
-                <mat-icon fontIcon="check"></mat-icon>
-                Titular existente.
-              </button>
+            <button mat-button color="accent" class="pointer-events-none">
+              <mat-icon fontIcon="check"></mat-icon>
+              Titular existente.
+            </button>
             }
-    
-            
           </div>
-    
-          <fieldset>
+
+          <div class="flex-container mt-4">
             <fieldset>
               <app-input-field
                 label="Comercio"
@@ -53,40 +57,33 @@
                 [selectedOption]="comercios[0]"
               ></app-input-field>
             </fieldset>
-          </fieldset>
-    
+          </div>
+
           <button
-            mat-raised-button
-            color="primary"
-            [disabled]="owner_form.invalid || comercioControl.disabled"
-            (click)="siguiente()"
-          >
+          class="mb-4"
+            mat-raised-button color="primary"
+            [disabled]="!owner_form.valid || comercioControl.value===''"
+            (click)="next()">   
             Siguiente
           </button>
         </form>
       </div>
   
-    <div id="datos-contratacion">
-        <div class="fila-data" >
-            <app-data-selection-table></app-data-selection-table>
-        </div>
-        <button
-        mat-raised-button
-        color="primary"
-        [disabled]="false"
-        (click)="siguiente()"
-      >
-        Siguiente
-      </button>
-    </div>
+    
 
-    <div id="edicion-contratacion">
+    <div *ngIf="nextStep" id="edicion-contratacion">
       <app-title-and-subtitle
       [title]="'Edición de la Contratación'"
-      [subtitle]="'Ingrese los nuevos datos de la Contratación.'"
+      [subtitle]="'Selecciona la Contratación que desea editar e ingrese los nuevos datos de la Contratación.'"
     ></app-title-and-subtitle>
+    <app-data-selection-table 
+  [data]="contractsDetailed" 
+  [columns]="columnDefs"
+  (rowSelected)="onRowSelected($event)">
+</app-data-selection-table>
+
     <form [formGroup]="contract_form">
-      <div class="fila-data">
+      <div class="flex-container mt-4">
         <fieldset>
           <app-input-field
             label="Fecha Desde"
@@ -99,7 +96,7 @@
         </fieldset>
         <fieldset>
           <app-input-field
-            label="Fecha Hasta"
+            label="Fecha Hasta (opcional)"
             placeholder="Ejemplo: Pérez"
             type="text"
             [control]="dateToControl"
@@ -119,15 +116,11 @@
         </fieldset>
       </div>
 
-      <button
-        class="btn-guardar-cambios"
-        mat-flat-button
-        color="accent"
-        [disabled]="contract_form.invalid"
-        (click)="openDialog()"
-      >
-        Guardar cambios
-      </button>
+      <app-btn-guardar-cambios
+          [disabled]="contract_form.invalid || !ownerFounded || btnControl"
+          (clickEvent)="openDialog()" 
+          [text]="'Guardar cambios'"
+        ></app-btn-guardar-cambios>
     </form>
     </div>
   </div>

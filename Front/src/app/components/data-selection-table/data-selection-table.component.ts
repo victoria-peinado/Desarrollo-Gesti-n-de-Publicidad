@@ -1,14 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, Output, ViewChild, EventEmitter, OnChanges } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-export interface ContractData {
-  id: number;
-  dateFrom: string;
-  dateTo: string;
-  regDate: string;
-  obs: string;
+export interface ColumnDefinition {
+  key: string;
+  label: string;
 }
 
 @Component({
@@ -16,31 +13,32 @@ export interface ContractData {
   templateUrl: './data-selection-table.component.html',
   styleUrl: './data-selection-table.component.scss'
 })
-export class DataSelectionTableComponent {
+export class DataSelectionTableComponent implements AfterViewInit, OnChanges {
 
-  displayedColumns: string[] = ['id', 'dateFrom', 'dateTo', 'regDate', 'obs', 'selected'];
-  dataSource: MatTableDataSource<ContractData>;
+  @Input() data: any[] = [];
+  @Input() columns: ColumnDefinition[] = [];
+  @Output() rowSelected = new EventEmitter<any>();
+
+  displayedColumns: string[] = [];
+  dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild(MatSort) sort: MatSort | null = null;
 
-  selectedRowId: number | null = null; // Almacena la fila seleccionada
+  selectedRowId: number | null = null;
 
   constructor() {
-    const contrataciones: ContractData[] = [
-      { id: 1, dateFrom: '2024-01-01', dateTo: '2024-01-15', regDate: '2024-01-10', obs: 'Contrato inicial' },
-      { id: 2, dateFrom: '2024-02-01', dateTo: '2024-02-10', regDate: '2024-02-05', obs: '' },
-      { id: 3, dateFrom: '2024-03-01', dateTo: '2024-03-10', regDate: '2024-03-07', obs: 'Firma electrónica' },
-      { id: 4, dateFrom: '2024-04-01', dateTo: '2024-04-12', regDate: '2024-04-08', obs: 'Renovación' },
-      { id: 5, dateFrom: '2024-05-01', dateTo: '2024-05-05', regDate: '2024-05-03', obs: '' },
-      { id: 6, dateFrom: '2024-06-01', dateTo: '2024-06-15', regDate: '2024-06-10', obs: 'Urgente' },
-      { id: 7, dateFrom: '2024-07-01', dateTo: '2024-07-10', regDate: '2024-07-05', obs: 'Contratación final' },
-      { id: 8, dateFrom: '2024-08-01', dateTo: '2024-08-10', regDate: '2024-08-07', obs: '' },
-      { id: 9, dateFrom: '2024-09-01', dateTo: '2024-09-15', regDate: '2024-09-10', obs: '' },
-      { id: 10, dateFrom: '2024-10-01', dateTo: '2024-10-15', regDate: '2024-10-12', obs: 'Nuevo acuerdo' },
-    ];
+    this.dataSource = new MatTableDataSource(this.data);
+  }
 
-    this.dataSource = new MatTableDataSource(contrataciones);
+  ngOnChanges() {
+    this.dataSource.data = this.data.map(item => ({
+      ...item,
+      estado: this.getEstado(item.dateTo) // Calcula el estado al cargar los datos
+    }));
+    this.displayedColumns = this.columns.map(col => col.key);
+    this.displayedColumns.push('estado'); // Agrega columna Estado
+    this.displayedColumns.push('selected'); // Agrega columna de selección
   }
 
   ngAfterViewInit() {
@@ -49,15 +47,35 @@ export class DataSelectionTableComponent {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
-  selectRow(row: ContractData) {
-    this.selectedRowId = row.id;
+  getEstado(dateTo: string | null): string {
+    if (!dateTo) return 'Sin fecha fin';
+    const today = new Date().toISOString().split('T')[0];
+    return dateTo < today ? 'Finalizada' : 'En curso';
+  }
+
+  getBadgeClass(estado: string): string {
+    return {
+      'Finalizada': 'bg-[#FFD5D6] text-[#BB0003] py-1 px-3 rounded-lg text-xs',
+      'En curso': 'bg-[#D6FFD4] text-[#01BB05] py-1 px-3 rounded-lg text-xs',
+      'Sin fecha fin': 'bg-[#D7E3FF] text-[#005CBB] py-1 px-3 rounded-lg text-xs'
+    }[estado] || 'bg-gray-200 text-black py-1 px-3 rounded-lg text-xs';
+  }
+
+  isSelectable(row: any): boolean {
+    return row.estado === 'En curso' || row.estado === 'Sin fecha fin';
+  }
+
+  selectRow(row: any) {
+    if (this.isSelectable(row)) {
+      this.selectedRowId = row.id;
+      this.rowSelected.emit(row);
+    }
   }
 }
