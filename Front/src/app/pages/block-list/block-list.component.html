@@ -1,12 +1,12 @@
 <!-- Display message when there are no trades -->
 <p *ngIf="lastElements.length === 0">
-  No hay comercios con los criterios requeridos
+  No hay historiales de precios
 </p>
 
 <!-- Display the cuit of the titular -->
 <section id="titular" *ngIf="lastElements.length != 0">
   <div class="m-5">
-    <b class="text-lg">Comercios de titular del cuit: {{ cuit }} </b>
+    <b class="text-lg">Precios de los bloques: </b>
   </div>
 </section>
 
@@ -59,7 +59,11 @@
     </mat-form-field>
 
     <div class="w-full flex justify-start items-start mb-6">
-      <app-btn-degrade [disabled]="form.invalid" [text]="'Filtrar'" (click)="filterTable()" class="ml-2 mt-2"></app-btn-degrade>
+      
+          <button class="btn-guardar-cambios" mat-flat-button color="accent" class="ml-2 mt-2"
+            [disabled]="form.invalid " (click)="filterTable()">
+            Filtrar
+        </button>
     </div>
   </div>
 
@@ -144,7 +148,7 @@
               {{ trade.value }}
             </td>
             <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-              {{ trade.regDate }}
+              {{ trade.formattedRegDate}}
             </td>
           </tr>
         </tbody>
@@ -164,7 +168,7 @@
           <div class="text-sm text-gray-700">
             <a href="#" class="font-bold text-blue-500 hover:underline">${{ trade.value }}</a>
           </div>
-          <div class="text-sm text-gray-700">{{ trade.regDate }}</div>
+          <div class="text-sm text-gray-700">{{ trade.formattedRegDate }}</div>
           <!-- <div class="text-sm font-medium text-black">{{ trade.id }}</div>
       <div class="text-sm font-medium text-black">{{ trade.idBlock }}</div> -->
         </ng-container>
@@ -175,6 +179,7 @@
           [@rotateArrow]="visibleContent[trade.block.numBlock] ? 'up' : 'down'">
           <mat-icon class="text-gray-500">expand_more</mat-icon>
         </button>
+
       </div>
     </div>
 

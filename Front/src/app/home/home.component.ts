@@ -66,7 +66,7 @@ export class HomeComponent implements AfterViewInit {
     selectedMenuItem: 'Edición Spot',
     lastOpenedSubMenu: 'Publicidades',
   },
-  '/bloques/listado-bloques': {
+  'blockList': {
     selectedMenuItem: 'Listado Bloques',
     lastOpenedSubMenu: 'Bloques',
   },

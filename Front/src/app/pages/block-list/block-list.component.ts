@@ -4,7 +4,7 @@ import { Price} from '../../models/price';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { take, tap } from 'rxjs/operators';
 import { ApiResponse } from '../../models/api_response.js';
-import { parse } from 'date-fns';
+
 import {
   trigger,
   state,
@@ -18,6 +18,7 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
+import { da } from 'date-fns/locale';
 
 @Component({
   selector: 'app-block-list',
@@ -35,9 +36,9 @@ export class BlockListComponent implements OnInit {
   @Input() cuit: string = '';
 
   inputfilter: string = '';
-  elements: Price[] = [];
+  elements: Price[] |any= [];
   allElements: Price[] = [];
-  lastElements: Price[] = [];
+  lastElements: Price[] |any = [];
   blocks: Block[] = [];
 
   //form to filter the table
@@ -68,69 +69,105 @@ export class BlockListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+   
     this.getBlocks();
     this.getHistory();
+    console.log('Blocks:', this.blocks)
+    console.log('History:', this.allElements);
   }
 
   //get the blocks of the database
-  getBlocks() {
-    this.myDataService
-      .getBlocks()
-      .pipe(take(1))
-      .subscribe({
-        next: (data: ApiResponse<Block[]>) => {
-          this.blocks = data.data;
-        },
-        error: (error: any) => {
-          console.error('Error fetching blocks:', error);
-        },
-      } as any);
-  }
+//get the blocks of the database
+getBlocks() {
+  this.myDataService
+    .getBlocks()
+    .pipe(take(1))
+    .subscribe({
+      next: (data: ApiResponse<Block[]>) => {
+        this.blocks = data.data;
+        console.log('Blockss:', this.blocks);
+        this.getHistory(); // Llama a getHistory() después de cargar los bloques
+      },
+      error: (error: any) => {
+        console.error('Error fetching blocks:', error);
+      },
+    } as any);
+}
+  //   //get the blocks of the database
+  // getBlocks() {
+  //   this.myDataService
+  //     .getBlocks()
+  //     .pipe(take(1))
+  //     .subscribe({
+  //       next: (data: ApiResponse<Block[]>) => {
+  //         console.log(data.data);
+  //         this.blocks = data.data.sort((a, b) => {
+  //           const numBlockA = parseInt(a.numBlock);
+  //           const numBlockB = parseInt(b.numBlock);
+  //           return numBlockA - numBlockB;
+  //         });
+  //       },
+  //       error: (error: any) => {
+  //         console.error('Error fetching blocks:', error);
+  //       },
+  //     } as any);
+  // }
   //get the last history of the selected block
   getHistory() {
-    this.myDataService
-      .getHistory()
-      .pipe(take(1))
-      .subscribe({
-        next: (response: ApiResponse<Price[]>) => {
-          if (Array.isArray(response.data)) {
-            this.allElements = response.data;
+  this.myDataService
+    .getHistory()
+    .pipe(take(1))
+    .subscribe({
+      next: (response: ApiResponse<Price[]>) => {
+        if (Array.isArray(response.data)) {
+          this.allElements = response.data;
+          console.log('Historyall:', this.allElements);
+          // Filtra el historial para obtener el último para cada bloque
+          console.log('Blocks:', this.blocks);
+          this.lastElements = this.blocks
+            .map((block) => {
+              const blockHistories = this.allElements
+                .filter((history) => history.block.id === block.id)
+                .sort(
+                  (a, b) =>
+                    new Date(b.regDate).getTime() -
+                    new Date(a.regDate).getTime()
+                );
 
-            // Filtra el historial para obtener el último para cada bloque
-            this.lastElements = this.blocks
-              .map((block) => {
-                const blockHistories = this.allElements
-                  .filter((history) => history.block.id === block.id)
-                  .sort(
-                    (a, b) =>
-                      new Date(b.regDate).getTime() -
-                      new Date(a.regDate).getTime()
-                  );
+              return blockHistories.length > 0 ? blockHistories[0] : null;
+            })
+            .filter((history) => history !== null) as Price[];
 
-                return blockHistories.length > 0 ? blockHistories[0] : null;
-              })
-              .filter((history) => history !== null) as Price[];
-            this.allElements = this.lastElements;
-            // Ordenar lastElements por el número de bloque
-            this.lastElements.sort((a, b) => {
-              const numBlockA = parseInt(a.block.numBlock);
-              const numBlockB = parseInt(b.block.numBlock);
-              return numBlockA - numBlockB;
+            this.lastElements.forEach((element: any) => {
+            const dateObject = new Date(element.regDate);
+            element.formattedRegDate = dateObject.toLocaleDateString('es-ES', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
             });
-
-            // Llama a la función separada para combinar los elementos
-            // this.combineElements();
-          } else {
-            console.error(
-              'The "data" property is not an array in the response.'
-            );
-          }
-        },
-        error: (error: any) => {
-          console.error('Error fetching history:', error);
-        },
-      } as any);
-  }
+          });
+          this.allElements = this.lastElements;
+          // Ordenar lastElements por el número de bloque
+          this.lastElements.sort((a:any, b:any) => {
+            const numBlockA = parseInt(a.block.numBlock);
+            const numBlockB = parseInt(b.block.numBlock);
+            return numBlockA - numBlockB;
+          });
+          console.log('History:', this.lastElements);
+          // Llama a la función separada para combinar los elementos
+          // this.combineElements();
+        } else {
+          console.error(
+            'The "data" property is not an array in the response.'
+          );
+        }
+      },
+      error: (error: any) => {
+        console.error('Error fetching history:', error);
+      },
+    } as any);
+}
+  
   // // Función para combinar this.blocks con this.lastElements
   // combineElements() {
   //   this.Prices = this.blocks.map((block) => {

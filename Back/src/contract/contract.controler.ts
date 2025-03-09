@@ -146,7 +146,7 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-async function getByShop(req: Request, res: Response) {
+async function getContractsByShopId(req: Request, res: Response) {
     try {
         const idShop = req.params.idShop
         const contracts = await em.find(Contract, {shop: idShop}, {populate: ['shop']} ) //¿popular con contacto y titular?
@@ -156,4 +156,4 @@ async function getByShop(req: Request, res: Response) {
     }
 }
 
-export {sanitizeContractInput, getByShop, findAll, findOne, add, update, remove}
+export {sanitizeContractInput, getContractsByShopId, findAll, findOne, add, update, remove}
