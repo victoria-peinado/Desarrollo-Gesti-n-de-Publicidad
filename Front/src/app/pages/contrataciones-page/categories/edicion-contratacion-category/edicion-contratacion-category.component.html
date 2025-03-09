@@ -118,7 +118,7 @@
 
       <app-btn-guardar-cambios
           [disabled]="contract_form.invalid || !ownerFounded || btnControl"
-          (clickEvent)="openDialog()" 
+          (clickEvent)="save()" 
           [text]="'Guardar cambios'"
         ></app-btn-guardar-cambios>
     </form>

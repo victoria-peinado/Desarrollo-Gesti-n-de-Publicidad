@@ -6,6 +6,7 @@ import { Owner } from '../models/owner';
 import { Contact } from '../models/contact';
 import { User } from '../models/user.js';
 import { environment } from 'src/environments/environment';
+import { Contract } from '../models/contract';
 
 @Injectable({
   providedIn: 'root',
@@ -151,4 +152,6 @@ export class MyDataService {
   }
 
   getContractsByShopId(idShop: string): Observable<any> {return this.http.get(`${this.apiUrl}contract/shop/${idShop}`);}
+
+  updateContract(contract: Contract): Observable<any> {return this.http.put(`${this.apiUrl}contract`, contract);}
 }
