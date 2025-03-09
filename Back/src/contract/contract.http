@@ -35,6 +35,13 @@ Authorization: Bearer {{token}}
 GET http://localhost:{{port}}/api/contract/{{idfirst}}
 Authorization: Bearer {{token}}
 
+
+
+###GETBYSHOP
+GET http://localhost:{{port}}/api/contract/shop/65c090e1ad3fb943fc5cb298
+Authorization: Bearer {{token}}
+
+
 ### POST
 # @name createContract
 POST http://localhost:{{port}}/api/contract
