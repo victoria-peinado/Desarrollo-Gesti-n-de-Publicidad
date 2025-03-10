@@ -189,4 +189,12 @@ export class MyDataService {
   payOrder(orderId: string,data:any): Observable<any> {
     return this.http.patch(`${this.apiUrl}order/registerPayment/${orderId}`, data);
   }
+  getODBByDates(dateFrom: string, dateTo: string): Observable<any> {
+    const params = new HttpParams()
+      .set('dateFrom', dateFrom)
+      .set('dateTo', dateTo);
+
+    return this.http.get(`${this.apiUrl}dayorderblock/dates`, { params });
+  }
+
 }

@@ -30,12 +30,23 @@
             mat-raised-button
             color="primary"
             [disabled]="list_form.invalid"
-            (click)="null"
+            (click)="findList()"
           >
             Siguiente
           </button>
     </form>
     </div>
-  
-    <div id="listado"></div>
+  <div id="listado" style="display: flex; flex-direction: column;">
+    <div *ngFor="let group of groupedData" style="margin-bottom: 20px;">
+      <h2>Día: {{ group.day }} - Bloque: {{ group.startTimeBlock }}</h2>
+      <app-data-table-dob [items]="group.items" [columns]="[
+            { key:'index', label: 'Index'},
+            {key: 'spotName', label:'Spot'},
+            { key: 'fantasyName', label: 'Comercio' },
+            { key: 'id', label: 'ID' },
+            { key: 'order', label: 'Orden' },
+          ]">
+      </app-data-table-dob>
+    </div>
+  </div>
   </div>

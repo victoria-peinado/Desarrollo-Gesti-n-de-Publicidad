@@ -46,11 +46,16 @@ Authorization: Bearer {{token}}
 
 
 ###
-@dateFrom = 2025-3-6
-@dateTo= 2025-2-27
+@dateFrom = 2025-3-10
+@dateTo= 2025-3-11
 GET http://localhost:{{port}}/api/dayorderblock/dates?dateFrom={{dateFrom}}&dateTo={{dateTo}}
 Authorization: Bearer {{token}}
 
+
+###ELIMINAR DOBS SIN ORDEN
+
+POST http://localhost:{{port}}/api/dayorderblock/limpiarBBDD
+Authorization: Bearer {{token}}
 
 
 ###dateTo no es obligatoria, default HOY. // dateFrom no puede ser mayor que dateTo

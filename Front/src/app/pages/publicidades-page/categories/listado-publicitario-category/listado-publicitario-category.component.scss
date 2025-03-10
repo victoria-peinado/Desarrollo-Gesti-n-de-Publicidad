@@ -1,7 +1,23 @@
-.fila-data {
+#listado {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 2rem;
-    padding-bottom: 15px;
+    flex-direction: column;
+}
+
+#listado>div {
+    margin-bottom: 20px;
+}
+
+#listado {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    
+}
+app-data-table-dob {
+    margin-bottom: 250px;
+  
+}
+#listado h2 {
+    margin-bottom: 20px;
+    /* Ajusta el valor según tus necesidades */
 }
