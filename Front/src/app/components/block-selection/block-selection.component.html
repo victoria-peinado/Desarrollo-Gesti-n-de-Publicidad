@@ -1,0 +1,47 @@
+<mat-tab-group>
+    @for (day of daysOfWeek; track day) {
+      <mat-tab [label]="day">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="addBlock(day)"
+          class="mt-4"
+        >
+          <mat-icon fontIcon="add"></mat-icon>
+          Bloque
+        </button>
+  
+        <div class="grid-container">
+          @if (blocksPerDay[day].length === 0) {
+            <p class="empty-message">Aún no hay bloques añadidos.</p>
+          } @else {
+            @for (block of blocksPerDay[day]; track block.id) {
+              <div class="block-wrapper" @blockAnimation>
+                <mat-form-field appearance="outline" class="selector">
+                  <mat-label>Elegir hora</mat-label>
+                  <mat-select
+                    [value]="block.time"
+                    (selectionChange)="updateBlock(day, block.id, $event.value)"
+                  >
+                    @for (time of blockTimes; track time) {
+                      <mat-option [value]="time">{{ time }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <div class="delete-btn">
+                  <button mat-icon-button color="warn" (click)="removeBlock(day, block.id)">
+                    <mat-icon fontIcon="delete"></mat-icon>
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </mat-tab>
+    }
+  </mat-tab-group>
+  
+  <div class="show-btn-container">
+    <button mat-raised-button color="accent" (click)="showBlocks()">Mostrar bloques</button>
+  </div>
+  

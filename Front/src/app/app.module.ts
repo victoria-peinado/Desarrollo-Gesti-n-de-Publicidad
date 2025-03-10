@@ -75,6 +75,7 @@ import { CardComponent } from './components/card/card.component';
 import { InputContactsComponent } from './components/input-contacts/input-contacts.component';
 import { AltaUsuarioComponent } from './pages/usuarios-page/categories/alta-usuario/alta-usuario.component';
 import { EdicionUsuarioComponent} from './pages/usuarios-page/categories/edicion-usuario/edicion-usuario.component';
+import { BlockSelectionComponent } from './components/block-selection/block-selection.component';
 @NgModule({ declarations: [
         AppComponent,
         MainNavComponent,
@@ -142,7 +143,8 @@ import { EdicionUsuarioComponent} from './pages/usuarios-page/categories/edicion
         CardComponent,
         InputContactsComponent,
         AltaUsuarioComponent,
-        EdicionUsuarioComponent
+        EdicionUsuarioComponent,
+        BlockSelectionComponent
         
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

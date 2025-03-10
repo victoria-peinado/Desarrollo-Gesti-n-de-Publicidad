@@ -20,7 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatExpansionModule} from '@angular/material/expansion';
-
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 const MaterialComponents = [  
@@ -44,7 +44,8 @@ const MaterialComponents = [
   MatNativeDateModule,
   MatRadioModule,
   MatChipsModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatTabsModule,
 
 ]
 
