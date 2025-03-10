@@ -1,47 +1,80 @@
+<div class="mode-toggle">
+  <mat-checkbox [(ngModel)]="isNoRegular" (change)="toggleMode()">
+    No regular
+  </mat-checkbox>
+</div>
+
 <mat-tab-group>
-    @for (day of daysOfWeek; track day) {
-      <mat-tab [label]="day">
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="addBlock(day)"
-          class="mt-4"
-        >
-          <mat-icon fontIcon="add"></mat-icon>
-          Bloque
-        </button>
-  
-        <div class="grid-container">
-          @if (blocksPerDay[day].length === 0) {
-            <p class="empty-message">Aún no hay bloques añadidos.</p>
-          } @else {
-            @for (block of blocksPerDay[day]; track block.id) {
-              <div class="block-wrapper" @blockAnimation>
-                <mat-form-field appearance="outline" class="selector">
-                  <mat-label>Elegir hora</mat-label>
-                  <mat-select
-                    [value]="block.time"
-                    (selectionChange)="updateBlock(day, block.id, $event.value)"
-                  >
-                    @for (time of blockTimes; track time) {
-                      <mat-option [value]="time">{{ time }}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
-                <div class="delete-btn">
-                  <button mat-icon-button color="warn" (click)="removeBlock(day, block.id)">
-                    <mat-icon fontIcon="delete"></mat-icon>
-                  </button>
-                </div>
-              </div>
-            }
-          }
-        </div>
-      </mat-tab>
-    }
-  </mat-tab-group>
-  
-  <div class="show-btn-container">
-    <button mat-raised-button color="accent" (click)="showBlocks()">Mostrar bloques</button>
+  <ng-container *ngIf="!isNoRegular">
+    <mat-tab *ngFor="let day of daysOfWeek" [label]="day">
+      <ng-container
+        *ngTemplateOutlet="blocksTemplate; context: { label: day }"
+      ></ng-container>
+    </mat-tab>
+  </ng-container>
+
+  <ng-container *ngIf="isNoRegular">
+    <mat-tab *ngFor="let date of customDates" [label]="date">
+      <ng-container
+        *ngTemplateOutlet="blocksTemplate; context: { label: date }"
+      ></ng-container>
+    </mat-tab>
+
+    <mat-tab label="Añadir fecha +">
+      <div class="add-date-container">
+        <input
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Selecciona una fecha"
+          (dateChange)="addCustomDate($event)"
+        />
+
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </div>
+    </mat-tab>
+  </ng-container>
+</mat-tab-group>
+
+<ng-template #blocksTemplate let-label="label">
+  <div class="btn-price">
+    <button mat-raised-button color="primary" (click)="addBlock(label)">
+      <mat-icon fontIcon="add"></mat-icon>
+      Bloque
+    </button>
+    <span>Precio por bloque: $1000</span>
   </div>
-  
+
+  <div class="grid-container">
+    <p *ngIf="!blocksPerDay[label]?.length" class="empty-message">
+      Aún no hay bloques añadidos.
+    </p>
+
+    <div
+      *ngFor="let block of blocksPerDay[label]"
+      class="block-wrapper"
+      @blockAnimation
+    >
+      <mat-form-field appearance="outline" class="selector">
+        <mat-label>Elegir hora</mat-label>
+        <mat-select
+          [value]="block.time"
+          (selectionChange)="updateBlock(label, block.id, $event.value)"
+        >
+          <mat-option *ngFor="let time of blockTimes" [value]="time">{{
+            time
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="delete-btn">
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="removeBlock(label, block.id)"
+        >
+          <mat-icon fontIcon="delete"></mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

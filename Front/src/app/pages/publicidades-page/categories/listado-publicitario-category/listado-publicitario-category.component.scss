@@ -7,8 +7,17 @@
     margin-bottom: 20px;
 }
 
-#listado ::ng-deep app-data-table-dob {
-    /* Estilos específicos para el componente hijo */
-    margin-top: 0;
-    padding: 0;
+#listado {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    
+}
+app-data-table-dob {
+    margin-bottom: 250px;
+  
+}
+#listado h2 {
+    margin-bottom: 20px;
+    /* Ajusta el valor según tus necesidades */
 }
