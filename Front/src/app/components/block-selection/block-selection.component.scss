@@ -57,3 +57,37 @@
     color: #630E0E;
     transition: color 0.1s ease-out;
 }
+
+
+.btn-price {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 1rem 0;
+  gap: 1rem;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+
+.mode-toggle {
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.add-date-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.empty-message {
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  padding: 1rem;
+}

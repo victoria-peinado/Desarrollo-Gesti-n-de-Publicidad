@@ -70,6 +70,10 @@ export class MyDataService {
     return this.http.post(`${this.apiUrl}shop`, Shop);
   }
 
+  createSpot(spot: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}spot`, spot);
+  }
+
   getShop(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}shop/${id}`);
   }
@@ -111,6 +115,11 @@ export class MyDataService {
   createOwner(owner: Owner) {
     return this.http.post(`${this.apiUrl}owner`, owner);
   }
+
+  createOrder(order: any) {
+    return this.http.post(`${this.apiUrl}order`, order);
+  }
+
   updateOwner(owner: Owner) {
     return this.http.put(`${this.apiUrl}owner`, owner);
   }
