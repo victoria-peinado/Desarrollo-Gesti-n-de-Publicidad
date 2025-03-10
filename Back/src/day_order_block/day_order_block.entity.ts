@@ -8,7 +8,7 @@ import { z } from "zod";
 @Entity()
 export class DayOrderBlock extends BaseEntity {
 
-    @Property()
+    @Property({nullable: false})
     day!: Date;
 
     //inversedBy lo define como "dueño" de la relación. 
@@ -20,10 +20,10 @@ export class DayOrderBlock extends BaseEntity {
     order!: Rel<Order>
     */
 
-    @ManyToOne(() => Block)
+    @ManyToOne(() => Block, { nullable: false})
     block!: Rel<Block>
 
-    @ManyToOne(() => Order)
+    @ManyToOne(() => Order, {  nullable: false })
     order!: Rel<Order>
 
 }

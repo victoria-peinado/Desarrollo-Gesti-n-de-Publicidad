@@ -3,6 +3,9 @@ import { orm } from "../shared/db/orm.js";
 import { DayOrderBlock } from "./day_order_block.entity.js";
 import { compareAsc } from "date-fns";
 import { Block } from "../block/block.entity.js";
+import { Contact } from "../contact/contact.entity.js";
+import { Contract } from "../contract/contract.entity.js";
+import { Order } from "../order/order.entity.js";
 
 const em = orm.em
 em.getRepository(DayOrderBlock)
@@ -63,15 +66,28 @@ async function findByDates(req: Request, res: Response) {
             throw new Error('La fecha DESDE no puede ser mayor que la fecha HASTA')
         }
         console.log('Las fechas son desde: ', dF, 'hasta ', dT)
-        const dobs = await em.find(DayOrderBlock, {
+        const emanag = em.fork()
+        const dobs = await emanag.find(DayOrderBlock, {
             day: {
                 $gte: dF,  // Mayor o igual que fechaInicio
                 $lte: dT      // Menor o igual que fechaFin
             }
-        }, { populate: ['order.spot.id', 'block.startTime'] }
-        );
+        }, {
+            populate: ['order', 'order.contract', 'order.spot', 'order.contract.shop', 'order.contract.shop.fantasyName', 'block.startTime']
+        });
         const msj = 'Find DayOrderBlocks from: ' + dF + ' to ' + dT
+
+        // for (const d of dobs) {
+        //     console.log('-------------------------')
+        //     console.log(d)
+        //     console.log(d.order)
+        //     console.log(d.order.contract)
+        //     console.log(d.order.contract.shop)
+
+        // }
+
         const data = responseDataContructor(dobs)
+
         res.status(200).json({ message: msj, data: data });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -86,8 +102,10 @@ function responseDataContructor(dobs: DayOrderBlock[]) {
             id: dob.id,
             day: dob.day,
             block: dob.block.id,
+            numBlock: dob.block.numBlock,
             startTimeBlock: dob.block.startTime,
             order: dob.order.id,
+            fantasyName: dob.order.contract.shop.fantasyName,
             spot: dob.order.spot?.id,
             spotName: dob.order.spot?.name
         })
@@ -107,5 +125,19 @@ async function createNewDOB(o: string | undefined, b: string | undefined, d: Dat
 }
 
 
+async function sanitizeBBDD(req: Request, res: Response) {
+    try {
+        console.log('Entre a la funcion')
+        const orderIds = await em.find(Order, {}, { fields: ['id'] });
+        const dobs = await em.find(DayOrderBlock, { order: { $nin: orderIds } });
+        em.remove(dobs)
+        await em.flush()
+        res.status(200).json({ message: 'Eliminadas correctamente: ', data: dobs });
 
-export { createNewDOB, findAll, findOne, findByDates, sanitizeDOBInput }
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
+export { createNewDOB, findAll, findOne, findByDates, sanitizeDOBInput, sanitizeBBDD }
