@@ -107,6 +107,31 @@ type TupleBlocksType = z.infer<typeof TupleBlocksSchema>
 
 type TupleBlocksReqType = z.infer<typeof TupleBlocksSchemaReq>
 
+export interface OrderInterface {
+  nameStrategy: string,
+  obs: string,
+  showName: string,
+  month: string, // 'MM-YYYY'
+  regular: boolean,
+  regStructure?: BlocksRegularType | undefined,
+  notRegStructure?: BlocksNotRegularType | undefined ,
+  contract: string,
+  spot?: string | undefined
+  dateFrom: Date,
+  dateTo: Date,
+  numOrder?: number,
+  regDate: Date,
+  liq: boolean, 
+  totalAds?: number,
+  daysAmount?: number,
+  totalCost?: number,
+  dailyCost?: number,
+  cancelDate?: Date,
+  paymentDate?: Date,
+  paymentForm?: string,
+  paymentObs?: string,
+}
+
 const DateOrStringSchema = z.date().or(z.string().regex(/^\d{4}-\d{1,2}-\d{1,2}$/, 'Formato de fecha inválido (yyyy-m-d o yyyy-mm-dd)')) //default(()=> new Date()), //podriamos poner la fecha de hoy como default. 
 
 export const OrderSchema = z.object({
@@ -151,7 +176,7 @@ export const UpdSpotOrderSchema = z.object({
 })
 
 
-export { BlocksRegularSchema, TupleBlocksSchema, BlocksRegularType, TupleBlocksType, TupleBlocksReqType, TupleBlocksSchemaReq, BlocksNotRegularType }
+export { BlocksRegularSchema, TupleBlocksSchema, BlocksRegularType, TupleBlocksType, TupleBlocksReqType, TupleBlocksSchemaReq, BlocksNotRegularType, }
 
 export const PutOrderSchema = OrderSchema.omit({ contract: true }); // Partial schema for updates
 

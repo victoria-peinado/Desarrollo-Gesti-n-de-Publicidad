@@ -45,3 +45,5 @@ export const OwnerSchema = z.object({
   //shops: z.array(ShopSchema).optional()
 });
 export const ParcialOwnerSchema = OwnerSchema.partial();
+
+export type OwnerInterface = z.infer<typeof OwnerSchema>

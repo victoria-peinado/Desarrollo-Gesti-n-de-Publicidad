@@ -54,3 +54,5 @@ export const PatchContractSchema = z.object({
 
 });
 export const PutContractSchema = ContractSchema.omit({shop:true}).partial(); // Partial schema for updates
+
+export type ContractInterface = z.infer<typeof ContractSchema>

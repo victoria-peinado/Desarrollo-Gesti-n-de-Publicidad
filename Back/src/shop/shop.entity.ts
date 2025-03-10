@@ -31,7 +31,7 @@ export class Shop extends BaseEntity{
     fantasyName!: string
     
     @Property({nullable:false})    
-    address!: Address
+    address!: string | Address
     
     @Property({nullable:false})    
     billingType!: string //condicionfiscal. fiscalCondition
