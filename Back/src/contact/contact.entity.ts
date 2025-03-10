@@ -47,3 +47,5 @@ export const ContactSchema = z.object({
   //shops: z.array(ShopSchema).optional(), // Valida la relación con Shop
 });
 export const ParcialContactSchema = ContactSchema.partial(); // Schema for partial updates
+
+export type ContactInterface = z.infer<typeof ContactSchema>
