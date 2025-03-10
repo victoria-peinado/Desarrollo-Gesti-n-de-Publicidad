@@ -196,5 +196,12 @@ export class MyDataService {
 
     return this.http.get(`${this.apiUrl}dayorderblock/dates`, { params });
   }
+  uploadAudio(audioFile: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('audio', audioFile, audioFile.name);
 
+  
+
+    return this.http.post(`${this.apiUrl}spot/upload`, formData);
+  }
 }
