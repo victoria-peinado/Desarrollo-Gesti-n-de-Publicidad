@@ -26,8 +26,9 @@
           matInput
           [matDatepicker]="picker"
           placeholder="Selecciona una fecha"
-          (dateChange)="addCustomDate($event.value)"
+          (dateChange)="addCustomDate($event)"
         />
+
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </div>

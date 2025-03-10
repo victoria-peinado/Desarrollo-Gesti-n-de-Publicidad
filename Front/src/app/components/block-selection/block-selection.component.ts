@@ -47,10 +47,14 @@ export class BlockSelectionComponent {
     this.daysOfWeek.forEach(day => this.blocksPerDay[day] = []);
   }
 
-  addCustomDate(date: string) {
-    if (date && !this.customDates.includes(date)) {
-      this.customDates.push(date);
-      this.blocksPerDay[date] = [];
+  addCustomDate(event: any) {
+    const date: Date = event.value;
+    if (date) {
+      const formattedDate = this.formatDate(date);
+      if (!this.customDates.includes(formattedDate)) {
+        this.customDates.push(formattedDate);
+        this.blocksPerDay[formattedDate] = [];
+      }
     }
   }
 
@@ -93,8 +97,19 @@ export class BlockSelectionComponent {
     return ((hour * 2) + (minute === 30 ? 1 : 0)).toString();
   }
 
+  private formatDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Meses en JS son 0-indexed
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+  
+
   emitRegStructure() {
     const regStructure = this.generateRegStructure();
     this.regStructureChange.emit(regStructure);
   }
+
+  
+  
 }
