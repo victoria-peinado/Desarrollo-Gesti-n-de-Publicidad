@@ -70,10 +70,16 @@ Content-Type: application/json
 
 
 ### GET NOT PAY ORDERS FILTER BY DATES V2
+
 @dateFrom = 2025-1-1
 @dateTo= 2026-12-1
 GET http://localhost:{{port}}/api/order/dates/v2/notPayOrders?dateFrom={{dateFrom}}&dateTo={{dateTo}}
 Authorization: Bearer {{token}}
+
+
+
+###
+POST http://localhost:3001/api/order/migrarFechas
 
 
 ### POST

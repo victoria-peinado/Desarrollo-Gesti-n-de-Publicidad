@@ -11,7 +11,7 @@ import { checkAll, numsToIds2 } from "../block/block.controler.js";
 import { PaymentMethod, Shop } from "../shop/shop.entity.js";
 import { Spot } from "../spot/spot.entity.js";
 import { validateIdsExistence, validateUniqueFields } from "../shared/db/validations.js";
-import { EntityRepository } from "@mikro-orm/core";
+import { DateType, EntityRepository } from "@mikro-orm/core";
 import { Owner } from "../owner/owner.entity.js";
 
 const em = orm.em
@@ -35,6 +35,8 @@ function sanitizeOrderInput(req: Request, res: Response, next: NextFunction) {
         paymentDate: req.body.paymentDate,
         paymentForm: req.body.paymentForm,
         paymentObs: req.body.paymentObs,
+        dateFrom: req.body.dateFrom,
+        dateTo: req.body.dateTo,
         notRegStructure: req.body.notRegStructure,
         contract: req.body.contract,
         spot: req.body.spot,
@@ -174,6 +176,7 @@ async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, re
 
     order.month = format(dateFrom, 'MM-yyyy')
     order.totalCost = 0
+    order.dateFrom = dateFrom
 
 
     if (order?._id === undefined) {
@@ -183,9 +186,12 @@ async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, re
 
     let tuples: TupleBlocksType[] = []
 
+    order.dateTo = dateToCalculate(dateFrom, dateTo)
+
 
     if (regular) {
-        tuples = await createTuples2(regStructure, dateFrom, dateTo)
+        tuples = await createTuples2(regStructure, dateFrom, dateTo
+        )
     } else {
         if (notRegStructure != undefined) {
             tuples = await createNotRegularTuples(notRegStructure, dateFrom, dateTo)
@@ -258,6 +264,7 @@ function totalCostCalculete(ids: string[], allBlocks: Block[]) {
 
 
 async function update(req: Request, res: Response) {
+    //solo deberiamos dejar actualizar el nombre del show, las observaciones, nameStrategy.
     try {
         const id = req.params.id;
         const sanitizeInput = req.body.sanitizeInput;
@@ -268,7 +275,16 @@ async function update(req: Request, res: Response) {
 
         try {
             const order = em.getReference(Order, id);
-            em.assign(order, sanitizeInput);
+            if (req.body.sanitizeInput.showName != undefined) {
+                order.showName = req.body.sanitizeInput.showName
+            }
+            if (req.body.sanitizeInput.obs != undefined) {
+                order.obs += '  ------   ' + req.body.sanitizeInput.obs
+            }
+            if (req.body.sanitizeInput.nameStrategy != undefined) {
+                order.nameStrategy = req.body.sanitizeInput.nameStrategy
+            }
+            em.persist(order);
             await em.flush();
             res.status(200).json({ message: 'Order modified successfully', data: order });
         } catch (updateError: any) {
@@ -347,6 +363,7 @@ async function createTuples2(regStructure: BlocksRegularType, dateFrom: Date, da
     if (numsCorrectos) { //si todos los bloques son correctos funciona.... 
 
         const lastDay: Date = dateToCalculate(dateFrom, dateTo)
+
 
         const daysOfMonth = eachDayOfInterval({ start: dateFrom, end: lastDay }) //ambos inclusives
         daysOfMonth.forEach(day => {
@@ -507,28 +524,35 @@ async function renovateRegularOrders(actualMonth: string): Promise<[boolean, Ord
 
             // si las fechas son validas creamos la orden, sino la ignoramos. 
             if (validOrder) {
-                const body = dataConstructor(actualOrder)
-                if (body.regStructure != undefined) {
-                    const newOrder = em.create(Order, body)
-                    await em.flush();
-
-                    await asingAtributes(newOrder, firstDayNextMonth, newOrder.regular, body.regStructure, undefined, newOrder.contract.dateTo)
-                    em.persist(newOrder)
-                    ordersCreated.push(newOrder)
-
-                    await em.flush()
-                    //console.log('Ordenes creadas con exito: ', ordersCreated)
-                } else {
-                    throw new Error('Error inesperado. Estructura regular sin definir');
-                }
-
+                crearOrdenRegularRenovada(actualOrder, firstDayNextMonth, ordersCreated, actualOrder.contract.dateTo)
+                //console.log('Ordenes creadas con exito: ', ordersCreated)
+            } else {
+                throw new Error('Error inesperado. Estructura regular sin definir');
             }
+
         }
+
         return [true, ordersCreated]
+
 
     } catch (error: any) {
         console.log('ALGO SE ROMPIO AL RENOVAR LAS ORDENES ', error)
         return [false, error]
+    }
+}
+
+
+async function crearOrdenRegularRenovada(actualOrder: Order, firstDayNextMonth: Date, ordersCreated: Order[], dateTo: Date | undefined) {
+    const body = dataConstructor(actualOrder)
+    if (body.regStructure != undefined) {
+        const newOrder = em.create(Order, body)
+        await em.flush();
+
+        await asingAtributes(newOrder, firstDayNextMonth, newOrder.regular, body.regStructure, undefined, dateTo)
+        em.persist(newOrder)
+        ordersCreated.push(newOrder)
+
+        await em.flush()
     }
 }
 
@@ -549,6 +573,8 @@ function dataConstructor(order: Order) {
         regular: true,
         regStructure: order.regStructure,
         cancelDate: undefined,
+        dateFrom: new Date(),
+        dateTo: new Date(),
         notRegStructure: undefined,
         contract: order.contract,
         spot: order.spot
@@ -616,49 +642,10 @@ async function cancelOrder(req: Request, res: Response) {
             const cancelMonth = format(cancelDate, 'MM-yyyy')
 
             if (order.month === cancelMonth) {
-                order.cancelDate = cancelDate
-                if (order.obs === undefined) { order.obs = '' }
-                order.obs = order.obs + '\n \n Info de Cancelación: \n' + req.body.sanitizeInput.obs
-                let ternarias = await order.days_orders_blocks.loadItems()
-                //popular y borrar todos los objetos DayOrderBlock que esten entre ese dia y el ultimo del mes. 
-                const ids_validas: string[] = [] //no se le asigna un tipo de dato....
-                ternarias.forEach(tern => {
-
-                    //si es mayor a la fecha de cancelación se elimina ese objeto.
-                    if (compareAsc(tern.day, cancelDate) >= 0) {
-                        remover.push(tern)
-                    } else {
-                        //si el objeto se queda en la orden guardamos el id.
-                        if (tern.block._id != undefined) {
-                            ids_validas.push(tern.block._id.toString())
-                        }
-                    }
-                });
-
-                //recalcular los atributos......
-
-                const allBlocks = await em.find(Block, {}, { populate: ['prices', 'prices.value'] })
-                let totalCost = 0;
-
-                totalCost = totalCostCalculete(ids_validas, allBlocks)
-                order.totalCost = totalCost
-
-                em.remove(remover)
-                order.days_orders_blocks?.remove(remover)
-                order.totalAds = order.days_orders_blocks?.length
-                if (order.days_orders_blocks != undefined) {
-                    order.daysAmount = daysAmountFromDOB(order.days_orders_blocks.getItems())
-                }
 
 
-                if (order.totalCost === 0) {
-                    //si el costo es cero la registramos como paga. 
-                    order.paymentDate = new Date()
-                    order.paymentForm = "Efectivo"
-                    order.liq = true
-                }
+                actualizarPostCancelacion(order, cancelDate, remover, req.body.sanitizeInput.obs)
 
-                em.persist(order)
 
 
                 const data = {
@@ -683,6 +670,55 @@ async function cancelOrder(req: Request, res: Response) {
 }
 
 
+async function actualizarPostCancelacion(order: Order, cancelDate: Date, remover: DayOrderBlock[], obs: string) {
+    order.cancelDate = cancelDate
+    order.dateTo = cancelDate
+    if (order.obs === undefined) { order.obs = '' }
+    order.obs = order.obs + '\n \n Info de Cancelación: \n' + obs
+    let ternarias = await order.days_orders_blocks.loadItems()
+    //popular y borrar todos los objetos DayOrderBlock que esten entre ese dia y el ultimo del mes. 
+    const ids_validas: string[] = [] //no se le asigna un tipo de dato....
+    ternarias.forEach(tern => {
+
+        //si es mayor a la fecha de cancelación se elimina ese objeto.
+        if (compareAsc(tern.day, cancelDate) >= 0) {
+            remover.push(tern)
+        } else {
+            //si el objeto se queda en la orden guardamos el id.
+            if (tern.block._id != undefined) {
+                ids_validas.push(tern.block._id.toString())
+            }
+        }
+    });
+
+    //recalcular los atributos......
+
+    const allBlocks = await em.find(Block, {}, { populate: ['prices', 'prices.value'] })
+    let totalCost = 0;
+
+    totalCost = totalCostCalculete(ids_validas, allBlocks)
+    order.totalCost = totalCost
+
+    em.remove(remover)
+    order.days_orders_blocks?.remove(remover)
+    order.totalAds = order.days_orders_blocks?.length
+    if (order.days_orders_blocks != undefined) {
+        order.daysAmount = daysAmountFromDOB(order.days_orders_blocks.getItems())
+    }
+
+
+    if (order.totalCost === 0) {
+        //si el costo es cero la registramos como paga. 
+        order.paymentDate = new Date()
+        order.paymentForm = "Efectivo"
+        order.liq = true
+    }
+    em.persist(order)
+    await em.flush()
+    return order
+}
+
+
 async function registerPayment(req: Request, res: Response) {
     try {
         let paymentDate: Date = checkStringToDate(req.body.sanitizeInput.paymentDate)
@@ -694,7 +730,8 @@ async function registerPayment(req: Request, res: Response) {
         const order = await em.findOneOrFail(Order, { id })
         console.log('La orden que trajo es: ', order)
 
-        if (order.paymentDate === undefined && order.liq !== true) { //deberia ser valido considerar cualquiera de las dos.
+        if (order.paymentDate === undefined && order.liq === false) { //deberia ser valido considerar cualquiera de las dos.
+
 
             order.paymentDate = paymentDate
             order.paymentForm = paymentForm
@@ -759,10 +796,10 @@ async function getNotPayOrdersByShop(req: Request, res: Response) {
         const shop = await em.findOneOrFail(Shop, { id: id_shop }, { populate: ['contracts', 'contracts.orders'] })
         const orders: Order[] = []
         const contracts = shop.contracts.getItems()
-        for (const contract of contracts){
+        for (const contract of contracts) {
             const ords = contract.orders.getItems()
-            for (const ord of ords){
-                if(ord.liq === false){
+            for (const ord of ords) {
+                if (ord.liq === false) {
                     orders.push(ord)
                 }
             }
@@ -775,7 +812,7 @@ async function getNotPayOrdersByShop(req: Request, res: Response) {
 
 async function findAllNotPayOrders(req: Request, res: Response) {
     try {
-        const orders = await em.find(Order, {liq: false}, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
+        const orders = await em.find(Order, { liq: false }, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
         res.status(200).json({ message: 'Find all not pay Orders', data: orders })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -789,14 +826,15 @@ async function findNotPayOrdersByDates(req: Request, res: Response) {
         if (compareAsc(dateFrom, dateTo) === 1) {
             throw new Error('La fecha DESDE no puede ser mayor que la fecha HASTA')
         }
-        const monthFrom = format(dateFrom, "MM-yyyy"); 
-        const monthTo = format(dateTo, "MM-yyyy"); 
+        const monthFrom = format(dateFrom, "MM-yyyy");
+        const monthTo = format(dateTo, "MM-yyyy");
 
         const orders = await em.find(Order, {
             liq: false, month: {
-                $gte: monthFrom,  
-                $lte: monthTo     
-            } }, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
+                $gte: monthFrom,
+                $lte: monthTo
+            }
+        }, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
         res.status(200).json({ message: 'Find all not pay Orders', data: orders })
     } catch (error: any) {
         res.status(500).json({ message: error.message })
@@ -819,7 +857,7 @@ async function findNotPayOrdersByDates2(req: Request, res: Response) {
         if (compareAsc(dF, dT) === 1) {
             throw new Error('La fecha DESDE no puede ser mayor que la fecha HASTA')
         }
-        
+
         const monthFrom = format(dF, "MM-yyyy");
         const monthTo = format(dT, "MM-yyyy");
 
@@ -836,9 +874,25 @@ async function findNotPayOrdersByDates2(req: Request, res: Response) {
 }
 
 
+async function migrateDatesOrder(req: Request, res: Response) {
+    try {
+        const ordersMarch = await em.find(Order, { month: "03-2025", totalCost: 12400 })
+        for (const order of ordersMarch) {
+            order.dateFrom = new Date('2025-3-1')
+            order.dateTo = new Date('2025-3-31')
+        }
+        em.flush()
+        res.status(200).json({ message: 'Ordenes actualizadas correctamente', data: ordersMarch })
+
+    }
+    catch (error: any) {
+        res.status(500).json({ message: error.message })
+
+    }
+}
 
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2 }
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, actualizarPostCancelacion, crearOrdenRegularRenovada, migrateDatesOrder }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]

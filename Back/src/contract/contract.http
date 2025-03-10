@@ -71,15 +71,13 @@ Content-Type: application/json
 }
 
 ### PATCH
-PATCH http://localhost:{{port}}/api/contract/{{id}}
+@id_patch = 67b905fb4bd0c3f4c7685797
+PATCH http://localhost:{{port}}/api/contract/{{id_patch}}
 Authorization: Bearer {{token}}
 Content-Type: application/json 
 
 {
-
-
-    "observations" : "si se",
-    "shop": "{{idShop}}"
+    "dateTo": "2025-3-20"
 }
 
 ### DELETE
