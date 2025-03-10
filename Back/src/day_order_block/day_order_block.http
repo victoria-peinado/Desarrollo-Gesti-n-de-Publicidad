@@ -46,8 +46,8 @@ Authorization: Bearer {{token}}
 
 
 ###
-@dateFrom = 2025-3-6
-@dateTo= 2025-2-27
+@dateFrom = 2025-2-1
+@dateTo= 2025-2-28
 GET http://localhost:{{port}}/api/dayorderblock/dates?dateFrom={{dateFrom}}&dateTo={{dateTo}}
 Authorization: Bearer {{token}}
 

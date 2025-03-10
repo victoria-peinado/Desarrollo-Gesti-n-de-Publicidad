@@ -67,12 +67,31 @@ async function findByDates(req: Request, res: Response) {
                 $gte: dF,  // Mayor o igual que fechaInicio
                 $lte: dT      // Menor o igual que fechaFin
             }
-        }, { populate: ['order.spot.id'] });
+        }, { populate: ['order.spot.id'] }
+        );
         const msj = 'Find DayOrderBlocks from: ' + dF + ' to ' + dT
-        res.status(200).json({ message: msj, data: dobs });
+        const data = responseDataContructor(dobs)
+        res.status(200).json({ message: msj, data: data });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
+}
+
+
+function responseDataContructor(dobs: DayOrderBlock[]){
+    const data = []
+    for (const dob of dobs){
+        data.push({
+            id: dob.id,
+            day: dob.day,
+            block: dob.block.id,
+            order: dob.order.id,
+            spot: dob.order.spot?.id,
+            spotName: dob.order.spot?.name
+        })
+
+    }
+    return data
 }
 
 
