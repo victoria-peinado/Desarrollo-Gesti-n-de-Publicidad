@@ -114,7 +114,6 @@ function responseDataContructor(dobs: DayOrderBlock[]) {
     return data
 }
 
-
 async function createNewDOB(o: string | undefined, b: string | undefined, d: Date) {
     //la orden ya existe. 
     if (b !== undefined && o !== undefined) {

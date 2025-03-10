@@ -76,6 +76,7 @@ import { InputContactsComponent } from './components/input-contacts/input-contac
 import { AltaUsuarioComponent } from './pages/usuarios-page/categories/alta-usuario/alta-usuario.component';
 import { EdicionUsuarioComponent} from './pages/usuarios-page/categories/edicion-usuario/edicion-usuario.component';
 import { BlockSelectionComponent } from './components/block-selection/block-selection.component';
+import { DataTableComponentDOB } from './components/data-table-DOB/data-table.component';
 @NgModule({ declarations: [
         AppComponent,
         MainNavComponent,
@@ -144,7 +145,8 @@ import { BlockSelectionComponent } from './components/block-selection/block-sele
         InputContactsComponent,
         AltaUsuarioComponent,
         EdicionUsuarioComponent,
-        BlockSelectionComponent
+        BlockSelectionComponent,
+        DataTableComponentDOB
         
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
