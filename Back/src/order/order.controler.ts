@@ -826,13 +826,12 @@ async function findNotPayOrdersByDates(req: Request, res: Response) {
         if (compareAsc(dateFrom, dateTo) === 1) {
             throw new Error('La fecha DESDE no puede ser mayor que la fecha HASTA')
         }
-        const monthFrom = format(dateFrom, "MM-yyyy");
-        const monthTo = format(dateTo, "MM-yyyy");
+   
 
         const orders = await em.find(Order, {
-            liq: false, month: {
-                $gte: monthFrom,
-                $lte: monthTo
+            liq: false, dateFrom: {
+                $gte: dateFrom,
+                $lte: dateTo
             }
         }, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
         res.status(200).json({ message: 'Find all not pay Orders', data: orders })
@@ -858,13 +857,10 @@ async function findNotPayOrdersByDates2(req: Request, res: Response) {
             throw new Error('La fecha DESDE no puede ser mayor que la fecha HASTA')
         }
 
-        const monthFrom = format(dF, "MM-yyyy");
-        const monthTo = format(dT, "MM-yyyy");
-
         const orders = await em.find(Order, {
-            liq: false, month: {
-                $gte: monthFrom,
-                $lte: monthTo
+            liq: false, dateFrom: {
+                $gte: dF,
+                $lte: dT
             }
         }, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
         res.status(200).json({ message: 'Find all not pay Orders', data: orders })
