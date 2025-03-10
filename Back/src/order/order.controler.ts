@@ -689,10 +689,12 @@ async function registerPayment(req: Request, res: Response) {
         let paymentForm: PaymentMethod = req.body.sanitizeInput.paymentForm
         let paymentObs: string = req.body.sanitizeInput.paymentObs
         const id = req.params.id
+        console.log(req)
 
         const order = await em.findOneOrFail(Order, { id })
+        console.log('La orden que trajo es: ', order)
 
-        if (order.paymentDate != undefined && order.liq === true) { //deberia ser valido considerar cualquiera de las dos.
+        if (order.paymentDate === undefined && order.liq !== true) { //deberia ser valido considerar cualquiera de las dos.
 
             order.paymentDate = paymentDate
             order.paymentForm = paymentForm
@@ -803,6 +805,7 @@ async function findNotPayOrdersByDates(req: Request, res: Response) {
 
 async function findNotPayOrdersByDates2(req: Request, res: Response) {
     try {
+        console.log('Query: ', req.query)
         if (req.query.dateFrom === undefined) {
             return res.status(400).json({ message: "Debe enviarse una fecha Desde" });
         }
