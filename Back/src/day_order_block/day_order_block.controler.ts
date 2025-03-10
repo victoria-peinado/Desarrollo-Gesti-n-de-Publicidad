@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
 import { DayOrderBlock } from "./day_order_block.entity.js";
 import { compareAsc } from "date-fns";
+import { Block } from "../block/block.entity.js";
 
 const em = orm.em
 em.getRepository(DayOrderBlock)
@@ -55,8 +56,8 @@ async function findByDates(req: Request, res: Response) {
 
         const dF = new Date(dateFrom.toString())
         let dT: Date
-        if (dateTo === undefined || dateTo === '') {  dT = new Date() } else {
-             dT = new Date(dateTo.toString())
+        if (dateTo === undefined || dateTo === '') { dT = new Date() } else {
+            dT = new Date(dateTo.toString())
         }
         if (compareAsc(dF, dT) === 1) {
             throw new Error('La fecha DESDE no puede ser mayor que la fecha HASTA')
@@ -67,7 +68,7 @@ async function findByDates(req: Request, res: Response) {
                 $gte: dF,  // Mayor o igual que fechaInicio
                 $lte: dT      // Menor o igual que fechaFin
             }
-        }, { populate: ['order.spot.id'] }
+        }, { populate: ['order.spot.id', 'block.startTime'] }
         );
         const msj = 'Find DayOrderBlocks from: ' + dF + ' to ' + dT
         const data = responseDataContructor(dobs)
@@ -78,13 +79,14 @@ async function findByDates(req: Request, res: Response) {
 }
 
 
-function responseDataContructor(dobs: DayOrderBlock[]){
+function responseDataContructor(dobs: DayOrderBlock[]) {
     const data = []
-    for (const dob of dobs){
+    for (const dob of dobs) {
         data.push({
             id: dob.id,
             day: dob.day,
             block: dob.block.id,
+            startTimeBlock: dob.block.startTime,
             order: dob.order.id,
             spot: dob.order.spot?.id,
             spotName: dob.order.spot?.name

@@ -9,5 +9,5 @@ export const dobRouter = Router()
 
 dobRouter.get('/', verifyToken, authorizeUserRoles('admin'), findAll)
 //dobRouter.get('/dates', verifyToken, authorizeUserRoles('admin'), validateWithSchema(DaysSchema), sanitizeDatesFilterInput, findByDates)
-dobRouter.get('/dates', verifyToken, authorizeUserRoles('admin'),  findByDates)
+dobRouter.get('/dates', verifyToken, authorizeUserRoles('admin'), findByDates)
 dobRouter.get('/:id', verifyToken, authorizeUserRoles('admin'), validateObjectId('id'), findOne)
