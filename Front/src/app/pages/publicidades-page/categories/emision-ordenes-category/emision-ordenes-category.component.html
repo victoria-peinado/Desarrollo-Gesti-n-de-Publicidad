@@ -134,15 +134,12 @@
     <form [formGroup]="spot_form">
       <div class="flex-container">
         <fieldset>
-          <input
-            type="file"
-            accept="audio/*"
-            #fileInput
-            (change)="onFileSelected($event)"
-            hidden
-          />
+          <input type="file" accept="audio/*" #fileInput (change)="onFileSelected($event)" hidden />
           <button mat-raised-button color="primary" (click)="fileInput.click()">
             <mat-icon>upload_file</mat-icon> Subir
+          </button>
+          <button mat-raised-button color="accent" (click)="onUpload()" [disabled]="!audioFile">
+            Upload Audio
           </button>
         </fieldset>
 
