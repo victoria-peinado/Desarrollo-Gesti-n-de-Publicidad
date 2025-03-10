@@ -40,7 +40,7 @@ Authorization: Bearer {{token}}
 
  
 ### GET ONE
-GET http://localhost:{{port}}/api/order/{{idfirst}}
+GET http://localhost:{{port}}/api/order/67c213596c542306ce30406d
 Authorization: Bearer {{token}}
 
 ### GET BY OWNER CUIT NOT PAY ORDERS
@@ -64,14 +64,15 @@ Content-Type: application/json
 
 {
     "dateFrom": "2025-3-27" ,
-    "dateTo": "2025-3-27"
+    "dateTo": "2026-3-27"
 
 }
 
 
 ### GET NOT PAY ORDERS FILTER BY DATES V2
-@dateFrom = 2025-2-27
-@dateTo= 2025-2-27
+
+@dateFrom = 2025-1-1
+@dateTo= 2026-12-1
 GET http://localhost:{{port}}/api/order/dates/v2/notPayOrders?dateFrom={{dateFrom}}&dateTo={{dateTo}}
 Authorization: Bearer {{token}}
 

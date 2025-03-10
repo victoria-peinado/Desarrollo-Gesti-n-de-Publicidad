@@ -3,6 +3,9 @@ import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { Contract } from 'src/app/models/contract';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-edicion-contratacion-category',
@@ -26,17 +29,19 @@ export class EdicionContratacionCategoryComponent {
     contractsDetailed: {id: number, dateFrom: string, dateTo: string, regDate: string, obs: string}[] = [];
     
     columnDefs = [
-      { key: 'id', label: 'N°' },
+      { key: 'index', label: 'N°' },
       { key: 'dateFrom', label: 'Fecha Desde' },
       { key: 'dateTo', label: 'Fecha Hasta' },
       { key: 'regDate', label: 'Fecha Realización' },
-      { key: 'obs', label: 'Observaciones' }
+      { key: 'obs', label: 'Observaciones' },
+      { key: 'id', label: 'Id' },
     ];
   dateTo: Date | null = null;
   dateFrom: Date | null = null;
   obs: string = '';
+  id: string = '';
     
-    constructor(public dialog: MatDialog, private myDataService: MyDataService) {
+    constructor(public dialog: MatDialog, private myDataService: MyDataService, private _snackBar: SnackbarService,) {
       this.owner_form = new FormGroup({
         cuit: new FormControl('', [
           Validators.required,
@@ -51,7 +56,7 @@ export class EdicionContratacionCategoryComponent {
       });
 
       this.contract_form = new FormGroup({
-        dateFrom: new FormControl('', Validators.required),
+        dateFrom: new FormControl({ value: '', disabled: true }),
         dateTo: new FormControl(''),
         obs: new FormControl(''),
       });
@@ -110,7 +115,8 @@ export class EdicionContratacionCategoryComponent {
           next: (response: any) => {
             this.contracts = response.data;
             this.contractsDetailed = this.contracts.map((contract: any, index: number) => ({
-              id: index + 1,
+              id: contract.id,
+              index: index + 1,
               dateFrom: contract.dateFrom,
               dateTo: contract.dateTo,
               regDate: contract.regDate,
@@ -128,10 +134,12 @@ export class EdicionContratacionCategoryComponent {
       this.dateFrom = row.dateFrom;
       this.dateTo = row.dateTo;
       this.obs = row.obs;
+      this.id = row.id;
       
       this.dateFromControl.setValue(row.dateFrom);
       this.dateToControl.setValue(row.dateTo);
       this.obsControl.setValue(row.obs);
+
     }
   
     get cuitControl(): FormControl {
@@ -157,10 +165,35 @@ export class EdicionContratacionCategoryComponent {
     get btnControl(): boolean {
       return (
         this.dateTo === this.dateToControl.value &&
-        this.dateFrom === this.dateFromControl.value &&
         this.obs === this.obsControl.value
       );
     }
+     formatDateToYYYYMMDD(date: Date | string): string | undefined {
+      if (!date) return undefined;
+    
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0'); // sumamos 1 porque los meses empiezan en 0
+      const day = String(d.getDate()).padStart(2, '0');
+    
+      return `${year}-${month}-${day}`;
+    }
+    save() {
+      const contract = new Contract(this.id, this.formatDateToYYYYMMDD(this.dateToControl.value), this.obsControl.value);
+      console.log(contract);
+      this.myDataService.patchContract(contract).subscribe({
+   
+        next: (response: any) => {
+            this._snackBar.openSnackBar(response.message, 'success-snackbar');
+          },
+          error: (error: any) => {
+            console.log(error);
+            let errorMessage = error.error.errors ? error.error.errors || error.error.messages: error.error.messages;
+            this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+          },
+      });
+    }
+ 
 
     openDialog() {
       

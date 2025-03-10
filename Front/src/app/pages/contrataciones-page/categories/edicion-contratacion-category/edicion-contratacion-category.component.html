@@ -1,7 +1,7 @@
 <div id="edicion-contratacion-categoria">
-    <div id="datos-titular">
+    <div id="datos-titular-comercio">
         <app-title-and-subtitle
-          [title]="'Datos del Titular'"
+          [title]="'Datos del Titular y del Comercio'"
           [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
         ></app-title-and-subtitle>
     
@@ -118,7 +118,7 @@
 
       <app-btn-guardar-cambios
           [disabled]="contract_form.invalid || !ownerFounded || btnControl"
-          (clickEvent)="openDialog()" 
+          (clickEvent)="save()" 
           [text]="'Guardar cambios'"
         ></app-btn-guardar-cambios>
     </form>

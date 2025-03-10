@@ -1,8 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/components/dialog/dialog.component';
+import { Contract } from 'src/app/models/contract';
 import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-alta-contratacion-category',
@@ -11,6 +14,8 @@ import { MyDataService } from 'src/app/services/my-data.service';
 })
 export class AltaContratacionCategoryComponent {
 @ViewChild('of') ownerNgForm: NgForm | undefined;
+@ViewChild('cf') contractNgForm: NgForm | undefined;
+
 
   owner_form: FormGroup;
   contract_form: FormGroup;
@@ -22,6 +27,16 @@ export class AltaContratacionCategoryComponent {
     nextStep: boolean = false;
 
     contracts = [];
+
+    contract: Contract = {
+        dateFrom: '',
+        observations: '',
+        shop: ''
+      };
+
+    fantasyName: string = '';
+    shopId: string = '';
+
 
     contractsDetailed: {id: number, dateFrom: string, dateTo: string, regDate: string, obs: string}[] = [];
     
@@ -36,7 +51,7 @@ export class AltaContratacionCategoryComponent {
   dateFrom: Date | null = null;
   obs: string = '';
     
-    constructor(public dialog: MatDialog, private myDataService: MyDataService) {
+    constructor(public dialog: MatDialog, private _snackBar: SnackbarService, private myDataService: MyDataService) {
       this.owner_form = new FormGroup({
         cuit: new FormControl('', [
           Validators.required,
@@ -51,11 +66,40 @@ export class AltaContratacionCategoryComponent {
       });
 
       this.contract_form = new FormGroup({
-        dateFrom: new FormControl('', Validators.required),
+        dateFrom: new FormControl('', [Validators.required, this.verifyDate()]),
         dateTo: new FormControl(''),
         obs: new FormControl(''),
       });
     }
+
+    ngOnInit() {
+      this.dateToControl.valueChanges.subscribe((valor) => {
+        this.dateTo = valor;
+        this.dateFromControl.updateValueAndValidity();
+
+      });
+    }
+    
+
+verifyDate(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+
+    console.log('value: ', value);
+    console.log('date from: ', this.dateTo);
+  
+      if (!this.dateTo) {
+        return null;
+      } else {
+        if (value >= this.dateTo) {
+          return {dateToGreater:true};
+        } else {
+          return null;
+        }
+  
+      }
+  };
+}
 
     
     
@@ -71,10 +115,32 @@ export class AltaContratacionCategoryComponent {
         form?.resetForm(values);
       }
   
+      clearAll() {
+        this.owner_form.reset();
+        this.contract_form.reset();
+        this.clearForm(this.ownerNgForm, {
+          cuit: '',
+          comercio: ''
+        });
+        this.clearForm(this.contractNgForm, {
+          dateFrom: '',
+          dateTo: '',
+          obs: '',
+        });
+        this.shops = [];
+        this.comercios = [];
+        this.nextStep = false;
+        this.ownerFounded = false;
+        this.fantasyName = '';
+        this.contract_form.reset();
+        this.owner_form.reset();
+        this.errorMessageOwner = null;
+        this.comercioControl.disable();
+      }
     findOwner() {
   
   
-      this.cuit = this.cuitControl.value.trim();
+      this.cuit = this.cuitControl.value;
   
       if(!this.cuit) return;
   
@@ -102,38 +168,11 @@ export class AltaContratacionCategoryComponent {
     }
   
     next() {
-      
+      this.fantasyName = this.comercioControl.value;
       this.nextStep = true;
-      const selectedShop = this.shops.find(shop => shop.fantasyName === this.comercioControl.value);
-      if (selectedShop) {
-        this.myDataService.getContractsByShopId(selectedShop.id).subscribe({
-          next: (response: any) => {
-            this.contracts = response.data;
-            this.contractsDetailed = this.contracts.map((contract: any, index: number) => ({
-              id: index + 1,
-              dateFrom: contract.dateFrom,
-              dateTo: contract.dateTo,
-              regDate: contract.regDate,
-              obs: contract.observations
-            }));
-          },
-          
-          error: () => {
-          }
-        
-      });}
+
     }
 
-    onRowSelected(row: any) {
-      this.dateFrom = row.dateFrom;
-      this.dateTo = row.dateTo;
-      this.obs = row.obs;
-      
-      this.dateFromControl.setValue(row.dateFrom);
-      this.dateToControl.setValue(row.dateTo);
-      this.obsControl.setValue(row.obs);
-    }
-  
     get cuitControl(): FormControl {
       return this.owner_form.get('cuit') as FormControl;
     }
@@ -154,16 +193,57 @@ export class AltaContratacionCategoryComponent {
       return this.contract_form.get('obs') as FormControl;
     }
 
-    get btnControl(): boolean {
-      return (
-        this.dateTo === this.dateToControl.value &&
-        this.dateFrom === this.dateFromControl.value &&
-        this.obs === this.obsControl.value
-      );
-    }
+    getShopId() {
+      const shop = this.shops.find(s => s.fantasyName === this.fantasyName);
+      return this.shopId = shop ? shop.id : null;
 
-    openDialog() {
-      
+    } 
+    
+    formatDateToYYYYMMDD(date: Date | string): string | undefined {
+      if (!date) return undefined;
+    
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0'); // sumamos 1 porque los meses empiezan en 0
+      const day = String(d.getDate()).padStart(2, '0');
+    
+      return `${year}-${month}-${day}`;
     }
-  
+    
+    createContract() {
+        
+        this.contract.dateFrom = this.formatDateToYYYYMMDD(this.dateFromControl.value);
+        this.contract.dateTo = this.formatDateToYYYYMMDD(this.dateToControl.value);
+        this.contract.observations = this.obsControl.value;
+        this.contract.shop = this.getShopId();
+
+        console.log('Contratación: ', this.contract);
+
+        this.myDataService.createContract(this.contract).subscribe({
+          next: (response: any) => {
+            this._snackBar.openSnackBar(response.message, 'success-snackbar');
+            this.clearAll();
+          },
+          error: (error: any) => {
+            console.log(error);
+            let errorMessage = error.error.errors ? error.error.errors || error.error.messages: error.error.messages;
+            this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+          },
+        });
+      }
+    
+      openDialog(): void {
+        const dialogRef = this.dialog.open(DialogComponent, {
+          data: {
+            text: `<p>¿Seguro que desea crear la nueva Contratación para el Comercio ${this.comercioControl.value}?</p>`,
+          },
+        });
+    
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.createContract();
+          }
+        });
+      }
+    
 }

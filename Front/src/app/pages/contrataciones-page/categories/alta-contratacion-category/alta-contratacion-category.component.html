@@ -1,7 +1,7 @@
-<div id="edicion-contratacion-categoria">
-    <div id="datos-titular">
+<div id="alta-contratacion-categoria">
+    <div id="datos-titular-comercio">
         <app-title-and-subtitle
-          [title]="'Datos del Titular'"
+          [title]="'Datos del Titular y del Comercio'"
           [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
         ></app-title-and-subtitle>
     
@@ -71,18 +71,13 @@
   
     
 
-    <div *ngIf="nextStep" id="edicion-contratacion">
+    <div *ngIf="nextStep" id="datos-contratacion">
       <app-title-and-subtitle
-      [title]="'Edición de la Contratación'"
-      [subtitle]="'Selecciona la Contratación que desea editar e ingrese los nuevos datos de la Contratación.'"
+      [title]="'Datos de la Contratación'"
+      [subtitle]="'Ingrese los datos de la nueva Contratación.'"
     ></app-title-and-subtitle>
-    <app-data-selection-table 
-  [data]="contractsDetailed" 
-  [columns]="columnDefs"
-  (rowSelected)="onRowSelected($event)">
-</app-data-selection-table>
 
-    <form [formGroup]="contract_form">
+    <form [formGroup]="contract_form" #cf="ngForm">
       <div class="flex-container mt-4">
         <fieldset>
           <app-input-field
@@ -90,7 +85,7 @@
             placeholder="Ejemplo: Juan"
             type="text"
             [control]="dateFromControl"
-            [validations]="{ required: true }"
+            [validations]="{ required: true, dateToGreater: true }"
             [mode]="'date'"
           ></app-input-field>
         </fieldset>
@@ -117,7 +112,7 @@
       </div>
 
       <app-btn-guardar-cambios
-          [disabled]="contract_form.invalid || !ownerFounded || btnControl"
+          [disabled]="owner_form.invalid || contract_form.invalid || !ownerFounded"
           (clickEvent)="openDialog()" 
           [text]="'Guardar cambios'"
         ></app-btn-guardar-cambios>

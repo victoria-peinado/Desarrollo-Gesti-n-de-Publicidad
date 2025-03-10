@@ -1,1 +1,78 @@
-<p>registro-pago-category works!</p>
+<div id="edicion-contratacion-categoria">
+  <div id="datos-titular-comercio">
+    <app-title-and-subtitle [title]="'Lista pagos faltantes por titular'"
+      [subtitle]="'Ingrese el CUIT del Titular y opcionalmente  un Comercio.'"></app-title-and-subtitle>
+
+    <form [formGroup]="owner_form" #of="ngForm">
+      <div class="flex-container">
+        <fieldset>
+          <app-input-field label="CUIT Titular" placeholder="Ejemplo: 25444505879" type="text"
+            [hintLabel]="'11 dígitos'" [control]="cuitControl" [validations]="{
+                  required: true,
+                  minLength: 11,
+                  maxLength: 11,
+                  pattern: '^[0-9]*$'
+                }" [mode]="'input'"></app-input-field>
+        </fieldset>
+
+        <button mat-raised-button color="primary" [disabled]="cuitControl.invalid" (click)="findOwner()">
+          Check
+        </button>
+
+        @if (errorMessageOwner) {
+        <button mat-button color="warn" class="pointer-events-none">
+          <mat-icon fontIcon="close"></mat-icon>
+          {{ errorMessageOwner }}
+        </button>
+        } @else if (ownerFounded) {
+        <button mat-button color="accent" class="pointer-events-none">
+          <mat-icon fontIcon="check"></mat-icon>
+          Titular existente.
+        </button>
+        }
+      </div>
+
+      <div class="flex-container mt-4">
+        <fieldset>
+          <app-input-field label="Comercio" [control]="comercioControl" [validations]="{ required: true }"
+            [mode]="'select'" [options]="comercios" [selectedOption]="comercios[0]"></app-input-field>
+        </fieldset>
+      </div>
+
+      <button class="mb-4" mat-raised-button color="primary"
+        (click)="next()">
+        Siguiente
+      </button>
+    </form>
+  </div>
+
+
+
+  <div *ngIf="nextStep" id="edicion-contratacion">
+    <app-title-and-subtitle [title]="'Ordenes por pagar'"
+      [subtitle]="'Selecciona la orden que desea pagar'"></app-title-and-subtitle>
+    <app-data-selection-table [data]="ordersDetailed" [columns]="columnDefs" (rowSelected)="onRowSelected($event)">
+    </app-data-selection-table>
+
+    <form [formGroup]="order_form">
+      <div class="flex-container mt-4">
+        <fieldset>
+          <app-input-field label="Fecha Pago" placeholder="Ejemplo: Juan" type="text" [control]="dateFromControl"
+            [validations]="{ required: true }" [mode]="'date'"></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field label="Forma de pago" placeholder="Ejemplo: Pérez" type="text"
+            [control]="dateToControl" [validations]="{ required: true }" [mode]="'select'" [options]="paymentForms"></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field label="Observaciones " placeholder="Ejemplo: 44996266" type="text"
+            [control]="obsControl" [validations]="{ required: true, minlength: 8, maxlength: 8 }"
+            [mode]="'input'"></app-input-field>
+        </fieldset>
+      </div>
+
+      <app-btn-guardar-cambios [disabled]="order_form.invalid " (clickEvent)="save()"
+        [text]="'Pagar'"></app-btn-guardar-cambios>
+    </form>
+  </div>
+</div>

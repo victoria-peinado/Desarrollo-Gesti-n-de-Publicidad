@@ -6,6 +6,8 @@ import { Owner } from '../models/owner';
 import { Contact } from '../models/contact';
 import { User } from '../models/user.js';
 import { environment } from 'src/environments/environment';
+import { Contract } from '../models/contract.js';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -122,6 +124,11 @@ export class MyDataService {
   createContact(contact: Contact) {
     return this.http.post(`${this.apiUrl}contact`, contact);
   }
+
+  createContract(contract: Contract) {
+    return this.http.post(`${this.apiUrl}contract`, contract);
+    
+  }
   updateContact(contact: Contact) {
     return this.http.put(`${this.apiUrl}contact`, contact);
   }
@@ -151,4 +158,26 @@ export class MyDataService {
   }
 
   getContractsByShopId(idShop: string): Observable<any> {return this.http.get(`${this.apiUrl}contract/shop/${idShop}`);}
+
+
+  
+  patchContract( contract: Partial<Contact>): Observable<any> {
+    return this.http.patch(`${this.apiUrl}contract/${contract.id}`, contract);
+  }
+  getOrdersByOwnerCuit(cuit: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}order/notPayOrdersByOwnerCuit/${cuit}`);
+  }
+  getOrdersByShopId(idShop: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}order/notPayOrdersByShop/${idShop}`);
+  }
+ getOrdersByDates(dateFrom: string, dateTo: string): Observable<any> {
+  const params = new HttpParams()
+    .set('dateFrom', dateFrom)
+    .set('dateTo', dateTo);
+
+  return this.http.get(`${this.apiUrl}order/allNotPayOrders`);
+  }
+  payOrder(orderId: string,data:any): Observable<any> {
+    return this.http.patch(`${this.apiUrl}order/registerPayment/${orderId}`, data);
+  }
 }

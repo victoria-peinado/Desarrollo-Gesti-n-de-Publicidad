@@ -36,7 +36,7 @@ export class DataSelectionTableComponent implements AfterViewInit, OnChanges {
       ...item,
       estado: this.getEstado(item.dateTo) // Calcula el estado al cargar los datos
     }));
-    this.displayedColumns = this.columns.map(col => col.key);
+    this.displayedColumns = this.columns.filter(col => col.key !== 'id').map(col => col.key);
     this.displayedColumns.push('estado'); // Agrega columna Estado
     this.displayedColumns.push('selected'); // Agrega columna de selección
   }
@@ -75,6 +75,7 @@ export class DataSelectionTableComponent implements AfterViewInit, OnChanges {
   selectRow(row: any) {
     if (this.isSelectable(row)) {
       this.selectedRowId = row.id;
+      console.log('Row selected:', row);
       this.rowSelected.emit(row);
     }
   }

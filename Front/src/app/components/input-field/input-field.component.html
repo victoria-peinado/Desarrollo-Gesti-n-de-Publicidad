@@ -12,9 +12,10 @@
         [placeholder]="placeholder"
         [maxlength]="maxlength"
         [formControl]="control"
+  
         
       />
-
+      <!-- [(ngModel)]="value" -->
       <mat-icon
         *ngIf="value && type !== 'password'"
         mat-icon-button
@@ -64,14 +65,26 @@
 
     <mat-form-field class="w-full">
       <mat-label>{{ label }}</mat-label>
-      <input matInput [matDatepicker]="picker" [formControl]="control">
+      <input 
+        matInput 
+        [matDatepicker]="picker" 
+        [formControl]="control"
+        [readonly]="true">
       <mat-hint>MM/DD/YYYY</mat-hint>
+
+      <mat-icon class="clear-icon" *ngIf="control.value" mat-icon-button matSuffix (click)="clearDate()">
+        close
+      </mat-icon>
+    
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-
-      <mat-error *ngIf="control.hasError('required')">
-        * Campo obligatorio
+    
+      <mat-error *ngIf="control.invalid && control.touched">
+        {{ getErrorMessage() }}
       </mat-error>
     </mat-form-field>
+    
+    
+    
   }
 </div>
