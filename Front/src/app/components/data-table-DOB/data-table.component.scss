@@ -1,0 +1,83 @@
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  min-height: 372px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px #74777F solid;
+  box-shadow: none;
+
+  table {
+    flex: 1;
+    overflow: auto;
+    display: block;
+    width: 100%;
+    border-radius: 20px;
+    overflow-y: hidden;
+    min-height: 316px;
+
+  }
+
+  mat-paginator {
+    flex-shrink: 0;
+    border-radius: 20px;
+
+  }
+
+   th {
+    max-height: 52px;
+    width: 15%;
+  }
+}
+
+
+.data-error {
+  position: relative;
+  height: 100%;
+  text-align: center;
+
+  &::before {
+    content: "No se encontraron coincidencias.";
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 40%);
+    font-size: 14px;
+    color: black;
+    width: 100%;
+    height: 260px;
+  }
+
+  td {
+    visibility: hidden;
+  }
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(100%, 1fr)
+  );
+  width: auto;
+  max-width: 1000px;
+  margin: 0 auto;
+  place-items: center;
+  gap: 1rem;
+}
+
+.card {
+  margin: 0.5rem;
+  width: 100%
+}
+
+.no-results {
+  text-align: center;
+  font-size: 14px;
+  color: black;
+  margin-top: 10px;
+}
+
