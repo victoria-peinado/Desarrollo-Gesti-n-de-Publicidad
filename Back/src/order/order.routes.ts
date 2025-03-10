@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2,  } from "./order.controler.js";
+import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, migrateDatesOrder,  } from "./order.controler.js";
 import { validateWithSchema , validateObjectId, validateCuit, sanitizeDatesFilterInput} from '../shared/db/middleware.js'
 import { CancelOrderSchema, OrderSchema, PatchOrderSchema, PutOrderSchema, UpdSpotOrderSchema} from './order.entity.js'
 import {  verifyToken,authorizeUserRoles } from '../auth/auth.middleware.js'
@@ -22,6 +22,8 @@ orderRouter.get('/:id',verifyToken, authorizeUserRoles('admin'), validateObjectI
 
 
 orderRouter.post('/renovateOrders',verifyToken, authorizeUserRoles('admin'), testRenovarOrdenes)
+
+orderRouter.post('/migrarFechas', migrateDatesOrder)
 orderRouter.post('/',verifyToken, authorizeUserRoles('admin'), validateWithSchema(OrderSchema), sanitizeOrderInput, add); // Validate order schema and sanitize input before adding
 //orderRouter.post('/', sanitizeOrderInput, add); // Validate order schema and sanitize input before adding
 

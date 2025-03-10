@@ -47,5 +47,10 @@ export const ContractSchema = z.object({
 //     })
 //   ).optional(),
 });
+
+export const PatchContractSchema = z.object({
+  dateTo: z.coerce.date().optional(),
+  observations: z.string().optional(),
+
+});
 export const PutContractSchema = ContractSchema.omit({shop:true}).partial(); // Partial schema for updates
-export const PatchContractSchema = ContractSchema.omit({shop:true}).partial(); // Partial schema for updates

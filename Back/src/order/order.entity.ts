@@ -64,6 +64,12 @@ export class Order extends BaseEntity {
   @Property({ nullable: true })
   paymentObs?: string
 
+  @Property({ nullable: true })
+  dateFrom!: Date //lo asignamos al crearlo...
+
+  @Property({ nullable: true })
+  dateTo!: Date //lo asignamos al crearlo...
+
   @ManyToOne(() => Contract, {nullable: false})
   contract!: Rel<Contract> //deberia estar al momento de crearla de forma obligatoria.
 
@@ -148,5 +154,9 @@ export const UpdSpotOrderSchema = z.object({
 export { BlocksRegularSchema, TupleBlocksSchema, BlocksRegularType, TupleBlocksType, TupleBlocksReqType, TupleBlocksSchemaReq, BlocksNotRegularType }
 
 export const PutOrderSchema = OrderSchema.omit({ contract: true }); // Partial schema for updates
-export const PatchOrderSchema = OrderSchema.omit({ contract: true }).partial(); // Partial schema for updates
 
+export const PatchOrderSchema = z.object({
+  nameStrategy: z.string().min(1, { message: 'nameStrategy no puede estar vacío' }).optional(),
+  obs: z.string().min(1, { message: 'obs no puede estar vacío' }).optional(),
+  showName: z.string().min(1, { message: 'showName no puede estar vacío' }).optional(),
+});
