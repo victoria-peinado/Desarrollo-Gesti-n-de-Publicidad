@@ -17,6 +17,8 @@ export class InputFieldComponent {
   @Input() mode: 'input' | 'select' | 'date' = 'input';
   @Input() options: string[] = [];
   @Input() hintLabel: string = '';
+  @Input() tooltipText: string = '';
+
 
   hidePassword: boolean = true;
   value = '';
@@ -49,6 +51,9 @@ export class InputFieldComponent {
   }
 
   clearDate() {
+    if (this.control.disabled) {
+      return;
+    }
     this.control.setValue(null);
   }
   

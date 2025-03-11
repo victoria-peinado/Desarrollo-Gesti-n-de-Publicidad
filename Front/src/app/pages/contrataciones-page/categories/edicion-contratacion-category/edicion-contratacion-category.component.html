@@ -83,7 +83,7 @@
 </app-data-selection-table>
 
     <form [formGroup]="contract_form">
-      <div class="flex-container mt-4">
+      <div class="grid-container">
         <fieldset>
           <app-input-field
             label="Fecha Desde"
@@ -109,7 +109,7 @@
             label="Observaciones (opcional)"
             placeholder="Ejemplo: 44996266"
             type="text"
-            [control]="obsControl"
+            [control]="observationsControl"
             [validations]="{ required: true, minlength: 8, maxlength: 8 }"
             [mode]="'input'"
           ></app-input-field>

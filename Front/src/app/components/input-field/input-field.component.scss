@@ -43,3 +43,21 @@
   padding: 0 !important;
   margin: 0 !important;
 }
+
+
+.tooltip-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tooltip-icon {
+  font-size: 14px;
+  color: #44474E;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px 0;
+  text-align: center;
+}

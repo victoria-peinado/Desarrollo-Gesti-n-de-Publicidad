@@ -26,19 +26,19 @@ export class EdicionContratacionCategoryComponent {
 
     contracts = [];
 
-    contractsDetailed: {id: number, dateFrom: string, dateTo: string, regDate: string, obs: string}[] = [];
+    contractsDetailed: {id: number, dateFrom: string, dateTo: string, regDate: string, observations: string}[] = [];
     
     columnDefs = [
       { key: 'index', label: 'N°' },
       { key: 'dateFrom', label: 'Fecha Desde' },
       { key: 'dateTo', label: 'Fecha Hasta' },
       { key: 'regDate', label: 'Fecha Realización' },
-      { key: 'obs', label: 'Observaciones' },
+      { key: 'observations', label: 'Observaciones' },
       { key: 'id', label: 'Id' },
     ];
   dateTo: Date | null = null;
   dateFrom: Date | null = null;
-  obs: string = '';
+  observations: string = '';
   id: string = '';
     
     constructor(public dialog: MatDialog, private myDataService: MyDataService, private _snackBar: SnackbarService,) {
@@ -56,9 +56,9 @@ export class EdicionContratacionCategoryComponent {
       });
 
       this.contract_form = new FormGroup({
-        dateFrom: new FormControl({ value: '', disabled: true }),
+        dateFrom: new FormControl({ value: '', disabled: false }),
         dateTo: new FormControl(''),
-        obs: new FormControl(''),
+        observations: new FormControl(''),
       });
     }
 
@@ -101,6 +101,11 @@ export class EdicionContratacionCategoryComponent {
           this.ownerFounded = false;
           this.shops = [];
           this.comercioControl.disable();
+          this.clearForm(this.ownerNgForm, {
+            cuit: this.cuitControl.value,
+            comercio: ''
+          });
+          this.nextStep = false;
           this.errorMessageOwner = 'Titular inexistente.';
         },
       });
@@ -120,7 +125,7 @@ export class EdicionContratacionCategoryComponent {
               dateFrom: contract.dateFrom,
               dateTo: contract.dateTo,
               regDate: contract.regDate,
-              obs: contract.observations
+              observations: contract.observations
             }));
           },
           
@@ -131,16 +136,30 @@ export class EdicionContratacionCategoryComponent {
     }
 
     onRowSelected(row: any) {
+
+
+      console.log('row', row);
+
       this.dateFrom = row.dateFrom;
       this.dateTo = row.dateTo;
-      this.obs = row.obs;
+      this.observations = row.observations;
       this.id = row.id;
       
       this.dateFromControl.setValue(row.dateFrom);
       this.dateToControl.setValue(row.dateTo);
-      this.obsControl.setValue(row.obs);
+      this.observationsControl.setValue(row.observations);
+
+      console.log('estado', row.estado);
+      if(row.estado === "En curso"){
+        console.log('no puede editar dateTo')
+        this.contract_form.get('dateFrom')?.disable();
 
     }
+    if(row.estado === "No iniciada") {
+      this.contract_form.get('dateFrom')?.enable();
+
+    }
+  }
   
     get cuitControl(): FormControl {
       return this.owner_form.get('cuit') as FormControl;
@@ -158,14 +177,14 @@ export class EdicionContratacionCategoryComponent {
       return this.contract_form.get('dateTo') as FormControl;
     }
 
-    get obsControl(): FormControl {
-      return this.contract_form.get('obs') as FormControl;
+    get observationsControl(): FormControl {
+      return this.contract_form.get('observations') as FormControl;
     }
 
     get btnControl(): boolean {
       return (
         this.dateTo === this.dateToControl.value &&
-        this.obs === this.obsControl.value
+        this.observations === this.observationsControl.value
       );
     }
      formatDateToYYYYMMDD(date: Date | string): string | undefined {
@@ -179,7 +198,7 @@ export class EdicionContratacionCategoryComponent {
       return `${year}-${month}-${day}`;
     }
     save() {
-      const contract = new Contract(this.id, this.formatDateToYYYYMMDD(this.dateToControl.value), this.obsControl.value);
+      const contract = new Contract(this.id, this.formatDateToYYYYMMDD(this.dateToControl.value), this.observationsControl.value);
       console.log(contract);
       this.myDataService.patchContract(contract).subscribe({
    

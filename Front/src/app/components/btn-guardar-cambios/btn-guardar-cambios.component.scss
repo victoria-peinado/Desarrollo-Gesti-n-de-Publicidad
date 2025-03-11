@@ -8,3 +8,17 @@
         justify-content: center;
     }
 }
+
+  .btn-animation {
+    animation: positioning 0.5s cubic-bezier(0, 0.97, 0.4, 0.99);
+  }
+
+
+  @keyframes positioning {
+    0% {
+      height: 10px;
+    }
+    100% {
+      height: 40px;
+    }
+  }

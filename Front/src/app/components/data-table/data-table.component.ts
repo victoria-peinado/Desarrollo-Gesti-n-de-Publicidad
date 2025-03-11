@@ -1,8 +1,9 @@
 import { Component, Input, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { Shop } from 'src/app/models/shop';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 interface Column {
   key: string;
@@ -22,7 +23,7 @@ export class DataTableComponent implements AfterViewInit {
 
   displayedColumns: string[] = [];
   dataSource: MatTableDataSource<Shop>;
-  filteredShops: Shop[] = []; // Nueva propiedad para filtrar las tarjetas
+  filteredShops: Shop[] = [];
 
   @ViewChild(MatPaginator) paginator?: MatPaginator;
   @ViewChild(MatSort) sort?: MatSort;
@@ -36,14 +37,14 @@ export class DataTableComponent implements AfterViewInit {
 
   panelOpenState = false;
 
-  constructor() {
+  constructor(private _liveAnnouncer: LiveAnnouncer) {
     this.dataSource = new MatTableDataSource();
   }
 
   ngOnInit() {
     this.displayedColumns = this.columns.map(col => col.key);
     this.dataSource.data = this.shops;
-    this.filteredShops = this.shops; // Inicializar con todos los comercios
+    this.filteredShops = this.shops;
   }
 
   ngAfterViewInit() {
@@ -79,4 +80,13 @@ export class DataTableComponent implements AfterViewInit {
       'Otro': 'bg-[#D6D6D6] text-[#3B3B3B] py-1 px-3 rounded-lg text-xs'
     }[type] || 'bg-gray-200 text-black py-1 px-3 rounded-lg text-xs';
   }
+
+  announceSortChange(sortState: Sort) {
+  
+      if (sortState.direction) {
+        this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+      } else {
+        this._liveAnnouncer.announce('Sorting cleared');
+      }
+    }
 }
