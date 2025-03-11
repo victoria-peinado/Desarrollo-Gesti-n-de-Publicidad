@@ -27,6 +27,7 @@ export class EmisionOrdenesCategoryComponent {
   order_form: FormGroup;
   audioFile: File | null = null;
   audioURL: string | null = null;
+  spot: Spot | null = null;
   duracionSpot: string = 'Calculando...';
   spot_form: FormGroup;
   shops: any[] = [];
@@ -285,7 +286,7 @@ export class EmisionOrdenesCategoryComponent {
       this.formatDateToYYYYMMDD(this.dateToControl.value),
       this.obsControl.value
     );
-    console.log(contract);
+    console.log(contract.id);
     this.myDataService.patchContract(contract).subscribe({
       next: (response: any) => {
         this._snackBar.openSnackBar(response.message, 'success-snackbar');
@@ -318,6 +319,26 @@ export class EmisionOrdenesCategoryComponent {
     }
   }
 
+onUpload(): void {
+        if (this.audioFile) {
+            this.myDataService.uploadAudio(this.audioFile).subscribe({
+                next: (response) => {
+                  this._snackBar.openSnackBar(response.message, 'success-snackbar');
+                  this.spot = response.data.spot; //obtener el id del spot creado que es lo que guardas en la orden
+                  console.log('Spot creado:', response);
+                },
+               error: (error: any) => {
+                console.log(error);
+                let errorMessage = error.error.errors
+                  ? error.error.errors || error.error.messages
+                  : error.error.messages;
+                this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+              },
+            });
+        } else {
+            console.warn('No audio file selected');
+        }
+    }
   calcularDuracion(audioSrc: string) {
     const audio = new Audio(audioSrc);
     audio.addEventListener('loadedmetadata', () => {

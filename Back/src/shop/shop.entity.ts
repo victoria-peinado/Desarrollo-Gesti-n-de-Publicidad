@@ -9,7 +9,7 @@ import {ObjectIdSchema} from '../shared/db/schemas.js';
 import { z } from 'zod';
 
 
-interface Address{
+export interface Address{
   street: string,
   number: string,
   level: string, 
@@ -31,7 +31,7 @@ export class Shop extends BaseEntity{
     fantasyName!: string
     
     @Property({nullable:false})    
-    address!: Address
+    address!: string | Address
     
     @Property({nullable:false})    
     billingType!: string //condicionfiscal. fiscalCondition
@@ -95,6 +95,7 @@ export const AdressSchema = z.object({
   province: z.string().optional()
 })
 export const SimpleAdressSchema = z.string().regex(/^.*\s\d+$/, { message: 'Address must contain a space followed by a number' });
+
 export const ShopSchema = z.object({
   regDate: z.date().optional(), // Registration date, optional with a default value
   fantasyName: z.string().min(1, { message: "Fantasy name is required" }), // Fantasy name, cannot be empty
@@ -110,3 +111,5 @@ export const ShopSchema = z.object({
 });
 export const ShopPutSchema = ShopSchema.omit({ regDate: true, contact:true, owner:true }); // Schema for full updates
 export const PartialShopSchema = ShopPutSchema.partial(); // Partial schema for updates
+
+export type ShopInterface = z.infer<typeof ShopSchema>;

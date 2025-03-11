@@ -112,7 +112,7 @@ async function upload(req: Request, res: Response){
         em.persist(spot)
         console.log('El spot creado es: ', spot)
         await em.flush()
-        res.status(200).json({ message: 'Spot upload and created successfully', data: audioFile })}
+        res.status(200).json({ message: 'Spot upload and created successfully', data: {data: audioFile , spot: spot}})}
         else {throw new Error('Error al subir el archivo. ')};
     
     } catch (error:any) {
