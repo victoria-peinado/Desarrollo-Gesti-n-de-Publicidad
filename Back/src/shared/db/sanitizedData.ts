@@ -1,5 +1,6 @@
 import { Contact, ContactInterface } from "../../contact/contact.entity.js";
 import { Contract, ContractInterface } from "../../contract/contract.entity.js";
+import { DayOrderBlock } from "../../day_order_block/day_order_block.entity.js";
 import { BlocksNotRegularType, BlocksRegularType, Order, OrderInterface } from "../../order/order.entity.js";
 import { FiscalCondition, Owner, OwnerInterface } from "../../owner/owner.entity.js";
 import { billingType, PaymentMethod, Shop, ShopInterface, ShopType } from "../../shop/shop.entity.js";
@@ -9,6 +10,27 @@ import { orm } from "./orm.js";
 const em = orm.em
 
 export async function createInfoSanitized() {
+    //podriamos borrar todo lo existente en la base de datos. 
+
+    try{
+    const shops = await em.find(Shop, {})
+    const ownersToDelete = await em.find(Owner, {})
+    const contactsToDelte = await em.find(Contact, {})
+    const contractsToDelete = await em.find(Contract, {})
+    const ordersToDelete = await em.find(Order, {})
+    const dosbToDelete = await em.find(DayOrderBlock, {})
+    em.remove(dosbToDelete)
+    em.remove(ordersToDelete)
+    em.remove(contractsToDelete)
+    em.remove(shops)
+    em.remove(ownersToDelete)
+    em.remove(contactsToDelte)
+    await em.flush()
+    }
+    catch(error: any) {
+           return { message: 'Ha sucedido un error', error: error }
+
+    }
 
     try {
 
@@ -223,5 +245,7 @@ export async function createInfoSanitized() {
 
     }
 
-    catch (error: any) { }
+    catch (error: any) { 
+        return {message:'Ha sucedido un error', error: error}
+    }
 }
