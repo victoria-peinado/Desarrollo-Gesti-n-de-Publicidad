@@ -24,6 +24,7 @@ import { destDir } from './shared/audioFunctions.js';
 import { dobRouter } from './day_order_block/day_order_block.router.js';
 import swaggerUI from "swagger-ui-express"
 import configSwagger from './swagger/swagger.js';
+import { sanitizadorBBDD } from './shared/db/sanitizedData.js';
 
 
 //server
@@ -54,6 +55,7 @@ app.use("/api/spot", spotRouter)
 app.use("/api/order", orderRouter)
 app.use("/api/auth", authRouter)
 app.use("/api/dayorderblock", dobRouter)
+app.post("/api/sanitizarInformacion", sanitizadorBBDD) //SOLO EN PRUEBAS
 
 
 // default route for not found resources

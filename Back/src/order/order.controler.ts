@@ -888,7 +888,7 @@ async function migrateDatesOrder(req: Request, res: Response) {
 }
 
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, actualizarPostCancelacion, crearOrdenRegularRenovada, migrateDatesOrder }
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, actualizarPostCancelacion, crearOrdenRegularRenovada, migrateDatesOrder, asingAtributes }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]

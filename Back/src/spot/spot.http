@@ -48,6 +48,9 @@ Content-Type: application/json
 
 }
 
+
+
+
 ### PUTH Modifica todo el objeto -idempotente-
 PUT http://localhost:{{port}}/api/spot/{{id}}
 Authorization: Bearer {{token}}

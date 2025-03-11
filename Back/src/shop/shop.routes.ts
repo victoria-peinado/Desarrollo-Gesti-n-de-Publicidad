@@ -3,6 +3,7 @@ import { findAll, findOne, add, update, remove, sanitizeShopInput, getShopsByOwn
 import { ShopSchema, PartialShopSchema, ShopPutSchema} from './shop.entity.js'
 import { validateWithSchema , validateObjectId, validateCuit} from '../shared/db/middleware.js'
 import {  verifyToken,authorizeUserRoles } from '../auth/auth.middleware.js'
+import { createInfoSanitized, sanitizadorBBDD } from "../shared/db/sanitizedData.js";
 
 export const shopRouter = Router()
 shopRouter.get('/search',verifyToken, authorizeUserRoles('admin'), getShopsByCuitAndFantasyName);

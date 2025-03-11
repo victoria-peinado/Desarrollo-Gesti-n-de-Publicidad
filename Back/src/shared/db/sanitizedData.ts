@@ -1,34 +1,47 @@
+import { Request, Response } from "express";;
 import { Contact, ContactInterface } from "../../contact/contact.entity.js";
 import { Contract, ContractInterface } from "../../contract/contract.entity.js";
 import { DayOrderBlock } from "../../day_order_block/day_order_block.entity.js";
-import { BlocksNotRegularType, BlocksRegularType, Order, OrderInterface } from "../../order/order.entity.js";
+import { BlocksRegularType, Order, OrderInterface } from "../../order/order.entity.js";
 import { FiscalCondition, Owner, OwnerInterface } from "../../owner/owner.entity.js";
 import { billingType, PaymentMethod, Shop, ShopInterface, ShopType } from "../../shop/shop.entity.js";
 import { orm } from "./orm.js";
+import { asingAtributes, crearOrdenRegularRenovada } from "../../order/order.controler.js";
+import { any } from "zod";
 
 
 const em = orm.em
 
+export async function sanitizadorBBDD(req: Request, res: Response) {
+    try {
+        const result = await createInfoSanitized()
+        res.status(200).json({ message: 'todo salio bien', data: result })
+    }
+    catch (error: any) {
+        res.status(500).json({ message: error })
+    }
+}
+
 export async function createInfoSanitized() {
     //podriamos borrar todo lo existente en la base de datos. 
 
-    try{
-    const shops = await em.find(Shop, {})
-    const ownersToDelete = await em.find(Owner, {})
-    const contactsToDelte = await em.find(Contact, {})
-    const contractsToDelete = await em.find(Contract, {})
-    const ordersToDelete = await em.find(Order, {})
-    const dosbToDelete = await em.find(DayOrderBlock, {})
-    em.remove(dosbToDelete)
-    em.remove(ordersToDelete)
-    em.remove(contractsToDelete)
-    em.remove(shops)
-    em.remove(ownersToDelete)
-    em.remove(contactsToDelte)
-    await em.flush()
-    }
-    catch(error: any) {
-           return { message: 'Ha sucedido un error', error: error }
+    try {
+    //     const shops = await em.find(Shop, {})
+    //     const ownersToDelete = await em.find(Owner, {})
+    //     const contactsToDelte = await em.find(Contact, {})
+    //     const contractsToDelete = await em.find(Contract, {})
+    //     const ordersToDelete = await em.find(Order, {})
+    //     const dosbToDelete = await em.find(DayOrderBlock, {})
+    //     em.remove(dosbToDelete)
+    //     em.remove(ordersToDelete)
+    //     em.remove(contractsToDelete)
+    //     em.remove(shops)
+    //     em.remove(ownersToDelete)
+    //     em.remove(contactsToDelte)
+    //     await em.flush()
+     }
+    catch (error: any) {
+    //     return { message: 'Ha sucedido un error', error: error }
 
     }
 
@@ -68,7 +81,7 @@ export async function createInfoSanitized() {
         const ownerShop1 = em.create(Owner, owner_shop1)
         const ownerShop2 = em.create(Owner, owner_shop2)
         await em.flush()
-        if (!contactShop1 || !contactShop2 || !ownerShop1 || !ownerShop2 ) {
+        if (!contactShop1 || !contactShop2 || !ownerShop1 || !ownerShop2) {
             return 'Ocurrio un error al crear el Contacto o el Owner'
         }
 
@@ -82,8 +95,8 @@ export async function createInfoSanitized() {
             type: ShopType.Empresa,
             mail: "info@djjb.com",
             usualPaymentForm: PaymentMethod.Efectivo,
-            contact: contactShop1.id!, // id: contact_shop1
-            owner: ownerShop1.id!, // id: owner_shop1
+            contact: contactShop1._id!.toString(), // id: contact_shop1
+            owner: ownerShop1._id!.toString(), // id: owner_shop1
             address: "12 de abril 596 - Arroyo Seco"
         }
 
@@ -93,8 +106,8 @@ export async function createInfoSanitized() {
             type: ShopType.PyM,
             mail: "infoksrl@gmail.com",
             usualPaymentForm: PaymentMethod.Transferencia,
-            contact: contactShop2.id!, // id: contact_shop2
-            owner: ownerShop2.id!, // id: owner_shop2
+            contact: contactShop2._id!.toString(), // id: contact_shop2
+            owner: ownerShop2._id!.toString(), // id: owner_shop2
             address: "San Martin 2425 - Fighiera"
         }
 
@@ -103,7 +116,7 @@ export async function createInfoSanitized() {
         const shopSave1 = em.create(Shop, shop1)
         const shopSave2 = em.create(Shop, shop2)
         em.flush()
-        if (!shopSave1 || !shopSave2){
+        if (!shopSave1 || !shopSave2) {
             return 'Ocurrio un error inesperado al crear los Shops.'
         }
 
@@ -112,7 +125,7 @@ export async function createInfoSanitized() {
         const contract1: ContractInterface = {
             dateFrom: new Date(), //yyyy-MM-dd
             observations: "Quiere que se realicen publicidades en Facebook.",
-            shop: shopSave1.id! //id: shop1
+            shop: shopSave1._id!.toString() //id: shop1
         }
 
 
@@ -120,7 +133,7 @@ export async function createInfoSanitized() {
             dateFrom: new Date("2025-4-1"), //yyyy-MM-dd
             dateTo: new Date("2025-8-31"), //yyyy-MM-dd
             observations: "Prefiere estar en el final de la tanda.",
-            shop: shopSave2.id!//id: shop2
+            shop: shopSave2._id!.toString()//id: shop2
         }
 
 
@@ -129,7 +142,7 @@ export async function createInfoSanitized() {
         const contractSave1 = em.create(Contract, contract1)
         const contractSave2 = em.create(Contract, contract2)
         em.flush
-        if (!contractSave1 || !contractSave2){
+        if (!contractSave1 || !contractSave2) {
             return 'Ocurrio un error inesperado al crear los contratos.'
         }
 
@@ -144,7 +157,7 @@ export async function createInfoSanitized() {
             sunday: ['5', '6', '7', '8', '9']
         }
 
-        const notRegularStructure1: [string, string[]][] = [["2025-4-1", ['5', '6', '7', '8', '9']], ['2025-4-2', ['5', '6', '7', '8', '10']], ["2025-4-8", ['5', '6', '7', '8', '9']], ["2025-4-12", ['5', '6', '7', '8', '9']]  ]// [ date, [numBlocks..] ]
+        const notRegularStructure1: [string, string[]][] = [["2025-4-25", ["1", "2", "3", "4"]], ["2025-4-26", ["5", "6", "7", "8"]], ["2025-4-27", ["9", "10", "11", "12"]], ["2025-4-28", ["9", "10", "11", "12"]], ["2025-4-24", ["20", "19", "16", "12"]]]// [ date, [numBlocks..] ]
 
 
         const regularStructure2: BlocksRegularType = {
@@ -175,7 +188,7 @@ export async function createInfoSanitized() {
             month: "04-2025",
             regular: true,
             regStructure: regularStructure1,
-            contract: contractSave1.id!,
+            contract: contractSave1._id!.toString(),
             spot: "67c5270f29de2f00c7260987",
             dateFrom: new Date(),
             dateTo: new Date(),
@@ -190,8 +203,7 @@ export async function createInfoSanitized() {
             showName: "Tarde musical",
             month: "04-2025",
             regular: false,
-            notRegStructure: notRegularStructure1,
-            contract: "contractSave1.id!",
+            contract: contractSave1._id!.toString(),
             spot: "67c5270f29de2f00c7260987",
             dateFrom: new Date(),
             dateTo: new Date(),
@@ -207,10 +219,10 @@ export async function createInfoSanitized() {
             month: "04-2025",
             regular: true,
             regStructure: regularStructure2,
-            contract: contractSave2.id!,
+            contract: contractSave2._id!.toString(),
             spot: "67c5270f29de2f00c7260987",
-            dateFrom: new Date(),
-            dateTo: new Date(),
+            dateFrom: new Date('2025-4-1'),
+            dateTo: new Date('2025-4-30'),
             regDate: new Date(),
             liq: false
             //cargar spot a mano
@@ -218,10 +230,20 @@ export async function createInfoSanitized() {
 
 
         //GUARDAR EN LA BBDD
-        const order_regular_s1 =  em.create(Order, order_regular_shop1)
-        const order_notRegular_s1 =  em.create(Order, order_notRegular_shop1)
-        const order_regular_s2 =  em.create(Order, order_regular_shop2)
+        const order_regular_s1 = em.create(Order, order_regular_shop1)
+        const order_notRegular_s1 = em.create(Order, order_notRegular_shop1)
+        const order_regular_s2 = em.create(Order, order_regular_shop2)
         await em.flush()
+
+        let lau: any
+
+        await asingAtributes(order_regular_s1, contractSave1.dateFrom, true, regularStructure1, undefined, undefined)
+        await asingAtributes(order_regular_s2, new Date('2025-4-1'), true, regularStructure2, undefined, undefined)
+        await asingAtributes(order_notRegular_s1, contractSave1.dateFrom, order_notRegular_s1.regular, lau, notRegularStructure1, undefined)
+
+
+        await em.flush()
+
         if (!order_regular_s1 || !order_regular_s2 || !order_notRegular_s1) {
             return 'Ocurrio un error al crear las ordenes. '
         }
@@ -230,22 +252,24 @@ export async function createInfoSanitized() {
 
 
         //Metodos de prueba:
-            // - Renovar automaticamente las ordenes con el mes 05-2025
-            // - Registrar como paga una orden
-            // - Cancelar contratacion en curso
-            // - Cancelar una orden
-            // - Crear nueva orden para esa contratacion
+        // - Renovar automaticamente las ordenes con el mes 05-2025
+        // - Registrar como paga una orden
+        // - Cancelar contratacion en curso
+        // - Cancelar una orden
+        // - Crear nueva orden para esa contratacion
 
 
 
 
 
-        return { message: 'Creado correctamente', contactShop1, contactShop2, ownerShop1, ownerShop2, shopSave1, shopSave2,
-        contractSave1, contractSave2}
+        return {
+            message: 'Creado correctamente', contactShop1, contactShop2, ownerShop1, ownerShop2, shopSave1, shopSave2,
+            contractSave1, contractSave2, order_regular_s1, order_regular_s2, order_notRegular_s1
+        }
 
     }
 
-    catch (error: any) { 
-        return {message:'Ha sucedido un error', error: error}
+    catch (error: any) {
+        return { message: 'Ha sucedido un error', error: error }
     }
 }
