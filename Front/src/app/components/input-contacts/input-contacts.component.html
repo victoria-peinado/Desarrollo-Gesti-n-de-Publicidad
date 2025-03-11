@@ -1,5 +1,5 @@
 <form [formGroup]="contacts_form">
-    <mat-form-field class="example-chip-list">
+    <mat-form-field class="example-chip-list" hintLabel="Presione ENTER para cargar el contacto.">
       <mat-label>Contactos (teléfono/email)</mat-label>
       <mat-chip-grid #chipGrid aria-label="Ingresar contactos (teléfono/email)" formControlName="contact">
         <mat-chip-row *ngFor="let contact of contacts"

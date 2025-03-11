@@ -8,5 +8,7 @@ export const ATTRIBUTE_MAPPING: { [key: string]: string } = {
     name: 'Nombre Contacto',
     lastname: 'Apellido Contacto',
     dni: 'DNI Contacto',
+    bussinessName: 'Razón Social',
+    fiscalCondition: 'Condición Fiscal',
   };
   

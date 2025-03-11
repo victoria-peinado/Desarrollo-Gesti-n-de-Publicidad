@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
+import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping';
 import { FISCAL_CONDITION_TYPES } from 'src/app/constants/constants';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -104,6 +105,8 @@ export class EdicionTitularCategoryComponent {
   }
 
   clearForm() {
+    this.businessNameControl.disable();
+    this.fiscalConditionControl.disable();
     this.formDirective?.resetForm();
     this.errorMessageOwner = null;
     this.ownerFounded = false;
@@ -138,10 +141,32 @@ export class EdicionTitularCategoryComponent {
   }
 
   openDialog(): void {
-    console.log('xd');
+
+    const ownerFieldsToCheck = [
+      { key: 'bussinessName', control: this.businessNameControl, initialValue: this.bussinessName },
+      { key: 'fiscalCondition', control: this.fiscalConditionControl, initialValue: this.fiscalCondition }
+    ];
+
+
+  const modifiedOwnerAttributes: any = {};
+  const changesList: any[] = [];
+  
+
+  ownerFieldsToCheck.forEach(field => {
+      if (field.control.value !== field.initialValue) {
+        modifiedOwnerAttributes[field.key] = field.control.value;
+        changesList.push({
+          attribute: ATTRIBUTE_MAPPING[field.key] || field.key,
+          oldValue: field.initialValue,
+          newValue: field.control.value,
+        });
+      }
+    });
+
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         text: `<p>¿Seguro que desea editar el Titular de CUIT <strong>${this.cuit}</strong>?</p>`,
+        changes: changesList,
       },
     });
 
@@ -151,4 +176,5 @@ export class EdicionTitularCategoryComponent {
       }
     });
   }
+
 }

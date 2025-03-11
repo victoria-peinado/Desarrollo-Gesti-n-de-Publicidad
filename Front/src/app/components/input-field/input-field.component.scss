@@ -61,3 +61,12 @@
   margin: 5px 0;
   text-align: center;
 }
+
+.tooltip-icon mat-icon {
+  font-size: 14px;
+}
+
+.tooltip-disabled {
+  color: #E1E0E3;
+  pointer-events: none;
+}

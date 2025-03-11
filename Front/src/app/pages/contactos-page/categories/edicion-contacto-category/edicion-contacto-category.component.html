@@ -21,9 +21,11 @@
               pattern: '^[0-9]*$'
             }"
             [mode]="'input'"
+            tooltipText="Documento Nacional de Identidad."
           ></app-input-field>
           </fieldset>
 
+          <span matTooltip="Ingrese un DNI válido." [matTooltipDisabled]="!dniControl.invalid" [matTooltipPosition]="'right'">
           <button
             mat-raised-button
             color="primary"
@@ -32,6 +34,7 @@
           >
             Check
           </button>
+        </span>
 
           @if (errorMessageContact) {
           <button mat-button color="warn" class="pointer-events-none">
@@ -74,7 +77,7 @@
         </div>
 
     <app-btn-guardar-cambios
-        [disabled]="contact_form.invalid || !contactFounded || btnControl"
+        [disabled]="contact_form.invalid || !contactFounded || btnControl || (inputContactsComponent.contacts_form.get('contact')!.invalid && inputContactsComponent.contacts.length===0)"
         (clickEvent)="openDialog()" 
         [text]="'Guardar cambios'"
       ></app-btn-guardar-cambios>

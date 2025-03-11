@@ -24,7 +24,7 @@
             ></app-input-field>
           </fieldset>
           
-  
+          <span matTooltip="Ingrese un CUIT válido." [matTooltipDisabled]="!cuit_form.invalid" [matTooltipPosition]="'right'">
           <button
             mat-raised-button
             color="primary"
@@ -33,6 +33,7 @@
           >
             Check
           </button>
+          </span>
   
         </div>
         
@@ -62,7 +63,7 @@
         </div>
       </form>
 
-
+      <span matTooltip="Debe existir el Titular." [matTooltipDisabled]="ownerFounded" [matTooltipPosition]="'right'">
         <button
         class="btn-eliminar"
         mat-flat-button
@@ -72,6 +73,7 @@
       >
         Eliminar Titular
       </button>
+      </span>
 
     </div>
   </div>
