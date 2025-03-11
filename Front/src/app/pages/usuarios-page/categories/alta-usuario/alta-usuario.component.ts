@@ -46,8 +46,7 @@ registration() {
     next: (response: any) => {
       console.log('Usuario creado:', response);
       this.openSnackBar('Registro exitoso', 'Cerrar', 5000, 'success-snackbar');
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('role', response.data.user.role);
+
       this.router.navigate(['/inicio']);
     },
     error: (error: any) => {
