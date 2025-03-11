@@ -396,3 +396,55 @@ form.sign-in-form {
     left: 50%;
   }
 }
+
+
+
+
+
+
+
+
+
+.footer {
+  width: 100%;
+  background-color: #FDFBFF;
+  border-top: 1px solid #454545;
+  padding: 1rem;
+  text-align: center;
+  z-index: 1000;
+}
+
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.footer-logo {
+  height: 40px;  // Adjust logo size as needed
+}
+
+.footer-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: #454545;
+}
+
+.footer-text p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer-text a {
+  color: #005CBB;
+  text-decoration: none;
+}
+
+.footer-text a:hover {
+  text-decoration: underline;
+}

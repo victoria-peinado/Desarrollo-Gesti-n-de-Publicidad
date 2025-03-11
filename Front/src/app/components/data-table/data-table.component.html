@@ -10,7 +10,7 @@
   </mat-form-field>
 
   <div class="mat-elevation-z8" *ngIf="!isMobile">
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
       <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ column.label }}
@@ -22,6 +22,7 @@
             }}</a>
             <span
               *ngSwitchCase="'badge'"
+              class="badge"
               [ngClass]="getBadgeClass(row[column.key])"
             >
               {{ row[column.key] }}
@@ -57,7 +58,7 @@
               {{ shop.fantasyName }}
             </mat-panel-title>
             <mat-panel-description>
-              <span [ngClass]="getBadgeClass(shop.type)">{{ shop.type }}</span>
+              <span class="badge" [ngClass]="getBadgeClass(shop.type)">{{ shop.type }}</span>
             </mat-panel-description>
           </mat-expansion-panel-header>
           <p>

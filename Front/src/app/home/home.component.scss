@@ -10,6 +10,7 @@
     display: grid;
     grid-template-columns: auto 5fr;
     overflow: hidden;
+    position: relative;
   }
 
 }
@@ -223,3 +224,5 @@
       }
     }
   }
+
+

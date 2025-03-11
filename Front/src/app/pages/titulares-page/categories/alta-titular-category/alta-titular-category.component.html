@@ -21,6 +21,7 @@
                     pattern: '^[0-9]*$'
                   }"
                   [mode]="'input'"
+                  tooltipText="La Clave Única de Identificación Tributaria (CUIT) es un código de 11 dígitos que identifica a las personas físicas o jurídicas que tributan en Argentina."
                 ></app-input-field>
               </fieldset>
     
@@ -32,6 +33,7 @@
                   [control]="businessNameControl"
                   [validations]="{ required: true }"
                   [mode]="'input'"
+                  tooltipText="Nombre legal completo de la empresa."
                 ></app-input-field>
               </fieldset>
               <fieldset>
@@ -41,6 +43,7 @@
                   [validations]="{ required: true }"
                   [mode]="'select'"
                   [options]="fiscalConditionTypes"
+                  tooltipText="Régimen fiscal de la empresa."
                 ></app-input-field>
               </fieldset>
             </div>

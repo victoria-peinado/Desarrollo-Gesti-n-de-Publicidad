@@ -1,61 +1,131 @@
-<mat-form-field class="w-100">
-  <mat-label>Filtrar</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Buscar..." #input />
-</mat-form-field>
+<div>
+  <mat-form-field class="w-100">
+    <mat-label>Filtrar</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Buscar..."
+      #input
+    />
+  </mat-form-field>
 
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" matSort>
+  <div class="mat-elevation-z8" *ngIf="!isMobile">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
 
-    <!-- Columnas dinámicas -->
-    <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ column.label }}
-      </th>
-      <td mat-cell *matCellDef="let row">
-        {{ row[column.key] }}
-      </td>
-    </ng-container>
+      <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ column.label }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row[column.key] }}
+        </td>
+      </ng-container>
 
-    <!-- Columna Estado -->
-    <ng-container matColumnDef="estado">
-      <th mat-header-cell *matHeaderCellDef> Estado </th>
-      <td mat-cell *matCellDef="let row">
-        <span [ngClass]="getBadgeClass(row.estado)">{{ row.estado }}</span>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let row">
+          <span
+            class="badge"
+            [ngClass]="getBadgeClass(getEstado(row.dateFrom, row.dateTo))"
+          >
+            {{ getEstado(row.dateFrom, row.dateTo) }}
+          </span>
+        </td>
+      </ng-container>
 
-    <!-- Columna de Selección -->
-    <ng-container matColumnDef="selected">
-      <th mat-header-cell *matHeaderCellDef> Seleccionar </th>
-      <td mat-cell *matCellDef="let row">
-        <mat-radio-group [(ngModel)]="selectedRowId">
-          <mat-radio-button
-            [value]="row.id"
-            (change)="selectRow(row)"
-            [disabled]="!isSelectable(row)">
-          </mat-radio-button>
-        </mat-radio-group>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="selected">
+        <th mat-header-cell *matHeaderCellDef>Seleccionar</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-radio-group [(ngModel)]="selectedRowId">
+            <mat-radio-button
+              [value]="row.id"
+              (change)="selectRow(row)"
+              [disabled]="!isSelectable(row)"
+            >
+            </mat-radio-button>
+          </mat-radio-group>
+        </td>
+      </ng-container>
 
-    <!-- Encabezado y Filas -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-    <!-- Sin Datos -->
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" [attr.colspan]="columns.length + 2">
-        No se encontraron datos para "{{ input.value }}"
-      </td>
-    </tr>
-  </table>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="columns.length + 2">
+          No se encontraron datos para "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
 
-  <!-- Paginación -->
-  <mat-paginator
-    #paginator
-    [pageSize]="5"
-    [showFirstLastButtons]="true"
-    [hidePageSize]="true"
-    aria-label="Seleccionar página">
-  </mat-paginator>
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of users"
+    ></mat-paginator>
+  </div>
+
+  <div class="cards" *ngIf="isMobile" class="grid-container">
+    <div *ngFor="let contract of filteredContracts; let i = index" class="card">
+      <mat-accordion class="accordion">
+        <mat-expansion-panel
+          (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">
+              {{ i + 1 }}
+            </mat-panel-title>
+            <mat-panel-description>
+              <span
+                class="badge"
+                [ngClass]="
+                  getBadgeClass(getEstado(contract.dateFrom, contract.dateTo))
+                "
+              >
+                {{ getEstado(contract.dateFrom, contract.dateTo) }}
+              </span>
+              
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>
+            <span class="font-bold">Fecha Desde: </span>
+            <span>{{ contract.dateFrom }}</span>
+          </p>
+          <p>
+            <span class="font-bold">Fecha Hasta: </span>
+            <span>{{ contract.dateTo }}</span>
+          </p>
+          <p>
+            <span class="font-bold">Fecha Realización: </span>
+            <span>{{ contract.regDate }}</span>
+          </p>
+          <p>
+            <span class="font-bold">Observaciones: </span>
+            <span>{{ contract.observations }}</span>
+          </p>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-radio-button
+        [value]="contract.id"
+        (change)="
+          selectRow({
+            dateFrom: contract.dateFrom,
+            dateTo: contract.dateTo,
+            estado: getEstado(contract.dateFrom, contract.dateTo),
+            id: contract.id,
+            index: i,
+            obs: contract.observations,
+            regDate: contract.regDate
+          })
+        "
+      >
+      </mat-radio-button>
+    </div>
+    <p *ngIf="filteredContracts.length === 0 && isMobile" class="no-results">
+      {{ noDataMessage }}
+    </p>
+  </div>
 </div>
+
+
+
+  

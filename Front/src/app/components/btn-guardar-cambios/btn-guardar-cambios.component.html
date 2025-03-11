@@ -1,5 +1,7 @@
 <div class="btn-guardar-cambios">
+  <span matTooltip="Complete los campos obligatorios (*)" [matTooltipDisabled]="!disabled" [matTooltipPosition]="'right'">
     <button
+      [ngClass]="{ 'btn-animation': !disabled }"
       mat-flat-button
       color="accent"
       [disabled]="disabled"
@@ -7,6 +9,5 @@
     >
       {{ text }}
     </button>
-  </div>
-  
-
+  </span>
+</div>
