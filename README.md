@@ -8,6 +8,9 @@ This project was developed by students of the National Technological University.
 ## **Description**
 This web application is designed for radio station administrators and operators. Its functionalities focus on managing advertising contracts and tracking advertisement broadcast orders efficiently.
 
+## **API Documentation**
+You can find the API Documentation, made with Swagger, on `http://localhost:3001/api-docs`. Remember to change the port if you don´t use the default definded. 
+
 ## **Installation**
 
 ### **Install Node.js**

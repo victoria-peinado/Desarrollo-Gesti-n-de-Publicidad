@@ -30,7 +30,8 @@ tags:
   - name: DayOrderBlock
     description: Asociación entre ordenes y los bloques en los que se emitirá cada día.  
 
-
+  - name: Develops Utilities
+    description: Utilizado para la optimización del desarrollo.
 
 
 paths:
@@ -2831,8 +2832,8 @@ paths:
       summary: Lista todos los DayOrderBlock (ternarias/DOBs) entre las fechas dadas
       security:
         - bearerAuth: []
-      description: Listar todas las ternarias existentes (SIN POPULAR) entre las fechas dadas como parametros. Fecha desde y fecha hasta para filtrar. La fecha hasta no es oblicatoria (puede estar o no en la url.). Fecha desde no puede ser mayor que fecha hasta. El formato es string AAAA-MM-DD o AAAA-M-D.
-      operationId: Price-GET-ALL
+      description: Listar todas las ternarias existentes (con datos especificos para mostrar.) entre las fechas dadas como parametros. Fecha desde y fecha hasta para filtrar. La fecha hasta no es oblicatoria (puede estar o no en la url.). Fecha desde no puede ser mayor que fecha hasta. El formato es string AAAA-MM-DD o AAAA-M-D.
+      operationId: DOBS-GET-FILTER
 
       parameters:
         
@@ -2866,7 +2867,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/DayOrderBlock'    
+                      $ref: '#/components/schemas/DayOrderBlockResponse'    
                 
         '500':
           description: Mensaje de error
@@ -3134,6 +3135,61 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiErrorResponse'
 
+  /api/order/dates/notPayOrdersFilter:
+    get:
+      tags:
+        - Order
+      summary: Lista todos las Ordenes (Orders) existentes no pagas pero con datos especificos devueltos.
+      security:
+        - bearerAuth: []
+      description: Lista de las ordenes no pagas los atributos cuit, ownerName, fantasyName, idOrder, nameStrategy, month, totalCost, regular, showName      
+      operationId: Ordenes-GET-NOTPAYFILTER
+
+
+      responses:
+        '200':
+          description: Find not pay.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Find not pay orders by shop Id.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        cuit:
+                          type: string
+                          example: 
+                        ownerName:
+                          type: string
+                          example: "30500010912"
+                        fantasyName:
+                          type: string
+                          example: Informatiks SRL
+                        idOrder:
+                          type: string
+                          example: 67cfa8b10142f39419bf1839
+                        nameStrategy:
+                          type: string
+                          example: Servicios de Transporte
+                        month:
+                          type: string
+                          example: 04-2025
+                        totalCost:
+                          type: number
+                          example: 12800
+                        regular:
+                          type: boolean
+                          example: true 
+                        showName:
+                          type: string
+                          example: "Siempre al Día"
+
 
   #Renovar ordenes automaticas
   /api/order/renovateOrders:
@@ -3195,6 +3251,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorResponse'
+
+
+  /api/order/notifyByMail:
+    post:
+      tags: 
+        - Order
+      summary: INFORMAR DEUDORES VIA EMAIL.
+      security:
+        - bearerAuth: []
+      description: Enviar un email a los comercios (y sus contactos) que deben ordenes.
+      operationId: ORDER-INFORM-MAIL
+
+      requestBody:
+        description: Se envia los id de las ordenes que se quieren notificar.
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties:
+                id: 
+                  type: array
 
 
   #Edit an orden
@@ -3500,8 +3577,42 @@ paths:
                   $ref: '#/components/schemas/ApiErrorResponse'
 
       
+#DEVELOPS UTILITIES
+  /api/sanitizarInformacion:
+    post:
+      tags:
+        - Develops Utilities
+      summary: Crea una base de datos con ejemplos sanitizados.
+      description: Crea una base de datos en funcion de datos sanitizados escritos en un archivo de codigo. Se recomienda para realizar pruebas. SOLO UTILIZADO PARA DESARROLLO.
 
-  
+
+  /api/dayorderblock/limpiarBBDD:
+    delete: 
+      tags: 
+        - Develops Utilities
+      summary: Eliminar DOBS de ordenes inexistentes
+      security:
+        - bearerAuth: []
+      description: Elimina todas las DOBS restantes de ordenes que ya no existen. Solo utilizado durante etapas del desarrollo en la que la informacion no era integra.
+      operationId: DOB-DELETE-NOTREFERENCES
+
+  /api/order//migrarFechas:
+    post:
+      tags: 
+        - Develops Utilities
+      summary: Agrega a ciertas ordenes el dateTo - dateFrom.
+      description: Utilizado para mantener consistencia entre datos frente a nuevos atributos. Modificaba las ordenes con mes 3-2025. No se utiliza mas. BORRAR PARA DESARROLLO.
+      operationId: ORDER-INFORM-MAIL
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3774,7 +3885,6 @@ components:
             example: 67b8ffd0cb7daee6202cfff6
 
 
-
     DayOrderBlock:
       type: object 
       properties: 
@@ -3791,6 +3901,42 @@ components:
         order: 
           type: string
           example: 67b9378d348d061c1ebe699c
+
+
+
+    DayOrderBlockResponse: 
+      type: object 
+      properties: 
+        id: 
+          type: string
+          example: 67b9378f348d061c1ebe69ab
+        day: 
+          type: string
+          formate: date-time
+          example: "2025-02-25T03:00:00.000Z"
+        block: 
+          type: string
+          example: 67b8ffd0cb7daee6202cfff8
+        numBlock:
+          type: string
+          example: "20"
+        startTimeBlock:
+          type: string
+          example: "00:30:00"
+        order: 
+          type: string
+          example: 67b9378d348d061c1ebe699c
+        fantasyName:
+          type: string
+          example: "Transporte DJJB"
+        spot:
+          type: string
+          example: "67c5270f29de2f00c7260987"
+        spotName:
+          type: string
+          example: "Universo_Paralelo_-_La_K'onga-1740973839666.mp3"
+
+
 
 
     User: 
