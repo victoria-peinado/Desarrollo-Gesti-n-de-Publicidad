@@ -67,16 +67,23 @@ export class EmisionOrdenesCategoryComponent {
   obs: string = '';
   id: string = '';
 
-  selectedContractId: string = '';
   createdSpotId: string = '';
   orderData: any = {};
   regStructure: { [key: string]: string[] } = {};
+  notRegularStructure: [string, string[]][] = [];
+  isNotRegular: boolean = false;
+  isNRSignal = signal(false);
+
+  structureIsEmpty: boolean = true;
+
 
   constructor(
     public dialog: MatDialog,
     private myDataService: MyDataService,
     private _snackBar: SnackbarService
   ) {
+    this.cargarProximosDoceMeses()
+
     this.owner_form = new FormGroup({
       cuit: new FormControl('', [
         Validators.required,
@@ -116,11 +123,42 @@ export class EmisionOrdenesCategoryComponent {
   }
 
   captureRegStructure(structure: { [key: string]: string[] }) {
+    console.log('Estructura recibida:', structure);
     this.regStructure = structure;
-    this.regStructureIsEmpty = Object.values(structure).every(arr => arr.length === 0);
+    this.structureIsEmpty = this.isStructureEmphty();
+  }
 
-    console.log('regStructureIsEmpty', this.regStructureIsEmpty);
+  caputreNotRegularStruc(structure: [string, string[]][]) {
+    console.log('Estructura recibida:', structure);
+    this.notRegularStructure = structure;
+    this.structureIsEmpty = this.isStructureEmphty();
+  }
 
+  isStructureEmphty(){
+     if (this.isNotRegular){
+       //si la orden es no regular
+       if (this.notRegularStructure.length>0){
+         return false
+       } else { return true}
+     } else {
+      //la orden es regular
+      const keys = Object.keys(this.regStructure)
+       const programedKeys = ['monday', 'tuesday',  'wednesday', 'thursday',  'friday', 'saturday', 'sunday']
+      if (keys == programedKeys){
+        //la estructura regular esta cargada
+        let band = false 
+        for (const k of keys){
+          if (this.regStructure[k].length>1){band = true} }
+        return band
+      } else {
+        return false
+      }
+     }
+   }
+
+  captureIsNotRegular(isNoRegular: boolean){
+    this.isNotRegular = isNoRegular
+    this.isNRSignal.set(isNoRegular)
   }
 
   setContract(contractId: string) {
@@ -161,15 +199,29 @@ createOrder() {
           switchMap((spotId) => {
             this.spotId = spotId;
   
-            const orderData: any = {
-                nameStrategy: this.nameStrategyControl.value,
-                obs: this.obsOrderControl.value ? this.obsOrderControl.value : undefined,
-                showName: this.showNameControl.value,
-                contract: this.contractId,
-                spot: this.spotId,
-                regular: true,
-                regStructure: this.regStructure,
-            };
+            if(!this.isNotRegular){
+        this.orderData = {
+          nameStrategy: this.order_form.get('nameStrategy')?.value, // Personalizar según necesidad
+          obs: this.order_form.get('obs')?.value,
+          showName: this.order_form.get('showName')?.value,
+          month: this.order_form.get('month')?.value,
+          contract: this.contractId, // ID de la contratación seleccionada
+          spot: this.createdSpotId, // ID del spot recién creado
+          regular: true,
+          regStructure: this.regStructure, // La estructura de bloques seleccionados
+        }}  else{
+          //la orden es no regular
+          console.log('VAMOS A CREAR UNA ORDEN NO REGULAR!!')
+          this.orderData = {
+            nameStrategy: this.order_form.get('nameStrategy')?.value, // Personalizar según necesidad
+            obs: this.order_form.get('obs')?.value,
+            showName: this.order_form.get('showName')?.value,
+            month: this.order_form.get('month')?.value,
+            contract: this.contractId, // ID de la contratación seleccionada
+            //spot: this.createdSpotId, // ID del spot recién creado
+            regular: false,
+            notRegStructure: this.notRegularStructure, // La estructura de bloques seleccionados
+        }}
   
             console.log(orderData);
   
@@ -337,6 +389,10 @@ createOrder() {
     return this.order_form.get('showName') as FormControl;
   }
 
+  get month(): FormControl {
+    return this.order_form.get('month') as FormControl;
+  }
+
   get obsOrderControl(): FormControl {
     return this.order_form.get('obs') as FormControl;
   }
@@ -423,5 +479,16 @@ createOrder() {
         }
       });
     }
+
+    cargarProximosDoceMeses(){
+    let today = new Date()
+    const actualMonth = format(today, 'MM-yyyy')
+    this.validsNextYearMonths.push(actualMonth)
+    for (let i = 0; i < 12; i++) {
+      today = addMonths(today,1)
+      const actualMonth = format(today, 'MM-yyyy')
+      this.validsNextYearMonths.push(actualMonth)      
+    }
+  }
   
 }
