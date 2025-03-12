@@ -819,6 +819,30 @@ async function findAllNotPayOrders(req: Request, res: Response) {
     }
 }
 
+async function findAllNotPayOrdersFilter(req: Request, res:Response){
+    try{
+        const orders = await em.find(Order, { liq: false }, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
+        const dataSend = []
+        for (const ord of orders){
+            dataSend.push({
+                cuit: ord.contract.shop.owner.cuit,
+                ownerName: ord.contract.shop.owner.businessName,
+                fantasyName: ord.contract.shop.fantasyName,
+                idOrder: ord.id,
+                nameStrategy: ord.nameStrategy,
+                month: ord.month,
+                totalCost: ord.totalCost,
+                regular: ord.regular,
+                showName: ord.showName,
+            })
+        }
+        res.status(200).json({ message: 'Find all not pay Orders - Filter Atributes', data: dataSend })
+
+    } catch (error:any){
+        res.status(500).json({ message: error.message })
+    }
+}
+
 async function findNotPayOrdersByDates(req: Request, res: Response) {
     try {
         const dateFrom = new Date(req.body.sanitizeInput.dateFrom)
@@ -888,7 +912,7 @@ async function migrateDatesOrder(req: Request, res: Response) {
 }
 
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, actualizarPostCancelacion, crearOrdenRegularRenovada, migrateDatesOrder, asingAtributes }
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, actualizarPostCancelacion, crearOrdenRegularRenovada, migrateDatesOrder, asingAtributes, findAllNotPayOrdersFilter }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]

@@ -7,6 +7,7 @@ import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ShowForRolesDirective } from '../guards/show-for-roles.directive';
 import { ContentObserver } from '@angular/cdk/observers/index.js';
+import { th } from 'date-fns/locale';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -264,6 +265,7 @@ toggleSubMenuInternal(button: HTMLElement) {
   }
   logout() {
     this.myDataService.logout();
+    this.router.navigate(['/']);
   }
   openDialog(): void {
 

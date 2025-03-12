@@ -8,6 +8,7 @@ import { User } from '../models/user.js';
 import { environment } from 'src/environments/environment';
 import { Contract } from '../models/contract.js';
 import { HttpParams } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ import { HttpParams } from '@angular/common/http';
 export class MyDataService {
   private apiUrl: string = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private  cookies:CookieService ) {}
 
   register(user: User){
     return this.http.post(`${this.apiUrl}auth/register`, user);
@@ -24,15 +25,15 @@ export class MyDataService {
     return this.http.post(`${this.apiUrl}auth/login`, user);
   }
   logout(){
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+   this.cookies.delete('token');
+   this.cookies.delete('role');
     return this.http.get(`${this.apiUrl}auth/logout`);
   } 
   islogged(){
-    return !!localStorage.getItem('token');
+    return !!this.cookies.get('token');
   }
   getUserRole(){
-    return localStorage.getItem('role');
+    return this.cookies.get('role');
   }
   getUserByUsername(username: string){
     return this.http.get(`${this.apiUrl}auth/byUsername/${username}`);
