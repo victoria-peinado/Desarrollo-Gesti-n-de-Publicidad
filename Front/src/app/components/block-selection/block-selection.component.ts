@@ -49,7 +49,7 @@ export class BlockSelectionComponent {
     this.daysOfWeek.forEach(day => this.blocksPerDay[day] = []);
   }
 
-  addCustomDate(event: any) {
+  addCustomDate(event: any) { //se comenta y se borra
     const date: Date = event.value;
     if (date) {
       const formattedDate = this.formatDate(date);
@@ -63,18 +63,18 @@ export class BlockSelectionComponent {
 
   addBlock(label: string) {
     this.blocksPerDay[label].push({ id: this.idCounter++, time: '' });
-    this.emitRegStructure();
+    this.emitRegStructure(); //no va
   }
 
   removeBlock(label: string, id: number) {
     this.blocksPerDay[label] = this.blocksPerDay[label].filter(b => b.id !== id);
-    this.emitRegStructure();
+    this.emitRegStructure(); //no va
   }
 
   updateBlock(label: string, id: number, value: string) {
     const block = this.blocksPerDay[label].find(b => b.id === id);
     if (block){ block.time = value;
-    this.emitRegStructure(); }
+    this.emitRegStructure(); } //no va
   }
 
   generateRegStructure(): { [key: string]: string[] } {
