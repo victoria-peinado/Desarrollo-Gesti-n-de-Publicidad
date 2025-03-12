@@ -29,7 +29,6 @@ export class BlockSelectionComponent {
 
   daysOfWeek: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   regularCampo = false
-  //emmiterNoRegular = output<boolean>()
   customDates: string[] = [];
 
 
@@ -40,7 +39,6 @@ export class BlockSelectionComponent {
 
   blockTimes = BLOCK_TIMES;
 
-  //@Input() month: string = format(new Date(), 'MM,yyyy') ;
 
   month = input.required<string>()
 
