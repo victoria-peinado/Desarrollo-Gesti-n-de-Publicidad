@@ -127,7 +127,12 @@ async function add(req: Request, res: Response) {
         // Verificamos contrato.
         const id = sanitizeInput.contract;
         const contract = await em.findOneOrFail(Contract, { id });
-        let dateFrom = contract.dateFrom;
+        //la fecha desde es la primera del mes de la contratacion. Si no hay mes quiere decir que es actual. y se pondra sola. Si el mes es actual y la de inicio es anterior a hoy se asigna la de hoy. 
+        let dateFrom = new Date();
+
+        if (req.body.sanitizeInput.month) {
+            dateFrom = parse((req.body.sanitizeInput.month + '-01'), 'MM-yyyy-dd', new Date())
+        }
         let dateTo = contract.dateTo;
 
         const order = em.create(Order, sanitizeInput);
