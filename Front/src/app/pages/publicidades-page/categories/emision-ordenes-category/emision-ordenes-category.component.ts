@@ -76,6 +76,7 @@ export class EmisionOrdenesCategoryComponent {
   isNotRegular: boolean = false;
   isNRSignal = signal(false);
 
+  dobsEmitidos: boolean = false
   structureIsEmpty: boolean = true;
 
 
@@ -166,6 +167,10 @@ export class EmisionOrdenesCategoryComponent {
     this.isNRSignal.set(isNoRegular)
   }
 
+  captureDatosEmitidos(band: boolean){
+    this.dobsEmitidos = band
+  }
+
   setContract(contractId: string) {
     this.contractId = contractId;
   }
@@ -211,7 +216,7 @@ createOrder() {
           showName: this.order_form.get('showName')?.value,
           month: this.order_form.get('month')?.value,
           contract: this.contractId, // ID de la contratación seleccionada
-          spot: this.createdSpotId, // ID del spot recién creado
+          spot: this.spotId, // ID del spot recién creado
           regular: true,
           regStructure: this.regStructure, // La estructura de bloques seleccionados
         }}  else{
@@ -223,7 +228,7 @@ createOrder() {
             showName: this.order_form.get('showName')?.value,
             month: this.order_form.get('month')?.value,
             contract: this.contractId, // ID de la contratación seleccionada
-            //spot: this.createdSpotId, // ID del spot recién creado
+            spot: this.spotId, // ID del spot recién creado
             regular: false,
             notRegStructure: this.notRegularStructure, // La estructura de bloques seleccionados
         }}

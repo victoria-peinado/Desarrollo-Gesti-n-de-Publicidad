@@ -145,6 +145,7 @@
       (notRegularStructure)="caputreNotRegularStruc($event)"
       (emmiterNoRegular)="captureIsNotRegular($event)"
       [month]="order_form.get('month')!.value"
+      (datosEmitidos)="captureDatosEmitidos($event)"
     ></app-block-selection>
     }
 
@@ -198,6 +199,7 @@
       !completeOrdenData ||
       spot_form.invalid ||
       isStructureEmphty() ||
+      !dobsEmitidos ||
       order_form.invalid
     "
     (clickEvent)="openDialog()"

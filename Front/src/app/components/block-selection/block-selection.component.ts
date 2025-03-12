@@ -50,6 +50,8 @@ export class BlockSelectionComponent {
 
   formatFunction = (date: Date) => { return format(date, 'dd') }
 
+  @Output() datosEmitidos = new EventEmitter<boolean>()
+
   @Output() emmiterNoRegular = new EventEmitter<boolean>();
 
   @Output() regStructureChange = new EventEmitter<{ [key: string]: string[] }>();
@@ -73,6 +75,7 @@ export class BlockSelectionComponent {
     if (!this.regularCampo) {
       this.emitRegStructure()
     } else { this.emitNotRegStructure() }
+    this.datosEmitidos.emit(true) 
   }
 
   changeEmitter(){
