@@ -155,6 +155,10 @@ export class MyDataService {
     return this.http.get(`${this.apiUrl}owner/${id}`);
   }
 
+  getContactById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}contact/${id}`);
+  }
+
   patchShop(id: string, shop: Partial<Shop>): Observable<any> {
     return this.http.patch(`${this.apiUrl}shop/${id}`, shop);
   }

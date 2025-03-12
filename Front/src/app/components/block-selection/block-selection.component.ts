@@ -40,6 +40,8 @@ export class BlockSelectionComponent {
     } else {
       this.initializeDays();
     }
+
+    this.emitRegStructure();
   }
 
   private initializeDays() {
@@ -54,21 +56,25 @@ export class BlockSelectionComponent {
       if (!this.customDates.includes(formattedDate)) {
         this.customDates.push(formattedDate);
         this.blocksPerDay[formattedDate] = [];
+        this.emitRegStructure();
       }
     }
   }
 
   addBlock(label: string) {
     this.blocksPerDay[label].push({ id: this.idCounter++, time: '' });
+    this.emitRegStructure();
   }
 
   removeBlock(label: string, id: number) {
     this.blocksPerDay[label] = this.blocksPerDay[label].filter(b => b.id !== id);
+    this.emitRegStructure();
   }
 
   updateBlock(label: string, id: number, value: string) {
     const block = this.blocksPerDay[label].find(b => b.id === id);
-    if (block) block.time = value;
+    if (block){ block.time = value;
+    this.emitRegStructure(); }
   }
 
   generateRegStructure(): { [key: string]: string[] } {
@@ -107,6 +113,7 @@ export class BlockSelectionComponent {
 
   emitRegStructure() {
     const regStructure = this.generateRegStructure();
+    console.log('regStructure', regStructure);
     this.regStructureChange.emit(regStructure);
   }
 

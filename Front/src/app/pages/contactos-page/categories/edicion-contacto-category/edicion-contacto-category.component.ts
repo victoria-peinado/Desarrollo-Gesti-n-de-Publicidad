@@ -186,7 +186,6 @@ export class EdicionContactoCategoryComponent {
           : field.control;
       let initialValue = field.initialValue;
 
-      // Si el valor es un array, unirlo con ", "
       if (Array.isArray(currentValue)) {
         currentValue = currentValue.join(', ');
       }

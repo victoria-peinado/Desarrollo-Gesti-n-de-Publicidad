@@ -1,14 +1,14 @@
 <form [formGroup]="contacts_form">
     <mat-form-field class="example-chip-list" hintLabel="Presione ENTER para cargar el contacto.">
       <mat-label>Contactos (teléfono/email)</mat-label>
-      <mat-chip-grid #chipGrid aria-label="Ingresar contactos (teléfono/email)" formControlName="contact">
+      <mat-chip-grid #chipGrid formControlName="contact">
         <mat-chip-row *ngFor="let contact of contacts"
                       (removed)="remove(contact)"
                       [editable]="true"
                       (edited)="edit(contact, $event)"
-                      [aria-description]="'Presione enter para editar ' + contact">
+                      >
           {{contact}}
-          <button matChipRemove [attr.aria-label]="'Eliminar ' + contact">
+          <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
         </mat-chip-row>

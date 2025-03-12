@@ -21,8 +21,6 @@
         *ngIf="value && type !== 'password'"
         mat-icon-button
         matSuffix
-        aria-hidden="false"
-        aria-label="Clear input value"
         (click)="value = ''"
         >close</mat-icon
       >
@@ -31,8 +29,6 @@
         *ngIf="type === 'password'"
         mat-icon-button
         matSuffix
-        aria-hidden="false"
-        aria-label="Toggle password visibility"
         (click)="togglePasswordVisibility()"
         >{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon
       >

@@ -122,8 +122,11 @@
             </fieldset>
           </div>
         </form>
+        <app-block-selection (regStructureChange)="captureRegStructure($event)"></app-block-selection>
     </div>
 
+
+  
 
   <div *ngIf="completeOrdenData" id="datos-spot">
     <app-title-and-subtitle
@@ -137,9 +140,6 @@
           <input type="file" accept="audio/*" #fileInput (change)="onFileSelected($event)" hidden />
           <button mat-raised-button color="primary" (click)="fileInput.click()">
             <mat-icon>upload_file</mat-icon> Subir
-          </button>
-          <button mat-raised-button color="accent" (click)="onUpload()" [disabled]="!audioFile">
-            Upload Audio
           </button>
         </fieldset>
 
@@ -164,19 +164,11 @@
     </form>
   </div>
 
-
-
-  <div *ngIf="completeOrdenData" id="datos-bloques">
-    <app-title-and-subtitle
-      [title]="'Datos de los Bloques'"
-      [subtitle]="'Seleccione los bloques en que desea emitir el Spot.'"
-    ></app-title-and-subtitle>
-    <app-block-selection (regStructureChange)="captureRegStructure($event)"></app-block-selection>
-  </div>
-
-  <button mat-raised-button color="primary" (click)="createOrder()">
-    Crear Orden
-  </button>
+  <app-btn-guardar-cambios *ngIf="completeOrdenData"
+          [disabled]="owner_form.invalid || !ownerFounded || !completeOrdenData || spot_form.invalid || regStructureIsEmpty || order_form.invalid"
+          (clickEvent)="openDialog()" 
+          [text]="'Crear Orden'"
+        ></app-btn-guardar-cambios>
   
 </div>
 
