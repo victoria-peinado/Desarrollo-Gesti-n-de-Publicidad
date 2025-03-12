@@ -3,7 +3,7 @@ import { orm } from "../shared/db/orm.js";
 import { Order } from "./order.entity.js";
 import { BlocksRegularType, TupleBlocksType, BlocksNotRegularType } from "./order.entity.js";
 import { Contract } from "../contract/contract.entity.js";
-import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays, differenceInCalendarDays, parse, startOfMonth, addMonths, isBefore, compareDesc } from 'date-fns';
+import { eachDayOfInterval, lastDayOfMonth, format, compareAsc, addDays, differenceInCalendarDays, parse, startOfMonth, addMonths, isBefore, compareDesc, startOfDay, differenceInDays } from 'date-fns';
 import { getNextMonthString, rewriteDaysArray } from "../shared/datesUtilities.js";
 import { DayOrderBlock } from "../day_order_block/day_order_block.entity.js";
 import { Block } from "../block/block.entity.js";
@@ -132,6 +132,8 @@ async function add(req: Request, res: Response) {
 
         if (req.body.sanitizeInput.month) {
             dateFrom = parse((req.body.sanitizeInput.month + '-01'), 'MM-yyyy-dd', new Date())
+            dateFrom.setHours(0, 0, 0, 0)
+
         }
         let dateTo = contract.dateTo;
 
@@ -173,7 +175,7 @@ async function add(req: Request, res: Response) {
 
 async function asingAtributes(order: Order, dateFrom: Date, regular: boolean, regStructure: BlocksRegularType, notRegStructure: BlocksNotRegularType | undefined, dateTo: Date | undefined) {
     // Verificamos fecha inicio Orden.
-    if (compareAsc(dateFrom, new Date()) == -1) { // si = -1 desde esta antes que hoy por ende ya paso
+    if (compareAsc(dateFrom, new Date()) === -1) { // si = -1 desde esta antes que hoy por ende ya paso
         dateFrom = addDays(new Date(), 1) // asignamos como inicio la fecha de mañana. 
         dateFrom.setHours(0, 0, 0, 0)
         console.log('Asignamos la fecha de mañana: ', dateFrom)
@@ -423,9 +425,10 @@ async function createNotRegularTuples(notRegularStructure: BlocksNotRegularType,
             //     -1 si dateLeft es menor que dateRight.
             //     0 si ambas fechas son iguales.
             //     1 si dateLeft es mayor que dateRight.
-
-            if (compareAsc(dia, dateFrom) >= 0) { // si = 0 dia es igual o mayor a dateFrom
-
+            
+            ///SE QUE HAY UN ERROR NO PUEDO SOLUCIONARLO. 
+            if (compareAsc(startOfDay(dia), startOfDay(dateFrom)) > -1) { // si = 0 dia es igual o mayor a dateFrom
+            //if (differenceInDays(startOfDay(dia), startOfDay(dateFrom)) < 0 ) {
                 //verificamos que la fecha no supere el hasta de la contratación o el ultimo día del mes.
                 const lastDay: Date = dateToCalculate(dateFrom, dateTo)
                 // si dia es igual o menor que lastDay (ultimo del mes o ultimo contratación)
@@ -436,7 +439,7 @@ async function createNotRegularTuples(notRegularStructure: BlocksNotRegularType,
                 } else { console.log('El dia ', dia, 'fue descartado por estar fuera de la contratacion o del mes de la orden.') }
 
             } else { //si la fecha es superior a mañana, se guardan como corresponde.
-                console.log('Los bloques asociados a la fecha', dia, 'son descartados por ser anteriores a hoy.')
+                console.log('Los bloques asociados a la fecha', dia, 'son descartados por ser anteriores a hoy. La fecha desde es: ', dateFrom)
             }
         }
 
