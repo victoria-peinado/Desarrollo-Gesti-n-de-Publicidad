@@ -19,20 +19,22 @@ table {
 }
 th, td {
     padding: 2px 12px;
-    text-align: left;
+    
 }
 
 .icon-column {
-    text-align: center;
     padding: 2px 3px;
+    text-align: center;
 }
 th {
     border-bottom: 1px solid #ddd;
     text-align: center;
+    font-weight: 400;
 }
 .label {
     color: #005CBB;
     text-decoration: none;
+    text-align: left;
 }
 .icon {
     color: gray;
@@ -43,7 +45,14 @@ th {
 
 .atribute-name {
     font-weight: lighter;
+    text-align: center;
 }
+
+.atribute-new {
+    font-weight: bold;
+    text-align: center;
+}
+
 
 .title {
     padding: 0px 20px;
@@ -91,3 +100,14 @@ th {
         margin-bottom: -10px;
     }
 }
+
+
+@media (max-width: 400px) {
+    td, tr {
+        padding: 2px 2px;
+        font-size: 10px;
+        word-spacing: 2px; /* Ajusta la separación entre palabras */
+    }
+}
+
+

@@ -43,9 +43,13 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-icon *ngIf="tooltipText" [matTooltip]="tooltipText" [matTooltipPosition]="'above'" class="tooltip-icon">
-      help
-    </mat-icon>
+    
+    <span class="tooltip-icon" *ngIf="tooltipText" [matTooltip]="tooltipText" [class.tooltip-disabled]="tooltipDisabled" [matTooltipDisabled]="tooltipDisabled" [matTooltipPosition]="'above'">
+      <mat-icon >
+        help
+      </mat-icon>
+    </span>
+
   </div>
 
   } @else if (mode === 'select') {
@@ -67,9 +71,11 @@
         * Campo obligatorio
       </mat-error>
     </mat-form-field>
-    <mat-icon *ngIf="tooltipText" [matTooltip]="tooltipText" [matTooltipPosition]="'above'" class="tooltip-icon">
-      help
-    </mat-icon>
+    <span class="tooltip-icon" *ngIf="tooltipText" [matTooltip]="tooltipText" [class.tooltip-disabled]="tooltipDisabled" [matTooltipDisabled]="tooltipDisabled" [matTooltipPosition]="'above'">
+      <mat-icon >
+        help
+      </mat-icon>
+    </span>
   </div>
   }
 

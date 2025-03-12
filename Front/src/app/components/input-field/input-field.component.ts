@@ -18,6 +18,7 @@ export class InputFieldComponent {
   @Input() options: string[] = [];
   @Input() hintLabel: string = '';
   @Input() tooltipText: string = '';
+  @Input() tooltipDisabled: boolean = false;
 
 
   hidePassword: boolean = true;

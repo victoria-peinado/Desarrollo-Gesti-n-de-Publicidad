@@ -98,7 +98,7 @@ export class AltaContactoCategoryComponent {
     console.log('xd');
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
-        text: `<p>¿Seguro que desea crear el nuevo Contacto ${this.nameControl.value + ' ' + this.lastnameControl.value}?</p>`,
+        text: `<p>¿Seguro que desea crear el nuevo Contacto <strong>${this.nameControl.value + ' ' + this.lastnameControl.value}</strong>?</p>`,
       },
     });
 

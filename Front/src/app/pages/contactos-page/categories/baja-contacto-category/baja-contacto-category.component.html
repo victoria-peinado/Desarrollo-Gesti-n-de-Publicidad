@@ -21,10 +21,11 @@
               pattern: '^[0-9]*$'
             }"
             [mode]="'input'"
+            tooltipText="Documento Nacional de Identidad."
           ></app-input-field>
         </fieldset>
         
-
+        <span matTooltip="Ingrese un DNI válido." [matTooltipDisabled]="!dni_form.invalid" [matTooltipPosition]="'right'">
         <button
           mat-raised-button
           color="primary"
@@ -33,6 +34,7 @@
         >
           Check
         </button>
+        </span>
 
       </div>
       
@@ -63,11 +65,12 @@
       </div>
     </form>
 
-
+    <span matTooltip="Debe existir el Contacto." [matTooltipDisabled]="contactFounded" [matTooltipPosition]="'right'">
     <button class="btn-eliminar" mat-flat-button color="warn" 
       [disabled]="!contactFounded || dni_form.invalid" (click)="openDialog()">
       Eliminar Contacto
     </button>
+    </span>
 
   </div>
 </div>

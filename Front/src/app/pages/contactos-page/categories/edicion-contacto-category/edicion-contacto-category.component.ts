@@ -8,6 +8,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { InputContactsComponent } from 'src/app/components/input-contacts/input-contacts.component';
+import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping';
 import { FISCAL_CONDITION_TYPES } from 'src/app/constants/constants';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -116,6 +117,9 @@ export class EdicionContactoCategoryComponent {
   }
 
   clearForm() {
+    this.nameControl.disable();
+    this.lastnameControl.disable();
+    this.inputContactsComponent.disableForm();
     this.formDirective?.resetForm();
     this.inputContactsComponent.clearForm();
     this.errorMessageContact = null;
@@ -128,12 +132,19 @@ export class EdicionContactoCategoryComponent {
     this.contact = {};
   }
   patchContact() {
-    if (this.name != this.nameControl.value) {
+    if (this.name !== this.nameControl.value) {
       this.contact.name = this.nameControl.value;
     }
 
-    if (this.lastname != this.lastnameControl.value) {
+    if (this.lastname !== this.lastnameControl.value) {
       this.contact.lastname = this.lastnameControl.value;
+    }
+
+    if (
+      this.initialContacts.slice().sort().join(', ') !==
+      this.inputContactsComponent.contacts.slice().sort().join(', ')
+    ) {
+      this.contact.contacts = this.inputContactsComponent.contacts;
     }
 
     this.myDataService.patchContact(this.contactId, this.contact).subscribe({
@@ -151,10 +162,52 @@ export class EdicionContactoCategoryComponent {
   }
 
   openDialog(): void {
-    console.log('xd');
+    const contactFieldsToCheck = [
+      { key: 'name', control: this.nameControl, initialValue: this.name },
+      {
+        key: 'lastname',
+        control: this.lastnameControl,
+        initialValue: this.lastname,
+      },
+      {
+        key: 'contacts',
+        control: this.inputContactsComponent.contacts,
+        initialValue: this.initialContacts,
+      },
+    ];
+
+    const modifiedContactAttributes: any = {};
+    const changesList: any[] = [];
+
+    contactFieldsToCheck.forEach((field) => {
+      let currentValue =
+        field.control instanceof FormControl
+          ? field.control.value
+          : field.control;
+      let initialValue = field.initialValue;
+
+      // Si el valor es un array, unirlo con ", "
+      if (Array.isArray(currentValue)) {
+        currentValue = currentValue.join(', ');
+      }
+      if (Array.isArray(initialValue)) {
+        initialValue = initialValue.join(', ');
+      }
+
+      if (currentValue !== initialValue) {
+        modifiedContactAttributes[field.key] = currentValue;
+        changesList.push({
+          attribute: ATTRIBUTE_MAPPING[field.key] || field.key,
+          oldValue: initialValue,
+          newValue: currentValue,
+        });
+      }
+    });
+
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         text: `<p>¿Seguro que desea editar el Contacto de DNI <strong>${this.dni}</strong>?</p>`,
+        changes: changesList,
       },
     });
 
