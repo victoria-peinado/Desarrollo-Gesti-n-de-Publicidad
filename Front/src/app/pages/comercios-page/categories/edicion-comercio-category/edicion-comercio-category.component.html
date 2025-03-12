@@ -1,12 +1,12 @@
-<div id="edicion-comercio">
-  <div id="datos-titular">
+<div id="edicion-comercio-category">
+  <div id="datos-titular-comercio">
     <app-title-and-subtitle
-      [title]="'Datos del Titular'"
+      [title]="'Datos del Titular y del Comercio'"
       [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
     ></app-title-and-subtitle>
 
-    <form [formGroup]="owner_form">
-      <div class="fila-data">
+    <form [formGroup]="owner_shop_form" #osf="ngForm">
+      <div class="flex-container">
         <fieldset>
           <app-input-field
             label="CUIT Titular"
@@ -14,35 +14,42 @@
             type="text"
             [hintLabel]="'11 dígitos'"
             [control]="cuitControl"
-            [validations]="{ required: true, minLength: 11, maxLength: 11, pattern: '^[0-9]*$' }"
+            [validations]="{
+              required: true,
+              minLength: 11,
+              maxLength: 11,
+              pattern: '^[0-9]*$'
+            }"
             [mode]="'input'"
+            tooltipText="'La Clave Única de Identificación Tributaria (CUIT) es un código de 11 dígitos que identifica a las personas físicas o jurídicas que tributan en Argentina.'"
           ></app-input-field>
         </fieldset>
 
+        <span matTooltip="Ingrese un CUIT válido." [matTooltipDisabled]="!cuitControl.invalid" [matTooltipPosition]="'right'">
         <button
-          mat-raised-button 
-          color="primary" 
-          [disabled]="cuitControl.invalid" 
-          (click)="findOwner()">
+          mat-raised-button
+          color="primary"
+          [disabled]="cuitControl.invalid"
+          (click)="findShopOwner()"
+        >
           Check
         </button>
+      </span>
 
-        @if (errorMessage) {
-          <button mat-button color="warn">
-            <mat-icon fontIcon="close"></mat-icon>
-            {{ errorMessage }}
-          </button>
+        @if (errorMessageOwner) {
+        <button mat-button color="warn" class="pointer-events-none">
+          <mat-icon fontIcon="close"></mat-icon>
+          {{ errorMessageOwner }}
+        </button>
         } @else if (ownerFounded) {
-          <button mat-button color="accent">
-            <mat-icon fontIcon="check"></mat-icon>
-            Titular existente.
-          </button>
+        <button mat-button color="accent" class="pointer-events-none">
+          <mat-icon fontIcon="check"></mat-icon>
+          Titular existente.
+        </button>
         }
-
-        
       </div>
 
-      <fieldset>
+      <div class="flex-container mt-4">
         <fieldset>
           <app-input-field
             label="Comercio"
@@ -53,17 +60,184 @@
             [selectedOption]="comercios[0]"
           ></app-input-field>
         </fieldset>
-      </fieldset>
+      </div>
+
+      <span matTooltip="Complete los campos obligatorios (*)." [matTooltipDisabled]="owner_shop_form.valid && comercioControl.value!=='' && ownerFounded" [matTooltipPosition]="'right'">
+      <button
+      class="mb-4"
+        mat-raised-button color="primary"
+        [disabled]="!owner_shop_form.valid || comercioControl.value==='' || !ownerFounded"
+        (click)="next()">   
+        Siguiente
+      </button>
+    </span>
     </form>
   </div>
 
-  <div id="datos-comercio">
+  
+
+  <div *ngIf="nextStep" id="edicion-titular">
     <app-title-and-subtitle
-      [title]="'Datos del Comercio'"
+      [title]="'Edición del Titular'"
+      [subtitle]="'Modifique datos pertinentes del Titular.'"
+    ></app-title-and-subtitle>
+    <form [formGroup]="owner_form" #of="ngForm">
+      <div class="flex-container">
+        <fieldset>
+          <app-input-field
+            label="CUIT Titular"
+            placeholder="Ejemplo: 25444505879"
+            type="text"
+            [hintLabel]="'11 dígitos'"
+            [control]="cuitControl"
+            [validations]="{
+              required: true,
+              minLength: 11,
+              maxLength: 11,
+              pattern: '^[0-9]*$'
+            }"
+            [mode]="'input'"
+            [tooltipText]="'La Clave Única de Identificación Tributaria (CUIT) es un código de 11 dígitos que identifica a las personas físicas o jurídicas que tributan en Argentina.'"
+          ></app-input-field>
+        </fieldset>
+
+        <span matTooltip="Ingrese un CUIT válido." [matTooltipDisabled]="!cuitControl.invalid" [matTooltipPosition]="'right'">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="cuitControl.invalid"
+          (click)="findOwner()"
+        >
+          Check
+        </button>
+      </span>
+
+        @if (errorMessageOwner) {
+        <button mat-button color="accent" class="btn-new-owner">
+          <mat-icon fontIcon="new_releases"></mat-icon>
+          {{ errorMessageOwner }}
+        </button>
+        } @else if (ownerFounded) {
+        <button mat-button color="accent" class="pointer-events-none">
+          <mat-icon fontIcon="check"></mat-icon>
+          Titular existente.
+        </button>
+        }
+      </div>
+
+      <div class="flex-container mt-4">
+        <fieldset>
+          <app-input-field
+            label="Razón Social"
+            placeholder="Ejemplo: Juan Pérez"
+            type="text"
+            [control]="businessNameControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+            [tooltipText]="'Nombre legal completo de la empresa.'"
+            [tooltipDisabled]="errorMessageOwner !== 'Titular nuevo.'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Condición Fiscal"
+            [control]="fiscalConditionControl"
+            [validations]="{ required: true }"
+            [mode]="'select'"
+            [options]="fiscalConditionTypes"
+            [tooltipText]="'Régimen fiscal de la empresa.'"
+            [tooltipDisabled]="errorMessageOwner !== 'Titular nuevo.'"
+          ></app-input-field>
+        </fieldset>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="nextStep" id="edicion-contacto">
+    <app-title-and-subtitle
+      [title]="'Edición del Contacto'"
+      [subtitle]="'Modifique datos pertinentes del Contacto.'"
+    ></app-title-and-subtitle>
+    <form [formGroup]="contact_form" #cf="ngForm">
+      <div class="flex-container">
+        <fieldset>
+          <app-input-field
+          label="DNI Contacto"
+          placeholder="Ejemplo: 44450587"
+          type="text"
+          [hintLabel]="'8 dígitos'"
+          [control]="dniControl"
+          [validations]="{
+            required: true,
+            minLength: 8,
+            maxLength: 8,
+            pattern: '^[0-9]*$'
+          }"
+          [mode]="'input'"
+          [tooltipText]="'Documento Nacional de Identidad.'"
+        ></app-input-field>
+        </fieldset>
+
+        <span matTooltip="Ingrese un DNI válido." [matTooltipDisabled]="!dniControl.invalid" [matTooltipPosition]="'right'">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="dniControl.invalid"
+          (click)="findContact()"
+        >
+          Check
+        </button>
+      </span>
+
+        @if (errorMessageContact) {
+        <button mat-button color="accent" class="btn-new-owner pointer-events-none">
+          <mat-icon fontIcon="new_releases"></mat-icon>
+          {{ errorMessageContact }}
+        </button>
+        } @else if (contactFounded) {
+        <button mat-button color="accent" class="pointer-events-none">
+          <mat-icon fontIcon="check"></mat-icon>
+          Contacto existente.
+        </button>
+        }
+      </div>
+
+      <div class="flex-container mt-4">
+        <fieldset>
+          <app-input-field
+            label="Nombre"
+            placeholder="Ejemplo: Marcos"
+            type="text"
+            [control]="nameControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Apellido"
+            placeholder="Ejemplo: Del Solar"
+            type="text"
+            [control]="lastnameControl"
+            [validations]="{ required: true }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+      </div>
+
+      <div class="mt-4 mb-4">
+        <app-input-contacts [(contacts)]="contacts" [disabled]="true"></app-input-contacts>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="nextStep" id="edicion-comercio">
+    <app-title-and-subtitle
+      [title]="'Edición del Comercio'"
       [subtitle]="'Modifique datos pertinentes del Comercio.'"
     ></app-title-and-subtitle>
-    <form [formGroup]="shop_form">
-      <div class="fila-data">
+    <form [formGroup]="shop_form" #sf="ngForm">
+      <div class="grid-container bt-4">
         <fieldset>
           <app-input-field
             label="Nombre Fantasía"
@@ -94,8 +268,6 @@
             [options]="billingTypes"
           ></app-input-field>
         </fieldset>
-      </div>
-      <div class="fila-data">
         <fieldset>
           <app-input-field
             label="Mail"
@@ -125,57 +297,12 @@
           ></app-input-field>
         </fieldset>
       </div>
-    </form>
-  </div>
 
-  <div id="datos-contacto">
-    <app-title-and-subtitle
-      [title]="'Datos del Contacto'"
-      [subtitle]="'Modifique datos pertinentes del Contacto.'"
-    ></app-title-and-subtitle>
-    <form [formGroup]="contact_form">
-      <div class="fila-data">
-        <fieldset>
-          <app-input-field
-            label="Nombre"
-            placeholder="Ejemplo: Juan"
-            type="text"
-            [control]="nameControl"
-            [validations]="{ required: true }"
-            [mode]="'input'"
-          ></app-input-field>
-        </fieldset>
-        <fieldset>
-          <app-input-field
-            label="Apellido"
-            placeholder="Ejemplo: Pérez"
-            type="text"
-            [control]="lastnameControl"
-            [validations]="{ required: true }"
-            [mode]="'input'"
-          ></app-input-field>
-        </fieldset>
-        <fieldset>
-          <app-input-field
-            label="DNI"
-            placeholder="Ejemplo: 44996266"
-            type="text"
-            [control]="dniControl"
-            [validations]="{ required: true, minlength: 8, maxlength: 8 }"
-            [mode]="'input'"
-          ></app-input-field>
-        </fieldset>
-      </div>
-
-      <button
-        class="btn-guardar-cambios"
-        mat-flat-button
-        color="accent"
-        [disabled]="shop_form.invalid"
-        (click)="openDialog()"
-      >
-        Guardar cambios
-      </button>
+      <app-btn-guardar-cambios
+      [disabled]="shop_form.invalid || owner_form.invalid || contact_form.invalid || !ownerFounded || btnControl || (inputContactsComponent.contacts_form.get('contact')!.invalid && inputContactsComponent.contacts.length===0)"
+      (clickEvent)="openDialog()" 
+      [text]="'Guardar cambios'"
+    ></app-btn-guardar-cambios>
     </form>
   </div>
   

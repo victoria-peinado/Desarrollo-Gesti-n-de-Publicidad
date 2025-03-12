@@ -4,9 +4,9 @@
       [title]="'Datos del Titular'"
       [subtitle]="'Ingrese el CUIT de un Titular.'"
     ></app-title-and-subtitle>
-    <div class="fila-data">
+
       <form [formGroup]="owner_form">
-        <div class="fila-data">
+        <div class="flex-container">
           <fieldset>
             <app-input-field
               label="CUIT Titular"
@@ -21,9 +21,11 @@
                 pattern: '^[0-9]*$'
               }"
               [mode]="'input'"
+              tooltipText="La Clave Única de Identificación Tributaria (CUIT) es un código de 11 dígitos que identifica a las personas físicas o jurídicas que tributan en Argentina."
             ></app-input-field>
           </fieldset>
 
+          <span matTooltip="Ingrese un CUIT válido." [matTooltipDisabled]="!cuitControl.invalid" [matTooltipPosition]="'right'">
           <button
             mat-raised-button
             color="primary"
@@ -32,6 +34,7 @@
           >
             Check
           </button>
+        </span>
 
           @if (errorMessageOwner) {
           <button mat-button color="warn">
@@ -46,11 +49,10 @@
           }
         </div>
       </form>
-    </div>
   </div>
 
   <div id="datos-comercios" class="mt-4">
-    <app-data-table *ngIf="shops.length > 0"
+    <app-data-table *ngIf="shops.length > 0 && ownerFounded"
       [shops]="shops"
       [columns]="[
         { key: 'fantasyName', label: 'Nombre fantasía' },

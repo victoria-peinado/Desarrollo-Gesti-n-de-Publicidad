@@ -8,13 +8,14 @@ export class Order {
     totalCost: number;
     dailyCost: number;
     obs: string;
-    showNmae: string;
+    showName: string;
     liq: boolean;
+    regular: boolean;
     month: string;
     contract: string;
     spot: string;
 
-    constructor(numOrder: string, regDate: Date, totalAds: number, daysAmount: number, nameStrategy: string, totalCost: number, dailyCost: number, obs: string, showNmae: string, liq: boolean, month: string, contract: string, spot: string) {
+    constructor(numOrder: string, regDate: Date, totalAds: number, daysAmount: number, nameStrategy: string, totalCost: number, dailyCost: number, obs: string, showName: string, liq: boolean, regular: boolean, month: string, contract: string, spot: string) {
         this.numOrder = numOrder;
         this.regDate = regDate;
         this.totalAds = totalAds;
@@ -23,8 +24,9 @@ export class Order {
         this.totalCost = totalCost;
         this.dailyCost = dailyCost;
         this.obs = obs;
-        this.showNmae = showNmae;
+        this.showName = showName;
         this.liq = liq;
+        this.regular = regular;
         this.month = month;
         this.contract = contract;
         this.spot = spot;

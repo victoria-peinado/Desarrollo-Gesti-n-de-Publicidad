@@ -87,3 +87,18 @@
   width: 100px;
   white-space: nowrap;
 }
+
+@keyframes slideFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation {
+  animation: slideFadeIn 0.4s cubic-bezier(0.64,-0.01, 0.19, 1.01);
+}

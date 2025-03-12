@@ -12,7 +12,10 @@ import { MyDataService } from 'src/app/services/my-data.service';
 import { Contract } from 'src/app/models/contract';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { Spot } from 'src/app/models/spot.js';
+import { Spot } from 'src/app/models/spot';
+import { DialogComponent } from 'src/app/components/dialog/dialog.component';
+import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
+import { Order } from 'src/app/models/order.js';
 
 @Component({
   selector: 'app-emision-ordenes-category',
@@ -35,8 +38,11 @@ export class EmisionOrdenesCategoryComponent {
   cuit: string = '';
   comercios: string[] = [];
   ownerFounded: boolean = false;
-  completeOrdenData: boolean = true; //cambiar a FALSE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SOLO ES POR TESTING
-  nextStep: boolean = true; //cambiar a FALSE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SOLO ES POR TESTING
+  completeOrdenData: boolean = false;
+  nextStep: boolean = false;
+  spotId: string = '';
+  contractId: string = '';
+  regStructureIsEmpty: boolean = true;
 
   contracts = [];
 
@@ -110,47 +116,34 @@ export class EmisionOrdenesCategoryComponent {
   }
 
   captureRegStructure(structure: { [key: string]: string[] }) {
-    console.log('Estructura recibida:', structure);
     this.regStructure = structure;
+    this.regStructureIsEmpty = Object.values(structure).every(arr => arr.length === 0);
+
+    console.log('regStructureIsEmpty', this.regStructureIsEmpty);
+
   }
 
   setContract(contractId: string) {
     this.selectedContractId = contractId;
   }
 
-  createOrder() {
-    const spot: Spot = {
-      name: this.spot_form.get('name')?.value,
-      long: this.spot_form.get('long')?.value,
-      //path: this.spot_form.get('path')?.value,
-    };
+  /*createOrder() {
 
-    console.log('Creando spot con datos:', spot);
-
-    this.myDataService.createSpot(spot).subscribe({
-      next: (response) => {
-        console.log('Spot creado:', response);
-        this.createdSpotId = response._id; // Asignar ID del spot creado
-
-        // Crear la Orden con la info recolectada
         this.orderData = {
-          nameStrategy: 'Te vamos a borrar', // Personalizar según necesidad
-          obs: '   ',
-          showName: 'Siempre Al Dia',
-          contract: this.selectedContractId, // ID de la contratación seleccionada
-          spot: this.createdSpotId, // ID del spot recién creado
+          nameStrategy: this.nameStrategyControl.value,
+          obs: this.obsOrderControl.value,
+          showName: this.showNameControl.value,
+          contract: this.contractId,
+          spot: this.spotId,
           regular: true,
-          regStructure: this.regStructure, // La estructura de bloques seleccionados
+          regStructure: this.regStructure,
         };
 
         console.log('Creando orden con datos:', this.orderData);
 
-        // Crear la Orden
         this.myDataService.createOrder(this.orderData).subscribe({
           next: (response: any) => {
             this._snackBar.openSnackBar(response.message, 'success-snackbar');
-            //this.clearForm();
-            // Aquí podrías resetear o mostrar un mensaje de éxito
           },
           error: (error: any) => {
             let errorMessage = error.error.errors
@@ -159,16 +152,86 @@ export class EmisionOrdenesCategoryComponent {
             this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
           },
         });
-      },
-      error: (error: any) => {
-        let errorMessage = error.error.errors
-          ? error.error.errors || error.error.messages
-          : error.error.messages;
-          console.log(error);
-        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
-      },
-    });
+
+  }*/
+
+createOrder() {
+      this.getSpotId()
+        .pipe(
+          switchMap((spotId) => {
+            this.spotId = spotId;
+  
+            const orderData: any = {
+                nameStrategy: this.nameStrategyControl.value,
+                obs: this.obsOrderControl.value ? this.obsOrderControl.value : undefined,
+                showName: this.showNameControl.value,
+                contract: this.contractId,
+                spot: this.spotId,
+                regular: true,
+                regStructure: this.regStructure,
+            };
+  
+            console.log(orderData);
+  
+            return this.myDataService.createOrder(orderData);
+          })
+        )
+        .subscribe({
+          next: (response: any) => {
+            this._snackBar.openSnackBar(response.message, 'success-snackbar');
+            //this.clearAllForm();
+          },
+          error: (error: any) => {
+            let errorMessage = error.error.errors ? error.error.errors || error.error.messages: error.error.messages;
+            console.log(error);
+            this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+          },
+        });
+    }
+
+
+    getSpotId(): Observable<string> {
+
+      if(this.audioFile) {
+      return this.myDataService.uploadAudio(this.audioFile).pipe(
+        map((response: any) => {
+          this.spotId = response.data.spot.id;
+          console.log('Spot creado:', this.spotId);
+          return this.spotId;
+        }),
+        catchError((error) => {
+          console.error('Error creating spot:', error);
+          return throwError(() => new Error('Failed to create spot'));
+        })
+      );
+    }
+   else {
+    return of(this.spotId);
   }
+  }
+
+  /*
+    onUpload(): void {
+      if (this.audioFile) {
+          this.myDataService.uploadAudio(this.audioFile).subscribe({
+              next: (response) => {
+                this._snackBar.openSnackBar(response.message, 'success-snackbar');
+                this.spot = response.data.spot;
+                this.spotId = response.data.spot.id;
+                console.log('Spot creado:', response);
+              },
+             error: (error: any) => {
+              console.log(error);
+              let errorMessage = error.error.errors
+                ? error.error.errors || error.error.messages
+                : error.error.messages;
+              this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+            },
+          });
+      } else {
+          console.warn('No audio file selected');
+      }
+  }*/
 
   clearForm(form: NgForm | undefined, values: any) {
     form?.resetForm(values);
@@ -202,8 +265,20 @@ export class EmisionOrdenesCategoryComponent {
     });
   }
 
+  scroll(htmlElement: string, point: ScrollLogicalPosition | undefined) {
+    setTimeout(() => {
+      const element = document.getElementById(htmlElement);
+
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: point });
+      }
+    }, 100);
+  }
+
   next() {
     this.nextStep = true;
+    this.scroll('datos-contratacion', 'end');
+
     const selectedShop = this.shops.find(
       (shop) => shop.fantasyName === this.comercioControl.value
     );
@@ -230,6 +305,8 @@ export class EmisionOrdenesCategoryComponent {
 
   onRowSelected(row: any) {
     this.completeOrdenData = true;
+    this.scroll('datos-orden', 'start');
+    this.contractId = row.id;
   }
 
   get cuitControl(): FormControl {
@@ -275,7 +352,7 @@ export class EmisionOrdenesCategoryComponent {
 
     const d = new Date(date);
     const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0'); // sumamos 1 porque los meses empiezan en 0
+    const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
@@ -301,7 +378,7 @@ export class EmisionOrdenesCategoryComponent {
     });
   }
 
-  openDialog() {}
+  
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -309,51 +386,42 @@ export class EmisionOrdenesCategoryComponent {
       this.audioFile = input.files[0];
       this.audioURL = URL.createObjectURL(this.audioFile);
 
-      // Asignar nombre (puede ser usado como path)
       this.spot_form.get('name')?.setValue(this.audioFile.name);
-      this.spot_form.get('path')?.setValue(this.audioFile.name); // si path es igual al nombre, o ajustar según backend
+      this.spot_form.get('path')?.setValue(this.audioFile.name);
       this.spot_form.updateValueAndValidity();
 
-      // Calcular y asignar duración
       this.calcularDuracion(this.audioURL);
     }
   }
 
-onUpload(): void {
-        if (this.audioFile) {
-            this.myDataService.uploadAudio(this.audioFile).subscribe({
-                next: (response) => {
-                  this._snackBar.openSnackBar(response.message, 'success-snackbar');
-                  this.spot = response.data.spot; //obtener el id del spot creado que es lo que guardas en la orden
-                  console.log('Spot creado:', response);
-                },
-               error: (error: any) => {
-                console.log(error);
-                let errorMessage = error.error.errors
-                  ? error.error.errors || error.error.messages
-                  : error.error.messages;
-                this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
-              },
-            });
-        } else {
-            console.warn('No audio file selected');
-        }
-    }
+
   calcularDuracion(audioSrc: string) {
     const audio = new Audio(audioSrc);
     audio.addEventListener('loadedmetadata', () => {
       const minutos = Math.floor(audio.duration / 60);
       const segundos = Math.floor(audio.duration % 60);
       const duracionFinal = `${minutos}:${segundos.toString().padStart(2, '0')}`;
-  
-      // Mostrar duración formateada al usuario
+
       this.duracionSpot = `${duracionFinal} min`;
-  
-      // Asignar duración total en segundos al formulario (como número)
       const duracionEnSegundos = Math.floor(audio.duration);
       this.spot_form.get('long')?.setValue(duracionEnSegundos);
       this.spot_form.updateValueAndValidity();
     });
   }
+
+  openDialog(): void {
+  
+      const dialogRef = this.dialog.open(DialogComponent, {
+        data: {
+          text: `<p>¿Seguro que desea crear la nueva Orden <strong>${this.nameStrategyControl.value}</strong>?</p>`,
+        },
+      });
+  
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.createOrder();
+        }
+      });
+    }
   
 }

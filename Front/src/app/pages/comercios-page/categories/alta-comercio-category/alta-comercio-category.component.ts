@@ -40,6 +40,7 @@ export class AltaComercioCategoryComponent {
   inputContactsComponent!: InputContactsComponent;
   @ViewChild('cf') contactNgForm: NgForm | undefined;
   @ViewChild('of') ownerNgForm: NgForm | undefined;
+  @ViewChild('sf') shopNgForm: NgForm | undefined;
 
   contact_form: FormGroup;
   errorMessageContact: string | null = null;
@@ -232,12 +233,10 @@ export class AltaComercioCategoryComponent {
       this.contactsControl.reset();
     }
 
-    console.log(this.numbers);
   }
 
   removeContacts(number: string) {
     this.numbers = this.numbers.filter((n) => n !== number);
-    console.log(this.numbers);
   }
 
   get fantasyNameControl(): FormControl {
@@ -298,6 +297,44 @@ export class AltaComercioCategoryComponent {
     );
   }
 
+  clearAllForm() {
+    this.businessNameControl.disable();
+    this.fiscalConditionControl.disable();
+    this.nameControl.disable();
+    this.lastnameControl.disable();
+    this.inputContactsComponent.disableForm();
+    this.ownerNgForm?.resetForm();
+    this.contactNgForm?.resetForm();
+    this.inputContactsComponent.clearForm();
+    this.shopNgForm?.resetForm();
+
+    this.errorMessageContact = null;
+    this.dni = '';
+    this.contactFounded = false;
+    this.name = '';
+    this.lastname = '';
+    this.cargando = false;
+    this.contactId = '';
+    this.contact = {};
+    this.contacts = [];
+    this.initialContacts = [];
+    this.isOwnerChecked = true;
+    this.isOwnerFirstChecked = false;
+    this.isNextContact = false;
+    this.isNextShop = false;
+    this.fantasyName = '';
+    this.bussinessName = '';
+    this.cuit = '';
+    this.ownerFounded = false;
+    this.ownerId = '';
+    this.shops = [];
+    this.shopsFantasyName = [];
+    this.errorMessageOwner = null;
+    this.clicked = false;
+    this.numbers = [];
+    
+  }
+
   getOwnerId(): Observable<string> {
     if (this.ownerId) {
       return of(this.ownerId);
@@ -330,7 +367,7 @@ export class AltaComercioCategoryComponent {
       dni: this.dniControl.value,
       name: this.nameControl.value,
       lastname: this.lastnameControl.value,
-      contacts: this.numbers,
+      contacts: this.contacts,
     };
 
     return this.myDataService.createContact(contactData).pipe(
@@ -374,7 +411,7 @@ export class AltaComercioCategoryComponent {
       .subscribe({
         next: (response: any) => {
           this._snackBar.openSnackBar(response.message, 'success-snackbar');
-          //this.clearForm();
+          this.clearAllForm();
         },
         error: (error: any) => {
           let errorMessage = error.error.errors ? error.error.errors || error.error.messages: error.error.messages;

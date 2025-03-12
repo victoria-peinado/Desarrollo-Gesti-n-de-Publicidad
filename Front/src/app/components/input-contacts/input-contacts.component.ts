@@ -47,7 +47,7 @@ export class InputContactsComponent {
    ngOnInit(): void {
      this.contacts_form.get('contact')?.valueChanges.subscribe((value) => {
  
-       if (!value || value.trim() === '') {
+       if (!value || value === '') {
          this.onInputEmpty();
        }
      });
@@ -66,7 +66,7 @@ export class InputContactsComponent {
    }
  
    add(event: MatChipInputEvent): void {
-     const value = (event.value || '').trim();
+     const value = (event.value || '');
  
      if (value) {
        this.contacts.push(value);
@@ -102,7 +102,7 @@ export class InputContactsComponent {
    }
    
    edit(contact: string, event: MatChipEditedEvent) {
-     const value = event.value.trim();
+     const value = event.value;
      if (!value) {
        this.remove(contact);
        return;

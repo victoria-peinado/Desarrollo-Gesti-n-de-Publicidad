@@ -21,8 +21,11 @@
                 pattern: '^[0-9]*$'
               }"
               [mode]="'input'"
+              [tooltipText]="'La Clave Única de Identificación Tributaria (CUIT) es un código de 11 dígitos que identifica a las personas físicas o jurídicas que tributan en Argentina.'"
             ></app-input-field>
           </fieldset>
+
+          <span matTooltip="Ingrese un CUIT válido." [matTooltipDisabled]="!cuitControl.invalid" [matTooltipPosition]="'right'">
           <button
             mat-raised-button
             color="primary"
@@ -31,7 +34,7 @@
           >
             Check
           </button>
-
+        </span>
 
           @if (errorMessageOwner) {
           <button mat-button color="accent" class="btn-new-owner">
@@ -55,6 +58,8 @@
               [control]="businessNameControl"
               [validations]="{ required: true }"
               [mode]="'input'"
+              [tooltipText]="'Nombre legal completo de la empresa.'"
+              [tooltipDisabled]="errorMessageOwner !== 'Titular nuevo.'"
             ></app-input-field>
           </fieldset>
           <fieldset>
@@ -64,6 +69,8 @@
               [validations]="{ required: true }"
               [mode]="'select'"
               [options]="fiscalConditionTypes"
+              [tooltipText]="'Régimen fiscal de la empresa.'"
+              [tooltipDisabled]="errorMessageOwner !== 'Titular nuevo.'"
             ></app-input-field>
           </fieldset>
         </div>
@@ -91,9 +98,11 @@
             pattern: '^[0-9]*$'
           }"
           [mode]="'input'"
+          [tooltipText]="'Documento Nacional de Identidad.'"
         ></app-input-field>
         </fieldset>
 
+        <span matTooltip="Ingrese un DNI válido." [matTooltipDisabled]="!dniControl.invalid" [matTooltipPosition]="'right'">
         <button
           mat-raised-button
           color="primary"
@@ -102,6 +111,7 @@
         >
           Check
         </button>
+      </span>
 
         @if (errorMessageContact) {
         <button mat-button color="accent" class="btn-new-owner pointer-events-none">
@@ -139,7 +149,7 @@
         </fieldset>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-4 mb-4">
         <app-input-contacts [(contacts)]="contacts" [disabled]="true"></app-input-contacts>
       </div>
     </form>
@@ -150,7 +160,7 @@
       [title]="'Datos del Comercio'"
       [subtitle]="'Ingrese los datos del Comercio.'"
     ></app-title-and-subtitle>
-    <form [formGroup]="shop_form">
+    <form [formGroup]="shop_form" #sf="ngForm">
       <div class="grid-container">
         <fieldset>
           <app-input-field
