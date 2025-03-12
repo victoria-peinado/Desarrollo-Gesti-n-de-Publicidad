@@ -36,9 +36,9 @@
           </button>
     </form>
     </div>
-  <div id="listado" style="display: flex; flex-direction: column;">
-    <div *ngFor="let group of groupedData" style="margin-bottom: 20px;">
-      <h2>Día: {{ group.day }} - Bloque: {{ group.startTimeBlock }}</h2>
+  <div id="listado" style="display: flex; flex-direction: column; height: auto;">
+    <div *ngFor="let group of groupedData" style="margin-bottom: 20px; height: auto;">
+      <p class="my-4 text-lg text-gray-600">Día: {{ group.day }} - Bloque: {{ group.startTimeBlock }}</p>
       <app-data-table-dob [items]="group.items" [columns]="[
             { key:'index', label: 'Index'},
             {key: 'spotName', label:'Spot'},

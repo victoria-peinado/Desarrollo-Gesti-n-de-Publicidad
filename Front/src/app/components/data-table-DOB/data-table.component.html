@@ -1,7 +1,7 @@
-<div class="h-screen">
-  <mat-form-field>
+<div class="h-auto">
+  <mat-form-field >
     <mat-label>Filtrar</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ID" #input />
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ID" #input class="bg-slate-300"/>
   </mat-form-field>
 
   <div class="mat-elevation-z8" *ngIf="!isMobile">
