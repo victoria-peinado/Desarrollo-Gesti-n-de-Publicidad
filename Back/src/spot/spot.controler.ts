@@ -102,7 +102,7 @@ async function upload(req: Request, res: Response){
         if (audioFile){
         const data = {
             regDate: new Date(),
-            path: audioFile?.path,
+            path: audioFile!.path,
             name: audioFile?.filename,
             long: audioFile?.size,  
             order: req.body.sanitizeInput.order }

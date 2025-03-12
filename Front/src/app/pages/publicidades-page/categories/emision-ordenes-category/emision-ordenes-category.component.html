@@ -196,8 +196,11 @@
     ></app-title-and-subtitle>
     <app-block-selection
       (regStructureChange)="captureRegStructure($event)"
+      (notRegularStructure)="caputreNotRegularStruc($event)"
+      (emmiterNoRegular)="captureIsNotRegular($event)"
       [month] = "order_form.get('month')!.value"
     ></app-block-selection>
+    <p>El emisor SIGNAL muestra que la orden es no regular: {{isNRSignal()}} - LA VARIABLE: {{isNotRegular}}</p>
   </div>
 
   <button mat-raised-button color="primary" (click)="createOrder()">

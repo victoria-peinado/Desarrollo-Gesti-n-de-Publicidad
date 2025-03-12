@@ -1,7 +1,8 @@
-import { Component, Output, EventEmitter, input, effect, Input,  SimpleChange } from '@angular/core';
+import { Component, Output, EventEmitter, input, effect, Input,  SimpleChange, output, signal } from '@angular/core';
 import { BLOCK_TIMES } from 'src/app/constants/constants';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { addDays, eachDayOfInterval, endOfMonth, format, parse } from 'date-fns';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-block-selection',
@@ -21,8 +22,11 @@ import { addDays, eachDayOfInterval, endOfMonth, format, parse } from 'date-fns'
 })
 export class BlockSelectionComponent {
   daysOfWeek: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-  isNoRegular: boolean = false;
+  regularCampo = false
+  //emmiterNoRegular = output<boolean>()
   customDates: string[] = [];
+
+
 
   blocksPerDay: { [key: string]: { id: number; time: string }[] } = {};
 
@@ -34,11 +38,15 @@ export class BlockSelectionComponent {
 
   month = input.required<string>()
 
+  
+
   datesOfMonth: Date[] = [];
   datesOfMonthString: string[] =[]
   
 
   formatFunction = (date: Date) => { return format(date, 'dd') }
+
+  @Output() emmiterNoRegular = new EventEmitter<boolean>();
 
   @Output() regStructureChange = new EventEmitter<{ [key: string]: string[] }>();
 
@@ -47,15 +55,28 @@ export class BlockSelectionComponent {
   constructor() {
     this.initializeDays(this.daysOfWeek);
 
+
     effect(() => {
       this.diasDelMesSeleccionado()
     })
+    
+    //effect(() => { this.changeEmitter() })
+    
 
+  }
+
+  changeEmitter(){
+    //console.log('Estoy emitiendo: ', this.emmiterNoRegular )
+    this.emmiterNoRegular
+    .pipe(tap((valor) => console.log('Valor emitido:', valor)))
+    .subscribe();
+    this.emmiterNoRegular.emit(this.regularCampo)
   }
 
 
   toggleMode() {
-    if (this.isNoRegular) {
+    this.changeEmitter()
+    if (this.regularCampo) {
       //this.diasDelMesSeleccionado()
       //funcion para limpiar
       this.initializeDays(this.datesOfMonthString);
@@ -96,7 +117,7 @@ export class BlockSelectionComponent {
 
   generateRegStructure(): { [key: string]: string[] } {
     const result: { [key: string]: string[] } = {};
-    const keys = this.isNoRegular ? this.customDates : this.daysOfWeek;
+    const keys = this.regularCampo ? this.customDates : this.daysOfWeek;
 
     for (const key of keys) {
       result[this.formatKey(key)] = this.blocksPerDay[key]
@@ -128,7 +149,7 @@ export class BlockSelectionComponent {
       'Lunes': 'monday', 'Martes': 'tuesday', 'Miércoles': 'wednesday',
       'Jueves': 'thursday', 'Viernes': 'friday', 'Sábado': 'saturday', 'Domingo': 'sunday',
     };
-    return this.isNoRegular ? key : map[key];
+    return this.regularCampo ? key : map[key];
   }
 
     //devuelve el numBlock dada un timeStart
@@ -157,7 +178,7 @@ export class BlockSelectionComponent {
     const today = new Date()
     const actualMonth = format(today, 'MM-yyyy')
     if (!this.month()) { month = actualMonth }
-    if (actualMonth === month) {
+    if (actualMonth == month) {
       //si es del mismo mes listo desde mañana hasta el final del mes. 
       const lastDay = endOfMonth(today)
       const tomorrow = addDays(today, 1)
@@ -168,6 +189,7 @@ export class BlockSelectionComponent {
       this.datesOfMonth = eachDayOfInterval({ start: firstDay, end: lastDay })
     }
     this.datesOfMonth.forEach((day) => { this.datesOfMonthString.push(day.toString())})
+    console.log(this.datesOfMonth)
   }
 
 

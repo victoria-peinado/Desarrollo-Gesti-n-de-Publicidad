@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import {
   Form,
   FormControl,
@@ -38,6 +38,7 @@ export class EmisionOrdenesCategoryComponent {
   ownerFounded: boolean = false;
   completeOrdenData: boolean = true; //cambiar a FALSE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SOLO ES POR TESTING
   nextStep: boolean = true; //cambiar a FALSE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SOLO ES POR TESTING
+  idSpot: string = ''
 
   contracts = [];
 
@@ -69,6 +70,12 @@ export class EmisionOrdenesCategoryComponent {
   createdSpotId: string = '';
   orderData: any = {};
   regStructure: { [key: string]: string[] } = {};
+  notRegularStructure: [string, string[]][] = [];
+  isNotRegular: boolean = false;
+  isNRSignal = signal(false);
+  
+  structureIsEmpty: boolean = true;
+
   
   //month: FormControl;
 
@@ -121,7 +128,42 @@ export class EmisionOrdenesCategoryComponent {
   captureRegStructure(structure: { [key: string]: string[] }) {
     console.log('Estructura recibida:', structure);
     this.regStructure = structure;
+    this.structureIsEmpty = this.isStructureEmphty();
   }
+
+  caputreNotRegularStruc(structure: [string, string[]][]) {
+    console.log('Estructura recibida:', structure);
+    this.notRegularStructure = structure;
+    this.structureIsEmpty = this.isStructureEmphty();
+  }
+
+  isStructureEmphty(){
+     if (this.isNotRegular){
+       //si la orden es no regular
+       if (this.notRegularStructure.length>0){
+         return false
+       } else { return true}
+     } else {
+      //la orden es regular
+      const keys = Object.keys(this.regStructure)
+       const programedKeys = ['monday', 'tuesday',  'wednesday', 'thursday',  'friday', 'saturday', 'sunday']
+      if (keys == programedKeys){
+        //la estructura regular esta cargada
+        let band = false 
+        for (const k of keys){
+          if (this.regStructure[k].length>1){band = true} }
+        return band
+      } else {
+        return false
+      }
+     }
+   }
+
+  captureIsNotRegular(isNoRegular: boolean){
+    this.isNotRegular = isNoRegular
+    this.isNRSignal.set(isNoRegular)
+  }
+
 
   setContract(contractId: string) {
     this.selectedContractId = contractId;
@@ -136,21 +178,35 @@ export class EmisionOrdenesCategoryComponent {
 
     console.log('Creando spot con datos:', spot);
 
-    this.myDataService.createSpot(spot).subscribe({
-      next: (response) => {
-        console.log('Spot creado:', response);
-        this.createdSpotId = response._id; // Asignar ID del spot creado
+    // this.myDataService.createSpot(spot).subscribe({
+    //   next: (response) => {
+    //     console.log('Spot creado:', response);
+    //     this.createdSpotId = response._id; // Asignar ID del spot creado
 
         // Crear la Orden con la info recolectada
+        if(!this.isNotRegular){
         this.orderData = {
           nameStrategy: this.order_form.get('nameStrategy')?.value, // Personalizar según necesidad
           obs: this.order_form.get('obs')?.value,
           showName: this.order_form.get('showName')?.value,
+          month: this.order_form.get('month')?.value,
           contract: this.selectedContractId, // ID de la contratación seleccionada
           spot: this.createdSpotId, // ID del spot recién creado
           regular: true,
           regStructure: this.regStructure, // La estructura de bloques seleccionados
-        };
+        }}  else{
+          //la orden es no regular
+          console.log('VAMOS A CREAR UNA ORDEN NO REGULAR!!')
+          this.orderData = {
+            nameStrategy: this.order_form.get('nameStrategy')?.value, // Personalizar según necesidad
+            obs: this.order_form.get('obs')?.value,
+            showName: this.order_form.get('showName')?.value,
+            month: this.order_form.get('month')?.value,
+            contract: this.selectedContractId, // ID de la contratación seleccionada
+            spot: this.createdSpotId, // ID del spot recién creado
+            regular: false,
+            notRegStructure: this.notRegularStructure, // La estructura de bloques seleccionados
+        }}
 
         console.log('Creando orden con datos:', this.orderData);
 
@@ -162,22 +218,24 @@ export class EmisionOrdenesCategoryComponent {
             // Aquí podrías resetear o mostrar un mensaje de éxito
           },
           error: (error: any) => {
+            console.log(error)
             let errorMessage = error.error.errors
               ? error.error.errors || error.error.messages
               : error.error.messages;
             this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
           },
         });
-      },
-      error: (error: any) => {
-        let errorMessage = error.error.errors
-          ? error.error.errors || error.error.messages
-          : error.error.messages;
-        console.log(error);
-        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
-      },
-    });
-  }
+      }
+    //   ,
+    //   error: (error: any) => {
+    //     let errorMessage = error.error.errors
+    //       ? error.error.errors || error.error.messages
+    //       : error.error.messages;
+    //     console.log(error);
+    //     this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+    //   },
+     //});
+  //}
 
   clearForm(form: NgForm | undefined, values: any) {
     form?.resetForm(values);
@@ -339,6 +397,7 @@ export class EmisionOrdenesCategoryComponent {
           this._snackBar.openSnackBar(response.message, 'success-snackbar');
           this.spot = response.data.spot; //obtener el id del spot creado que es lo que guardas en la orden
           console.log('Spot creado:', response);
+
         },
         error: (error: any) => {
           console.log(error);
@@ -352,6 +411,7 @@ export class EmisionOrdenesCategoryComponent {
       console.warn('No audio file selected');
     }
   }
+
   calcularDuracion(audioSrc: string) {
     const audio = new Audio(audioSrc);
     audio.addEventListener('loadedmetadata', () => {

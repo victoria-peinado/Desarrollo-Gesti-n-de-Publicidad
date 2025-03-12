@@ -1,15 +1,15 @@
 |
 
 <div class="mode-toggle">
-  <mat-checkbox [(ngModel)]="isNoRegular" (change)="toggleMode()">
-    No regular
+  <mat-checkbox [(ngModel)]="regularCampo"   (change)="toggleMode()">
+    No regular  - Seleccionado regularCampo: {{regularCampo}}
   </mat-checkbox>
 </div>
 
 <!-- REGULAR -->
 
 <mat-tab-group>
-  <ng-container *ngIf="!isNoRegular">
+  <ng-container *ngIf="!regularCampo">
     <mat-tab *ngFor="let day of daysOfWeek" [label]="day">
       <ng-container
         *ngTemplateOutlet="blocksTemplate; context: { label: day }"
@@ -19,7 +19,7 @@
 
   <!-- ORDENES NO REGULARES -->
 
-  <ng-container *ngIf="isNoRegular">
+  <ng-container *ngIf="regularCampo">
     @for (day of datesOfMonth; track day) {
     <mat-tab [label]= "formatFunction(day)">
       <ng-container
