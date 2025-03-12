@@ -76,6 +76,10 @@ Content-Type: application/json
 GET http://localhost:{{port}}/api/order/dates/v2/notPayOrders?dateFrom={{dateFrom}}&dateTo={{dateTo}}
 Authorization: Bearer {{token}}
 
+### 
+GET http://localhost:{{port}}/api/order/dates/notPayOrdersFilter
+Authorization: Bearer {{token}}
+
 
 
 ###

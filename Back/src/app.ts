@@ -55,6 +55,9 @@ app.use("/api/spot", spotRouter)
 app.use("/api/order", orderRouter)
 app.use("/api/auth", authRouter)
 app.use("/api/dayorderblock", dobRouter)
+
+
+//METODOS DE PRUEBA
 app.post("/api/sanitizarInformacion", sanitizadorBBDD) //SOLO EN PRUEBAS
 
 
