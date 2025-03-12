@@ -49,6 +49,7 @@ import  {isLoggedInGuard} from './guards/is-logged-in.guard';
 import  {hasRoleGuardGuard,canActivateWithRoles} from './guards/has-role-guard.guard';
 import { EdicionUsuarioComponent } from './pages/usuarios-page/categories/edicion-usuario/edicion-usuario.component';
 import { from } from 'rxjs';
+import { ConsultaOrdenesCategoryComponent } from './pages/publicidades-page/categories/consulta-ordenes-category/consulta-ordenes-category.component';
 const routes: Routes = [
   { path: '', component: WelcomePageComponent, pathMatch: 'full' ,
     
@@ -84,6 +85,7 @@ const routes: Routes = [
 { path: 'contrataciones/edicion-contratacion', component: EdicionContratacionCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 { path: 'pagos/registro-pago', component: RegistroPagoCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 { path: 'pagos/informe-falta-pago', component: InformeFaltaPagoCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
+{ path: 'publicidades/consulta-ordenes', component: ConsultaOrdenesCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 { path: 'publicidades/emision-ordenes', component: EmisionOrdenesCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },
 { path: 'publicidades/listado-publicitario', component: ListadoPublicitarioCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin', 'user'] } },
 { path: 'publicidades/edicion-spot', component: EdicionSpotCategoryComponent, canActivate: [hasRoleGuardGuard], data: { roles: ['admin'] } },

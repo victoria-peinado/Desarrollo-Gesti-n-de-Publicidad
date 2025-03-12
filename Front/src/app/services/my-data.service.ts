@@ -186,6 +186,12 @@ export class MyDataService {
   getOrdersByOwnerCuit(cuit: string): Observable<any> {
     return this.http.get(`${this.apiUrl}order/notPayOrdersByOwnerCuit/${cuit}`);
   }
+
+
+  getAllOrdersByShopId(idShop: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}order/byShopId/${idShop}`);
+  }
+
   getOrdersByShopId(idShop: string): Observable<any> {
     return this.http.get(`${this.apiUrl}order/notPayOrdersByShop/${idShop}`);
   }

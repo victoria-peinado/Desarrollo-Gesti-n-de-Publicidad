@@ -1,0 +1,122 @@
+<div id="edicion-contratacion-categoria">
+    <div id="datos-titular-comercio">
+      <app-title-and-subtitle [title]="'Lista pagos faltantes por titular'"
+        [subtitle]="'Ingrese el CUIT del Titular y opcionalmente  un Comercio.'"></app-title-and-subtitle>
+  
+      <form [formGroup]="owner_form" #of="ngForm">
+        <div class="flex-container">
+          <fieldset>
+            <app-input-field label="CUIT Titular" placeholder="Ejemplo: 25444505879" type="text"
+              [hintLabel]="'11 dígitos'" [control]="cuitControl" [validations]="{
+                    required: true,
+                    minLength: 11,
+                    maxLength: 11,
+                    pattern: '^[0-9]*$'
+                  }" [mode]="'input'"></app-input-field>
+          </fieldset>
+  
+          <button mat-raised-button color="primary" [disabled]="cuitControl.invalid" (click)="findOwner()">
+            Check
+          </button>
+  
+          @if (errorMessageOwner) {
+          <button mat-button color="warn" class="pointer-events-none">
+            <mat-icon fontIcon="close"></mat-icon>
+            {{ errorMessageOwner }}
+          </button>
+          } @else if (ownerFounded) {
+          <button mat-button color="accent" class="pointer-events-none">
+            <mat-icon fontIcon="check"></mat-icon>
+            Titular existente.
+          </button>
+          }
+        </div>
+  
+        <div class="flex-container mt-4">
+          <fieldset>
+            <app-input-field label="Comercio" [control]="comercioControl" [validations]="{ required: true }"
+              [mode]="'select'" [options]="comercios" [selectedOption]="comercios[0]"></app-input-field>
+          </fieldset>
+        </div>
+  
+        <button class="mb-4" mat-raised-button color="primary"
+          (click)="next()">
+          Siguiente
+        </button>
+      </form>
+    </div>
+  
+    <div *ngIf="nextStep" id="edicion-contratacion">
+        <app-title-and-subtitle [title]="'Listado Órdenes'"
+          [subtitle]="'Listado de Órdenes del CUIT y Comercio ingresados.'"></app-title-and-subtitle>
+        <app-data-selection-table [data]="ordersDetailed" [columns]="columnDefs" (rowSelected)="onRowSelected($event)">
+        </app-data-selection-table>
+
+
+        <!-- datos asociados -->
+        <div *ngIf="selectedOrder" class="flex-container">
+          <app-datos-asociados
+            [datos]="[
+              { atributo: 'Razón Social', valor: selectedOrder.bussinessName },
+              { atributo: 'Condición Fiscal', valor: selectedOrder.fiscalCondition },
+              { atributo: 'Nombre Show', valor: selectedOrder.showName },
+              { atributo: 'Fecha Registro', valor: selectedOrder.regDate },
+              { atributo: 'Costo Total', valor: selectedOrder.totalCost },
+              { atributo: 'Cantidad Publicidades', valor: selectedOrder.totalAds },
+              { atributo: 'Observaciones', valor: selectedOrder.obs },
+              { atributo: 'Regular', valor: selectedOrder.regular ? 'Sí' : 'No' },
+              { atributo: 'Mes', valor: selectedOrder.month },
+            ]"
+            [formularioValido]="ownerFounded"
+          ></app-datos-asociados>
+
+          <div *ngIf="selectedOrderDetails?.regStructure">
+            <h3>Estructuración de los bloques</h3>
+            
+            <div *ngFor="let day of daysOfWeekArreglo">
+              <strong>{{ day.esp | titlecase }}:</strong>
+              <span>
+                {{ selectedOrderDetails.regStructure[day.ing] }}
+              </span>
+            </div>
+          </div>
+          
+          
+          
+          
+        </div>
+        
+      </div>
+  
+    <!-- <div *ngIf="nextStep" id="edicion-contratacion">
+      <app-title-and-subtitle [title]="'Ordenes por pagar'"
+        [subtitle]="'Selecciona la orden que desea pagar'"></app-title-and-subtitle>
+      <app-data-selection-table [data]="ordersDetailed" [columns]="columnDefs" (rowSelected)="onRowSelected($event)">
+      </app-data-selection-table>
+
+      <div class="flex-container">
+        <app-datos-asociados
+          [datos]="[
+            { atributo: 'Razón Social', valor: bussinessName },
+            { atributo: 'Condición Fiscal', valor: fiscalCondition }
+          ]"
+          [formularioValido]="ownerFounded"
+          [cargando]="cargando"
+        >
+        </app-datos-asociados>
+
+        @if (errorMessage) {
+        <button mat-button color="warn" class="pointer-events-none">
+          <mat-icon fontIcon="close"></mat-icon>
+          {{ errorMessage }}
+        </button>
+        } @else if (ownerFounded) {
+        <button mat-button color="accent" class="pointer-events-none">
+          <mat-icon fontIcon="check"></mat-icon>
+          Titular existente.
+        </button>
+        }
+      </div>
+    </div> -->
+
+  </div>

@@ -77,6 +77,7 @@ import { AltaUsuarioComponent } from './pages/usuarios-page/categories/alta-usua
 import { EdicionUsuarioComponent} from './pages/usuarios-page/categories/edicion-usuario/edicion-usuario.component';
 import { BlockSelectionComponent } from './components/block-selection/block-selection.component';
 import { DataTableComponentDOB } from './components/data-table-DOB/data-table.component';
+import { ConsultaOrdenesCategoryComponent } from './pages/publicidades-page/categories/consulta-ordenes-category/consulta-ordenes-category.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -147,7 +148,8 @@ import { DataTableComponentDOB } from './components/data-table-DOB/data-table.co
         AltaUsuarioComponent,
         EdicionUsuarioComponent,
         BlockSelectionComponent,
-        DataTableComponentDOB
+        DataTableComponentDOB,
+        ConsultaOrdenesCategoryComponent
         
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

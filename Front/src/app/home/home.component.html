@@ -97,6 +97,8 @@
           <div>
             <li *appShowForRoles="['admin']" [class.active]="selectedMenuItem === 'Emisión Órdenes'">
               <a (click)="setActive('Emisión Órdenes')" routerLink="/publicidades/emision-ordenes">Emisión Órdenes</a></li>
+            <li *appShowForRoles="['admin']" [class.active]="selectedMenuItem === 'Consulta Órdenes'">
+              <a (click)="setActive('Consulta Órdenes')" routerLink="/publicidades/consulta-ordenes">Consulta Órdenes</a></li>
             <li *appShowForRoles="['admin','user']" [class.active]="selectedMenuItem === 'Listado Publicitario'">
               <a (click)="setActive('Listado Publicitario')" routerLink="/publicidades/listado-publicitario">Listado Publicitario</a></li>
             <li *appShowForRoles="['admin']" [class.active]="selectedMenuItem === 'Edición Spot'">
