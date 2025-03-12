@@ -59,6 +59,10 @@ export class HomeComponent implements AfterViewInit {
     selectedMenuItem: 'Emisión Órdenes',
     lastOpenedSubMenu: 'Publicidades',
   },
+  '/publicidades/consulta-ordenes': {
+    selectedMenuItem: 'Consulta Órdenes',
+    lastOpenedSubMenu: 'Publicidades',
+  },
   '/publicidades/listado-publicitario': {
     selectedMenuItem: 'Listado Publicitario',
     lastOpenedSubMenu: 'Publicidades',

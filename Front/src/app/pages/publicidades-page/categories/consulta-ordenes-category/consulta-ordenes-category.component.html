@@ -1,7 +1,7 @@
 <div id="edicion-contratacion-categoria">
     <div id="datos-titular-comercio">
-      <app-title-and-subtitle [title]="'Lista pagos faltantes por titular'"
-        [subtitle]="'Ingrese el CUIT del Titular y opcionalmente  un Comercio.'"></app-title-and-subtitle>
+      <app-title-and-subtitle [title]="'Datos del Titular y del Comercio'"
+        [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"></app-title-and-subtitle>
   
       <form [formGroup]="owner_form" #of="ngForm">
         <div class="flex-container">
@@ -40,6 +40,7 @@
         </div>
   
         <button class="mb-4" mat-raised-button color="primary"
+        [disabled]="owner_form.invalid || !ownerFounded"
           (click)="next()">
           Siguiente
         </button>
@@ -71,10 +72,10 @@
           ></app-datos-asociados>
 
           <div *ngIf="selectedOrderDetails?.regStructure">
-            <h3>Estructuración de los bloques</h3>
-            
+            <app-title-and-subtitle [title]="'Estructuración de los Bloques'"></app-title-and-subtitle>
+
             <div *ngFor="let day of daysOfWeekArreglo">
-              <strong>{{ day.esp | titlecase }}:</strong>
+              {{ day.esp | titlecase }}:
               <span>
                 {{ selectedOrderDetails.regStructure[day.ing] }}
               </span>
