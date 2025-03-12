@@ -818,6 +818,25 @@ async function getNotPayOrdersByShop(req: Request, res: Response) {
     }
 }
 
+
+async function getAllOrdersByShop(req: Request, res: Response) {
+    try {
+        const id_shop = req.params.shopId
+        const shop = await em.findOneOrFail(Shop, { id: id_shop }, { populate: ['contracts', 'contracts.orders'] })
+        const orders: Order[] = []
+        const contracts = shop.contracts.getItems()
+        for (const contract of contracts) {
+            const ords = contract.orders.getItems()
+            for (const ord of ords) {
+                   orders.push(ord)   
+            }
+        }
+        res.status(200).json({ message: 'Find all orders by shop Id.', data: orders })
+    } catch (error: any) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 async function findAllNotPayOrders(req: Request, res: Response) {
     try {
         const orders = await em.find(Order, { liq: false }, { populate: ['contract', 'contract.shop', 'contract.shop.owner', 'contract.shop.contact'] })
@@ -920,7 +939,7 @@ async function migrateDatesOrder(req: Request, res: Response) {
 }
 
 
-export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, actualizarPostCancelacion, crearOrdenRegularRenovada, migrateDatesOrder, asingAtributes, findAllNotPayOrdersFilter }
+export { sanitizeOrderInput, findAll, findOne, add, update, remove, findWithRelations, renovateRegularOrders, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, actualizarPostCancelacion, crearOrdenRegularRenovada, migrateDatesOrder, asingAtributes, findAllNotPayOrdersFilter, getAllOrdersByShop }
 
 // ORDEN REGULAR
 // Bloques_regular = [[1,2,3,4], [1,2,3,4], [10,11,15,16], [10,11,15,16], [id_bloque], [], []]
