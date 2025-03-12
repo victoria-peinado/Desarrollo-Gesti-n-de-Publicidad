@@ -16,6 +16,8 @@ import { Spot } from 'src/app/models/spot';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { Order } from 'src/app/models/order.js';
+import { SharedDataService } from 'src/app/services/shared-data.service';
+
 
 @Component({
   selector: 'app-emision-ordenes-category',
@@ -75,7 +77,8 @@ export class EmisionOrdenesCategoryComponent {
   constructor(
     public dialog: MatDialog,
     private myDataService: MyDataService,
-    private _snackBar: SnackbarService
+    private _snackBar: SnackbarService,
+    private sharedDataService: SharedDataService
   ) {
     this.owner_form = new FormGroup({
       cuit: new FormControl('', [
@@ -83,6 +86,7 @@ export class EmisionOrdenesCategoryComponent {
         Validators.maxLength(11),
         Validators.minLength(11),
         Validators.pattern(/^[0-9]+$/),
+        sharedDataService.verifyCuit()
       ]),
       comercio: new FormControl(
         { value: '', disabled: true },

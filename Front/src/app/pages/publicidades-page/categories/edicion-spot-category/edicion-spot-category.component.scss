@@ -1,27 +1,25 @@
-.fila-data {
+.flex-container {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 4rem;
-}
-
-.audio {
-    display: flex;
-    gap: 5px;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.btn-guardar-cambios {
-    margin-bottom: 5rem;
-
-}
-
-
-.datos-asociados {
-    padding: 2rem 0;
-    display: flex;
+    flex-direction: row;
     justify-content: flex-start;
     align-items: center;
     gap: 1rem;
-}
+  
+    button {
+      width: auto;
+      margin-bottom: 20px;
+    }
+  }
+  
+  @media(width <=584px) {
+    .flex-container {
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .btn-subir {
+    margin: 1rem 0;
+  }

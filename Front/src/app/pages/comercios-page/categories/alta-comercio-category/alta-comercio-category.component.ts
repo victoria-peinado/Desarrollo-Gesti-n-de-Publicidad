@@ -27,6 +27,7 @@ import { Contact } from 'src/app/models/contact.js';
 import { Owner } from 'src/app/models/owner.js';
 import { Shop } from 'src/app/models/shop.js';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { z } from 'zod';
 
@@ -84,7 +85,8 @@ export class AltaComercioCategoryComponent {
   constructor(
     public dialog: MatDialog,
     private _snackBar: SnackbarService,
-    private myDataService: MyDataService
+    private myDataService: MyDataService,
+    private sharedDataService: SharedDataService
   ) {
     this.owner_form = new FormGroup({
       cuit: new FormControl('', [
@@ -92,6 +94,7 @@ export class AltaComercioCategoryComponent {
         Validators.maxLength(11),
         Validators.minLength(11),
         Validators.pattern(/^[0-9]+$/),
+        sharedDataService.verifyCuit()
       ]),
       businessName: new FormControl(
         { value: '', disabled: true },
@@ -119,7 +122,7 @@ export class AltaComercioCategoryComponent {
 
     this.shop_form = new FormGroup({
       fantasyName: new FormControl('', [Validators.required, this.verifyFantasyNameRepeated()]),
-      address: new FormControl('', Validators.required),
+      address: new FormControl('', [Validators.required, sharedDataService.verifyAddress()]),
       billingType: new FormControl('', Validators.required),
       mail: new FormControl('', [Validators.required, this.verifyEmail()]),
       usualPaymentForm: new FormControl('', Validators.required),
@@ -143,6 +146,8 @@ export class AltaComercioCategoryComponent {
   
       }
     }
+
+    
 
     verifyEmail(): ValidatorFn {
       return (control: AbstractControl): ValidationErrors | null => {

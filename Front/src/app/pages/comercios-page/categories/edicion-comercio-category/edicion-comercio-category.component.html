@@ -13,7 +13,7 @@
             placeholder="Ejemplo: 25444505879"
             type="text"
             [hintLabel]="'11 dígitos'"
-            [control]="cuitControl"
+            [control]="cuitOwnerControl"
             [validations]="{
               required: true,
               minLength: 11,
@@ -25,23 +25,23 @@
           ></app-input-field>
         </fieldset>
 
-        <span matTooltip="Ingrese un CUIT válido." [matTooltipDisabled]="!cuitControl.invalid" [matTooltipPosition]="'right'">
+        <span matTooltip="Ingrese un CUIT válido." [matTooltipDisabled]="!cuitOwnerControl.invalid" [matTooltipPosition]="'right'">
         <button
           mat-raised-button
           color="primary"
-          [disabled]="cuitControl.invalid"
+          [disabled]="cuitOwnerControl.invalid"
           (click)="findShopOwner()"
         >
           Check
         </button>
       </span>
 
-        @if (errorMessageOwner) {
+        @if (errorMessageOwnerShop) {
         <button mat-button color="warn" class="pointer-events-none">
           <mat-icon fontIcon="close"></mat-icon>
-          {{ errorMessageOwner }}
+          {{ errorMessageOwnerShop }}
         </button>
-        } @else if (ownerFounded) {
+        } @else if (ownerShopFounded) {
         <button mat-button color="accent" class="pointer-events-none">
           <mat-icon fontIcon="check"></mat-icon>
           Titular existente.
@@ -62,11 +62,11 @@
         </fieldset>
       </div>
 
-      <span matTooltip="Complete los campos obligatorios (*)." [matTooltipDisabled]="owner_shop_form.valid && comercioControl.value!=='' && ownerFounded" [matTooltipPosition]="'right'">
+      <span matTooltip="Complete los campos obligatorios (*)." [matTooltipDisabled]="owner_shop_form.valid && comercioControl.value!=='' && ownerShopFounded" [matTooltipPosition]="'right'">
       <button
       class="mb-4"
         mat-raised-button color="primary"
-        [disabled]="!owner_shop_form.valid || comercioControl.value==='' || !ownerFounded"
+        [disabled]="!owner_shop_form.valid || comercioControl.value==='' || !ownerShopFounded"
         (click)="next()">   
         Siguiente
       </button>
@@ -82,7 +82,7 @@
       [subtitle]="'Modifique datos pertinentes del Titular.'"
     ></app-title-and-subtitle>
     <form [formGroup]="owner_form" #of="ngForm">
-      <div class="flex-container">
+      <div class="grid-container">
         <fieldset>
           <app-input-field
             label="CUIT Titular"
@@ -100,32 +100,6 @@
             [tooltipText]="'La Clave Única de Identificación Tributaria (CUIT) es un código de 11 dígitos que identifica a las personas físicas o jurídicas que tributan en Argentina.'"
           ></app-input-field>
         </fieldset>
-
-        <span matTooltip="Ingrese un CUIT válido." [matTooltipDisabled]="!cuitControl.invalid" [matTooltipPosition]="'right'">
-        <button
-          mat-raised-button
-          color="primary"
-          [disabled]="cuitControl.invalid"
-          (click)="findOwner()"
-        >
-          Check
-        </button>
-      </span>
-
-        @if (errorMessageOwner) {
-        <button mat-button color="accent" class="btn-new-owner">
-          <mat-icon fontIcon="new_releases"></mat-icon>
-          {{ errorMessageOwner }}
-        </button>
-        } @else if (ownerFounded) {
-        <button mat-button color="accent" class="pointer-events-none">
-          <mat-icon fontIcon="check"></mat-icon>
-          Titular existente.
-        </button>
-        }
-      </div>
-
-      <div class="flex-container mt-4">
         <fieldset>
           <app-input-field
             label="Razón Social"
@@ -135,7 +109,6 @@
             [validations]="{ required: true }"
             [mode]="'input'"
             [tooltipText]="'Nombre legal completo de la empresa.'"
-            [tooltipDisabled]="errorMessageOwner !== 'Titular nuevo.'"
           ></app-input-field>
         </fieldset>
         <fieldset>
@@ -146,7 +119,6 @@
             [mode]="'select'"
             [options]="fiscalConditionTypes"
             [tooltipText]="'Régimen fiscal de la empresa.'"
-            [tooltipDisabled]="errorMessageOwner !== 'Titular nuevo.'"
           ></app-input-field>
         </fieldset>
       </div>
@@ -159,7 +131,7 @@
       [subtitle]="'Modifique datos pertinentes del Contacto.'"
     ></app-title-and-subtitle>
     <form [formGroup]="contact_form" #cf="ngForm">
-      <div class="flex-container">
+      <div class="grid-container">
         <fieldset>
           <app-input-field
           label="DNI Contacto"
@@ -177,32 +149,6 @@
           [tooltipText]="'Documento Nacional de Identidad.'"
         ></app-input-field>
         </fieldset>
-
-        <span matTooltip="Ingrese un DNI válido." [matTooltipDisabled]="!dniControl.invalid" [matTooltipPosition]="'right'">
-        <button
-          mat-raised-button
-          color="primary"
-          [disabled]="dniControl.invalid"
-          (click)="findContact()"
-        >
-          Check
-        </button>
-      </span>
-
-        @if (errorMessageContact) {
-        <button mat-button color="accent" class="btn-new-owner pointer-events-none">
-          <mat-icon fontIcon="new_releases"></mat-icon>
-          {{ errorMessageContact }}
-        </button>
-        } @else if (contactFounded) {
-        <button mat-button color="accent" class="pointer-events-none">
-          <mat-icon fontIcon="check"></mat-icon>
-          Contacto existente.
-        </button>
-        }
-      </div>
-
-      <div class="flex-container mt-4">
         <fieldset>
           <app-input-field
             label="Nombre"
@@ -299,7 +245,7 @@
       </div>
 
       <app-btn-guardar-cambios
-      [disabled]="shop_form.invalid || owner_form.invalid || contact_form.invalid || !ownerFounded || btnControl || (inputContactsComponent.contacts_form.get('contact')!.invalid && inputContactsComponent.contacts.length===0)"
+      [disabled]="shop_form.invalid || owner_form.invalid || contact_form.invalid || btnControl || (inputContactsComponent.contacts_form.get('contact')!.invalid && inputContactsComponent.contacts.length===0)"
       (clickEvent)="openDialog()" 
       [text]="'Guardar cambios'"
     ></app-btn-guardar-cambios>

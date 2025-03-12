@@ -7,6 +7,7 @@ import { Order } from 'src/app/models/order';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { USUAL_PAYMENT_FORMS } from 'src/app/constants/constants';
 import { data } from 'cypress/types/jquery/index.js';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-registro-pago-category',
@@ -52,13 +53,14 @@ export class RegistroPagoCategoryComponent {
   obs: string = '';
   id: string = '';
     
-    constructor(public dialog: MatDialog, private myDataService: MyDataService, private _snackBar: SnackbarService,) {
+    constructor(public dialog: MatDialog, private myDataService: MyDataService, private _snackBar: SnackbarService, private sharedDataService: SharedDataService) {
       this.owner_form = new FormGroup({
         cuit: new FormControl('', [
           Validators.required,
           Validators.maxLength(11),
           Validators.minLength(11),
           Validators.pattern(/^[0-9]+$/),
+          sharedDataService.verifyCuit()
         ]),
         comercio: new FormControl(
           { value: '', disabled: true }
