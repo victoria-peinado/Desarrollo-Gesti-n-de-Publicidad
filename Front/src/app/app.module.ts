@@ -77,6 +77,7 @@ import { AltaUsuarioComponent } from './pages/usuarios-page/categories/alta-usua
 import { EdicionUsuarioComponent} from './pages/usuarios-page/categories/edicion-usuario/edicion-usuario.component';
 import { BlockSelectionComponent } from './components/block-selection/block-selection.component';
 import { DataTableComponentDOB } from './components/data-table-DOB/data-table.component';
+import { CookieService } from 'ngx-cookie-service';
 @NgModule({ declarations: [
         AppComponent,
         MainNavComponent,
@@ -162,6 +163,7 @@ import { DataTableComponentDOB } from './components/data-table-DOB/data-table.co
     providers: [
         provideHttpClient(withInterceptorsFromDi()), 
         provideAnimationsAsync(),
+        CookieService,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: TokenInterceptorService,
