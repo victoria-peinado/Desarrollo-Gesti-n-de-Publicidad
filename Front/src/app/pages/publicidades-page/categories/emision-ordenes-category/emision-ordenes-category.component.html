@@ -119,10 +119,26 @@
                 [control]="obsOrderControl"
                 [mode]="'input'"
               ></app-input-field>
+              <fieldset>
+          <app-input-field
+            label="Mes"
+            [control]="month"
+            [validations]="{ required: true }"
+            [mode]="'select'"
+            [options]="validsNextYearMonths"
+            [selectedOption]="validsNextYearMonths[0]"
+          ></app-input-field>
+        </fieldset>
             </fieldset>
           </div>
         </form>
-        <app-block-selection (regStructureChange)="captureRegStructure($event)"></app-block-selection>
+        <app-block-selection 
+          (regStructureChange)="captureRegStructure($event)"
+          (regStructureChange)="captureRegStructure($event)"
+          (notRegularStructure)="caputreNotRegularStruc($event)"
+          (emmiterNoRegular)="captureIsNotRegular($event)"
+          [month] = "order_form.get('month')!.value"
+          ></app-block-selection>
     </div>
 
 
