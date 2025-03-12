@@ -31,6 +31,7 @@ export class BlockSelectionComponent {
   regularCampo = false
   customDates: string[] = [];
 
+  
 
 
   blocksPerDay: { [key: string]: { id: number; time: string }[] } = {};
@@ -49,6 +50,10 @@ export class BlockSelectionComponent {
   
 
   formatFunction = (date: Date) => { return format(date, 'dd') }
+
+  finished: boolean = false; // Solo atributo normal
+  @Output() finishedChange = new EventEmitter<boolean>(); // Evento para avisar al padre
+
 
   @Output() datosEmitidos = new EventEmitter<boolean>()
 
@@ -76,6 +81,10 @@ export class BlockSelectionComponent {
       this.emitRegStructure()
     } else { this.emitNotRegStructure() }
     this.datosEmitidos.emit(true) 
+
+    this.finished = true;
+    this.finishedChange.emit(this.finished); // Avisar al padre
+
   }
 
   changeEmitter(){

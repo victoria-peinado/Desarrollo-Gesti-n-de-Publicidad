@@ -23,10 +23,10 @@
         </button>
         <ul class="sub-menu">
           <div>
-            <li [class.active]="selectedMenuItem === 'Alta Usuario'">
+            <li *appShowForRoles="['admin']" [class.active]="selectedMenuItem === 'Alta Usuario'">
               <a (click)="setActive('Alta Usuario')" routerLink="usuarios/altaUsuario">Alta Usuario</a>
             </li>
-            <li [class.active]="selectedMenuItem === 'Editar Usuario'">
+            <li *appShowForRoles="['admin']" [class.active]="selectedMenuItem === 'Editar Usuario'">
               <a (click)="setActive('Editar Usuario')"routerLink="usuarios/edicionUsuario" >Editar Usuario</a>
             </li>
             <li [class.active]="selectedMenuItem === 'Logout'">

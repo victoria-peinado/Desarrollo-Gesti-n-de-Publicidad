@@ -18,6 +18,7 @@ import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { Order } from 'src/app/models/order.js';
 import { addMonths, format } from 'date-fns';
 import { SharedDataService } from 'src/app/services/shared-data.service';
+import { BlockSelectionComponent } from 'src/app/components/block-selection/block-selection.component.js';
 
 
 @Component({
@@ -27,7 +28,7 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
 })
 export class EmisionOrdenesCategoryComponent {
   @ViewChild('of') ownerNgForm: NgForm | undefined;
-
+  finishedFromChild: boolean = false;
   owner_form: FormGroup;
   contract_form: FormGroup;
   order_form: FormGroup;
@@ -132,6 +133,11 @@ export class EmisionOrdenesCategoryComponent {
     });
   }
 
+  onFinishedChange(value: boolean) {
+    this.finishedFromChild = value; // Captura del evento
+
+    this.scroll('datos-spot', 'end');
+  }
   captureRegStructure(structure: { [key: string]: string[] }) {
     console.log('Estructura recibida:', structure);
     this.regStructure = structure;
@@ -216,7 +222,7 @@ createOrder() {
             if(!this.isNotRegular){
         this.orderData = {
           nameStrategy: this.order_form.get('nameStrategy')?.value, // Personalizar según necesidad
-          obs: this.order_form.get('obs')?.value,
+          obs: this.order_form.get('obs')?.value ? this.order_form.get('obs')?.value : undefined,
           showName: this.order_form.get('showName')?.value,
           month: this.order_form.get('month')?.value,
           contract: this.contractId, // ID de la contratación seleccionada
