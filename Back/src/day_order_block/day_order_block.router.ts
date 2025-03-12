@@ -7,7 +7,7 @@ import { DaysSchema } from "../shared/db/schemas.js";
 
 export const dobRouter = Router()
 
-dobRouter.post('/limpiarBBDD', verifyToken, authorizeUserRoles('admin'), sanitizeBBDD)
+dobRouter.delete('/limpiarBBDD', verifyToken, authorizeUserRoles('admin'), sanitizeBBDD)
 
 
 dobRouter.get('/', verifyToken, authorizeUserRoles('admin'), findAll)

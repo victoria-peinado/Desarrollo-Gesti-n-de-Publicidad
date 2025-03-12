@@ -47,14 +47,14 @@ Authorization: Bearer {{token}}
 
 ###
 @dateFrom = 2025-3-10
-@dateTo= 2025-3-11
+@dateTo= 2025-3-15
 GET http://localhost:{{port}}/api/dayorderblock/dates?dateFrom={{dateFrom}}&dateTo={{dateTo}}
 Authorization: Bearer {{token}}
 
 
 ###ELIMINAR DOBS SIN ORDEN
 
-POST http://localhost:{{port}}/api/dayorderblock/limpiarBBDD
+DELETE http://localhost:{{port}}/api/dayorderblock/limpiarBBDD
 Authorization: Bearer {{token}}
 
 
