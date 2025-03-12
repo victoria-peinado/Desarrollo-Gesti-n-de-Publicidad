@@ -76,6 +76,7 @@ export class EmisionOrdenesCategoryComponent {
   
   structureIsEmpty: boolean = true;
 
+
   
   //month: FormControl;
 
@@ -203,7 +204,7 @@ export class EmisionOrdenesCategoryComponent {
             showName: this.order_form.get('showName')?.value,
             month: this.order_form.get('month')?.value,
             contract: this.selectedContractId, // ID de la contratación seleccionada
-            spot: this.createdSpotId, // ID del spot recién creado
+            //spot: this.createdSpotId, // ID del spot recién creado
             regular: false,
             notRegStructure: this.notRegularStructure, // La estructura de bloques seleccionados
         }}
@@ -297,6 +298,7 @@ export class EmisionOrdenesCategoryComponent {
 
   onRowSelected(row: any) {
     this.completeOrdenData = true;
+    this.selectedContractId = row.id
   }
 
   get cuitControl(): FormControl {
