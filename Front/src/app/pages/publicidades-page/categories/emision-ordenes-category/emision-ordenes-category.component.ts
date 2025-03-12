@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import {
   Form,
   FormControl,
@@ -16,6 +16,7 @@ import { Spot } from 'src/app/models/spot';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { Order } from 'src/app/models/order.js';
+import { addMonths, format } from 'date-fns';
 
 @Component({
   selector: 'app-emision-ordenes-category',
@@ -43,6 +44,7 @@ export class EmisionOrdenesCategoryComponent {
   spotId: string = '';
   contractId: string = '';
   regStructureIsEmpty: boolean = true;
+  validsNextYearMonths: string[] = []
 
   contracts = [];
 
@@ -113,6 +115,9 @@ export class EmisionOrdenesCategoryComponent {
         Validators.maxLength(50),
       ]), // Nombre Programa
       obs: new FormControl(''),
+      month: new FormControl('', [
+        Validators.required
+      ])
     });
 
     this.spot_form = new FormGroup({
@@ -162,7 +167,7 @@ export class EmisionOrdenesCategoryComponent {
   }
 
   setContract(contractId: string) {
-    this.selectedContractId = contractId;
+    this.contractId = contractId;
   }
 
   /*createOrder() {
@@ -223,9 +228,9 @@ createOrder() {
             notRegStructure: this.notRegularStructure, // La estructura de bloques seleccionados
         }}
   
-            console.log(orderData);
+            console.log(this.orderData);
   
-            return this.myDataService.createOrder(orderData);
+            return this.myDataService.createOrder(this.orderData);
           })
         )
         .subscribe({
