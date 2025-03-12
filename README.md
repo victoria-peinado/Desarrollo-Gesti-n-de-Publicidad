@@ -132,12 +132,10 @@ Run the following command from the project's `Front` directory:
     ```sh
         ng build  
     ```  
-## **Usage Examples**
-*(Include examples of how to use the application, along with screenshots or GIFs to demonstrate functionality.)*
+
 
 ## **Running Tests**
-*(Explain how to run tests for both frontend and backend, including the necessary commands.)*
-npm run test en front
-
-## **License**
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). See the `LICENSE` file for more details.
+- Back: npm run test
+- Front: 
+    - npm run test
+    - npm run e2e

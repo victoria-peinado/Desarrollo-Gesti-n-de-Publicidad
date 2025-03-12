@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MyDataService } from '../../services/my-data.service';
 import { User } from '../../models/user';
-import { CookieService } from 'ngx-cookie-service';
+
 
 @Component({
   selector: 'app-welcome-page',
@@ -19,7 +19,7 @@ export class WelcomePageComponent implements AfterViewInit {
   u: string = 'admin';
   p: string = 'admin';
 
-  constructor(private myDataService: MyDataService,private cookies:CookieService, private _snackBar: MatSnackBar, private router: Router) {
+  constructor(private myDataService: MyDataService, private _snackBar: MatSnackBar, private router: Router) {
     this.login_form = new FormGroup({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
@@ -95,8 +95,8 @@ export class WelcomePageComponent implements AfterViewInit {
       next: (response: any) => {
         console.log('Usuario creado:', response);
         this.openSnackBar('Registro exitoso', 'Cerrar', 5000, 'success-snackbar');
-        this.cookies.set('token', response.data.token);
-        this.cookies.set('role', response.data.user.role);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.user.role)
         this.router.navigate(['/inicio']);
       },
       error: (error: any) => {
@@ -117,8 +117,8 @@ export class WelcomePageComponent implements AfterViewInit {
       next: (response: any) => {
         console.log('Usuario logeado:', response);
         this.openSnackBar('Logueo exitoso', 'Cerrar', 5000, 'success-snackbar');
-        this.cookies.set('token', response.data.token);
-        this.cookies.set('role', response.data.user.role);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.user.role)
         this.router.navigate(['/inicio']);
       },
       error: (error: any) => {
