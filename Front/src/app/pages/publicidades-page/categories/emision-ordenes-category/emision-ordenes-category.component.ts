@@ -13,6 +13,7 @@ import { Contract } from 'src/app/models/contract';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { Spot } from 'src/app/models/spot.js';
+import {  addMonths, format } from 'date-fns';
 
 @Component({
   selector: 'app-emision-ordenes-category',
@@ -40,6 +41,9 @@ export class EmisionOrdenesCategoryComponent {
 
   contracts = [];
 
+  validsNextYearMonths: string[] = [];
+
+
   contractsDetailed: {
     id: number;
     dateFrom: string;
@@ -65,12 +69,15 @@ export class EmisionOrdenesCategoryComponent {
   createdSpotId: string = '';
   orderData: any = {};
   regStructure: { [key: string]: string[] } = {};
+  
+  //month: FormControl;
 
   constructor(
     public dialog: MatDialog,
     private myDataService: MyDataService,
     private _snackBar: SnackbarService
   ) {
+    this.cargarProximosDoceMeses()
     this.owner_form = new FormGroup({
       cuit: new FormControl('', [
         Validators.required,
@@ -100,6 +107,8 @@ export class EmisionOrdenesCategoryComponent {
         Validators.maxLength(50),
       ]), // Nombre Programa
       obs: new FormControl(''),
+      month: new FormControl('', [
+        Validators.required])
     });
 
     this.spot_form = new FormGroup({
@@ -134,9 +143,9 @@ export class EmisionOrdenesCategoryComponent {
 
         // Crear la Orden con la info recolectada
         this.orderData = {
-          nameStrategy: 'Te vamos a borrar', // Personalizar según necesidad
-          obs: '   ',
-          showName: 'Siempre Al Dia',
+          nameStrategy: this.order_form.get('nameStrategy')?.value, // Personalizar según necesidad
+          obs: this.order_form.get('obs')?.value,
+          showName: this.order_form.get('showName')?.value,
           contract: this.selectedContractId, // ID de la contratación seleccionada
           spot: this.createdSpotId, // ID del spot recién creado
           regular: true,
@@ -164,7 +173,7 @@ export class EmisionOrdenesCategoryComponent {
         let errorMessage = error.error.errors
           ? error.error.errors || error.error.messages
           : error.error.messages;
-          console.log(error);
+        console.log(error);
         this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
       },
     });
@@ -223,7 +232,7 @@ export class EmisionOrdenesCategoryComponent {
           );
         },
 
-        error: () => {},
+        error: () => { },
       });
     }
   }
@@ -254,6 +263,10 @@ export class EmisionOrdenesCategoryComponent {
 
   get nameStrategyControl(): FormControl {
     return this.order_form.get('nameStrategy') as FormControl;
+  }
+
+  get month(): FormControl {
+    return this.order_form.get('month') as FormControl;
   }
 
   get showNameControl(): FormControl {
@@ -301,7 +314,7 @@ export class EmisionOrdenesCategoryComponent {
     });
   }
 
-  openDialog() {}
+  openDialog() { }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -319,41 +332,52 @@ export class EmisionOrdenesCategoryComponent {
     }
   }
 
-onUpload(): void {
-        if (this.audioFile) {
-            this.myDataService.uploadAudio(this.audioFile).subscribe({
-                next: (response) => {
-                  this._snackBar.openSnackBar(response.message, 'success-snackbar');
-                  this.spot = response.data.spot; //obtener el id del spot creado que es lo que guardas en la orden
-                  console.log('Spot creado:', response);
-                },
-               error: (error: any) => {
-                console.log(error);
-                let errorMessage = error.error.errors
-                  ? error.error.errors || error.error.messages
-                  : error.error.messages;
-                this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
-              },
-            });
-        } else {
-            console.warn('No audio file selected');
-        }
+  onUpload(): void {
+    if (this.audioFile) {
+      this.myDataService.uploadAudio(this.audioFile).subscribe({
+        next: (response) => {
+          this._snackBar.openSnackBar(response.message, 'success-snackbar');
+          this.spot = response.data.spot; //obtener el id del spot creado que es lo que guardas en la orden
+          console.log('Spot creado:', response);
+        },
+        error: (error: any) => {
+          console.log(error);
+          let errorMessage = error.error.errors
+            ? error.error.errors || error.error.messages
+            : error.error.messages;
+          this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+        },
+      });
+    } else {
+      console.warn('No audio file selected');
     }
+  }
   calcularDuracion(audioSrc: string) {
     const audio = new Audio(audioSrc);
     audio.addEventListener('loadedmetadata', () => {
       const minutos = Math.floor(audio.duration / 60);
       const segundos = Math.floor(audio.duration % 60);
       const duracionFinal = `${minutos}:${segundos.toString().padStart(2, '0')}`;
-  
+
       // Mostrar duración formateada al usuario
       this.duracionSpot = `${duracionFinal} min`;
-  
+
       // Asignar duración total en segundos al formulario (como número)
       const duracionEnSegundos = Math.floor(audio.duration);
       this.spot_form.get('long')?.setValue(duracionEnSegundos);
       this.spot_form.updateValueAndValidity();
     });
   }
-  
+
+  cargarProximosDoceMeses(){
+    let today = new Date()
+    const actualMonth = format(today, 'MM-yyyy')
+    this.validsNextYearMonths.push(actualMonth)
+    for (let i = 0; i < 12; i++) {
+      today = addMonths(today,1)
+      const actualMonth = format(today, 'MM-yyyy')
+      this.validsNextYearMonths.push(actualMonth)      
+    }
+  }
+
 }

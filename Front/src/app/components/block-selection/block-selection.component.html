@@ -1,8 +1,12 @@
+|
+
 <div class="mode-toggle">
   <mat-checkbox [(ngModel)]="isNoRegular" (change)="toggleMode()">
     No regular
   </mat-checkbox>
 </div>
+
+<!-- REGULAR -->
 
 <mat-tab-group>
   <ng-container *ngIf="!isNoRegular">
@@ -13,27 +17,18 @@
     </mat-tab>
   </ng-container>
 
+  <!-- ORDENES NO REGULARES -->
+
   <ng-container *ngIf="isNoRegular">
-    <mat-tab *ngFor="let date of customDates" [label]="date">
+    @for (day of datesOfMonth; track day) {
+    <mat-tab [label]= "formatFunction(day)">
       <ng-container
-        *ngTemplateOutlet="blocksTemplate; context: { label: date }"
+        *ngTemplateOutlet="blocksTemplate; context: { label: day.toString() }"
       ></ng-container>
-    </mat-tab>
-
-    <mat-tab label="Añadir fecha +">
-      <div class="add-date-container">
-        <input
-          matInput
-          [matDatepicker]="picker"
-          placeholder="Selecciona una fecha"
-          (dateChange)="addCustomDate($event)"
-        />
-
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </div>
-    </mat-tab>
+    </mat-tab>}
   </ng-container>
+
+
 </mat-tab-group>
 
 <ng-template #blocksTemplate let-label="label">
