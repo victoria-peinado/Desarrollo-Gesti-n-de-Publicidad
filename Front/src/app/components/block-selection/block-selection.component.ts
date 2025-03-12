@@ -21,6 +21,12 @@ import { tap } from 'rxjs';
   ],
 })
 export class BlockSelectionComponent {
+
+
+
+
+
+
   daysOfWeek: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   regularCampo = false
   //emmiterNoRegular = output<boolean>()
@@ -65,6 +71,12 @@ export class BlockSelectionComponent {
 
   }
 
+  sanitizarYemitir() {
+    if (!this.regularCampo) {
+      this.emitRegStructure()
+    } else { this.emitNotRegStructure() }
+  }
+
   changeEmitter(){
     //console.log('Estoy emitiendo: ', this.emmiterNoRegular )
     this.emmiterNoRegular
@@ -104,10 +116,12 @@ export class BlockSelectionComponent {
 
   addBlock(label: string) {
     this.blocksPerDay[label].push({ id: this.idCounter++, time: '' });
+    
   }
 
   removeBlock(label: string, id: number) {
     this.blocksPerDay[label] = this.blocksPerDay[label].filter(b => b.id !== id);
+    
   }
 
   updateBlock(label: string, id: number, value: string) {
@@ -135,10 +149,12 @@ export class BlockSelectionComponent {
     const data = this.blocksPerDay
     const dateStrings = Object.keys(data)
     for (const dayString of dateStrings){
+      if (data[dayString].length>0){
       const day = new Date(dayString)
       const parseDay = format(day, 'yyyy-MM-dd') //asi se va al back
       const blocksNumsOfDay = data[dayString].map((obj: { id: number, time: string }) => { return this.timeToBlockId(obj.time)}) //arreglo de bloques num que van en el dia
-      notRegularStructure.push([parseDay, blocksNumsOfDay])
+      notRegularStructure.push([parseDay, blocksNumsOfDay]) } 
+      else {delete data[dayString]}
     }
     console.log(notRegularStructure)
     return notRegularStructure
