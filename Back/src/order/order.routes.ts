@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, migrateDatesOrder,  } from "./order.controler.js";
+import { findAll, findOne, add, update, remove,sanitizeOrderInput, findWithRelations, testRenovarOrdenes, cancelOrder, registerPayment, updateSpot, getNotPayOrdersByOwnerCuit, getNotPayOrdersByShop, findAllNotPayOrders, findNotPayOrdersByDates, findNotPayOrdersByDates2, migrateDatesOrder, findAllNotPayOrdersFilter,  } from "./order.controler.js";
 import { validateWithSchema , validateObjectId, validateCuit, sanitizeDatesFilterInput} from '../shared/db/middleware.js'
-import { CancelOrderSchema, OrderSchema, PatchOrderSchema, PutOrderSchema, UpdSpotOrderSchema} from './order.entity.js'
+import { CancelOrderSchema, OrderSchema, OrdersIDsSchema, PatchOrderSchema, PutOrderSchema, UpdSpotOrderSchema} from './order.entity.js'
 import {  verifyToken,authorizeUserRoles } from '../auth/auth.middleware.js'
 import { DaysSchema } from "../shared/db/schemas.js";
+import { notifyByMail, sanitizeMailInput } from "../shared/sendMailNotification.js";
 
 
 //const validIdBlock=validateIdExistence(em.getRepository(Block), "block");
@@ -17,11 +18,17 @@ orderRouter.get('/dates/notPayOrders', verifyToken, authorizeUserRoles('admin'),
 
 orderRouter.get('/dates/v2/notPayOrders', verifyToken, authorizeUserRoles('admin'),  findNotPayOrdersByDates2)
 
+orderRouter.get('/dates/notPayOrdersFilter', verifyToken, authorizeUserRoles('admin'), findAllNotPayOrdersFilter)
+
+
 orderRouter.get('/',verifyToken, authorizeUserRoles('admin'), findAll);
 orderRouter.get('/:id',verifyToken, authorizeUserRoles('admin'), validateObjectId('id'), findOne); // Validate ID for finding an order by ID
 
 
 orderRouter.post('/renovateOrders',verifyToken, authorizeUserRoles('admin'), testRenovarOrdenes)
+
+orderRouter.post('/notifyByMail', verifyToken, authorizeUserRoles('admin'), validateWithSchema(OrdersIDsSchema), sanitizeMailInput,notifyByMail)
+
 
 orderRouter.post('/migrarFechas', migrateDatesOrder)
 orderRouter.post('/',verifyToken, authorizeUserRoles('admin'), validateWithSchema(OrderSchema), sanitizeOrderInput, add); // Validate order schema and sanitize input before adding

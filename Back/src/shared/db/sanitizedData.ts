@@ -238,10 +238,13 @@ export async function createInfoSanitized() {
         let lau: any
 
         await asingAtributes(order_regular_s1, contractSave1.dateFrom, true, regularStructure1, undefined, undefined)
+        await em.flush()
+
         await asingAtributes(order_regular_s2, new Date('2025-4-1'), true, regularStructure2, undefined, undefined)
-        await asingAtributes(order_notRegular_s1, contractSave1.dateFrom, order_notRegular_s1.regular, lau, notRegularStructure1, undefined)
+        await em.flush()
 
-
+        const orderNR = await asingAtributes(order_notRegular_s1, contractSave1.dateFrom, order_notRegular_s1.regular, lau, notRegularStructure1, undefined)
+        em.persist(orderNR)
         await em.flush()
 
         if (!order_regular_s1 || !order_regular_s2 || !order_notRegular_s1) {

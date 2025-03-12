@@ -185,3 +185,7 @@ export const PatchOrderSchema = z.object({
   obs: z.string().min(1, { message: 'obs no puede estar vacío' }).optional(),
   showName: z.string().min(1, { message: 'showName no puede estar vacío' }).optional(),
 });
+
+export const OrdersIDsSchema = z.object({
+  id: z.array(ObjectIdSchema)
+})
