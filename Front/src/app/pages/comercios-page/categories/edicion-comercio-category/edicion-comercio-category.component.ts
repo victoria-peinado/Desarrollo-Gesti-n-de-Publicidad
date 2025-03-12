@@ -22,7 +22,11 @@ import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping';
 import { InputContactsComponent } from 'src/app/components/input-contacts/input-contacts.component';
+import { of, throwError } from 'rxjs';
+import { concatMap, catchError, finalize } from 'rxjs/operators';
 import { z } from 'zod';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-edicion-comercio-category',
@@ -70,12 +74,22 @@ export class EdicionComercioCategoryComponent {
   ownerId: string = '';
   contactFounded: boolean = true;
   errorMessageContact: string | null = null;
-  contactId: string = ''
+  errorMessageOwnerShop: string | null = null;
+  ownerShopFounded: boolean = false;
+  contactId: string = '';
+  shopId: string = '';
+  cuitOwner: string = '';
+  ownerShopId: string = '';
+  owner: any = {};
+  contact: any = {};
+  shop: any = {};
+  newOwner: boolean = false;
 
   constructor(
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
-    private myDataService: MyDataService
+    private _snackBar: SnackbarService,
+    private myDataService: MyDataService,
+    private sharedDataService: SharedDataService
   ) {
     this.owner_shop_form = new FormGroup({
       cuitOwner: new FormControl('', [
@@ -83,6 +97,7 @@ export class EdicionComercioCategoryComponent {
         Validators.maxLength(11),
         Validators.minLength(11),
         Validators.pattern(/^[0-9]+$/),
+        sharedDataService.verifyCuit()
       ]),
       comercio: new FormControl(
         { value: '', disabled: true },
@@ -129,7 +144,7 @@ export class EdicionComercioCategoryComponent {
         Validators.required,
         this.verifyFantasyNameRepeated(),
       ]),
-      address: new FormControl('', Validators.required),
+      address: new FormControl('', [Validators.required, sharedDataService.verifyAddress()]),
       billingType: new FormControl('', Validators.required),
       mail: new FormControl('', [Validators.required, this.verifyEmail()]),
       usualPaymentForm: new FormControl('', Validators.required),
@@ -162,38 +177,41 @@ export class EdicionComercioCategoryComponent {
   }
 
   findShopOwner() {
-    this.cuit = this.cuitControl.value;
+    this.cuitOwner = this.cuitOwnerControl.value;
 
-    if (!this.cuit) return;
+    if (!this.cuitOwner) return;
 
-    this.myDataService.getOwnerByCuit(this.cuit).subscribe({
+    this.myDataService.getOwnerByCuit(this.cuitOwner).subscribe({
       next: (response: any) => {
         this.businessName = response.data.businessName;
-        this.ownerFounded = true;
+        this.ownerShopFounded = true;
         this.fiscalCondition = response.data.fiscalCondition;
+        this.cuitOwner = response.data.cuit;
         this.cuit = response.data.cuit;
+        this.ownerId = response.data.id;
+        this.ownerShopId = response.data.id;
         this.shops = response.data.shops;
-        this.errorMessageOwner = null;
+        this.errorMessageOwnerShop = null;
         this.comercios = response.data.shops.map(
           (shop: Shop) => shop.fantasyName
         );
         this.comercioControl.enable();
         this.clearForm(this.ownerShopNgForm, {
-          cuitOwner: this.cuitControl.value,
+          cuitOwner: this.cuitOwnerControl.value,
           comercio: '',
         });
       },
       error: () => {
-        this.ownerFounded = false;
+        this.ownerShopFounded = false;
         this.shops = [];
         this.comercioControl.disable();
-        this.errorMessageOwner = 'Titular inexistente.';
+        this.errorMessageOwnerShop = 'Titular inexistente.';
       },
     });
   }
 
   findOwner() {
-    this.cuit = this.cuitControl.value.trim();
+    this.cuit = this.cuitControl.value;
 
     if (!this.cuit) return;
 
@@ -211,6 +229,7 @@ export class EdicionComercioCategoryComponent {
         this.fiscalConditionControl.disable();
         this.businessNameControl.setValue(response.data.businessName);
         this.fiscalConditionControl.setValue(response.data.fiscalCondition);
+        this.newOwner = false;
       },
       error: () => {
         this.ownerFounded = false;
@@ -223,12 +242,13 @@ export class EdicionComercioCategoryComponent {
         });
         this.ownerId = '';
         this.errorMessageOwner = 'Titular nuevo.';
+        this.newOwner = true;
       },
     });
   }
 
   findContact() {
-    this.dni = this.dniControl.value.trim();
+    this.dni = this.dniControl.value;
 
     if (!this.dni) return;
 
@@ -275,6 +295,7 @@ export class EdicionComercioCategoryComponent {
       this.mail = selectedShop.mail;
       this.usualPaymentForm = selectedShop.usualPaymentForm;
       this.type = selectedShop.type;
+      this.shopId = selectedShop.id;
 
       this.fantasyNameControl.setValue(this.fantasyName);
       this.addressControl.setValue(this.address);
@@ -287,13 +308,17 @@ export class EdicionComercioCategoryComponent {
     }
 
     if (this.cuit) {
+      this.ownerFounded = true;
       this.cuitControl.setValue(this.cuit);
       this.businessNameControl.setValue(this.businessName);
       this.fiscalConditionControl.setValue(this.fiscalCondition);
     }
 
-    this.myDataService.getContactById(selectedShop.contact).subscribe({
+    this.contactId = selectedShop.contact;
+
+    this.myDataService.getContactById(this.contactId).subscribe({
       next: (response) => {
+        this.contactFounded = true;
         this.dni = response.data.dni;
         this.name = response.data.name;
         this.lastname = response.data.lastname;
@@ -382,9 +407,118 @@ export class EdicionComercioCategoryComponent {
     );
   }
 
+  patchOwner() {
+
+    if (this.cuit !== this.cuitControl.value) {
+      this.owner.cuit = this.cuitControl.value;
+    }
+
+    if (this.businessName !== this.businessNameControl.value) {
+      this.owner.businessName = this.businessNameControl.value;
+    }
+
+    if (this.fiscalCondition !== this.fiscalConditionControl.value) {
+      this.owner.fiscalCondition = this.fiscalConditionControl.value;
+    }
+
+    if(this.owner) {
+    this.myDataService.patchOwner(this.ownerId, this.owner).subscribe({
+      next: (response: any) => {
+        console.log('owner: ', response);
+        this._snackBar.openSnackBar(response.message, 'success-snackbar');
+        //this.clearForm();
+      },
+      error: (error: any) => {
+        let errorMessage = error.error.errors
+          ? error.error.errors || error.error.messages
+          : error.error.messages;
+        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+      },
+    });
+
+  } 
+  }
+
+  patchContact() {
+
+    if (this.dni !== this.dniControl.value) {
+      this.contact.dni = this.dniControl.value;
+    }
+
+    if (this.name !== this.nameControl.value) {
+      this.contact.name = this.nameControl.value;
+    }
+
+    if (this.lastname !== this.lastnameControl.value) {
+      this.contact.lastname = this.lastnameControl.value;
+    }
+
+    if (
+      this.initialContacts.slice().sort().join(', ') !==
+      this.inputContactsComponent.contacts.slice().sort().join(', ')
+    ) {
+      this.contact.contacts = this.inputContactsComponent.contacts;
+    }
+
+    if(this.contact) {
+    this.myDataService.patchContact(this.contactId, this.contact).subscribe({
+      next: (response: any) => {
+        console.log('contact: ', response);
+        this._snackBar.openSnackBar(response.message, 'success-snackbar');
+        //this.clearForm();
+      },
+      error: (error: any) => {
+        let errorMessage = error.error.errors
+          ? error.error.errors || error.error.messages
+          : error.error.messages;
+        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+      },
+    });
+  }
+  }
+
   patchShop() {
 
+    if (this.fantasyName !== this.fantasyNameControl.value) {
+      this.shop.fantasyName = this.fantasyNameControl.value;
+    }
+
+    if (this.address !== this.addressControl.value) {
+      this.shop.address = this.addressControl.value;
+    }
+
+    if (this.billingType !== this.billingTypeControl.value) {
+      this.shop.billingType = this.billingTypeControl.value;
+    }
+
+    if (this.mail !== this.mailControl.value) {
+      this.shop.mail = this.mailControl.value;
+    }
+
+    if (this.usualPaymentForm !== this.usualPaymentFormControl.value) {
+      this.shop.usualPaymentForm = this.usualPaymentFormControl.value;
+    }
+
+    if (this.type !== this.typeControl.value) {
+      this.shop.type = this.typeControl.value;
+    }
+
+    if(this.shop) {
+    this.myDataService.patchShop(this.shopId, this.shop).subscribe({
+      next: (response: any) => {
+        console.log('shop: ', response);
+        this._snackBar.openSnackBar(response.message, 'success-snackbar');
+        //this.clearForm();
+      },
+      error: (error: any) => {
+        let errorMessage = error.error.errors
+          ? error.error.errors || error.error.messages
+          : error.error.messages;
+        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+      },
+    });
   }
+}
   openDialog(): void {
     const ownerFieldsToCheck = [
       { key: 'cuit', control: this.cuitControl, initialValue: this.cuit },
@@ -470,7 +604,74 @@ export class EdicionComercioCategoryComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.patchShop();
+        this.saveAll();
+      }
+    });
+  }
+
+  saveAll() {
+    let ownerData: any = {};
+    let contactData: any = {};
+    let shopData: any = {};
+  
+    // 1. Preparar los datos solo si cambiaron
+    if (this.cuit !== this.cuitControl.value) ownerData.cuit = this.cuitControl.value;
+    if (this.businessName !== this.businessNameControl.value) ownerData.businessName = this.businessNameControl.value;
+    if (this.fiscalCondition !== this.fiscalConditionControl.value) ownerData.fiscalCondition = this.fiscalConditionControl.value;
+  
+    if (this.dni !== this.dniControl.value) contactData.dni = this.dniControl.value;
+    if (this.name !== this.nameControl.value) contactData.name = this.nameControl.value;
+    if (this.lastname !== this.lastnameControl.value) contactData.lastname = this.lastnameControl.value;
+    if (this.contacts.slice().sort().join(', ') !== this.inputContactsComponent.contacts.slice().sort().join(', ')) {
+      contactData.contacts = this.inputContactsComponent.contacts;
+    }
+  
+    if (this.fantasyName !== this.fantasyNameControl.value) shopData.fantasyName = this.fantasyNameControl.value;
+    if (this.address !== this.addressControl.value) shopData.address = this.addressControl.value;
+    if (this.billingType !== this.billingTypeControl.value) shopData.billingType = this.billingTypeControl.value;
+    if (this.mail !== this.mailControl.value) shopData.mail = this.mailControl.value;
+    if (this.usualPaymentForm !== this.usualPaymentFormControl.value) shopData.usualPaymentForm = this.usualPaymentFormControl.value;
+    if (this.type !== this.typeControl.value) shopData.type = this.typeControl.value;
+  
+    // 2. Empezar cadena de llamadas
+    of(null).pipe(
+      // PATCH OWNER
+      concatMap(() => {
+        if (Object.keys(ownerData).length) {
+          return this.myDataService.patchOwner(this.ownerId, ownerData);
+        }
+        return of({ message: 'Owner no modificado' });
+      }),
+      // PATCH CONTACT
+      concatMap(() => {
+        if (Object.keys(contactData).length) {
+          return this.myDataService.patchContact(this.contactId, contactData);
+        }
+        return of({ message: 'Contacto no modificado' });
+      }),
+      // PATCH SHOP
+      concatMap(() => {
+        if (Object.keys(shopData).length) {
+          return this.myDataService.patchShop(this.shopId, shopData);
+        }
+        return of({ message: 'Comercio no modificado' });
+      }),
+      // MANEJO DE ERRORES
+      catchError((error) => {
+        let errorMessage = error.error.errors || error.error.messages || 'Error inesperado';
+        this._snackBar.openSnackBar(errorMessage, 'unsuccess-snackbar');
+        return throwError(() => error); // Detener la secuencia
+      }),
+      // SIEMPRE al finalizar
+      finalize(() => {
+        console.log('Proceso finalizado');
+      })
+    ).subscribe({
+      next: (response) => {
+        console.log('Todo correcto:', response);
+      },
+      complete: () => {
+        this._snackBar.openSnackBar('Datos actualizados exitosamente', 'success-snackbar');
       }
     });
   }

@@ -171,6 +171,11 @@ export class MyDataService {
     return this.http.patch(`${this.apiUrl}contact/${contactId}`, contact);
   }
 
+  patchOrderSpot(orderId: string, order: any) {
+    console.log('se actualizó')
+    return this.http.patch(`${this.apiUrl}order/updateSpot/${orderId}`, order);
+  }
+
   getContractsByShopId(idShop: string): Observable<any> {return this.http.get(`${this.apiUrl}contract/shop/${idShop}`);}
 
 
@@ -209,4 +214,9 @@ export class MyDataService {
 
     return this.http.post(`${this.apiUrl}spot/upload`, formData);
   }
+
+  getSpotById(id: string) {
+    return this.http.get(`${this.apiUrl}spot/file/${id}`);
+  }
+
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-consulta-titular-category',
@@ -17,13 +18,15 @@ export class ConsultaTitularCategoryComponent {
     fiscalCondition: string = '';
     cargando: boolean = false;
 
-    constructor(private myDataService: MyDataService) {
+    constructor(private myDataService: MyDataService, private sharedDataService: SharedDataService
+    ) {
       this.cuit_form = new FormGroup({
         cuit: new FormControl('', [
           Validators.required,
           Validators.maxLength(11),
           Validators.minLength(11),
           Validators.pattern(/^[0-9]+$/),
+          sharedDataService.verifyCuit()
         ])
       });
 

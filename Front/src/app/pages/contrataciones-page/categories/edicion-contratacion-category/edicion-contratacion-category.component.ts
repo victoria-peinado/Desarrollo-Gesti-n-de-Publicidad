@@ -7,6 +7,7 @@ import { Contract } from 'src/app/models/contract';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-edicion-contratacion-category',
@@ -51,7 +52,8 @@ export class EdicionContratacionCategoryComponent {
   constructor(
     public dialog: MatDialog,
     private myDataService: MyDataService,
-    private _snackBar: SnackbarService
+    private _snackBar: SnackbarService,
+    private sharedDataService: SharedDataService
   ) {
     this.owner_form = new FormGroup({
       cuit: new FormControl('', [
@@ -59,6 +61,7 @@ export class EdicionContratacionCategoryComponent {
         Validators.maxLength(11),
         Validators.minLength(11),
         Validators.pattern(/^[0-9]+$/),
+        sharedDataService.verifyCuit()
       ]),
       comercio: new FormControl(
         { value: '', disabled: true },

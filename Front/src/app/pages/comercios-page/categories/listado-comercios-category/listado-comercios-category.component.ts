@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-listado-comercios-category',
@@ -15,13 +16,15 @@ export class ListadoComerciosCategoryComponent {
   shops: Shop[] = [];
   errorMessageOwner: string | null = null;
 
-  constructor(private myDataService: MyDataService) {
+  constructor(private myDataService: MyDataService, private sharedDataService: SharedDataService
+  ) {
     this.owner_form = new FormGroup({
       cuit: new FormControl('', [
         Validators.required,
         Validators.maxLength(11),
         Validators.minLength(11),
         Validators.pattern(/^[0-9]+$/),
+        sharedDataService.verifyCuit()
       ]),
     });
   }

@@ -1,64 +1,72 @@
 <div id="edicion-spot">
-  <div id="datos-orden">
-    <app-title-and-subtitle
-      [title]="'Datos de la Orden'"
-      [subtitle]="'Ingresá el número de la Orden.'"
-    ></app-title-and-subtitle>
+  
+  <div id="datos-titular-comercio">
+    <app-title-and-subtitle [title]="'Lista pagos faltantes por titular'"
+      [subtitle]="'Ingrese el CUIT del Titular y opcionalmente  un Comercio.'"></app-title-and-subtitle>
 
-    <form [formGroup]="nroOrden_form">
-      <div class="fila-data">
+    <form [formGroup]="owner_form" #of="ngForm">
+      <div class="flex-container">
         <fieldset>
-          <app-input-field
-            label="Nro. Orden"
-            placeholder="Ejemplo: 25"
-            type="number"
-            [control]="nroOrdenControl"
-            [validations]="{ required: true }"
-          >
-          </app-input-field>
+          <app-input-field label="CUIT Titular" placeholder="Ejemplo: 25444505879" type="text"
+            [hintLabel]="'11 dígitos'" [control]="cuitControl" [validations]="{
+                  required: true,
+                  minLength: 11,
+                  maxLength: 11,
+                  pattern: '^[0-9]*$'
+                }" [mode]="'input'"></app-input-field>
         </fieldset>
-        <div class="datos-asociados">
-          <app-datos-asociados
-            [datos]="[
-              { atributo: 'Número Contratación', valor: contractId },
-              { atributo: 'Nombre Comercio', valor: fantasyName },
-              { atributo: 'Razón Social', valor: businessName }
-            ]"
-            [formularioValido]="orderFounded"
-            [cargando]="cargando"
-          >
-          </app-datos-asociados>
 
-          @if (errorMessage) {
-          <button mat-button color="warn">
-            <mat-icon fontIcon="close"></mat-icon>
-            {{ errorMessage }}
-          </button>
-          } @else if (orderFounded) {
-          <button mat-button color="accent">
-            <mat-icon fontIcon="check"></mat-icon>
-            Orden existente.
-          </button>
-          }
-        </div>
+        <button mat-raised-button color="primary" [disabled]="cuitControl.invalid" (click)="findOwner()">
+          Check
+        </button>
+
+        @if (errorMessageOwner) {
+        <button mat-button color="warn" class="pointer-events-none">
+          <mat-icon fontIcon="close"></mat-icon>
+          {{ errorMessageOwner }}
+        </button>
+        } @else if (ownerFounded) {
+        <button mat-button color="accent" class="pointer-events-none">
+          <mat-icon fontIcon="check"></mat-icon>
+          Titular existente.
+        </button>
+        }
       </div>
 
-      <button
-        mat-raised-button
-        color="primary"
-        [disabled]="nroOrden_form.invalid"
-        (click)="siguiente()"
-      >
+      <div class="flex-container mt-4">
+        <fieldset>
+          <app-input-field label="Comercio" [control]="comercioControl" [validations]="{ required: true }"
+            [mode]="'select'" [options]="comercios" [selectedOption]="comercios[0]"></app-input-field>
+        </fieldset>
+      </div>
+
+      <button class="mb-4" mat-raised-button color="primary"
+        (click)="next()">
         Siguiente
       </button>
     </form>
   </div>
 
-  <div *ngIf="orderFounded" id="datos-spot">
+  <div *ngIf="nextStep" id="edicion-contratacion">
+    <app-title-and-subtitle [title]="'Ordenes por pagar'"
+      [subtitle]="'Selecciona la orden que desea pagar'"></app-title-and-subtitle>
+    <app-data-selection-table [data]="ordersDetailed" [columns]="columnDefs" (rowSelected)="onRowSelected($event)">
+    </app-data-selection-table>
+
     <app-title-and-subtitle
       [title]="'Datos del nuevo Spot'"
       [subtitle]="'Cargá el archivo del nuevo Spot.'"
     ></app-title-and-subtitle>
+
+    <div class="spot-actual">
+
+    <div class="audio">
+          <audio *ngIf="spotURL" controls>
+            <source [src]="spotURL" type="audio/mpeg" />
+
+            Tu navegador no soporta el elemento de audio.
+          </audio>
+        </div>
 
     <form [formGroup]="spot_form">
       <div class="block-data">
@@ -70,13 +78,12 @@
             (change)="onFileSelected($event)"
             hidden
           />
-          <button mat-raised-button color="primary" (click)="fileInput.click()">
+          <button class="btn-subir" mat-raised-button color="primary" (click)="fileInput.click()">
             <mat-icon>upload_file</mat-icon> Subir
           </button>
         </fieldset>
 
         <div *ngIf="audioFile" class="audio">
-          <p>{{ audioFile.name }}</p>
           <audio *ngIf="audioURL" controls>
             <source [src]="audioURL" type="{{ audioFile.type }}" />
             Tu navegador no soporta el elemento de audio.
@@ -107,4 +114,5 @@
       </button>
     </form>
   </div>
-</div>
+
+ 

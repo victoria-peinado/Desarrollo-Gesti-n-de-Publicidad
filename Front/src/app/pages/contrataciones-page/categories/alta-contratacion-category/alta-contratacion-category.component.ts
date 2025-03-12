@@ -6,6 +6,7 @@ import { Contract } from 'src/app/models/contract';
 import { Shop } from 'src/app/models/shop';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-alta-contratacion-category',
@@ -51,13 +52,14 @@ export class AltaContratacionCategoryComponent {
   dateFrom: Date | null = null;
   obs: string = '';
     
-    constructor(public dialog: MatDialog, private _snackBar: SnackbarService, private myDataService: MyDataService) {
+    constructor(public dialog: MatDialog, private _snackBar: SnackbarService, private myDataService: MyDataService, private sharedDataService: SharedDataService) {
       this.owner_form = new FormGroup({
         cuit: new FormControl('', [
           Validators.required,
           Validators.maxLength(11),
           Validators.minLength(11),
           Validators.pattern(/^[0-9]+$/),
+          sharedDataService.verifyCuit()
         ]),
         comercio: new FormControl(
           { value: '', disabled: true },

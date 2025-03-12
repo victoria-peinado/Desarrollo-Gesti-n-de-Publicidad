@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-baja-titular-category',
@@ -25,7 +26,9 @@ export class BajaTitularCategoryComponent {
   constructor(
     public dialog: MatDialog,
     private _snackBar: SnackbarService,
-    private myDataService: MyDataService
+    private myDataService: MyDataService,
+    private sharedDataService: SharedDataService
+
   ) {
     this.cuit_form = new FormGroup({
       cuit: new FormControl('', [
@@ -33,6 +36,7 @@ export class BajaTitularCategoryComponent {
         Validators.maxLength(11),
         Validators.minLength(11),
         Validators.pattern(/^[0-9]+$/),
+        sharedDataService.verifyCuit()
       ]),
     });
   }

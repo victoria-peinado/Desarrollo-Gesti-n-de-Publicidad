@@ -6,6 +6,7 @@ import { FISCAL_CONDITION_TYPES } from 'src/app/constants/constants';
 import { Owner } from 'src/app/models/owner';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-alta-titular-category',
@@ -25,7 +26,9 @@ export class AltaTitularCategoryComponent {
   constructor(
     public dialog: MatDialog,
     private _snackBar: SnackbarService,
-    private myDataService: MyDataService
+    private myDataService: MyDataService,
+    private sharedDataService: SharedDataService
+
   ) {
     this.owner_form = new FormGroup({
       cuit: new FormControl('', [
@@ -33,6 +36,7 @@ export class AltaTitularCategoryComponent {
         Validators.maxLength(11),
         Validators.minLength(11),
         Validators.pattern(/^[0-9]+$/),
+        sharedDataService.verifyCuit()
       ]),
       businessName: new FormControl('', Validators.required),
       fiscalCondition: new FormControl('', Validators.required),

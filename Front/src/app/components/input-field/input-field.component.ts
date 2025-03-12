@@ -48,6 +48,8 @@ export class InputFieldComponent {
     if (this.control.hasError('fantasyNameRepeated')) return 'Nombre fantasía repetido.';
     if (this.control.hasError('invalidEmail')) return 'Formato de mail incorrecto.';
     if (this.control.hasError('dateToGreater')) return 'Debe ser menor a Fecha Hasta.';
+    if (this.control.hasError('invalidCuit')) return 'Formato de CUIT incorrecto.';
+    if (this.control.hasError('invalidAddress')) return 'Formato de Direccion incorrecto.';
     return '';
   }
 

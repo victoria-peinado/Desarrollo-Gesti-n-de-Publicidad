@@ -11,6 +11,7 @@ import { ATTRIBUTE_MAPPING } from 'src/app/constants/attribute-mapping';
 import { FISCAL_CONDITION_TYPES } from 'src/app/constants/constants';
 import { MyDataService } from 'src/app/services/my-data.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-edicion-titular-category',
@@ -34,7 +35,9 @@ export class EdicionTitularCategoryComponent {
   constructor(
     public dialog: MatDialog,
     private _snackBar: SnackbarService,
-    private myDataService: MyDataService
+    private myDataService: MyDataService,
+    private sharedDataService: SharedDataService
+
   ) {
     this.owner_form = new FormGroup({
       cuit: new FormControl('', [
@@ -42,6 +45,7 @@ export class EdicionTitularCategoryComponent {
         Validators.maxLength(11),
         Validators.minLength(11),
         Validators.pattern(/^[0-9]+$/),
+        sharedDataService.verifyCuit()
       ]),
       businessName: new FormControl(
         { value: '', disabled: true },
