@@ -1,132 +1,153 @@
 <div id="emiion-ordenes-category">
-    <div id="datos-contratacion">
-        <div id="datos-titular-comercio">
-            <app-title-and-subtitle
-              [title]="'Datos del Titular y del Comercio'"
-              [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
-            ></app-title-and-subtitle>
-        
-            <form [formGroup]="owner_form" #of="ngForm">
-              <div class="flex-container">
-                <fieldset>
-                  <app-input-field
-                    label="CUIT Titular"
-                    placeholder="Ejemplo: 25444505879"
-                    type="text"
-                    [hintLabel]="'11 dígitos'"
-                    [control]="cuitControl"
-                    [validations]="{
-                      required: true,
-                      minLength: 11,
-                      maxLength: 11,
-                      pattern: '^[0-9]*$'
-                    }"
-                    [mode]="'input'"
-                  ></app-input-field>
-                </fieldset>
-    
-                <button
-                  mat-raised-button
-                  color="primary"
-                  [disabled]="cuitControl.invalid"
-                  (click)="findOwner()"
-                >
-                  Check
-                </button>
-      
-                @if (errorMessageOwner) {
-                <button mat-button color="warn" class="pointer-events-none">
-                  <mat-icon fontIcon="close"></mat-icon>
-                  {{ errorMessageOwner }}
-                </button>
-                } @else if (ownerFounded) {
-                <button mat-button color="accent" class="pointer-events-none">
-                  <mat-icon fontIcon="check"></mat-icon>
-                  Titular existente.
-                </button>
-                }
-              </div>
-    
-              <div class="flex-container mt-4">
-                <fieldset>
-                  <app-input-field
-                    label="Comercio"
-                    [control]="comercioControl"
-                    [validations]="{ required: true }"
-                    [mode]="'select'"
-                    [options]="comercios"
-                    [selectedOption]="comercios[0]"
-                  ></app-input-field>
-                </fieldset>
-              </div>
-    
-              <button
-              class="mb-4"
-                mat-raised-button color="primary"
-                [disabled]="!owner_form.valid || comercioControl.value===''"
-                (click)="next()">   
-                Siguiente
-              </button>
-            </form>
-          </div>
-    
-        <div *ngIf="nextStep" id="datos-contratacion">
-          <app-title-and-subtitle
-          [title]="'Datos de la Contratación'"
-          [subtitle]="'Seleccione la Contratación para la que desea crear una Orden Publicitaria.'"
-        ></app-title-and-subtitle>
-        <app-data-selection-table 
-      [data]="contractsDetailed" 
-      [columns]="columnDefs"
-      (rowSelected)="onRowSelected($event)">
-    </app-data-selection-table>
+  <div id="datos-contratacion">
+    <div id="datos-titular-comercio">
+      <app-title-and-subtitle
+        [title]="'Datos del Titular y del Comercio'"
+        [subtitle]="'Ingrese el CUIT del Titular y un Comercio.'"
+      ></app-title-and-subtitle>
 
+      <form [formGroup]="owner_form" #of="ngForm">
+        <div class="flex-container">
+          <fieldset>
+            <app-input-field
+              label="CUIT Titular"
+              placeholder="Ejemplo: 25444505879"
+              type="text"
+              [hintLabel]="'11 dígitos'"
+              [control]="cuitControl"
+              [validations]="{
+                required: true,
+                minLength: 11,
+                maxLength: 11,
+                pattern: '^[0-9]*$'
+              }"
+              [mode]="'input'"
+            ></app-input-field>
+          </fieldset>
+
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="cuitControl.invalid"
+            (click)="findOwner()"
+          >
+            Check
+          </button>
+
+          @if (errorMessageOwner) {
+          <button mat-button color="warn" class="pointer-events-none">
+            <mat-icon fontIcon="close"></mat-icon>
+            {{ errorMessageOwner }}
+          </button>
+          } @else if (ownerFounded) {
+          <button mat-button color="accent" class="pointer-events-none">
+            <mat-icon fontIcon="check"></mat-icon>
+            Titular existente.
+          </button>
+          }
         </div>
+
+        <div class="flex-container mt-4">
+          <fieldset>
+            <app-input-field
+              label="Comercio"
+              [control]="comercioControl"
+              [validations]="{ required: true }"
+              [mode]="'select'"
+              [options]="comercios"
+              [selectedOption]="comercios[0]"
+            ></app-input-field>
+          </fieldset>
+        </div>
+
+        <button
+          class="mb-4"
+          mat-raised-button
+          color="primary"
+          [disabled]="!owner_form.valid || comercioControl.value === ''"
+          (click)="next()"
+        >
+          Siguiente
+        </button>
+      </form>
     </div>
 
-
-    <div *ngIf="completeOrdenData" id="datos-orden">
-        <app-title-and-subtitle
-          [title]="'Datos de la Orden'"
-          [subtitle]="'Ingrese los datos de la Orden Publicitaria.'"
-        ></app-title-and-subtitle>
-        <form [formGroup]="order_form">
-          <div class="grid-container">
-            <fieldset>
-              <app-input-field
-                label="Nombre Campaña"
-                placeholder="Ejemplo: Juntos X el Cambio"
-                type="text"
-                [control]="nameStrategyControl"
-                [validations]="{ required: true, maxLength: 50 }"
-                [mode]="'input'"
-              ></app-input-field>
-            </fieldset>
-            <fieldset>
-              <app-input-field
-                label="Nombre Programa"
-                placeholder="Ejemplo: Siempre Al Día"
-                type="text"
-                [control]="showNameControl"
-                [validations]="{ required: true, maxLength: 50 }"
-                [mode]="'input'"
-              ></app-input-field>
-            </fieldset>
-            <fieldset>
-                <app-input-field
-                label="Observaciones"
-                type="text"
-                [control]="obsOrderControl"
-                [mode]="'input'"
-              ></app-input-field>
-            </fieldset>
-          </div>
-        </form>
-        <app-block-selection (regStructureChange)="captureRegStructure($event)"></app-block-selection>
+    <div *ngIf="nextStep" id="datos-contratacion">
+      <app-title-and-subtitle
+        [title]="'Datos de la Contratación'"
+        [subtitle]="
+          'Seleccione la Contratación para la que desea crear una Orden Publicitaria.'
+        "
+      ></app-title-and-subtitle>
+      <app-data-selection-table
+        [data]="contractsDetailed"
+        [columns]="columnDefs"
+        (rowSelected)="onRowSelected($event)"
+      >
+      </app-data-selection-table>
     </div>
+  </div>
 
+  <div *ngIf="completeOrdenData" id="datos-orden">
+    <app-title-and-subtitle
+      [title]="'Datos de la Orden'"
+      [subtitle]="'Ingrese los datos de la Orden Publicitaria.'"
+    ></app-title-and-subtitle>
+    <form [formGroup]="order_form">
+      <div class="grid-container">
+        <fieldset>
+          <app-input-field
+            label="Nombre Campaña"
+            placeholder="Ejemplo: Juntos X el Cambio"
+            type="text"
+            [control]="nameStrategyControl"
+            [validations]="{ required: true, maxLength: 50 }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Nombre Programa"
+            placeholder="Ejemplo: Siempre Al Día"
+            type="text"
+            [control]="showNameControl"
+            [validations]="{ required: true, maxLength: 50 }"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Observaciones"
+            type="text"
+            [control]="obsOrderControl"
+            [mode]="'input'"
+          ></app-input-field>
+        </fieldset>
+        <fieldset>
+          <app-input-field
+            label="Mes"
+            [control]="month"
+            [validations]="{ required: true }"
+            [mode]="'select'"
+            [options]="validsNextYearMonths"
+            [selectedOption]="validsNextYearMonths[0]"
+          ></app-input-field>
+        </fieldset>
+      </div>
+    </form>
+  </div>
 
-  
+  <!-- @if (order_form.get('month')?.value) { -->
+    @if(completeOrdenData) {
+  <app-block-selection
+      (regStructureChange)="captureRegStructure($event)"
+      (regStructureChange)="captureRegStructure($event)"
+      (notRegularStructure)="caputreNotRegularStruc($event)"
+      (emmiterNoRegular)="captureIsNotRegular($event)"
+      [month]="order_form.get('month')!.value"
+      (datosEmitidos)="captureDatosEmitidos($event)"
+    ></app-block-selection>
+    }
 
   <div *ngIf="completeOrdenData" id="datos-spot">
     <app-title-and-subtitle
@@ -137,7 +158,13 @@
     <form [formGroup]="spot_form">
       <div class="flex-container">
         <fieldset>
-          <input type="file" accept="audio/*" #fileInput (change)="onFileSelected($event)" hidden />
+          <input
+            type="file"
+            accept="audio/*"
+            #fileInput
+            (change)="onFileSelected($event)"
+            hidden
+          />
           <button mat-raised-button color="primary" (click)="fileInput.click()">
             <mat-icon>upload_file</mat-icon> Subir
           </button>
@@ -164,12 +191,18 @@
     </form>
   </div>
 
-  <app-btn-guardar-cambios *ngIf="completeOrdenData"
-          [disabled]="owner_form.invalid || !ownerFounded || !completeOrdenData || spot_form.invalid || regStructureIsEmpty || order_form.invalid"
-          (clickEvent)="openDialog()" 
-          [text]="'Crear Orden'"
-        ></app-btn-guardar-cambios>
-  
+  <app-btn-guardar-cambios
+    *ngIf="completeOrdenData"
+    [disabled]="
+      owner_form.invalid ||
+      !ownerFounded ||
+      !completeOrdenData ||
+      spot_form.invalid ||
+      isStructureEmphty() ||
+      !dobsEmitidos ||
+      order_form.invalid
+    "
+    (clickEvent)="openDialog()"
+    [text]="'Crear Orden'"
+  ></app-btn-guardar-cambios>
 </div>
-
-
